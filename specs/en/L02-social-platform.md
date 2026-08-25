@@ -91,9 +91,18 @@ endpoints — no SPA framework unless a spec justifies one.
 | S13 | Migration 0005 + auth (passkey first) | DONE: migrations 0005+0006 applied; 15 auth suites green; real-PG constraint smoke passed |
 | S14 | Rigs + profiles + catalog binding | DONE: migration 0007 (rig+badge); 13 route/service suites green; profile payload asserted from fixtures; real-PG smoke passed |
 | S15 | Claims + priors snapshot + voting | DONE: migration 0008; 6 property tests over margin math (bounds, whale cap, order-independence, revote) + 13 route suites green; real-PG constraint smoke passed |
-| S16 | Settle flow (claim → signed run conversion) | e2e: claim → CLI run → settled, rep credited |
-| S17 | Feed + trending + share cards | card PNG matches template golden file |
-| S18 | Web console (C6) on top of the API | oracle: full loop without touching a terminal |
+| S16 | Settle flow (claim → signed run conversion) | DONE: authed upload binds claim↔run; worker settles only on validated; rep events + disputed bonus; in-process e2e green |
+| S17 | Feed + trending + share cards | DONE: follows/notifications/feed (0009), typed feed items, SVG+markdown cards with SVG golden gate (PNG deferred: keeps the zero-dep policy; client-side rasterization or an image proxy can come later) |
+| S18 | Web console (C6) on top of the API | DONE: apps/web/console vanilla sub-app; node:test oracle check-console.mjs pins every touchpoint of the no-terminal loop |
+
+## Post-S18 extensions (delivered as S19/S20)
+
+- S19 — web console shipped under ``apps/web/console`` (this was C6, pulled
+  ahead of cards so the loop could be oracled end-to-end early).
+- S20 — embeddable verified-run badges (C5) and reputation-scaled rate
+  limits (anti-abuse section): claims 2–50/24h, votes 5–250/h by tier.
+- Still open from Track B/C: duel challenges crediting both parties (C2),
+  bounty points beyond the disputed-settle bonus, notification digests.
 
 ## Boundary with the commercial side (explicit)
 

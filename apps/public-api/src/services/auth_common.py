@@ -27,6 +27,10 @@ def expiry_iso(seconds: int) -> str:
     return (utcnow() + timedelta(seconds=seconds)).isoformat()
 
 
+def hours_ago_iso(hours: float) -> str:
+    return (utcnow() - timedelta(hours=hours)).isoformat()
+
+
 HANDLE_PATTERN_ERROR = (
     "handle must match ^[a-z0-9][a-z0-9_-]{1,31}$ "
     "(lowercase letters, digits, '-', '_'; starts with letter/digit)"

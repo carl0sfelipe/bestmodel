@@ -232,6 +232,13 @@ def test_get_unknown_claim_404(client):
 # --- listing / sorting -------------------------------------------------------
 
 
+def _lift_tier(database, handle: str, tier: str) -> None:
+    user_id = database.find_app_user_by_handle(handle)["id"]
+    for row in database._reputations:
+        if row["app_user_id"] == user_id:
+            row["tier"] = tier
+
+
 def _create_n_claims(client, token, n):
     return [
         client.post("/v1/claims", json=_claim_payload(note=f"c{i}"), headers=_auth(token)).json()["id"]
@@ -242,6 +249,11 @@ def _create_n_claims(client, token, n):
 def test_listing_sorts_recent_controversial_strongest(client, database, monkeypatch):
     token_a = _session_token(client, database, monkeypatch, HANDLE_A)
     token_b = _session_token(client, database, monkeypatch, HANDLE_B)
+    # lift above the L0 claim cap: this test is about sorting, not limits
+    ada_id = database.find_app_user_by_handle(HANDLE_A)["id"]
+    for row in database._reputations:
+        if row["app_user_id"] == ada_id:
+            row["tier"] = "L3"
     ids = _create_n_claims(client, token_a, 3)
 
     # claim 0 gets a vote (|margin| 0.2), claims 1 and 2 stay voteless (|margin| 0)

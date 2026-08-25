@@ -18,6 +18,7 @@ from src.dependencies.database_session_provider import DatabaseSessionProvider
 from src.dependencies.redis_queue_provider import RedisStreamQueue
 from src.routes import (
     auth_route,
+    badge_route,
     card_route,
     benchmark_submission_route,
     claim_route,
@@ -53,6 +54,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_route.router)
     app.include_router(rig_route.router)
     app.include_router(claim_route.router)
+    app.include_router(badge_route.router)
     app.include_router(card_route.router)
     app.include_router(social_route.router)  # before user_route: fixed segments first
     app.include_router(user_route.router)

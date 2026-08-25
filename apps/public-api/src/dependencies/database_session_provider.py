@@ -229,6 +229,18 @@ class DatabaseSession(ABC):
         """Return one row per voter with current verdict and weight."""
 
     @abstractmethod
+    def fetch_badge_context(self, run_id: str) -> dict[str, Any] | None:
+        """Validated-run summary for badge rendering (None if not validated)."""
+
+    @abstractmethod
+    def count_claims_since(self, user_id: str, since: str) -> int:
+        """Claims created by ``user_id`` after ``since``."""
+
+    @abstractmethod
+    def count_votes_since(self, user_id: str, since: str) -> int:
+        """Votes cast by ``user_id`` after ``since``."""
+
+    @abstractmethod
     def insert_follow(self, record: dict[str, Any]) -> None:
         """Insert a follow edge (unique pair, self-follow blocked)."""
 
@@ -722,6 +734,33 @@ class PostgresSession(DatabaseSession):
             "ORDER BY created_at",
             (claim_id,),
         )
+
+    def fetch_badge_context(self, run_id: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT r.id AS run_id, r.status, r.model_release_id, "
+            "m.p50_value AS decode_tok_s, g.marketing_name AS gpu_marketing_name "
+            "FROM benchmark_run r "
+            "JOIN hardware_submission hs ON hs.id = r.hardware_submission_id "
+            "LEFT JOIN gpu_model g ON g.id = hs.gpu_model_id "
+            "LEFT JOIN LATERAL (SELECT p50_value FROM benchmark_metric mm "
+            "  WHERE mm.benchmark_run_id = r.id AND mm.kind = 'decode_tok_s') m ON true "
+            "WHERE r.id = %s",
+            (run_id,),
+        )
+
+    def count_claims_since(self, user_id: str, since: str) -> int:
+        row = self._fetchone(
+            "SELECT COUNT(*) AS n FROM run_claim WHERE claimant_id = %s AND created_at > %s",
+            (user_id, since),
+        )
+        return int(row["n"])
+
+    def count_votes_since(self, user_id: str, since: str) -> int:
+        row = self._fetchone(
+            "SELECT COUNT(*) AS n FROM claim_vote WHERE voter_id = %s AND created_at > %s",
+            (user_id, since),
+        )
+        return int(row["n"])
 
     def insert_follow(self, record: dict[str, Any]) -> None:
         self._connection.execute(

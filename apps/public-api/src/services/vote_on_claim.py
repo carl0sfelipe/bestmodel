@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 
 from src.dependencies.database_session_provider import DatabaseSession
-from src.services.auth_common import AuthError, utcnow_iso
+from src.services.auth_common import AuthError, hours_ago_iso, utcnow_iso
 from src.services.claim_view import claim_view
 from src.services.compute_vote_tally import weight_for_tier
 
@@ -22,6 +22,14 @@ def vote_on_claim(
 
     reputation = session.fetch_reputation_by_user(caller["id"])
     tier = reputation["tier"] if reputation else None
+
+    from src.services.rate_limit_policy import vote_limit
+
+    if session.count_votes_since(caller["id"], hours_ago_iso(1)) >= vote_limit(tier):
+        raise AuthError(
+            429,
+            f"vote limit reached ({vote_limit(tier)} per hour at {tier or 'L0'})",
+        )
     session.upsert_claim_vote(
         {
             "id": str(uuid.uuid4()),

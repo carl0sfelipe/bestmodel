@@ -395,6 +395,50 @@ class FakeDatabase(DatabaseSession):
                 return
         self._votes.append(dict(record))
 
+    def fetch_badge_context(self, run_id: str) -> dict[str, Any] | None:
+        run = next((r for r in self._runs if r["id"] == run_id), None)
+        if run is None or run["status"] != "validated":
+            return None
+        submission = next(
+            (h for h in self._hardware_submissions if h["id"] == run["hardware_submission_id"]),
+            None,
+        )
+        gpu_name = None
+        if submission and submission.get("gpu_model_id"):
+            gpu = next(
+                (g for g in self._gpus if g["id"] == submission["gpu_model_id"]), {}
+            )
+            gpu_name = gpu.get("marketing_name")
+        decode = next(
+            (
+                m["p50_value"]
+                for m in self._metrics
+                if m["benchmark_run_id"] == run_id and m["kind"] == "decode_tok_s"
+            ),
+            None,
+        )
+        return {
+            "run_id": run_id,
+            "status": run["status"],
+            "model_release_id": run["model_release_id"],
+            "decode_tok_s": decode,
+            "gpu_marketing_name": gpu_name,
+        }
+
+    def count_claims_since(self, user_id: str, since: str) -> int:
+        return sum(
+            1
+            for c in self._claims
+            if c["claimant_id"] == user_id and str(c["created_at"]) > since
+        )
+
+    def count_votes_since(self, user_id: str, since: str) -> int:
+        return sum(
+            1
+            for v in self._votes
+            if v["voter_id"] == user_id and str(v["created_at"]) > since
+        )
+
     def insert_follow(self, record: dict[str, Any]) -> None:
         if any(
             f["follower_id"] == record["follower_id"]

@@ -63,6 +63,16 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
   profile payloads carry follower/following counts + viewer perspective
 - GET /v1/feed?scope=following|global&sort=recent|trending — typed items:
   claims with live tallies + account-attributed validated runs
+
+## Cards, badges & limits (S18–S20)
+
+- GET /v1/cards/claims/{id}.svg | .md — shareable claim cards (honesty-ladder prior line)
+- GET /v1/badges/runs/{run_id}.svg — embeddable 'N tok/s on <gpu>' badge;
+  validated runs only
+- Rate limits scale with reputation tier: claims 2–50 per 24h, votes
+  5–250 per hour (L0→L4); verified activity raises your ceiling
+- Web console (apps/web/console): passkey sign-in → browse → vote → claim →
+  settle command + card preview, zero dependencies
 - GET /v1/notifications + POST /v1/notifications/{id}/read — settlement and
   new-follower events land here
 

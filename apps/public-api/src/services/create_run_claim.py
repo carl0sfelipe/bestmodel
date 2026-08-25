@@ -6,7 +6,7 @@ import uuid
 from typing import Any
 
 from src.dependencies.database_session_provider import DatabaseSession
-from src.services.auth_common import AuthError, utcnow_iso
+from src.services.auth_common import AuthError, hours_ago_iso, utcnow_iso
 from src.services.claim_view import claim_view
 from src.services.compute_claim_prior import compute_claim_prior
 
@@ -16,6 +16,18 @@ def create_run_claim(
     caller: dict,
     payload: dict[str, Any],
 ) -> dict[str, Any]:
+    from src.services.rate_limit_policy import claim_limit
+
+    reputation = session.fetch_reputation_by_user(caller["id"])
+    tier = reputation["tier"] if reputation else "L0"
+    used = session.count_claims_since(caller["id"], hours_ago_iso(24))
+    if used >= claim_limit(tier):
+        raise AuthError(
+            429,
+            f"claim limit reached ({claim_limit(tier)} per 24h at {tier}); "
+            "verified runs raise your ceiling",
+        )
+
     metrics = payload.get("claimed_metrics") or {}
     if "decode_tok_s" not in metrics:
         raise AuthError(400, "claimed_metrics must include decode_tok_s")

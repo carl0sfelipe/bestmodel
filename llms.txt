@@ -48,6 +48,15 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
   optional binding to hardware_submission rows unlocks per-rig measured runs
 - GET /v1/users/{handle} — profile: reputation tier/points, badges, visible rigs
 
+## Claims (S15)
+
+- POST /v1/claims — assert a run without proof; prior snapshot frozen at creation
+  (pool medians + roofline range when GPU resolvable); never in leaderboards
+- GET /v1/claims?status=open&sort=controversial|recent|strongest — feed inputs
+- POST /v1/claims/{id}/votes — plausible/impossible; weight by reputation tier
+  (L0=0.2 … L4=1.0), one vote per voter, claimant cannot self-vote
+- POST /v1/claims/{id}/retract — claimant-only, open claims only
+
 ## License
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**

@@ -199,6 +199,36 @@ class DatabaseSession(ABC):
         """Return badge rows for ``user_id`` ordered by awarded_at."""
 
     @abstractmethod
+    def fetch_pool_measurements(
+        self, model_release_id: str, quantization_profile_id: str | None
+    ) -> dict[str, Any]:
+        """Return validated-run count + metric medians for the model/quant."""
+
+    @abstractmethod
+    def insert_run_claim(self, record: dict[str, Any]) -> None:
+        """Insert a run_claim row."""
+
+    @abstractmethod
+    def find_run_claim_by_id(self, claim_id: str) -> dict[str, Any] | None:
+        """Return the run_claim row or None."""
+
+    @abstractmethod
+    def set_run_claim_status(self, claim_id: str, status: str) -> int:
+        """Transition claim status; return affected rows (0/1)."""
+
+    @abstractmethod
+    def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
+        """Return run_claims newest-first, optionally filtered by status."""
+
+    @abstractmethod
+    def upsert_claim_vote(self, record: dict[str, Any]) -> None:
+        """Insert or replace the voter's verdict on a claim."""
+
+    @abstractmethod
+    def fetch_votes_for_claim(self, claim_id: str) -> list[dict[str, Any]]:
+        """Return one row per voter with current verdict and weight."""
+
+    @abstractmethod
     def commit(self) -> None:
         """Persist pending writes."""
 
@@ -556,6 +586,97 @@ class PostgresSession(DatabaseSession):
         return self._fetchall(
             "SELECT code, awarded_at FROM badge WHERE app_user_id = %s ORDER BY awarded_at",
             (user_id,),
+        )
+
+    def fetch_pool_measurements(
+        self, model_release_id: str, quantization_profile_id: str | None
+    ) -> dict[str, Any]:
+        return self._fetchone(
+            """
+            SELECT
+              (SELECT COUNT(*) FROM benchmark_run
+                WHERE status = 'validated' AND model_release_id = %s
+                  AND (%s::text IS NULL OR quantization_profile_id = %s::text)) AS run_count,
+              (SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY m.p50_value)
+                FROM benchmark_metric m
+                JOIN benchmark_run r ON r.id = m.benchmark_run_id
+                WHERE r.status = 'validated' AND r.model_release_id = %s
+                  AND (%s::text IS NULL OR r.quantization_profile_id = %s::text)
+                  AND m.kind = 'decode_tok_s') AS p50_decode_tok_s,
+              (SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY m.p50_value)
+                FROM benchmark_metric m
+                JOIN benchmark_run r ON r.id = m.benchmark_run_id
+                WHERE r.status = 'validated' AND r.model_release_id = %s
+                  AND (%s::text IS NULL OR r.quantization_profile_id = %s::text)
+                  AND m.kind = 'prefill_tok_s') AS p50_prefill_tok_s
+            """,
+            (
+                model_release_id,
+                quantization_profile_id,
+                quantization_profile_id,
+                model_release_id,
+                quantization_profile_id,
+                quantization_profile_id,
+                model_release_id,
+                quantization_profile_id,
+                quantization_profile_id,
+            ),
+        )
+
+    def insert_run_claim(self, record: dict[str, Any]) -> None:
+        record = dict(record)
+        record["claimed_metrics"] = Json(record["claimed_metrics"])
+        record["prior_snapshot"] = Json(record["prior_snapshot"])
+        self._connection.execute(
+            "INSERT INTO run_claim (id, claimant_id, rig_id, model_release_id, "
+            "quantization_profile_id, inference_runtime_id, gpu_model_id, context_tokens, "
+            "claimed_metrics, note, status, prior_snapshot, created_at, updated_at) "
+            "VALUES (%(id)s, %(claimant_id)s, %(rig_id)s, %(model_release_id)s, "
+            "%(quantization_profile_id)s, %(inference_runtime_id)s, %(gpu_model_id)s, "
+            "%(context_tokens)s, %(claimed_metrics)s, %(note)s, 'open', "
+            "%(prior_snapshot)s, %(created_at)s, %(updated_at)s)",
+            record,
+        )
+
+    def find_run_claim_by_id(self, claim_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM run_claim WHERE id = %s", (claim_id,))
+
+    def set_run_claim_status(self, claim_id: str, status: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE run_claim SET status = %s, updated_at = now() "
+                "WHERE id = %s",
+                (status, claim_id),
+            )
+            return cursor.rowcount
+
+    def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
+        if status is not None:
+            return self._fetchall(
+                "SELECT * FROM run_claim WHERE status = %s ORDER BY created_at DESC "
+                "LIMIT %s OFFSET %s",
+                (status, limit, offset),
+            )
+        return self._fetchall(
+            "SELECT * FROM run_claim ORDER BY created_at DESC LIMIT %s OFFSET %s",
+            (limit, offset),
+        )
+
+    def upsert_claim_vote(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO claim_vote (id, run_claim_id, voter_id, verdict, weight, created_at, updated_at) "
+            "VALUES (%(id)s, %(run_claim_id)s, %(voter_id)s, %(verdict)s, %(weight)s, "
+            "%(created_at)s, %(created_at)s) "
+            "ON CONFLICT (run_claim_id, voter_id) DO UPDATE SET "
+            "verdict = EXCLUDED.verdict, weight = EXCLUDED.weight, updated_at = now()",
+            record,
+        )
+
+    def fetch_votes_for_claim(self, claim_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT voter_id, verdict, weight FROM claim_vote WHERE run_claim_id = %s "
+            "ORDER BY created_at",
+            (claim_id,),
         )
 
     def commit(self) -> None:

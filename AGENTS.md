@@ -76,9 +76,10 @@ External-facing LLM entry point: `llms.txt` (root).
 - Phase 0: **COMPLETE** (S00–S12 committed; `make gate` green: infra → seed →
   pytest + cargo → CLI signed report → API 202 → worker validated →
   leaderboard; VRAM P50 error ~6%).
-- Phase 1 (in progress): **S13+S14 DONE** (auth + rigs/profiles/catalog binding;
-  migrations 0005–0007 applied to real PG; 28 new suites green).
-  Next: S15 claims/votes.
+- Phase 1 (in progress): **S13+S14+S15 DONE** (auth; rigs/profiles/binding;
+  run claims with frozen priors + weighted plausibility voting;
+  migrations 0005–0008 applied to real PG; 34 new suites green).
+  Next: S16 settle flow.
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
   `specs/en/L02-social-platform.md`; backlog tracks B/C.
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).

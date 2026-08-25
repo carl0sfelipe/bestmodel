@@ -13,6 +13,7 @@ from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PAT
 | `routes/auth_route.py` | `/v1/auth/passkey/{register,login}/{options,verify}` + `/v1/auth/tokens` CRUD (S13) |
 | `routes/rig_route.py` | `POST /v1/rigs`, `GET/PATCH /v1/rigs/{slug}`, `POST /v1/rigs/{slug}/bind` (S14) |
 | `routes/user_route.py` | `GET /v1/users/{handle}` public profile (S14) |
+| `routes/claim_route.py` | `POST /v1/claims`, `GET /v1/claims[?status&sort]`, `GET /v1/claims/{id}`, `POST .../votes`, `POST .../retract` (S15) |
 | `services/submit_benchmark_run.py` | intake pipeline: schema → digest → signature (Ed25519, env `TRUSTED_ED25519_PUBLIC_KEY_PATH`) → artifact digests → dedupe → insert → enqueue |
 | `services/query_hardware_match.py` / `query_model_match.py` | match logic over catalog + roofline kernel |
 | `services/query_leaderboard.py` | filters + Decimal→float coercion + recommendation-engine ranking |
@@ -20,6 +21,9 @@ from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PAT
 | `services/auth_common.py` / `manage_auth_tokens.py` | AuthError, token issuance (SHA-256 at rest), agent-token CRUD (S13) |
 | `services/create_rig.py` / `update_rig.py` / `rig_common.py` | rig CRUD + hardware binding; slugify + ownership checks (S14) |
 | `services/query_rig_profile.py` / `query_user_profile.py` | rig detail with validated runs; profile payload (reputation/badges/visible rigs) (S14) |
+| `services/compute_vote_tally.py` | PURE margin math; tier→weight map bounded to [0.2, 1.0] (whale bound) — property-tested, do not move to DB |
+| `services/compute_claim_prior.py` | frozen prior: pool medians + roofline range at creation time, never recomputed (S15) |
+| `services/create_run_claim.py` / `vote_on_claim.py` / `query_run_claims.py` | claim lifecycle: create w/ prior, vote upsert (no self-votes), retract, list+sorts recent/controversial/strongest (S15) |
 | `dependencies/auth_provider.py` | `WebAuthnConfig` (env `AUTH_RP_ID`, `AUTH_RP_NAME`, `AUTH_EXPECTED_ORIGIN`), `get_current_user` bearer resolver (401 on missing/revoked/expired) + `get_optional_user` (degrades to anonymous) |
 | `dependencies/database_session_provider.py` | `DatabaseSession` ABC + PostgresSession; jsonb via `Json()` (finding B2) |
 | `dependencies/artifact_vault_provider.py` | LocalArtifactVault (filesystem under `ARTIFACT_VAULT_DIR`) |

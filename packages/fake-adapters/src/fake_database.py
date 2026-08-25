@@ -49,6 +49,8 @@ class FakeDatabase(DatabaseSession):
         self._tokens: list[dict[str, Any]] = []
         self._rigs: list[dict[str, Any]] = []
         self._badges: list[dict[str, Any]] = []
+        self._claims: list[dict[str, Any]] = []
+        self._votes: list[dict[str, Any]] = []
         self._seed_validated_runs()
 
     def _seed_validated_runs(self) -> None:
@@ -333,6 +335,69 @@ class FakeDatabase(DatabaseSession):
             for b in sorted(
                 (b for b in self._badges if b["app_user_id"] == user_id),
                 key=lambda b: str(b["awarded_at"]),
+            )
+        ]
+
+    def fetch_pool_measurements(
+        self, model_release_id: str, quantization_profile_id: str | None
+    ) -> dict[str, Any]:
+        runs = [
+            run
+            for run in self._runs
+            if run["status"] == "validated"
+            and run["model_release_id"] == model_release_id
+            and (quantization_profile_id is None or run["quantization_profile_id"] == quantization_profile_id)
+        ]
+
+        def median(kind: str):
+            values = sorted(
+                m["p50_value"]
+                for run in runs
+                for m in self._metrics
+                if m["benchmark_run_id"] == run["id"] and m["kind"] == kind
+            )
+            return values[len(values) // 2] if values else None
+
+        return {
+            "run_count": len(runs),
+            "p50_decode_tok_s": median("decode_tok_s"),
+            "p50_prefill_tok_s": median("prefill_tok_s"),
+        }
+
+    def insert_run_claim(self, record: dict[str, Any]) -> None:
+        self._claims.append(dict(record))
+
+    def find_run_claim_by_id(self, claim_id: str) -> dict[str, Any] | None:
+        return next((row for row in self._claims if row["id"] == claim_id), None)
+
+    def set_run_claim_status(self, claim_id: str, status: str) -> int:
+        affected = 0
+        for row in self._claims:
+            if row["id"] == claim_id:
+                row["status"] = status
+                affected += 1
+        return affected
+
+    def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
+        rows = [row for row in self._claims if status is None or row["status"] == status]
+        rows.sort(key=lambda r: str(r["created_at"]), reverse=True)
+        return [dict(row) for row in rows[offset : offset + limit]]
+
+    def upsert_claim_vote(self, record: dict[str, Any]) -> None:
+        for row in self._votes:
+            if row["run_claim_id"] == record["run_claim_id"] and row["voter_id"] == record["voter_id"]:
+                row["verdict"] = record["verdict"]
+                row["weight"] = record["weight"]
+                row["updated_at"] = record["created_at"]
+                return
+        self._votes.append(dict(record))
+
+    def fetch_votes_for_claim(self, claim_id: str) -> list[dict[str, Any]]:
+        return [
+            {"voter_id": row["voter_id"], "verdict": row["verdict"], "weight": row["weight"]}
+            for row in sorted(
+                (v for v in self._votes if v["run_claim_id"] == claim_id),
+                key=lambda v: str(v["created_at"]),
             )
         ]
 

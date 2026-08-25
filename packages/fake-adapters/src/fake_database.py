@@ -51,6 +51,7 @@ class FakeDatabase(DatabaseSession):
         self._badges: list[dict[str, Any]] = []
         self._claims: list[dict[str, Any]] = []
         self._votes: list[dict[str, Any]] = []
+        self._reputation_events: list[dict[str, Any]] = []
         self._seed_validated_runs()
 
     def _seed_validated_runs(self) -> None:
@@ -391,6 +392,65 @@ class FakeDatabase(DatabaseSession):
                 row["updated_at"] = record["created_at"]
                 return
         self._votes.append(dict(record))
+
+    def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
+        affected = 0
+        for row in self._claims:
+            if (
+                row["id"] == claim_id
+                and row["status"] == "open"
+                and row.get("benchmark_run_id") is None
+            ):
+                row["benchmark_run_id"] = run_id
+                affected += 1
+        return affected
+
+    def fetch_settlement_context(self, run_id: str) -> dict[str, Any] | None:
+        for row in self._claims:
+            if row.get("benchmark_run_id") != run_id or row["status"] != "open":
+                continue
+            margin = sum(
+                float(v["weight"]) * (1 if v["verdict"] == "plausible" else -1)
+                for v in self._votes
+                if v["run_claim_id"] == row["id"]
+            )
+            rep = self.fetch_reputation_by_user(row["claimant_id"]) or {"points": 0}
+            return {
+                "claim_id": row["id"],
+                "claimant_id": row["claimant_id"],
+                "margin": margin,
+                "points": int(rep["points"]),
+            }
+        return None
+
+    def complete_claim_settlement(
+        self,
+        claim_id: str,
+        claimant_id: str,
+        events: list[tuple[str, int]],
+        new_points: int,
+        new_tier: str,
+    ) -> None:
+        from src.services.auth_common import utcnow_iso
+
+        for row in self._claims:
+            if row["id"] == claim_id and row["status"] == "open":
+                row["status"] = "settled_verified"
+        for reason, delta in events:
+            self._reputation_events.append(
+                {
+                    "id": str(len(self._reputation_events)),
+                    "app_user_id": claimant_id,
+                    "reason": reason,
+                    "delta": delta,
+                    "created_at": utcnow_iso(),
+                }
+            )
+        for row in self._reputations:
+            if row["app_user_id"] == claimant_id:
+                row["points"] = new_points
+                row["tier"] = new_tier
+                row["updated_at"] = utcnow_iso()
 
     def fetch_votes_for_claim(self, claim_id: str) -> list[dict[str, Any]]:
         return [

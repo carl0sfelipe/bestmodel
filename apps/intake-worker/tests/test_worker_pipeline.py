@@ -18,6 +18,8 @@ class FakeIntakeRepository:
         self.assessments = {}
         self.statuses = {}
         self.ranking_updates = []
+        self.settlement_context = None
+        self.settlements = []
 
     def find_existing_run_in_group(self, dimension, exclude_run_id, statuses):
         return self.duplicate_exists
@@ -36,6 +38,20 @@ class FakeIntakeRepository:
 
     def publish_ranking_update(self, event):
         self.ranking_updates.append(event)
+
+    def fetch_settlement_context(self, run_id):
+        return self.settlement_context
+
+    def complete_claim_settlement(self, claim_id, claimant_id, events, new_points, new_tier):
+        self.settlements.append(
+            {
+                "claim_id": claim_id,
+                "claimant_id": claimant_id,
+                "events": events,
+                "new_points": new_points,
+                "new_tier": new_tier,
+            }
+        )
 
     def fetch_run_payload(self, run_id):
         return None

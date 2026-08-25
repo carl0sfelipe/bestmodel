@@ -138,6 +138,51 @@ class PostgresIntakeRepository:
         fields = {key: str(value) for key, value in event.items()}
         self._redis.xadd(RANKING_STREAM_KEY, fields)
 
+    def fetch_settlement_context(self, run_id: str) -> Optional[dict[str, Any]]:
+        sql = (
+            "SELECT c.id AS claim_id, c.claimant_id, "
+            "COALESCE(SUM(CASE v.verdict WHEN 'plausible' THEN v.weight "
+            "ELSE -v.weight END), 0) AS margin, "
+            "COALESCE(rep.points, 0) AS points "
+            "FROM run_claim c "
+            "LEFT JOIN claim_vote v ON v.run_claim_id = c.id "
+            "LEFT JOIN user_reputation rep ON rep.app_user_id = c.claimant_id "
+            "WHERE c.benchmark_run_id = %s AND c.status = 'open' "
+            "GROUP BY c.id, c.claimant_id, rep.points "
+            "LIMIT 1"
+        )
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(sql, (run_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def complete_claim_settlement(
+        self,
+        claim_id: str,
+        claimant_id: str,
+        events: list[tuple[str, int]],
+        new_points: int,
+        new_tier: str,
+    ) -> None:
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE run_claim SET status = 'settled_verified', updated_at = now() "
+                "WHERE id = %s AND status = 'open'",
+                (claim_id,),
+            )
+            for reason, delta in events:
+                cursor.execute(
+                    "INSERT INTO reputation_event (id, app_user_id, reason, delta) "
+                    "VALUES (gen_random_uuid(), %s, %s, %s)",
+                    (claimant_id, reason, delta),
+                )
+            cursor.execute(
+                "UPDATE user_reputation SET points = %s, tier = %s, updated_at = now() "
+                "WHERE app_user_id = %s",
+                (new_points, new_tier, claimant_id),
+            )
+            connection.commit()
+
     def fetch_run_payload(self, run_id: str) -> Optional[dict[str, Any]]:
         with self._connect() as connection, connection.cursor() as cursor:
             cursor.execute(

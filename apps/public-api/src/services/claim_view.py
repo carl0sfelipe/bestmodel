@@ -20,6 +20,7 @@ def claim_view(record: dict, votes: list[dict]) -> dict[str, Any]:
         "claimed_metrics": record["claimed_metrics"],
         "note": record.get("note"),
         "status": record["status"],
+        "benchmark_run_id": record.get("benchmark_run_id"),
         "prior_snapshot": record["prior_snapshot"],
         "created_at": record.get("created_at"),
         "tally": tally(votes),

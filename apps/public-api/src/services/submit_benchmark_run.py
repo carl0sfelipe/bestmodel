@@ -56,8 +56,16 @@ def submit_benchmark_run(
     queue: BenchmarkQueue,
     form: SubmissionForm,
     artifact_files: Iterable[Any],
+    caller_user: dict[str, Any] | None = None,
 ) -> tuple[int, dict[str, str]]:
-    """Run the full intake pipeline; return the HTTP status and response body."""
+    """Run the full intake pipeline; return the HTTP status and response body.
+
+    ``caller_user`` is set when the upload carries a valid bearer token (S13
+    agent/session tokens); anonymous uploads stay supported and are attributed
+    to the community owner. A ``settle_claim_id`` form field links the run to
+    one of the caller's open claims (S16); settlement itself completes in the
+    intake worker once validation finishes.
+    """
     report_dict = _parse_report_json(form.report)
     report = _validate_report(report_dict)
     _verify_payload_digest(report_dict, form.payload_digest)
@@ -76,7 +84,8 @@ def submit_benchmark_run(
         inference_runtime_id,
         scenario_id,
     )
-    _ensure_hardware_submission(session, hardware_submission_id, report)
+    linked_claim = _resolve_settlement(session, form, caller_user, model_release_id)
+    _ensure_hardware_submission(session, hardware_submission_id, report, caller_user)
     session.insert_scenario(_scenario_record(scenario_id, report))
     run_id = _insert_run(
         session,
@@ -90,9 +99,40 @@ def submit_benchmark_run(
     )
     _insert_metrics(session, run_id, report)
     _insert_artifacts(session, run_id, report, artifact_records)
+    if linked_claim is not None:
+        session.bind_claim_to_run(linked_claim["id"], run_id)
     session.commit()
     queue.publish(_queue_event(run_id, report))
-    return 202, {"run_id": run_id}
+    body = {"run_id": run_id}
+    if linked_claim is not None:
+        body["linked_claim_id"] = linked_claim["id"]
+    return 202, body
+
+
+def _resolve_settlement(
+    session: DatabaseSession,
+    form: SubmissionForm,
+    caller_user: dict[str, Any] | None,
+    resolved_model_release_id: str,
+) -> dict[str, Any] | None:
+    """Validate and return the open claim this run settles, if requested."""
+    if not form.settle_claim_id:
+        return None
+    if caller_user is None:
+        raise SubmissionRejected(401, "authentication is required to settle a claim")
+    claim = session.find_run_claim_by_id(form.settle_claim_id)
+    if claim is None:
+        raise SubmissionRejected(404, f"claim not found: {form.settle_claim_id}")
+    if claim["status"] != "open":
+        raise SubmissionRejected(409, f"claim is not open (status: {claim['status']})")
+    if claim["claimant_id"] != caller_user["id"]:
+        raise SubmissionRejected(403, "only the claimant can settle a claim")
+    if (
+        claim.get("model_release_id")
+        and resolved_model_release_id != claim["model_release_id"]
+    ):
+        raise SubmissionRejected(400, "run model does not match the claimed model")
+    return claim
 
 
 def _parse_report_json(report_json: str) -> dict[str, Any]:
@@ -224,7 +264,10 @@ def _reject_if_duplicate(
 
 
 def _ensure_hardware_submission(
-    session: DatabaseSession, hardware_submission_id: str, report: BenchmarkReport
+    session: DatabaseSession,
+    hardware_submission_id: str,
+    report: BenchmarkReport,
+    caller_user: dict[str, Any] | None = None,
 ) -> None:
     """Create the community-owned hardware row derived from the fingerprint.
 
@@ -237,7 +280,7 @@ def _ensure_hardware_submission(
     session.insert_hardware_submission(
         {
             "id": hardware_submission_id,
-            "owner_account_id": COMMUNITY_OWNER_ID,
+            "owner_account_id": caller_user["id"] if caller_user else COMMUNITY_OWNER_ID,
             "gpu_model_id": None,
             "cpu_model_id": None,
             "gpu_count": 1,

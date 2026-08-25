@@ -229,6 +229,10 @@ class DatabaseSession(ABC):
         """Return one row per voter with current verdict and weight."""
 
     @abstractmethod
+    def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
+        """Link an open claim to an incoming run; return affected rows (0/1)."""
+
+    @abstractmethod
     def commit(self) -> None:
         """Persist pending writes."""
 
@@ -678,6 +682,15 @@ class PostgresSession(DatabaseSession):
             "ORDER BY created_at",
             (claim_id,),
         )
+
+    def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE run_claim SET benchmark_run_id = %s, updated_at = now() "
+                "WHERE id = %s AND status = 'open' AND benchmark_run_id IS NULL",
+                (run_id, claim_id),
+            )
+            return cursor.rowcount
 
     def commit(self) -> None:
         self._connection.commit()

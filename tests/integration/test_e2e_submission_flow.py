@@ -58,6 +58,12 @@ class _WorkerRepository:
     def publish_ranking_update(self, event):
         self.ranking_updates.append(event)
 
+    def fetch_settlement_context(self, run_id):
+        return None
+
+    def complete_claim_settlement(self, **kwargs):
+        pass
+
     def fetch_run_payload(self, run_id):
         return None
 

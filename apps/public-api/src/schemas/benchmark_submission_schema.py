@@ -19,6 +19,7 @@ class SubmissionForm(BaseModel):
     model_release_id: str | None = None
     quantization_profile_id: str | None = None
     inference_runtime_id: str | None = None
+    settle_claim_id: str | None = None
 
 
 class SubmissionAccepted(BaseModel):

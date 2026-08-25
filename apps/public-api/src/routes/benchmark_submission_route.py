@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
 from src.dependencies.artifact_vault_provider import ArtifactVault, get_artifact_vault
+from src.dependencies.auth_provider import AuthenticatedCaller, get_optional_user
 from src.dependencies.database_session_provider import DatabaseSession, get_database_session
 from src.dependencies.redis_queue_provider import BenchmarkQueue, get_benchmark_queue
 from src.schemas.benchmark_submission_schema import SubmissionForm
@@ -33,12 +34,20 @@ async def submit_benchmark(
     session: DatabaseSession = Depends(get_database_session),
     vault: ArtifactVault = Depends(get_artifact_vault),
     queue: BenchmarkQueue = Depends(get_benchmark_queue),
+    caller: AuthenticatedCaller | None = Depends(get_optional_user),
 ) -> JSONResponse:
     form = await request.form()
     try:
         fields = _parse_fields(form)
         artifact_files = _extract_artifacts(form)
-        status_code, body = submit_benchmark_run(session, vault, queue, fields, artifact_files)
+        status_code, body = submit_benchmark_run(
+            session,
+            vault,
+            queue,
+            fields,
+            artifact_files,
+            caller_user=caller.user if caller else None,
+        )
     except SubmissionRejected as exc:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
     return JSONResponse(status_code=status_code, content=body)

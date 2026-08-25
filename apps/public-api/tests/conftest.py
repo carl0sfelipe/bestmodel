@@ -198,3 +198,75 @@ def sign_report(private_key: Ed25519PrivateKey, report_dict: dict) -> tuple[str,
     digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     signature = private_key.sign(digest.encode("utf-8")).hex()
     return digest, signature
+
+
+def make_passkey_session(client, database, monkeypatch, handle: str) -> str:
+    """Drive the S13 ceremonies with patched WebAuthn; return a bearer token.
+
+    Shared by S14/S15/S16 route tests so each file does not re-declare the
+    patching boilerplate.
+    """
+    import base64
+    from types import SimpleNamespace
+
+    from src.services import authenticate_passkey, register_passkey
+
+    credential_id = b"\x01" * 32
+    raw_id = base64.urlsafe_b64encode(credential_id).decode().rstrip("=")
+
+    monkeypatch.setattr(
+        register_passkey,
+        "_generate_registration_options",
+        lambda *a, **k: SimpleNamespace(challenge=b"reg-challenge"),
+    )
+    monkeypatch.setattr(
+        register_passkey,
+        "_options_to_json",
+        lambda o: '{"challenge": "%s"}'
+        % base64.urlsafe_b64encode(o.challenge).decode().rstrip("="),
+    )
+    monkeypatch.setattr(
+        register_passkey,
+        "_verify_attestation",
+        lambda *a, **k: SimpleNamespace(
+            credential_id=credential_id, credential_public_key=b"cose-pubkey", sign_count=0
+        ),
+    )
+    monkeypatch.setattr(
+        authenticate_passkey,
+        "_generate_authentication_options",
+        lambda *a, **k: SimpleNamespace(challenge=b"login-challenge"),
+    )
+    monkeypatch.setattr(
+        authenticate_passkey,
+        "_options_to_json",
+        lambda o: '{"challenge": "%s"}'
+        % base64.urlsafe_b64encode(o.challenge).decode().rstrip("="),
+    )
+    monkeypatch.setattr(
+        authenticate_passkey,
+        "_verify_assertion",
+        lambda *a, **k: SimpleNamespace(new_sign_count=5),
+    )
+
+    options = client.post("/v1/auth/passkey/register/options", json={"handle": handle}).json()
+    client.post(
+        "/v1/auth/passkey/register/verify",
+        json={
+            "handle": handle,
+            "credential": {"response": {"challenge": options["options"]["challenge"]}},
+        },
+    )
+    login_options = client.post("/v1/auth/passkey/login/options", json={"handle": handle}).json()
+    login = client.post(
+        "/v1/auth/passkey/login/verify",
+        json={
+            "handle": handle,
+            "credential": {
+                "rawId": raw_id,
+                "response": {"challenge": login_options["options"]["challenge"]},
+            },
+        },
+    )
+    assert login.status_code == 200, login.text
+    return login.json()["access_token"]

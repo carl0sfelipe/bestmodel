@@ -229,6 +229,46 @@ class DatabaseSession(ABC):
         """Return one row per voter with current verdict and weight."""
 
     @abstractmethod
+    def insert_follow(self, record: dict[str, Any]) -> None:
+        """Insert a follow edge (unique pair, self-follow blocked)."""
+
+    @abstractmethod
+    def delete_follow(self, follower_id: str, followee_id: str) -> int:
+        """Remove the edge; return affected rows."""
+
+    @abstractmethod
+    def fetch_follow_counts(self, user_id: str) -> dict[str, int]:
+        """Return {'followers': n, 'following': n} for ``user_id``."""
+
+    @abstractmethod
+    def is_following(self, follower_id: str | None, followee_id: str) -> bool:
+        """Whether ``follower_id`` follows ``followee_id`` (False if None)."""
+
+    @abstractmethod
+    def list_followee_ids(self, user_id: str) -> list[str]:
+        """Return ids of accounts ``user_id`` follows."""
+
+    @abstractmethod
+    def insert_notification(self, record: dict[str, Any]) -> None:
+        """Insert a notification row."""
+
+    @abstractmethod
+    def list_notifications_for_user(self, user_id: str) -> list[dict[str, Any]]:
+        """Return notifications newest-first with read status."""
+
+    @abstractmethod
+    def mark_notification_read(self, notification_id: str, recipient_id: str) -> int:
+        """Mark one notification read for its recipient; return rows (0/1)."""
+
+    @abstractmethod
+    def list_recent_claims_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        """Recent claims; ``None`` selects every account (global feed)."""
+
+    @abstractmethod
+    def list_recent_validated_runs_by_owners(self, owner_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        """Validated runs attributed to owners; ``None`` selects all."""
+
+    @abstractmethod
     def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
         """Link an open claim to an incoming run; return affected rows (0/1)."""
 
@@ -681,6 +721,94 @@ class PostgresSession(DatabaseSession):
             "SELECT voter_id, verdict, weight FROM claim_vote WHERE run_claim_id = %s "
             "ORDER BY created_at",
             (claim_id,),
+        )
+
+    def insert_follow(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO follow (id, follower_id, followee_id) "
+            "VALUES (%(id)s, %(follower_id)s, %(followee_id)s)",
+            record,
+        )
+
+    def delete_follow(self, follower_id: str, followee_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM follow WHERE follower_id = %s AND followee_id = %s",
+                (follower_id, followee_id),
+            )
+            return cursor.rowcount
+
+    def fetch_follow_counts(self, user_id: str) -> dict[str, int]:
+        row = self._fetchone(
+            "SELECT "
+            "(SELECT COUNT(*) FROM follow WHERE followee_id = %s) AS followers, "
+            "(SELECT COUNT(*) FROM follow WHERE follower_id = %s) AS following",
+            (user_id, user_id),
+        )
+        return {"followers": int(row["followers"]), "following": int(row["following"])}
+
+    def is_following(self, follower_id: str | None, followee_id: str) -> bool:
+        if follower_id is None:
+            return False
+        row = self._fetchone(
+            "SELECT 1 AS one FROM follow WHERE follower_id = %s AND followee_id = %s",
+            (follower_id, followee_id),
+        )
+        return row is not None
+
+    def list_followee_ids(self, user_id: str) -> list[str]:
+        rows = self._fetchall(
+            "SELECT followee_id FROM follow WHERE follower_id = %s", (user_id,)
+        )
+        return [row["followee_id"] for row in rows]
+
+    def insert_notification(self, record: dict[str, Any]) -> None:
+        record = dict(record)
+        record["payload"] = Json(record.get("payload") or {})
+        self._connection.execute(
+            "INSERT INTO notification (id, recipient_id, kind, payload, read_at, created_at) "
+            "VALUES (%(id)s, %(recipient_id)s, %(kind)s, %(payload)s, NULL, %(created_at)s)",
+            record,
+        )
+
+    def list_notifications_for_user(self, user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT id, kind, payload, read_at, created_at FROM notification "
+            "WHERE recipient_id = %s ORDER BY created_at DESC LIMIT 100",
+            (user_id,),
+        )
+
+    def mark_notification_read(self, notification_id: str, recipient_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE notification SET read_at = now() "
+                "WHERE id = %s AND recipient_id = %s AND read_at IS NULL",
+                (notification_id, recipient_id),
+            )
+            return cursor.rowcount
+
+    def list_recent_claims_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT c.*, u.handle AS claimant_handle FROM run_claim c "
+            "JOIN app_user u ON u.id = c.claimant_id "
+            "WHERE %s::uuid[] IS NULL OR c.claimant_id = ANY(%s::uuid[]) "
+            "ORDER BY c.created_at DESC LIMIT %s",
+            (user_ids, user_ids, limit),
+        )
+
+    def list_recent_validated_runs_by_owners(self, owner_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT r.id AS run_id, r.model_release_id, r.quantization_profile_id, "
+            "r.inference_runtime_id, hs.owner_account_id AS owner_account_id, "
+            "r.submitted_at, m.p50_value AS decode_tok_s "
+            "FROM benchmark_run r "
+            "JOIN hardware_submission hs ON hs.id = r.hardware_submission_id "
+            "LEFT JOIN LATERAL (SELECT p50_value FROM benchmark_metric mm "
+            "  WHERE mm.benchmark_run_id = r.id AND mm.kind = 'decode_tok_s') m ON true "
+            "WHERE r.status = 'validated' "
+            "AND (%s::uuid[] IS NULL OR hs.owner_account_id = ANY(%s::uuid[])) "
+            "ORDER BY r.submitted_at DESC LIMIT %s",
+            (owner_ids, owner_ids, limit),
         )
 
     def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:

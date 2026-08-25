@@ -57,6 +57,15 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
   (L0=0.2 … L4=1.0), one vote per voter, claimant cannot self-vote
 - POST /v1/claims/{id}/retract — claimant-only, open claims only
 
+## Social graph & feed (S17)
+
+- POST/DELETE /v1/users/{handle}/follow — follow graph (self/duplicate blocked);
+  profile payloads carry follower/following counts + viewer perspective
+- GET /v1/feed?scope=following|global&sort=recent|trending — typed items:
+  claims with live tallies + account-attributed validated runs
+- GET /v1/notifications + POST /v1/notifications/{id}/read — settlement and
+  new-follower events land here
+
 ## License
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**

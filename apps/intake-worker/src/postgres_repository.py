@@ -181,6 +181,12 @@ class PostgresIntakeRepository:
                 "WHERE app_user_id = %s",
                 (new_points, new_tier, claimant_id),
             )
+            cursor.execute(
+                "INSERT INTO notification (id, recipient_id, kind, payload) "
+                "VALUES (gen_random_uuid(), %s, 'claim_settled_verified', "
+                "jsonb_build_object('claim_id', %s, 'points_awarded', %s))",
+                (claimant_id, claim_id, new_points),
+            )
             connection.commit()
 
     def fetch_run_payload(self, run_id: str) -> Optional[dict[str, Any]]:

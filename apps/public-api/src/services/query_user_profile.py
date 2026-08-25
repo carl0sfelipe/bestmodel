@@ -33,6 +33,12 @@ def get_user_profile(
             "updated_at": reputation.get("updated_at"),
         },
         "badges": session.fetch_badges_by_user(user["id"]),
+        "follow": {
+            **session.fetch_follow_counts(user["id"]),
+            "viewer_is_following": session.is_following(
+                (viewer or {}).get("id"), user["id"]
+            ),
+        },
         "rigs": [
             {
                 "slug": rig["slug"],

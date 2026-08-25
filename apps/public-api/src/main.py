@@ -24,6 +24,7 @@ from src.routes import (
     leaderboard_route,
     model_match_route,
     rig_route,
+    social_route,
     user_route,
 )
 
@@ -51,6 +52,7 @@ def create_app() -> FastAPI:
     app.include_router(auth_route.router)
     app.include_router(rig_route.router)
     app.include_router(claim_route.router)
+    app.include_router(social_route.router)  # before user_route: fixed segments first
     app.include_router(user_route.router)
     return app
 

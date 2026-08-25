@@ -52,6 +52,8 @@ class FakeDatabase(DatabaseSession):
         self._claims: list[dict[str, Any]] = []
         self._votes: list[dict[str, Any]] = []
         self._reputation_events: list[dict[str, Any]] = []
+        self._follows: list[dict[str, Any]] = []
+        self._notifications: list[dict[str, Any]] = []
         self._seed_validated_runs()
 
     def _seed_validated_runs(self) -> None:
@@ -393,6 +395,93 @@ class FakeDatabase(DatabaseSession):
                 return
         self._votes.append(dict(record))
 
+    def insert_follow(self, record: dict[str, Any]) -> None:
+        if any(
+            f["follower_id"] == record["follower_id"]
+            and f["followee_id"] == record["followee_id"]
+            for f in self._follows
+        ):
+            raise ValueError("duplicate follow")
+        self._follows.append(dict(record))
+
+    def delete_follow(self, follower_id: str, followee_id: str) -> int:
+        before = len(self._follows)
+        self._follows = [
+            f for f in self._follows
+            if not (f["follower_id"] == follower_id and f["followee_id"] == followee_id)
+        ]
+        return before - len(self._follows)
+
+    def fetch_follow_counts(self, user_id: str) -> dict[str, int]:
+        return {
+            "followers": sum(1 for f in self._follows if f["followee_id"] == user_id),
+            "following": sum(1 for f in self._follows if f["follower_id"] == user_id),
+        }
+
+    def is_following(self, follower_id: str | None, followee_id: str) -> bool:
+        return follower_id is not None and any(
+            f["follower_id"] == follower_id and f["followee_id"] == followee_id
+            for f in self._follows
+        )
+
+    def list_followee_ids(self, user_id: str) -> list[str]:
+        return [f["followee_id"] for f in self._follows if f["follower_id"] == user_id]
+
+    def insert_notification(self, record: dict[str, Any]) -> None:
+        stored = dict(record)
+        stored.setdefault("payload", {})
+        stored.setdefault("read_at", None)
+        stored.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        self._notifications.append(stored)
+
+    def list_notifications_for_user(self, user_id: str) -> list[dict[str, Any]]:
+        rows = [n for n in self._notifications if n["recipient_id"] == user_id]
+        return sorted(rows, key=lambda n: str(n["created_at"]), reverse=True)
+
+    def mark_notification_read(self, notification_id: str, recipient_id: str) -> int:
+        affected = 0
+        for n in self._notifications:
+            if n["id"] == notification_id and n["recipient_id"] == recipient_id and n.get("read_at") is None:
+                n["read_at"] = datetime.now(timezone.utc).isoformat()
+                affected += 1
+        return affected
+
+    def list_recent_claims_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        wanted = None if user_ids is None else set(user_ids)
+        handles = {u["id"]: u["handle"] for u in self._users}
+        rows = [
+            {**c, "claimant_handle": handles.get(c["claimant_id"])}
+            for c in self._claims
+            if wanted is None or c["claimant_id"] in wanted
+        ]
+        return sorted(rows, key=lambda r: str(r["created_at"]), reverse=True)[:limit]
+
+    def list_recent_validated_runs_by_owners(self, owner_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        owners = {h["id"]: h["owner_account_id"] for h in self._hardware_submissions}
+        wanted = None if owner_ids is None else set(owner_ids)
+        rows = []
+        for run in self._runs:
+            if run["status"] != "validated":
+                continue
+            owner = owners.get(run["hardware_submission_id"])
+            if wanted is not None and owner not in wanted:
+                continue
+            metrics = {
+                m["kind"]: m["p50_value"]
+                for m in self._metrics
+                if m["benchmark_run_id"] == run["id"] and m["kind"] == "decode_tok_s"
+            }
+            rows.append({
+                "run_id": run["id"],
+                "model_release_id": run["model_release_id"],
+                "quantization_profile_id": run["quantization_profile_id"],
+                "inference_runtime_id": run["inference_runtime_id"],
+                "owner_account_id": owner,
+                "submitted_at": run["submitted_at"],
+                "decode_tok_s": metrics.get("decode_tok_s"),
+            })
+        return sorted(rows, key=lambda r: str(r["submitted_at"]), reverse=True)[:limit]
+
     def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
         affected = 0
         for row in self._claims:
@@ -451,6 +540,14 @@ class FakeDatabase(DatabaseSession):
                 row["points"] = new_points
                 row["tier"] = new_tier
                 row["updated_at"] = utcnow_iso()
+        self.insert_notification(
+            {
+                "id": f"notif-{claim_id}",
+                "recipient_id": claimant_id,
+                "kind": "claim_settled_verified",
+                "payload": {"claim_id": claim_id, "points_awarded": new_points},
+            }
+        )
 
     def fetch_votes_for_claim(self, claim_id: str) -> list[dict[str, Any]]:
         return [

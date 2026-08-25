@@ -163,6 +163,42 @@ class DatabaseSession(ABC):
         """Update ``last_used_at`` for the token."""
 
     @abstractmethod
+    def insert_rig(self, record: dict[str, Any]) -> None:
+        """Insert a rig row."""
+
+    @abstractmethod
+    def find_rig_by_slug(self, slug: str) -> dict[str, Any] | None:
+        """Return the rig row for ``slug`` or None."""
+
+    @abstractmethod
+    def update_rig(
+        self,
+        rig_id: str,
+        fields: dict[str, Any],
+    ) -> int:
+        """Update whitelisted rig columns; return affected rows (0/1)."""
+
+    @abstractmethod
+    def list_visible_rigs_by_owner(self, owner_id: str, viewer_id: str | None) -> list[dict[str, Any]]:
+        """Return rigs of ``owner_id`` visible to ``viewer_id`` (None = anonymous)."""
+
+    @abstractmethod
+    def fetch_validated_runs_for_hardware(self, hardware_submission_id: str, limit: int) -> list[dict[str, Any]]:
+        """Return validated runs bound to a hardware submission with metric medians."""
+
+    @abstractmethod
+    def fetch_reputation_by_user(self, user_id: str) -> dict[str, Any] | None:
+        """Return the user_reputation row for ``user_id`` or None."""
+
+    @abstractmethod
+    def insert_badge(self, record: dict[str, Any]) -> None:
+        """Insert a badge row (unique per user+code)."""
+
+    @abstractmethod
+    def fetch_badges_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        """Return badge rows for ``user_id`` ordered by awarded_at."""
+
+    @abstractmethod
     def commit(self) -> None:
         """Persist pending writes."""
 
@@ -437,6 +473,89 @@ class PostgresSession(DatabaseSession):
         self._connection.execute(
             "UPDATE auth_token SET last_used_at = %s WHERE id = %s",
             (last_used_at, token_id),
+        )
+
+    def insert_rig(self, record: dict[str, Any]) -> None:
+        record = dict(record)
+        record["topology"] = Json(record.get("topology") or {})
+        self._connection.execute(
+            "INSERT INTO rig (id, owner_id, nickname, slug, topology, is_public, "
+            "hardware_submission_id, created_at, updated_at) "
+            "VALUES (%(id)s, %(owner_id)s, %(nickname)s, %(slug)s, %(topology)s, "
+            "%(is_public)s, %(hardware_submission_id)s, %(created_at)s, %(updated_at)s)",
+            record,
+        )
+
+    def find_rig_by_slug(self, slug: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM rig WHERE slug = %s", (slug,))
+
+    def update_rig(self, rig_id: str, fields: dict[str, Any]) -> int:
+        allowed = {"nickname", "topology", "is_public", "hardware_submission_id"}
+        assignments = []
+        params: dict[str, Any] = {"rig_id": rig_id}
+        for key in sorted(set(fields) & allowed):
+            value = fields[key]
+            if key == "topology":
+                value = Json(value or {})
+            assignments.append(f"{key} = %({key})s")
+            params[key] = value
+        if not assignments:
+            return 0
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                f"UPDATE rig SET {', '.join(assignments)}, updated_at = now() "
+                "WHERE id = %(rig_id)s",
+                params,
+            )
+            return cursor.rowcount
+
+    def list_visible_rigs_by_owner(self, owner_id: str, viewer_id: str | None) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT * FROM rig WHERE owner_id = %s AND "
+            "(is_public OR (%s::uuid IS NOT NULL AND owner_id = %s::uuid)) "
+            "ORDER BY created_at",
+            (owner_id, viewer_id, viewer_id),
+        )
+
+    def fetch_validated_runs_for_hardware(self, hardware_submission_id: str, limit: int) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT run.id AS run_id, run.model_release_id, run.quantization_profile_id, "
+            "run.inference_runtime_id, run.submitted_at, "
+            "m_decode.p50_value AS decode_tok_s, "
+            "m_prefill.p50_value AS prefill_tok_s, "
+            "m_ttft.p50_value AS ttft_ms, "
+            "m_vram.p50_value AS peak_vram_mib "
+            "FROM benchmark_run run "
+            "LEFT JOIN benchmark_metric m_decode ON m_decode.benchmark_run_id = run.id "
+            "AND m_decode.kind = 'decode_tok_s' "
+            "LEFT JOIN benchmark_metric m_prefill ON m_prefill.benchmark_run_id = run.id "
+            "AND m_prefill.kind = 'prefill_tok_s' "
+            "LEFT JOIN benchmark_metric m_ttft ON m_ttft.benchmark_run_id = run.id "
+            "AND m_ttft.kind = 'ttft_ms' "
+            "LEFT JOIN benchmark_metric m_vram ON m_vram.benchmark_run_id = run.id "
+            "AND m_vram.kind = 'peak_vram_mib' "
+            "WHERE run.hardware_submission_id = %s AND run.status = 'validated' "
+            "ORDER BY run.submitted_at DESC LIMIT %s",
+            (hardware_submission_id, limit),
+        )
+
+    def fetch_reputation_by_user(self, user_id: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT points, tier, updated_at FROM user_reputation WHERE app_user_id = %s",
+            (user_id,),
+        )
+
+    def insert_badge(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO badge (id, app_user_id, code) VALUES (%(id)s, %(app_user_id)s, %(code)s) "
+            "ON CONFLICT (app_user_id, code) DO NOTHING",
+            record,
+        )
+
+    def fetch_badges_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT code, awarded_at FROM badge WHERE app_user_id = %s ORDER BY awarded_at",
+            (user_id,),
         )
 
     def commit(self) -> None:

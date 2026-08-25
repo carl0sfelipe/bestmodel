@@ -89,7 +89,7 @@ endpoints — no SPA framework unless a spec justifies one.
 | Step | Story | Acceptance gate |
 |---|---|---|
 | S13 | Migration 0005 + auth (passkey first) | DONE: migrations 0005+0006 applied; 15 auth suites green; real-PG constraint smoke passed |
-| S14 | Rigs + profiles + catalog binding | profile page renders from API fixtures |
+| S14 | Rigs + profiles + catalog binding | DONE: migration 0007 (rig+badge); 13 route/service suites green; profile payload asserted from fixtures; real-PG smoke passed |
 | S15 | Claims + priors snapshot + voting | vote margin math property-tested |
 | S16 | Settle flow (claim → signed run conversion) | e2e: claim → CLI run → settled, rep credited |
 | S17 | Feed + trending + share cards | card PNG matches template golden file |

@@ -22,6 +22,8 @@ from src.routes import (
     hardware_match_route,
     leaderboard_route,
     model_match_route,
+    rig_route,
+    user_route,
 )
 
 DEFAULT_DATABASE_URL = "postgresql://bestmodel:bestmodel@localhost:5434/bestmodel"
@@ -46,6 +48,8 @@ def create_app() -> FastAPI:
     app.include_router(leaderboard_route.router)
     app.include_router(benchmark_submission_route.router)
     app.include_router(auth_route.router)
+    app.include_router(rig_route.router)
+    app.include_router(user_route.router)
     return app
 
 

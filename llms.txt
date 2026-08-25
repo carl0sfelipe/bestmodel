@@ -42,6 +42,12 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 - POST /v1/auth/passkey/login/options + /verify — assert passkey, receive session bearer token
 - POST/GET/DELETE /v1/auth/tokens — long-lived agent tokens (shown once, SHA-256 at rest)
 
+## Social (S14)
+
+- POST /v1/rigs · GET/PATCH /v1/rigs/{slug} · POST /v1/rigs/{slug}/bind — user rigs,
+  optional binding to hardware_submission rows unlocks per-rig measured runs
+- GET /v1/users/{handle} — profile: reputation tier/points, badges, visible rigs
+
 ## License
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**

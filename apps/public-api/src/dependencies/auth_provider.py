@@ -98,5 +98,20 @@ def _as_aware(value: Any) -> datetime:
     return value
 
 
+def get_optional_user(
+    authorization: str | None = Header(default=None),
+    session: DatabaseSession = Depends(get_database_session),
+) -> AuthenticatedCaller | None:
+    """Resolve the caller when a valid bearer token is present; else anonymous.
+
+    Invalid or expired tokens degrade to anonymous instead of failing, so
+    public views never break over stale client credentials.
+    """
+    try:
+        return get_current_user(authorization=authorization, session=session)
+    except HTTPException:
+        return None
+
+
 def _utcnow_iso() -> str:
     return datetime.now(timezone.utc).isoformat()

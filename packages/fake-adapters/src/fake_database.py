@@ -47,6 +47,8 @@ class FakeDatabase(DatabaseSession):
         self._credentials: list[dict[str, Any]] = []
         self._challenges: list[dict[str, Any]] = []
         self._tokens: list[dict[str, Any]] = []
+        self._rigs: list[dict[str, Any]] = []
+        self._badges: list[dict[str, Any]] = []
         self._seed_validated_runs()
 
     def _seed_validated_runs(self) -> None:
@@ -243,6 +245,96 @@ class FakeDatabase(DatabaseSession):
         for row in self._tokens:
             if row["id"] == token_id:
                 row["last_used_at"] = last_used_at
+
+    def insert_rig(self, record: dict[str, Any]) -> None:
+        if any(row["slug"] == record["slug"] for row in self._rigs):
+            raise ValueError(f"duplicate slug: {record['slug']}")
+        self._rigs.append(dict(record))
+
+    def find_rig_by_slug(self, slug: str) -> dict[str, Any] | None:
+        return next((row for row in self._rigs if row["slug"] == slug), None)
+
+    def update_rig(self, rig_id: str, fields: dict[str, Any]) -> int:
+        allowed = {"nickname", "topology", "is_public", "hardware_submission_id"}
+        affected = 0
+        for row in self._rigs:
+            if row["id"] != rig_id:
+                continue
+            for key in set(fields) & allowed:
+                row[key] = fields[key]
+            row["updated_at"] = _parse_ts("2026-01-01T00:00:00+00:00")
+            affected += 1
+        return affected
+
+    def list_visible_rigs_by_owner(self, owner_id: str, viewer_id: str | None) -> list[dict[str, Any]]:
+        return [
+            dict(row)
+            for row in self._rigs
+            if row["owner_id"] == owner_id and (row.get("is_public") or viewer_id == owner_id)
+        ]
+
+    def fetch_validated_runs_for_hardware(self, hardware_submission_id: str, limit: int) -> list[dict[str, Any]]:
+        runs = sorted(
+            (
+                run
+                for run in self._runs
+                if run["hardware_submission_id"] == hardware_submission_id
+                and run["status"] == "validated"
+            ),
+            key=lambda r: r["submitted_at"],
+            reverse=True,
+        )[:limit]
+        return [self._run_with_metrics(run) for run in runs]
+
+    def _run_with_metrics(self, run: dict[str, Any]) -> dict[str, Any]:
+        medians = {}
+        for kind in ("decode_tok_s", "prefill_tok_s", "ttft_ms", "peak_vram_mib"):
+            values = sorted(
+                m["p50_value"] for m in self._metrics
+                if m["benchmark_run_id"] == run["id"] and m["kind"] == kind
+            )
+            medians[kind] = values[len(values) // 2] if values else None
+        return {
+            "run_id": run["id"],
+            "model_release_id": run["model_release_id"],
+            "quantization_profile_id": run["quantization_profile_id"],
+            "inference_runtime_id": run["inference_runtime_id"],
+            "submitted_at": run["submitted_at"],
+            **medians,
+        }
+
+    def fetch_reputation_by_user(self, user_id: str) -> dict[str, Any] | None:
+        return next(
+            (
+                {
+                    "points": row["points"],
+                    "tier": row["tier"],
+                    "updated_at": row.get("updated_at"),
+                }
+                for row in self._reputations
+                if row["app_user_id"] == user_id
+            ),
+            None,
+        )
+
+    def insert_badge(self, record: dict[str, Any]) -> None:
+        duplicate = any(
+            b["app_user_id"] == record["app_user_id"] and b["code"] == record["code"]
+            for b in self._badges
+        )
+        if not duplicate:
+            stored = dict(record)
+            stored.setdefault("awarded_at", datetime.now(timezone.utc).isoformat())
+            self._badges.append(stored)
+
+    def fetch_badges_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        return [
+            {"code": b["code"], "awarded_at": b["awarded_at"]}
+            for b in sorted(
+                (b for b in self._badges if b["app_user_id"] == user_id),
+                key=lambda b: str(b["awarded_at"]),
+            )
+        ]
 
     # -- test helpers ----------------------------------------------------
 

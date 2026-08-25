@@ -1,0 +1,75 @@
+{
+  "run_id": "run-fraud-0001",
+  "schema_version": "0.9.0",
+  "runtime_version": "b4568",
+  "runtime_engine": "llama_cpp",
+  "hardware_fingerprint": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+  "signature_valid": true,
+  "duration_seconds": 120.0,
+  "hardware": {
+    "id": "gpu-rtx-4090",
+    "vendor": "nvidia",
+    "marketing_name": "RTX 4090",
+    "vram_mib": 24576,
+    "memory_bandwidth_gib_s": 1008.0,
+    "tdp_watt": 450
+  },
+  "model": {
+    "id": "model-llama3-8b",
+    "family": "llama-3",
+    "release_name": "llama-3-8b",
+    "architecture": "dense",
+    "parameter_count_billion": 8.0,
+    "num_layers": 32,
+    "hidden_size": 4096,
+    "num_attention_heads": 32,
+    "num_kv_heads": 8,
+    "head_dim": 128,
+    "max_context_tokens": 8192
+  },
+  "quant": {
+    "id": "q-gguf-q4-k-m",
+    "display_name": "GGUF Q4_K_M",
+    "weight_format": "gguf_q4",
+    "weight_bits": 4.5,
+    "kv_cache_bits": 16
+  },
+  "scenario": {
+    "prompt_tokens": 4096,
+    "generated_tokens": 512,
+    "batch_size": 1,
+    "context_tokens": 8192
+  },
+  "metrics": {
+    "ttft_ms": 100.0,
+    "prefill_tok_s": 9000.0,
+    "decode_tok_s": 300.0,
+    "peak_vram_mib": 2000.0,
+    "power_watt_avg": 412.0
+  },
+  "dimension": {
+    "hardware_model_id": "gpu-rtx-4090",
+    "model_release_id": "model-llama3-8b",
+    "quantization_profile_id": "q-gguf-q4-k-m",
+    "runtime_engine": "llama_cpp",
+    "context_tokens": 8192,
+    "batch_size": 1
+  },
+  "artifacts": [
+    {
+      "artifact_kind": "runtime_stdout",
+      "declared_sha256": "184caceee263be9e5c7534e5551a2caf03515927d59513b12381646613d03741",
+      "content": "llama-cli benchmark output\nbackend: cuda\nmetric ttft_ms 100.0\nmetric prefill_tok_s 9000.0\nmetric decode_tok_s 300.0\nmetric peak_vram_mib 2000.0\n"
+    },
+    {
+      "artifact_kind": "runtime_config",
+      "declared_sha256": "30c3c679489fdb907ad80000592aa22a466f382c58471c03b8e9dd7203226af6",
+      "content": "quant=q-gguf-q4-k-m\ncontext_tokens=8192\nbatch_size=1\n"
+    },
+    {
+      "artifact_kind": "gpu_smi_trace",
+      "declared_sha256": "c62df92e7c7d0eb3426ac71704f097e44c3b4b5eed494579cf0ecc2f57cd1143",
+      "content": "gpu_utilization=0.98\nmemory_used_mib=2000\npower_watt=412\n"
+    }
+  ]
+}

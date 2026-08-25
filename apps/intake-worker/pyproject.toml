@@ -1,0 +1,9 @@
+[project]
+name = "intake-worker"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2",
+    "redis>=5",
+    "psycopg[binary]>=3",
+]

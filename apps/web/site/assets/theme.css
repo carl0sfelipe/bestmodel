@@ -1,0 +1,213 @@
+/* ============================================================
+   theme.css — S4 shared UI kit for bestmodel web
+   Extracted literally from the three prototypes (spec S4).
+   Source of truth: prototypes/goal-first.html; divergences from
+   hardware-first / mobile-landing are noted per block.
+
+   Google Fonts — same <link> tags as the prototypes (the mobile
+   link is a superset of the desktop weights, so one tag covers
+   all pages):
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+   ============================================================ */
+
+/* ---------- tokens ---------- */
+/* from prototypes/goal-first.html — the desktop set is identical in all
+   three prototypes; the mobile-only extras (--surface-2, --surface-3,
+   --amber-soft, --safe-top, --safe-bot, --nav-h, --bottom-h) are unioned
+   in from prototypes/mobile-landing.html so the kit also serves site/m/. */
+:root{
+  --bg:#0B0C0E;
+  --surface:#121417;
+  --surface-2:#181B20;
+  --surface-3:#1F2328;
+  --hair:rgba(255,255,255,.08);
+  --hair-strong:rgba(255,255,255,.16);
+  --ink:#EDEEF0;
+  --muted:#8B9096;
+  --dim:#4A4F57;
+  --amber:#E0A458;
+  --amber-soft:rgba(224,164,88,.08);
+  --green:#9BC4A9;
+  --red:#D67B7B;
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --display:'Inter Tight', 'Inter', system-ui, sans-serif;
+  --body:'Inter', system-ui, sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-soft:cubic-bezier(.25,.8,.25,1);
+  --safe-top:env(safe-area-inset-top, 0px);
+  --safe-bot:env(safe-area-inset-bottom, 0px);
+  --nav-h:56px;
+  --bottom-h:72px;
+}
+
+/* ---------- base reset ---------- */
+/* from prototypes/goal-first.html */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11"}
+body{overflow-x:hidden}
+::selection{background:var(--amber);color:#000}
+button,input{font:inherit;color:inherit;background:none;border:0;outline:0}
+
+/* ---------- state rail chips ---------- */
+/* from prototypes/goal-first.html */
+.rail{
+  position:fixed;top:88px;left:40px;z-index:30;
+  display:flex;flex-wrap:wrap;gap:8px;max-width:560px;
+  opacity:0;transform:translateY(-6px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  pointer-events:none;
+}
+.rail.on{opacity:1;transform:translateY(0);pointer-events:auto}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 11px;border-radius:999px;
+  background:rgba(18,20,23,.6);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--hair);
+  font-family:var(--mono);font-size:12px;letter-spacing:-.01em;
+  color:var(--ink);cursor:pointer;
+  transition:border-color .25s, background .25s, transform .3s var(--ease);
+}
+.chip:hover{border-color:var(--hair-strong);background:rgba(18,20,23,.85)}
+.chip:active{transform:scale(.98)}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--dim)}
+.chip[data-k="intent"] .dot{background:var(--amber)}
+.chip[data-k="machine"] .dot{background:var(--green)}
+.chip[data-k="quant"] .dot{background:var(--muted)}
+.chip[data-k="query"] .dot{background:var(--ink)}
+.chip .x{color:var(--dim);margin-left:2px}
+
+/* ---------- popover ---------- */
+/* from prototypes/goal-first.html */
+.popover{
+  position:fixed;z-index:60;min-width:200px;
+  background:rgba(18,20,23,.96);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--hair);border-radius:10px;
+  padding:8px;font-family:var(--mono);font-size:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6), 0 2px 6px rgba(0,0,0,.4);
+  opacity:0;transform:translateY(4px);transition:opacity .25s var(--ease), transform .25s var(--ease);
+  pointer-events:none;
+}
+.popover.on{opacity:1;transform:translateY(0);pointer-events:auto}
+.pop-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:6px;cursor:pointer;
+  color:var(--muted);transition:background .2s, color .2s;
+}
+.pop-item:hover{background:rgba(255,255,255,.04);color:var(--ink)}
+.pop-item .g{width:12px;height:12px;display:inline-block;flex-shrink:0}
+.pop-item.active{color:var(--ink)}
+.pop-item.active::after{content:"";width:4px;height:4px;border-radius:50%;background:var(--amber);margin-left:auto}
+
+/* ---------- tip ---------- */
+/* from prototypes/goal-first.html */
+.tip{
+  position:fixed;z-index:50;background:var(--surface);border:1px solid var(--hair);
+  padding:8px 12px;border-radius:6px;font-family:var(--mono);font-size:11px;
+  pointer-events:none;opacity:0;transition:opacity .15s;
+  white-space:pre;
+}
+.tip.on{opacity:1}
+
+/* ---------- toast ---------- */
+/* from prototypes/hardware-first.html (goal-first has no toast) */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  z-index:100;padding:12px 18px;border-radius:10px;
+  background:rgba(18,20,23,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--hair);
+  font-family:var(--mono);font-size:12px;color:var(--ink);
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  opacity:0;transition:opacity .3s, transform .3s;
+  pointer-events:none;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+/* mobile divergence: from prototypes/mobile-landing.html (used by site/m/) */
+@media (max-width:1024px){
+  .toast{
+    top:calc(var(--nav-h) + var(--safe-top) + 10px);bottom:auto;
+    transform:translateX(-50%) translateY(-10px);
+    z-index:200;padding:10px 16px;gap:8px;
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    max-width:calc(100vw - 32px);
+  }
+  .toast .dot{width:5px;height:5px}
+}
+
+/* ---------- quant segment (qbtn) ---------- */
+/* from prototypes/goal-first.html */
+.quant-row{display:flex;align-items:center;gap:20px;margin-top:40px;justify-content:center}
+.quant-lbl{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.quant-seg{display:flex;background:var(--surface);border:1px solid var(--hair);border-radius:999px;padding:3px}
+.qbtn{
+  padding:8px 16px;border-radius:999px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer;
+  transition:background .25s, color .25s;
+}
+.qbtn.on{background:rgba(255,255,255,.06);color:var(--ink)}
+.qbtn:hover:not(.on){color:var(--ink)}
+.match-count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:20px}
+.match-count b{color:var(--amber);font-weight:500}
+
+/* ---------- install / copy block ---------- */
+/* from prototypes/goal-first.html */
+.install{
+  margin-top:44px;display:inline-flex;align-items:center;gap:16px;
+  padding:14px 22px;background:var(--surface);border:1px solid var(--hair);border-radius:8px;
+  font-family:var(--mono);font-size:14px;color:var(--ink);
+  transition:border-color .25s;
+}
+.install:hover{border-color:var(--hair-strong)}
+.install .prompt{color:var(--muted)}
+.install .cp{
+  margin-left:8px;padding:4px 10px;border-radius:4px;background:rgba(255,255,255,.04);
+  color:var(--muted);font-size:11px;cursor:pointer;transition:background .25s, color .25s;
+}
+.install .cp:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+.install .cp.done{color:var(--green)}
+
+/* ---------- ecosystem SVG (eco) ---------- */
+/* from prototypes/goal-first.html (the scroll-scrubbed dash animation is
+   page-level and stays out of the kit) */
+.eco{position:relative;width:100%;aspect-ratio:16/9;max-height:520px}
+.eco svg{width:100%;height:100%;display:block}
+.eco-node{fill:var(--surface);stroke:var(--hair);stroke-width:1;transition:stroke .3s}
+.eco-node.center{fill:var(--surface);stroke:var(--amber);stroke-width:1.5}
+.eco-node:hover{stroke:var(--amber)}
+.eco-line{stroke:var(--hair-strong);stroke-width:1;fill:none;stroke-dasharray:300;stroke-dashoffset:300;transition:stroke-dashoffset 1s var(--ease)}
+.eco-lbl{font-family:var(--mono);font-size:11px;fill:var(--muted);text-anchor:middle;letter-spacing:.02em}
+.eco-core-lbl{font-family:var(--display);font-size:14px;fill:var(--ink);text-anchor:middle;font-weight:600;letter-spacing:-.01em}
+
+/* ---------- footer ---------- */
+/* from prototypes/goal-first.html */
+footer{
+  padding:48px 56px;border-top:1px solid var(--hair);
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--dim);
+}
+footer .links{display:flex;gap:22px}
+footer .links a{color:inherit;text-decoration:none;transition:color .25s}
+footer .links a:hover{color:var(--muted)}
+
+/* ---------- fit badges ---------- */
+/* badge base from prototypes/goal-first.html (.rec .badge);
+   palette from .snode[data-fit] in the same file:
+   no=--dim, tight=#C58E52, ok/head=--green (spec S4) */
+.fit-badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fit-badge.fit-no{color:var(--dim)}
+.fit-badge.fit-tight{color:#C58E52}
+.fit-badge.fit-ok,.fit-badge.fit-head{color:var(--green)}
+.fit-badge.fit-none{color:var(--dim)}
+
+/* ---------- basis badges ---------- */
+/* colors per CONTRATO §7: measured=green, reported=amber,
+   extrapolated=muted, no data=dim */
+.basis-badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.basis-badge[data-basis="measured"]{color:var(--green)}
+.basis-badge[data-basis="reported"]{color:var(--amber)}
+.basis-badge[data-basis="extrapolated"]{color:var(--muted)}
+.basis-badge[data-basis="none"]{color:var(--dim)}

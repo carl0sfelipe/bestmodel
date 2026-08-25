@@ -1,0 +1,2 @@
+{"recipe": "synthetic-ok2g", "recipe_version": "comfy-r1", "model_file": "ok-2g.safetensors", "resolution": [512, 512], "batch_size": 1, "steps": 20, "experiment": "exp-ok2g"}
+{"recipe": "synthetic-small", "recipe_version": "comfy-r1", "model_file": "small-1g.safetensors", "resolution": [512, 512], "batch_size": 1, "steps": 20, "experiment": "exp-small"}

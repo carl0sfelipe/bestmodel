@@ -1,0 +1,20 @@
+{
+  "system": {
+    "os": "synthetic",
+    "comfyui_version": "0.0.0-synthetic",
+    "python_version": "0.0.0-synthetic",
+    "pytorch_version": "0.0.0-synthetic"
+  },
+  "devices": [
+    {
+      "name": "synthetic-gpu",
+      "type": "synthetic",
+      "index": 0,
+      "vram_total": 8000000000,
+      "vram_free": 6000000000,
+      "torch_vram_total": 8000000000,
+      "torch_vram_free": 6000000000
+    }
+  ],
+  "source": "synthetic"
+}

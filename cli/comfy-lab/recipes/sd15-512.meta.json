@@ -1,0 +1,9 @@
+{
+  "recipe_version": "comfy-r1",
+  "warmup_runs": 1,
+  "measured_runs": 3,
+  "model_file": "v1-5-pruned-emaonly-fp16.safetensors",
+  "resolution": [512, 512],
+  "batch_size": 1,
+  "steps": 20
+}

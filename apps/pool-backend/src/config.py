@@ -1,0 +1,16 @@
+API_PORT = 8790
+DB_PATH = "data/lmpool.sqlite3"
+API_BASE = "https://www.localmaxxing.com/api"
+THROTTLE_MS = 350
+USER_AGENT = "bestmodel-backend-sync/0.1"
+MIN_RUNS_MEASURED = 3
+SUSPICIOUS_FRACTION = 0.92
+IMPOSSIBLE_FRACTION = 1.05
+ATTRIBUTION = "community pool data via localmaxxing.com public API"
+USABLE_DISCRETE = 0.90
+USABLE_UNIFIED = 0.75
+GB_PER_B_PER_BIT = 0.15
+CTX_ALLOWANCE_GB = 2.0
+FIT_TIGHT = 0.12
+FIT_OK = 0.35
+BITS_DOMAIN = (1, 2, 3, 4, 5, 6, 7, 8, 16)

@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Every machine × model answer, from real runs</title>
+<meta name="description" content="Community-verified answers: can a given machine run a given model, and how fast? Measured single-stream runs from the localmaxxing public pool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/theme.css">
+<style>/* S8 static answer pages — layout only; tokens/components from theme.css. */
+.page{max-width:780px;margin:0 auto;padding:0 24px 120px}
+.nav-top{
+  position:sticky;top:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:20px 56px;
+  background:rgba(11,12,14,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--hair);
+  font-family:var(--mono);font-size:13px;letter-spacing:-.01em;
+}
+.wordmark{color:var(--ink);display:flex;align-items:center;gap:10px}
+.wordmark .prompt{color:var(--muted)}
+.nav-top .links{display:flex;gap:20px;color:var(--muted);flex-wrap:wrap}
+.nav-top .links a{color:inherit;text-decoration:none;transition:color .25s}
+.nav-top .links a:hover{color:var(--ink)}
+.hero{padding:72px 0 32px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.6vw,54px);line-height:1.04;letter-spacing:-.03em;max-width:720px}
+.answer{margin-top:24px;font-family:var(--display);font-weight:500;font-size:clamp(18px,2.2vw,24px);letter-spacing:-.01em}
+.answer .yes{color:var(--green)}
+.answer .em{color:var(--amber)}
+.sub{margin-top:12px;color:var(--muted);font-size:15px;max-width:600px}
+.data-table{margin-top:44px;width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+.data-table th,.data-table td{padding:14px 18px;text-align:left;font-family:var(--mono);font-size:12px}
+.data-table thead th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--hair);background:var(--surface-2)}
+.data-table tbody tr{border-top:1px solid var(--hair)}
+.data-table tbody tr:first-child{border-top:0}
+.data-table td.num{font-variant-numeric:tabular-nums;color:var(--ink)}
+.journeys{margin-top:44px;display:flex;flex-direction:column;gap:12px;padding:22px;border:1px solid var(--hair);border-radius:12px;background:var(--surface)}
+.j-head{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.journeys a{color:var(--amber);text-decoration:none;font-family:var(--mono);font-size:13px;transition:color .25s}
+.journeys a:hover{color:#E9B36F}
+.rig-group{margin-top:56px}
+.rig-name{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.rig-count{font-family:var(--mono);font-size:11px;color:var(--dim);font-weight:400}
+.model-list{list-style:none;margin-top:16px;display:flex;flex-direction:column}
+.model-list li{padding:10px 0;border-top:1px solid var(--hair)}
+.model-list a{color:var(--ink);text-decoration:none;font-family:var(--mono);font-size:13px;transition:color .25s}
+.model-list a:hover{color:var(--amber)}
+@media (max-width:900px){
+  .nav-top{padding:16px 20px}
+  .page{padding:0 20px 80px}
+  .hero{padding:48px 0 24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}</style>
+</head>
+<body>
+<header class="nav-top">
+  <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+  <div class="links">
+    <a href="../index.html">I have a goal</a>
+    <a href="../hardware.html">I have hardware</a>
+  </div>
+</header>
+<main class="page">
+  <section class="hero">
+    <div class="kicker">answer pages · 520 combinations</div>
+    <h1>Every machine × model answer, from real runs.</h1>
+    <p class="sub">One page per rig × model pair, aggregated from verified community runs with n ≥ 2. Grouped by machine below.</p>
+  </section>
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3060 12GB ×2<span class="rig-count">527 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3060-12gb-x2/allenai-olmo-3-32b-think.html">Olmo-3-32B-Think</a></li>
+      <li><a href="./rtx-3060-12gb-x2/arcee-ai-trinity-mini.html">Trinity-Mini</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-deepseek-r1-distill-qwen-14b-gguf.html">DeepSeek-R1-Distill-Qwen-14B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-deepseek-r1-distill-qwen-32b-gguf.html">DeepSeek-R1-Distill-Qwen-32B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-deepseek-r1-distill-qwen-7b-gguf.html">DeepSeek-R1-Distill-Qwen-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-internlm3-8b-instruct-gguf.html">internlm3-8b-instruct-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-nvidia-nemotron-cascade-8b-gguf.html">nvidia_Nemotron-Cascade-8B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/bartowski-ui-tars-7b-dpo-gguf.html">UI-TARS-7B-DPO-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/coherelabs-north-mini-code-1-0.html">North-Mini-Code-1.0</a></li>
+      <li><a href="./rtx-3060-12gb-x2/cyankiwi-qwen3-5-9b-awq-4bit.html">Qwen3.5-9B-AWQ-4bit</a></li>
+      <li><a href="./rtx-3060-12gb-x2/deepreinforce-ai-ornith-1-0-35b-gguf.html">Ornith-1.0-35B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/dhruvallabs-webworld-14b-gguf.html">WebWorld-14B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/dhruvallabs-webworld-8b-gguf.html">WebWorld-8B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/drawais-qwen3-6-27b-awq-int4.html">Qwen3.6-27B-AWQ-INT4</a></li>
+      <li><a href="./rtx-3060-12gb-x2/empero-ai-qwythos-9b-v2-gguf.html">Qwythos-9B-v2-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./rtx-3060-12gb-x2/internscience-agents-a1.html">Agents-A1</a></li>
+      <li><a href="./rtx-3060-12gb-x2/internscience-agents-a1-q4-k-m-gguf.html">Agents-A1-Q4_K_M-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/jackrong-qwopus3-6-27b-v2-gguf.html">Qwopus3.6-27B-v2-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/jackrong-qwopus3-6-35b-a3b-v1-mtp-gguf.html">Qwopus3.6-35B-A3B-v1-MTP-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/jgebbeken-gemma-4-coder-gguf.html">gemma-4-coder-gguf</a></li>
+      <li><a href="./rtx-3060-12gb-x2/josefprusa-thinkingcap-qwen3-6-27b-int4-autoround-v1.html">ThinkingCap-Qwen3.6-27B-int4-AutoRound-v1</a></li>
+      <li><a href="./rtx-3060-12gb-x2/kai-os-carnice-9b-gguf.html">Carnice-9b-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/liquidai-lfm2-5-8b-a1b-gguf.html">LFM2.5-8B-A1B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/lmstudio-community-acereason-nemotron-1-1-7b-gguf.html">AceReason-Nemotron-1.1-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/lmstudio-community-openreasoning-nemotron-32b-gguf.html">OpenReasoning-Nemotron-32B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/lmstudio-community-openreasoning-nemotron-7b-gguf.html">OpenReasoning-Nemotron-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/lmstudio-community-seed-oss-36b-instruct-gguf.html">Seed-OSS-36B-Instruct-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/microsoft-phi-4-reasoning.html">Phi-4-reasoning</a></li>
+      <li><a href="./rtx-3060-12gb-x2/migtissera-tess-4-27b.html">Tess-4-27B</a></li>
+      <li><a href="./rtx-3060-12gb-x2/mradermacher-gemma-4-19b-a4b-it-reap-gguf.html">gemma-4-19b-a4b-it-REAP-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/nousresearch-deephermes-3-mistral-24b-preview.html">DeepHermes-3-Mistral-24B-Preview</a></li>
+      <li><a href="./rtx-3060-12gb-x2/nvidia-nemotron-cascade-14b-thinking.html">Nemotron-Cascade-14B-Thinking</a></li>
+      <li><a href="./rtx-3060-12gb-x2/nvidia-nemotron-orchestrator-8b.html">Nemotron-Orchestrator-8B</a></li>
+      <li><a href="./rtx-3060-12gb-x2/nvidia-nvidia-nemotron-nano-12b-v2.html">NVIDIA-Nemotron-Nano-12B-v2</a></li>
+      <li><a href="./rtx-3060-12gb-x2/nvidia-nvidia-nemotron-nano-9b-v2.html">NVIDIA-Nemotron-Nano-9B-v2</a></li>
+      <li><a href="./rtx-3060-12gb-x2/opengvlab-internvl3-14b.html">InternVL3-14B</a></li>
+      <li><a href="./rtx-3060-12gb-x2/opengvlab-internvl3-38b.html">InternVL3-38B</a></li>
+      <li><a href="./rtx-3060-12gb-x2/prism-ml-bonsai-27b-gguf.html">Bonsai-27B-gguf</a></li>
+      <li><a href="./rtx-3060-12gb-x2/quanttrio-qwen3-6-27b-awq.html">Qwen3.6-27B-AWQ</a></li>
+      <li><a href="./rtx-3060-12gb-x2/qwen-qwen3-0-6b-gguf.html">Qwen3-0.6B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/qwen-qwen3-1-7b-gguf.html">Qwen3-1.7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/qwen-qwen3-8b-gguf.html">Qwen3-8B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/rekaai-reka-flash-3.html">reka-flash-3</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-gemma-4-26b-a4b-it-gguf.html">gemma-4-26B-A4B-it-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-gemma-4-26b-a4b-it-qat-gguf.html">gemma-4-26B-A4B-it-qat-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-gemma-4-31b-it-gguf.html">gemma-4-31B-it-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-gemma-4-e4b-it-gguf.html">gemma-4-E4B-it-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-internvl3-8b-gguf.html">InternVL3-8B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-lfm2-8b-a1b-gguf.html">LFM2-8B-A1B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-phi-4-mini-reasoning-gguf.html">Phi-4-mini-reasoning-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-qwen-agentworld-35b-a3b-gguf.html">Qwen-AgentWorld-35B-A3B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-qwen3-14b-gguf.html">Qwen3-14B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-qwen3-5-9b-gguf.html">Qwen3.5-9B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/unsloth-qwen3-6-35b-a3b-gguf.html">Qwen3.6-35B-A3B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb-x2/weiboai-vibethinker-3b.html">VibeThinker-3B</a></li>
+      <li><a href="./rtx-3060-12gb-x2/zai-org-glm-z1-32b-0414.html">GLM-Z1-32B-0414</a></li>
+      <li><a href="./rtx-3060-12gb-x2/zai-org-glm-z1-rumination-32b-0414.html">GLM-Z1-Rumination-32B-0414</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3090 24GB<span class="rig-count">498 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3090-24gb/allenai-olmo-3-32b-think.html">Olmo-3-32B-Think</a></li>
+      <li><a href="./rtx-3090-24gb/arcee-ai-trinity-mini.html">Trinity-Mini</a></li>
+      <li><a href="./rtx-3090-24gb/atomicchat-deepseek-v4-flash-0731-gguf.html">DeepSeek-V4-Flash-0731-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/bartowski-deepseek-r1-distill-qwen-14b-gguf.html">DeepSeek-R1-Distill-Qwen-14B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/bartowski-deepseek-r1-distill-qwen-32b-gguf.html">DeepSeek-R1-Distill-Qwen-32B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/coherelabs-north-mini-code-1-0.html">North-Mini-Code-1.0</a></li>
+      <li><a href="./rtx-3090-24gb/deepseek-ai-deepseek-r1-distill-qwen-14b.html">DeepSeek-R1-Distill-Qwen-14B</a></li>
+      <li><a href="./rtx-3090-24gb/deepseek-ai-deepseek-r1-distill-qwen-32b.html">DeepSeek-R1-Distill-Qwen-32B</a></li>
+      <li><a href="./rtx-3090-24gb/empero-ai-qwythos-9b-v2.html">Qwythos-9B-v2</a></li>
+      <li><a href="./rtx-3090-24gb/empero-ai-qwythos-9b-v2-gguf.html">Qwythos-9B-v2-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/gestaltlabs-ornstein3-6-27b-mtp-nsc-ace-saber-gguf.html">Ornstein3.6-27B-MTP-NSC-ACE-SABER-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/ggml-org-gemma-4-12b-it-gguf.html">gemma-4-12B-it-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./rtx-3090-24gb/google-gemma-4-12b-it.html">gemma-4-12B-it</a></li>
+      <li><a href="./rtx-3090-24gb/jackrong-deepseek-v4-pro-qwen3-5-9b-mtp-gguf.html">DeepSeek-V4-Pro-Qwen3.5-9B-MTP-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/jackrong-qwopus3-5-27b-v3.html">Qwopus3.5-27B-v3</a></li>
+      <li><a href="./rtx-3090-24gb/jackrong-qwopus3-5-27b-v3-gguf.html">Qwopus3.5-27B-v3-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/llmfan46-qwen3-6-27b-uncensored-heretic-v2-native-mtp-preserved-gguf.html">Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/lmstudio-community-openreasoning-nemotron-32b-gguf.html">OpenReasoning-Nemotron-32B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./rtx-3090-24gb/lucebox-deepseek-v4-flash-rocmfpx.html">DeepSeek-V4-Flash-ROCMFPX</a></li>
+      <li><a href="./rtx-3090-24gb/microsoft-phi-4-mini-reasoning.html">Phi-4-mini-reasoning</a></li>
+      <li><a href="./rtx-3090-24gb/microsoft-phi-4-reasoning.html">Phi-4-reasoning</a></li>
+      <li><a href="./rtx-3090-24gb/migtissera-tess-4-27b.html">Tess-4-27B</a></li>
+      <li><a href="./rtx-3090-24gb/migtissera-tess-4-35b-a3b.html">Tess-4-35B-A3B</a></li>
+      <li><a href="./rtx-3090-24gb/nousresearch-deephermes-3-mistral-24b-preview.html">DeepHermes-3-Mistral-24B-Preview</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-nemotron-cascade-14b-thinking.html">Nemotron-Cascade-14B-Thinking</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-nemotron-cascade-2-30b-a3b.html">Nemotron-Cascade-2-30B-A3B</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-nvidia-nemotron-3-nano-4b-bf16.html">NVIDIA-Nemotron-3-Nano-4B-BF16</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-nvidia-nemotron-nano-12b-v2.html">NVIDIA-Nemotron-Nano-12B-v2</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-nvidia-nemotron-nano-9b-v2.html">NVIDIA-Nemotron-Nano-9B-v2</a></li>
+      <li><a href="./rtx-3090-24gb/nvidia-openreasoning-nemotron-32b.html">OpenReasoning-Nemotron-32B</a></li>
+      <li><a href="./rtx-3090-24gb/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./rtx-3090-24gb/opengvlab-internvl3-14b.html">InternVL3-14B</a></li>
+      <li><a href="./rtx-3090-24gb/opengvlab-internvl3-38b.html">InternVL3-38B</a></li>
+      <li><a href="./rtx-3090-24gb/poolside-laguna-xs-2-1-gguf.html">Laguna-XS-2.1-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/prism-ml-bonsai-27b-gguf.html">Bonsai-27B-gguf</a></li>
+      <li><a href="./rtx-3090-24gb/qwen-qwen3-14b.html">Qwen3-14B</a></li>
+      <li><a href="./rtx-3090-24gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rtx-3090-24gb/rekaai-reka-flash-3.html">reka-flash-3</a></li>
+      <li><a href="./rtx-3090-24gb/tencent-hunyuan-mt-7b.html">Hunyuan-MT-7B</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-gemma-4-12b-it-qat-gguf.html">gemma-4-12B-it-qat-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-gemma-4-26b-a4b-it-qat-gguf.html">gemma-4-26B-A4B-it-qat-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-gemma-4-31b-it-gguf.html">gemma-4-31B-it-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-phi-4-mini-reasoning-gguf.html">Phi-4-mini-reasoning-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-qwen3-14b-gguf.html">Qwen3-14B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-qwen3-5-27b-gguf.html">Qwen3.5-27B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb/zai-org-glm-z1-32b-0414.html">GLM-Z1-32B-0414</a></li>
+      <li><a href="./rtx-3090-24gb/zai-org-glm-z1-rumination-32b-0414.html">GLM-Z1-Rumination-32B-0414</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3060 12GB<span class="rig-count">364 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3060-12gb/deepseek-ai-deepseek-r1-distill-qwen-7b.html">DeepSeek-R1-Distill-Qwen-7B</a></li>
+      <li><a href="./rtx-3060-12gb/dhruvallabs-webworld-14b-gguf.html">WebWorld-14B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/dhruvallabs-webworld-8b-gguf.html">WebWorld-8B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/google-gemma-4-12b-it.html">gemma-4-12B-it</a></li>
+      <li><a href="./rtx-3060-12gb/google-gemma-4-e4b.html">gemma-4-E4B</a></li>
+      <li><a href="./rtx-3060-12gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rtx-3060-12gb/inclusionai-ling-3-0-tiny.html">Ling-3.0-tiny</a></li>
+      <li><a href="./rtx-3060-12gb/internscience-agents-a1-4b-q4-k-m-gguf.html">Agents-A1-4B-Q4_K_M-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/kai-os-carnice-9b-gguf.html">Carnice-9b-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/liquidai-lfm2-5-8b-a1b.html">LFM2.5-8B-A1B</a></li>
+      <li><a href="./rtx-3060-12gb/liquidai-lfm2-8b-a1b.html">LFM2-8B-A1B</a></li>
+      <li><a href="./rtx-3060-12gb/lmstudio-community-openreasoning-nemotron-7b-gguf.html">OpenReasoning-Nemotron-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/meta-llama-llama-3-2-3b-instruct.html">Llama-3.2-3B-Instruct</a></li>
+      <li><a href="./rtx-3060-12gb/microsoft-phi-4-reasoning-plus.html">Phi-4-reasoning-plus</a></li>
+      <li><a href="./rtx-3060-12gb/mistralai-ministral-3-3b-instruct-2512.html">Ministral-3-3B-Instruct-2512</a></li>
+      <li><a href="./rtx-3060-12gb/nvidia-acereason-nemotron-1-1-7b.html">AceReason-Nemotron-1.1-7B</a></li>
+      <li><a href="./rtx-3060-12gb/nvidia-nvidia-nemotron-3-nano-4b-bf16.html">NVIDIA-Nemotron-3-Nano-4B-BF16</a></li>
+      <li><a href="./rtx-3060-12gb/opengvlab-internvl3-8b.html">InternVL3-8B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen2-5-0-5b-instruct.html">Qwen2.5-0.5B-Instruct</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-0-6b-gguf.html">Qwen3-0.6B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-1-7b-gguf.html">Qwen3-1.7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-14b.html">Qwen3-14B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-5-2b.html">Qwen3.5-2B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-5-4b.html">Qwen3.5-4B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rtx-3060-12gb/qwen-qwen3-8b.html">Qwen3-8B</a></li>
+      <li><a href="./rtx-3060-12gb/tencent-hy-mt2-7b-gguf.html">Hy-MT2-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/unsloth-gemma-4-e4b-it-gguf.html">gemma-4-E4B-it-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/unsloth-hy-mt2-7b-gguf.html">Hy-MT2-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/unsloth-phi-4-mini-reasoning-gguf.html">Phi-4-mini-reasoning-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html">Qwen3.6-35B-A3B-MTP-GGUF</a></li>
+      <li><a href="./rtx-3060-12gb/weiboai-vibethinker-3b.html">VibeThinker-3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon AI Pro R9700 32GB ×3<span class="rig-count">201 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/1337hero-qwen3-coder-30b-a3b-codemonkey.html">qwen3-coder-30b-a3b-codemonkey</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/cerebras-minimax-m2-5-reap-139b-a10b.html">MiniMax-M2.5-REAP-139B-A10B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/cerebras-minimax-m2-reap-172b-a10b.html">MiniMax-M2-REAP-172B-A10B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/deepreinforce-ai-ornith-1-0-35b.html">Ornith-1.0-35B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/deepreinforce-ai-ornith-1-0-9b.html">Ornith-1.0-9B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/deepseek-ai-deepseek-v4-flash-0731.html">DeepSeek-V4-Flash-0731</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/google-gemma-4-12b-it.html">gemma-4-12B-it</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/google-gemma-4-31b-it.html">gemma-4-31B-it</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/ibm-granite-granite-4-1-30b.html">granite-4.1-30b</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/inclusionai-ling-3-0-flash.html">Ling-3.0-flash</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/kwaipilot-kat-coder-v2-5-dev.html">KAT-Coder-V2.5-Dev</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/meta-models-muse-glimmer-30b.html">Muse-Glimmer-30B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/minimaxai-minimax-m2-7.html">MiniMax-M2.7</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/mistralai-devstral-small-2-24b-instruct-2512.html">Devstral-Small-2-24B-Instruct-2512</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/mistralai-mistral-medium-3-5-128b.html">Mistral-Medium-3.5-128B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/moonshotai-kimi-dev-72b.html">Kimi-Dev-72B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/nvidia-nemotron-3-nano-omni-30b-a3b-reasoning-bf16.html">Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/nvidia-nemotron-cascade-2-30b-a3b.html">Nemotron-Cascade-2-30B-A3B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/openai-gpt-oss-120b.html">gpt-oss-120b</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/poolside-laguna-s-2-1.html">Laguna-S-2.1</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-5-122b-a10b.html">Qwen3.5-122B-A10B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-coder-30b-a3b-instruct.html">Qwen3-Coder-30B-A3B-Instruct</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-coder-next.html">Qwen3-Coder-Next</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb-x3/xiaomimimo-mimo-v2-5.html">MiMo-V2.5</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 570 4GB ×2<span class="rig-count">167 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-570-4gb-x2/deepreinforce-ai-ornith-1-0-9b.html">Ornith-1.0-9B</a></li>
+      <li><a href="./rx-570-4gb-x2/deepreinforce-ai-ornith-1-0-9b-gguf.html">Ornith-1.0-9B-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/deepseek-ai-deepseek-r1-distill-qwen-7b.html">DeepSeek-R1-Distill-Qwen-7B</a></li>
+      <li><a href="./rx-570-4gb-x2/google-gemma-4-12b-it.html">gemma-4-12B-it</a></li>
+      <li><a href="./rx-570-4gb-x2/google-gemma-4-12b-it-qat-q4-0-gguf.html">gemma-4-12B-it-qat-q4_0-gguf</a></li>
+      <li><a href="./rx-570-4gb-x2/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./rx-570-4gb-x2/google-gemma-4-e2b-it.html">gemma-4-E2B-it</a></li>
+      <li><a href="./rx-570-4gb-x2/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rx-570-4gb-x2/ibm-granite-granite-4-0-h-micro.html">granite-4.0-h-micro</a></li>
+      <li><a href="./rx-570-4gb-x2/internscience-agents-a1.html">Agents-A1</a></li>
+      <li><a href="./rx-570-4gb-x2/internscience-agents-a1-q4-k-m-gguf.html">Agents-A1-Q4_K_M-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/jetbrains-mellum2-12b-a2-5b-instruct.html">Mellum2-12B-A2.5B-Instruct</a></li>
+      <li><a href="./rx-570-4gb-x2/jetbrains-mellum2-12b-a2-5b-instruct-gguf-q4-k-m.html">Mellum2-12B-A2.5B-Instruct-GGUF-Q4_K_M</a></li>
+      <li><a href="./rx-570-4gb-x2/lgai-exaone-exaone-3-5-7-8b-instruct.html">EXAONE-3.5-7.8B-Instruct</a></li>
+      <li><a href="./rx-570-4gb-x2/lgai-exaone-exaone-3-5-7-8b-instruct-gguf.html">EXAONE-3.5-7.8B-Instruct-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/liquidai-lfm2-5-1-2b-instruct-gguf.html">LFM2.5-1.2B-Instruct-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/liquidai-lfm2-5-8b-a1b.html">LFM2.5-8B-A1B</a></li>
+      <li><a href="./rx-570-4gb-x2/liquidai-lfm2-5-8b-a1b-gguf.html">LFM2.5-8B-A1B-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/openbmb-minicpm5-1b.html">MiniCPM5-1B</a></li>
+      <li><a href="./rx-570-4gb-x2/openbmb-minicpm5-1b-gguf.html">MiniCPM5-1B-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/poolside-laguna-xs-2-1-gguf.html">Laguna-XS-2.1-GGUF</a></li>
+      <li><a href="./rx-570-4gb-x2/qwen-qwen3-4b.html">Qwen3-4B</a></li>
+      <li><a href="./rx-570-4gb-x2/rwkv-rwkv7-goose-world3-2-9b-hf.html">RWKV7-Goose-World3-2.9B-HF</a></li>
+      <li><a href="./rx-570-4gb-x2/tencent-hy-mt2-7b.html">Hy-MT2-7B</a></li>
+      <li><a href="./rx-570-4gb-x2/unsloth-lfm2-5-8b-a1b-gguf.html">LFM2.5-8B-A1B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B70 32GB ×4<span class="rig-count">162 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b70-32gb-x4/0xsero-deepseek-v4-flash-180b.html">DeepSeek-V4-Flash-180B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/lasimeri-minimax-m2-7-int4-autoround.html">MiniMax-M2.7-int4-AutoRound</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/minimaxai-minimax-m2-7.html">MiniMax-M2.7</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/mjpansa-minimax-m2-7-reap-172b-a10b-autoround-w4a16.html">MiniMax-M2.7-REAP-172B-A10B-AutoRound-W4A16</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/nameistoken-qwen3-6-35b-a3b-quark-w8a8-int8.html">Qwen3.6-35B-A3B-Quark-W8A8-INT8</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/poolside-laguna-s-2-1-int4.html">Laguna-S-2.1-INT4</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/unsloth-minimax-m2-7.html">MiniMax-M2.7</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/unsloth-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x4/vrfai-qwen3-6-27b-fp8.html">Qwen3.6-27B-FP8</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B70 32GB<span class="rig-count">149 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b70-32gb/aaryank-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/deepreinforce-ai-ornith-1-0-35b.html">Ornith-1.0-35B</a></li>
+      <li><a href="./arc-pro-b70-32gb/deepreinforce-ai-ornith-1-0-9b.html">Ornith-1.0-9B</a></li>
+      <li><a href="./arc-pro-b70-32gb/frosty40-nex-n2-mini-b70-turbo-gguf.html">Nex-N2-mini-B70-Turbo-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/frosty40-ornith-1-0-35b-b70-turbo.html">Ornith-1.0-35B-B70-Turbo</a></li>
+      <li><a href="./arc-pro-b70-32gb/frosty40-quest-30b-rl-b70-turbo-gguf.html">QUEST-30B-RL-B70-Turbo-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/frosty40-qwen-agentworld-35b-a3b-b70-turbo-gguf.html">Qwen-AgentWorld-35B-A3B-B70-Turbo-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/frosty40-siq-1-35b-b70-turbo-gguf.html">SIQ-1-35B-B70-Turbo-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/google-gemma-4-31b-it.html">gemma-4-31B-it</a></li>
+      <li><a href="./arc-pro-b70-32gb/intel-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./arc-pro-b70-32gb/internscience-agents-a1.html">Agents-A1</a></li>
+      <li><a href="./arc-pro-b70-32gb/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./arc-pro-b70-32gb/meta-models-muse-glimmer-30b.html">Muse-Glimmer-30B</a></li>
+      <li><a href="./arc-pro-b70-32gb/meta-models-muse-glimmer-30b-gguf.html">Muse-Glimmer-30B-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/nex-agi-nex-n2-mini.html">Nex-N2-mini</a></li>
+      <li><a href="./arc-pro-b70-32gb/nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-bf16.html">NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16</a></li>
+      <li><a href="./arc-pro-b70-32gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./arc-pro-b70-32gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./arc-pro-b70-32gb/unsloth-gemma-4-26b-a4b-it-gguf.html">gemma-4-26B-A4B-it-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./arc-pro-b70-32gb/webhie-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5090 32GB<span class="rig-count">140 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5090-32gb/aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-nvfp4.html">Qwen3.6-27B-AEON-Ultimate-Uncensored-NVFP4</a></li>
+      <li><a href="./rtx-5090-32gb/aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-text-nvfp4-mtp-xs.html">Qwen3.6-27B-AEON-Ultimate-Uncensored-Text-NVFP4-MTP-XS</a></li>
+      <li><a href="./rtx-5090-32gb/aidxteam-qwen3-coder-30b-a3b-instruct-awq.html">Qwen3-Coder-30B-A3B-Instruct-AWQ</a></li>
+      <li><a href="./rtx-5090-32gb/cyankiwi-gemma-4-26b-a4b-it-awq-4bit.html">gemma-4-26B-A4B-it-AWQ-4bit</a></li>
+      <li><a href="./rtx-5090-32gb/cyankiwi-ornith-1-0-35b-awq-int4.html">Ornith-1.0-35B-AWQ-INT4</a></li>
+      <li><a href="./rtx-5090-32gb/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./rtx-5090-32gb/google-gemma-4-26b-a4b-it-qat-q4-0-gguf.html">gemma-4-26B-A4B-it-qat-q4_0-gguf</a></li>
+      <li><a href="./rtx-5090-32gb/nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16.html">NVIDIA-Nemotron-3-Nano-30B-A3B-BF16</a></li>
+      <li><a href="./rtx-5090-32gb/nvidia-nvidia-nemotron-3-nano-30b-a3b-nvfp4.html">NVIDIA-Nemotron-3-Nano-30B-A3B-NVFP4</a></li>
+      <li><a href="./rtx-5090-32gb/nvidia-qwen3-6-27b-nvfp4.html">Qwen3.6-27B-NVFP4</a></li>
+      <li><a href="./rtx-5090-32gb/palmfuture-qwen3-6-35b-a3b-gptq-int4.html">Qwen3.6-35B-A3B-GPTQ-Int4</a></li>
+      <li><a href="./rtx-5090-32gb/preyazz-muse-glimmer-30b-nvfp4.html">Muse-Glimmer-30B-NVFP4</a></li>
+      <li><a href="./rtx-5090-32gb/quanttrio-glm-4-7-flash-awq.html">GLM-4.7-Flash-AWQ</a></li>
+      <li><a href="./rtx-5090-32gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rtx-5090-32gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rtx-5090-32gb/rdtand-ornith-1-0-35b-prismaaura-4-75bit-vllm-mtp.html">Ornith-1.0-35B-PrismaAURA-4.75bit-vllm-MTP</a></li>
+      <li><a href="./rtx-5090-32gb/sakamakismile-gemma-4-12b-coder-fable5-composer2-5-mtp-nvfp4.html">gemma-4-12B-coder-fable5-composer2.5-MTP-NVFP4</a></li>
+      <li><a href="./rtx-5090-32gb/sakamakismile-huihui-qwen3-6-27b-abliterated-nvfp4-mtp.html">Huihui-Qwen3.6-27B-abliterated-NVFP4-MTP</a></li>
+      <li><a href="./rtx-5090-32gb/sakamakismile-qwen3-6-27b-text-nvfp4-mtp.html">Qwen3.6-27B-Text-NVFP4-MTP</a></li>
+      <li><a href="./rtx-5090-32gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./rtx-5090-32gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html">Qwen3.6-35B-A3B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3060 Ti 8GB<span class="rig-count">139 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3060-ti-8gb/deepseek-ai-deepseek-r1-distill-qwen-7b.html">DeepSeek-R1-Distill-Qwen-7B</a></li>
+      <li><a href="./rtx-3060-ti-8gb/lmstudio-community-openreasoning-nemotron-7b-gguf.html">OpenReasoning-Nemotron-7B-GGUF</a></li>
+      <li><a href="./rtx-3060-ti-8gb/nvidia-acereason-nemotron-1-1-7b.html">AceReason-Nemotron-1.1-7B</a></li>
+      <li><a href="./rtx-3060-ti-8gb/nvidia-nvidia-nemotron-3-nano-4b-bf16.html">NVIDIA-Nemotron-3-Nano-4B-BF16</a></li>
+      <li><a href="./rtx-3060-ti-8gb/nvidia-nvidia-nemotron-nano-9b-v2.html">NVIDIA-Nemotron-Nano-9B-v2</a></li>
+      <li><a href="./rtx-3060-ti-8gb/opengvlab-internvl3-8b.html">InternVL3-8B</a></li>
+      <li><a href="./rtx-3060-ti-8gb/qwen-qwen3-0-6b.html">Qwen3-0.6B</a></li>
+      <li><a href="./rtx-3060-ti-8gb/qwen-qwen3-1-7b-gguf.html">Qwen3-1.7B-GGUF</a></li>
+      <li><a href="./rtx-3060-ti-8gb/qwen-qwen3-8b.html">Qwen3-8B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Ryzen AI Max 395 128GB<span class="rig-count">127 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./ryzen-ai-max-395-128gb/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/deepseek-ai-deepseek-v4-flash-0731.html">DeepSeek-V4-Flash-0731</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/empero-ai-qwythos-9b-claude-mythos-5-1m-gguf.html">Qwythos-9B-Claude-Mythos-5-1M-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/google-gemma-4-31b-it.html">gemma-4-31B-it</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/google-gemma-4-e2b-it.html">gemma-4-E2B-it</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/hauhaucs-qwen3-6-35b-a3b-uncensored-hauhaucs-aggressive.html">Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/jackrong-gemopus-4-26b-a4b-it.html">Gemopus-4-26B-A4B-it</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/jackrong-qwopus3-5-27b-v3.html">Qwopus3.5-27B-v3</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/kwaipilot-kat-coder-v2-5-dev.html">KAT-Coder-V2.5-Dev</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/nousresearch-hermes-3-llama-3-1-8b.html">Hermes-3-Llama-3.1-8B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/nvidia-llama-3-1-nemotron-70b-instruct-hf.html">Llama-3.1-Nemotron-70B-Instruct-HF</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/poolside-laguna-s-2-1.html">Laguna-S-2.1</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/prism-ml-bonsai-27b-gguf.html">Bonsai-27B-gguf</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/prism-ml-ternary-bonsai-27b-gguf.html">Ternary-Bonsai-27B-gguf</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/qwen-qwen3-5-122b-a10b.html">Qwen3.5-122B-A10B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/qwen-qwen3-5-4b.html">Qwen3.5-4B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/qwen-qwen3-coder-30b-a3b-instruct.html">Qwen3-Coder-30B-A3B-Instruct</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/qwen-qwen3-coder-next.html">Qwen3-Coder-Next</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/samuelcardillo-carnice-moe-35b-a3b.html">Carnice-MoE-35B-A3B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/samuelcardillo-qwopus-moe-35b-a3b.html">Qwopus-MoE-35B-A3B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/samuelcardillo-qwopus-moe-35b-a3b-gguf.html">Qwopus-MoE-35B-A3B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/unsloth-glm-4-7-flash-gguf.html">GLM-4.7-Flash-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/unsloth-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./ryzen-ai-max-395-128gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 7900 XTX 24GB<span class="rig-count">78 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-7900-xtx-24gb/bahushruth-qwen3-6-35b-a3b-abliterated-v4-gguf.html">Qwen3.6-35B-A3B-abliterated-v4-GGUF</a></li>
+      <li><a href="./rx-7900-xtx-24gb/jackrong-qwopus3-6-27b-coder-mtp-gguf.html">Qwopus3.6-27B-Coder-MTP-GGUF</a></li>
+      <li><a href="./rx-7900-xtx-24gb/jackrong-qwopus3-6-27b-v2-mtp-gguf.html">Qwopus3.6-27B-v2-MTP-GGUF</a></li>
+      <li><a href="./rx-7900-xtx-24gb/qwen-qwen3-5-27b.html">Qwen3.5-27B</a></li>
+      <li><a href="./rx-7900-xtx-24gb/qwen-qwen3-5-35b-a3b.html">Qwen3.5-35B-A3B</a></li>
+      <li><a href="./rx-7900-xtx-24gb/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./rx-7900-xtx-24gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rx-7900-xtx-24gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rx-7900-xtx-24gb/unsloth-qwen3-5-9b-mtp-gguf.html">Qwen3.5-9B-MTP-GGUF</a></li>
+      <li><a href="./rx-7900-xtx-24gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Ryzen AI Max 395 64GB<span class="rig-count">72 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./ryzen-ai-max-395-64gb/bartowski-deepseek-r1-distill-qwen-14b-gguf.html">DeepSeek-R1-Distill-Qwen-14B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/deepreinforce-ai-ornith-1-0-9b-gguf.html">Ornith-1.0-9B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/internscience-agents-a1-q4-k-m-gguf.html">Agents-A1-Q4_K_M-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/meta-models-muse-glimmer-30b.html">Muse-Glimmer-30B</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/meta-models-muse-glimmer-30b-gguf.html">Muse-Glimmer-30B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/poolside-laguna-s-2-1.html">Laguna-S-2.1</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/poolside-laguna-xs-2-1-gguf.html">Laguna-XS-2.1-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/qwen-qwen3-coder-30b-a3b-instruct.html">Qwen3-Coder-30B-A3B-Instruct</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/samuelcardillo-qwopus-moe-35b-a3b-gguf.html">Qwopus-MoE-35B-A3B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-gemma-4-e2b-it-gguf.html">gemma-4-E2B-it-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-glm-4-7-flash-gguf.html">GLM-4.7-Flash-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-phi-4-mini-reasoning-gguf.html">Phi-4-mini-reasoning-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-395-64gb/unsloth-qwen3-8b-gguf.html">Qwen3-8B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3090 24GB ×2<span class="rig-count">67 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3090-24gb-x2/bottlecapai-thinkingcap-qwen3-6-27b.html">ThinkingCap-Qwen3.6-27B</a></li>
+      <li><a href="./rtx-3090-24gb-x2/cyankiwi-qwen3-6-27b-awq-bf16-int4.html">Qwen3.6-27B-AWQ-BF16-INT4</a></li>
+      <li><a href="./rtx-3090-24gb-x2/gestaltlabs-ornstein3-6-27b-mtp-nsc-ace-saber-gguf.html">Ornstein3.6-27B-MTP-NSC-ACE-SABER-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x2/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./rtx-3090-24gb-x2/hampsonw-qwen3-6-27b-awq-bf16-int4-mtp-bf16.html">Qwen3.6-27B-AWQ-BF16-INT4-mtp-bf16</a></li>
+      <li><a href="./rtx-3090-24gb-x2/liquidai-lfm2-5-8b-a1b-gguf.html">LFM2.5-8B-A1B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x2/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./rtx-3090-24gb-x2/nvidia-qwen3-6-35b-a3b-nvfp4.html">Qwen3.6-35B-A3B-NVFP4</a></li>
+      <li><a href="./rtx-3090-24gb-x2/qwen-qwen3-6-27b-fp8.html">Qwen3.6-27B-FP8</a></li>
+      <li><a href="./rtx-3090-24gb-x2/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rtx-3090-24gb-x2/unsloth-gemma-4-12b-it-gguf.html">gemma-4-12b-it-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x2/unsloth-laguna-s-2-1-gguf.html">Laguna-S-2.1-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x2/unsloth-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rtx-3090-24gb-x2/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x2/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">GB10 Grace Blackwell 128GB<span class="rig-count">47 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./gb10-grace-blackwell-128gb/aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-multimodal-nvfp4-mtp-xs.html">Qwen3.6-27B-AEON-Ultimate-Uncensored-Multimodal-NVFP4-MTP-XS</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/aeon-7-qwen3-6-35b-a3b-heretic-nvfp4.html">Qwen3.6-35B-A3B-heretic-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/lukealonso-mimo-v2-5-nvfp4.html">MiMo-V2.5-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/nvidia-qwen3-6-35b-a3b-nvfp4.html">Qwen3.6-35B-A3B-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/poolside-laguna-s-2-1-nvfp4.html">Laguna-S-2.1-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/qwen-qwen3-5-27b.html">Qwen3.5-27B</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/qwen-qwen3-6-27b-fp8.html">Qwen3.6-27B-FP8</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/redhatai-qwen3-6-35b-a3b-nvfp4.html">Qwen3.6-35B-A3B-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/sakamakismile-qwen3-6-27b-nvfp4.html">Qwen3.6-27B-NVFP4</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/unsloth-minimax-m2-7.html">MiniMax-M2.7</a></li>
+      <li><a href="./gb10-grace-blackwell-128gb/unsloth-qwen3-6-27b-nvfp4.html">Qwen3.6-27B-NVFP4</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX PRO 6000 Blackwell 96GB<span class="rig-count">46 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-pro-6000-blackwell-96gb/cerebras-minimax-m2-5-reap-139b-a10b.html">MiniMax-M2.5-REAP-139B-A10B</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/meta-models-muse-glimmer-30b.html">Muse-Glimmer-30B</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/meta-models-muse-glimmer-30b-gguf.html">Muse-Glimmer-30B-GGUF</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/nvidia-qwen3-6-27b-nvfp4.html">Qwen3.6-27B-NVFP4</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/nvidia-qwen3-6-35b-a3b-nvfp4.html">Qwen3.6-35B-A3B-NVFP4</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/openai-gpt-oss-120b.html">gpt-oss-120b</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/poolside-laguna-s-2-1-nvfp4.html">Laguna-S-2.1-NVFP4</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/qwen-qwen3-6-27b-fp8.html">Qwen3.6-27B-FP8</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/sakamakismile-qwen3-6-27b-text-nvfp4-mtp.html">Qwen3.6-27B-Text-NVFP4-MTP</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/unsloth-muse-glimmer-30b-gguf.html">Muse-Glimmer-30B-GGUF</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb/unsloth-qwen3-6-27b-nvfp4.html">Qwen3.6-27B-NVFP4</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 570 4GB<span class="rig-count">44 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-570-4gb/deepreinforce-ai-ornith-1-0-9b.html">Ornith-1.0-9B</a></li>
+      <li><a href="./rx-570-4gb/deepreinforce-ai-ornith-1-0-9b-gguf.html">Ornith-1.0-9B-GGUF</a></li>
+      <li><a href="./rx-570-4gb/liquidai-lfm2-5-1-2b-instruct-gguf.html">LFM2.5-1.2B-Instruct-GGUF</a></li>
+      <li><a href="./rx-570-4gb/liquidai-lfm2-8b-a1b-gguf.html">LFM2-8B-A1B-GGUF</a></li>
+      <li><a href="./rx-570-4gb/openbmb-minicpm5-1b.html">MiniCPM5-1B</a></li>
+      <li><a href="./rx-570-4gb/openbmb-minicpm5-1b-gguf.html">MiniCPM5-1B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 4070 12GB<span class="rig-count">36 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-4070-12gb/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./rtx-4070-12gb/jackrong-qwopus3-6-35b-a3b-coder-mtp-gguf.html">Qwopus3.6-35B-A3B-Coder-MTP-GGUF</a></li>
+      <li><a href="./rtx-4070-12gb/poolside-laguna-xs-2-1-gguf.html">Laguna-XS-2.1-GGUF</a></li>
+      <li><a href="./rtx-4070-12gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rtx-4070-12gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./rtx-4070-12gb/yuxinlu1-gemma-4-12b-agentic-fable5-composer2-5-v2-3-5x-tau2-gguf.html">gemma-4-12B-agentic-fable5-composer2.5-v2-3.5x-tau2-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">AMD Ryzen 7 7840HS<span class="rig-count">32 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./cpu-amd-ryzen-7-7840hs/liquidai-lfm2-350m.html">LFM2-350M</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3080 12GB<span class="rig-count">30 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3080-12gb/deepseek-ai-deepseek-coder-v2-lite-instruct.html">DeepSeek-Coder-V2-Lite-Instruct</a></li>
+      <li><a href="./rtx-3080-12gb/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./rtx-3080-12gb/google-gemma-3n-e4b-it.html">gemma-3n-E4B-it</a></li>
+      <li><a href="./rtx-3080-12gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rtx-3080-12gb/meta-llama-llama-3-1-8b-instruct.html">Llama-3.1-8B-Instruct</a></li>
+      <li><a href="./rtx-3080-12gb/qwen-qwen2-5-14b-instruct.html">Qwen2.5-14B-Instruct</a></li>
+      <li><a href="./rtx-3080-12gb/qwen-qwen2-5-coder-14b-instruct.html">Qwen2.5-Coder-14B-Instruct</a></li>
+      <li><a href="./rtx-3080-12gb/qwen-qwen2-5-coder-7b-instruct.html">Qwen2.5-Coder-7B-Instruct</a></li>
+      <li><a href="./rtx-3080-12gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon AI Pro R9700 32GB<span class="rig-count">29 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-ai-pro-r9700-32gb/jackrong-qwopus3-6-27b-v2-mtp-gguf.html">Qwopus3.6-27B-v2-MTP-GGUF</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/liquidai-lfm2-5-230m.html">LFM2.5-230M</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/liquidai-lfm2-5-350m.html">LFM2.5-350M</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/qwen-qwen3-5-0-8b.html">Qwen3.5-0.8B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/unsloth-qwen3-5-27b.html">Qwen3.5-27B</a></li>
+      <li><a href="./radeon-ai-pro-r9700-32gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B60 24GB ×2<span class="rig-count">25 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b60-24gb-x2/deepreinforce-ai-ornith-1-0-35b-gguf.html">Ornith-1.0-35B-GGUF</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/meta-llama-llama-2-7b-hf.html">Llama-2-7b-hf</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/meta-llama-llama-3-2-1b-instruct.html">Llama-3.2-1B-Instruct</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/meta-llama-meta-llama-3-8b-instruct.html">Meta-Llama-3-8B-Instruct</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./arc-pro-b60-24gb-x2/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX PRO 6000 Blackwell Workstation Edition 96GB<span class="rig-count">23 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/0xsero-qwen3-5-122b-a10b-reap-20.html">Qwen3.5-122B-A10B-REAP-20</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/google-gemma-4-31b-it.html">gemma-4-31B-it</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/hauhaucs-qwen3-5-122b-a10b-uncensored-hauhaucs-aggressive.html">Qwen3.5-122B-A10B-Uncensored-HauhauCS-Aggressive</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/inclusionai-ling-2-6-flash.html">Ling-2.6-flash</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/qwen-qwen3-6-27b-fp8.html">Qwen3.6-27B-FP8</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-workstation-edition-96gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B60 24GB<span class="rig-count">22 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b60-24gb/deepreinforce-ai-ornith-1-0-35b-gguf.html">Ornith-1.0-35B-GGUF</a></li>
+      <li><a href="./arc-pro-b60-24gb/meta-llama-llama-2-7b-hf.html">Llama-2-7b-hf</a></li>
+      <li><a href="./arc-pro-b60-24gb/meta-llama-llama-3-2-1b-instruct.html">Llama-3.2-1B-Instruct</a></li>
+      <li><a href="./arc-pro-b60-24gb/meta-llama-meta-llama-3-8b-instruct.html">Meta-Llama-3-8B-Instruct</a></li>
+      <li><a href="./arc-pro-b60-24gb/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./arc-pro-b60-24gb/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B70 32GB ×3<span class="rig-count">22 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b70-32gb-x3/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x3/unsloth-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./arc-pro-b70-32gb-x3/z-lab-qwen3-6-27b-dflash.html">Qwen3.6-27B-DFlash</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 6700 XT 12GB<span class="rig-count">20 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-6700-xt-12gb/byroneverson-glm-4-9b-chat-abliterated.html">glm-4-9b-chat-abliterated</a></li>
+      <li><a href="./rx-6700-xt-12gb/deepreinforce-ai-ornith-1-0-9b.html">Ornith-1.0-9B</a></li>
+      <li><a href="./rx-6700-xt-12gb/google-gemma-4-12b-it.html">gemma-4-12B-it</a></li>
+      <li><a href="./rx-6700-xt-12gb/meta-llama-llama-3-2-3b-instruct.html">Llama-3.2-3B-Instruct</a></li>
+      <li><a href="./rx-6700-xt-12gb/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX PRO 6000 Blackwell 96GB ×4<span class="rig-count">19 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/deepseek-ai-deepseek-v4-flash-0731.html">DeepSeek-V4-Flash-0731</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/fraserprice-deepseek-v4-flash-abliterated-dspark.html">DeepSeek-V4-Flash-Abliterated-DSpark</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/fraserprice-deepseek-v4-flash-dspark.html">DeepSeek-V4-Flash-DSpark</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/fraserprice-ornith-1-0-397b-w4a16-autoround-dflash.html">Ornith-1.0-397B-W4A16-AutoRound-DFlash</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/madeby561-glm-5-2-mxfp8-nvfp4-nf3-hybrid.html">GLM-5.2-MXFP8-NVFP4-NF3-Hybrid</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/madeby561-glm-5-2-nvfp4-reap-504b-term.html">GLM-5.2-NVFP4-REAP-504B-term</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x4/unsloth-glm-5-2-gguf.html">GLM-5.2-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX3060+RTX2080-pooled-20GB 20GB<span class="rig-count">18 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/deepseek-ai-deepseek-coder-v2-lite-instruct.html">DeepSeek-Coder-V2-Lite-Instruct</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/deepseek-ai-deepseek-r1-distill-qwen-7b.html">DeepSeek-R1-Distill-Qwen-7B</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/meta-llama-llama-3-1-8b-instruct.html">Llama-3.1-8B-Instruct</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/qwen-qwen2-5-14b-instruct.html">Qwen2.5-14B-Instruct</a></li>
+      <li><a href="./rtx3060-rtx2080-pooled-20gb-20gb/qwen-qwen2-5-coder-14b-instruct.html">Qwen2.5-Coder-14B-Instruct</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Tesla V100 32GB<span class="rig-count">18 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./tesla-v100-32gb/unsloth-qwen3-6-35b-a3b-gguf.html">Qwen3.6-35B-A3B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX A5000 24GB<span class="rig-count">16 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-a5000-24gb/bartowski-qwen-qwen3-5-2b-gguf.html">Qwen_Qwen3.5-2B-GGUF</a></li>
+      <li><a href="./rtx-a5000-24gb/ggml-org-gemma-3-1b-it-gguf.html">gemma-3-1b-it-GGUF</a></li>
+      <li><a href="./rtx-a5000-24gb/ggml-org-gemma-4-e4b-it-gguf.html">gemma-4-E4B-it-GGUF</a></li>
+      <li><a href="./rtx-a5000-24gb/qwen-qwen2-5-1-5b-instruct-gguf.html">Qwen2.5-1.5B-Instruct-GGUF</a></li>
+      <li><a href="./rtx-a5000-24gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Ryzen AI Max 385 24GB<span class="rig-count">16 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./ryzen-ai-max-385-24gb/bartowski-nvidia-nemotron-cascade-2-30b-a3b-gguf.html">nvidia_Nemotron-Cascade-2-30B-A3B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/openai-gpt-oss-20b.html">gpt-oss-20b</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/unsloth-gemma-4-e2b-it-gguf.html">gemma-4-E2B-it-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/unsloth-qwen3-30b-a3b-gguf.html">Qwen3-30B-A3B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/unsloth-qwen3-5-27b-gguf.html">Qwen3.5-27B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/unsloth-qwen3-6-35b-a3b-gguf.html">Qwen3.6-35B-A3B-GGUF</a></li>
+      <li><a href="./ryzen-ai-max-385-24gb/unsloth-qwen3-coder-30b-a3b-instruct-gguf.html">Qwen3-Coder-30B-A3B-Instruct-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Arc Pro B70 32GB ×2<span class="rig-count">13 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./arc-pro-b70-32gb-x2/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./arc-pro-b70-32gb-x2/webhie-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./arc-pro-b70-32gb-x2/z-lab-qwen3-6-27b-dflash.html">Qwen3.6-27B-DFlash</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX PRO 6000 Blackwell 96GB ×2<span class="rig-count">13 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x2/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x2/deepseek-ai-deepseek-v4-flash-0731.html">DeepSeek-V4-Flash-0731</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x2/deepseek-ai-deepseek-v4-flash-dspark.html">DeepSeek-V4-Flash-DSpark</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x2/fraserprice-deepseek-v4-flash-abliterated-dspark.html">DeepSeek-V4-Flash-Abliterated-DSpark</a></li>
+      <li><a href="./rtx-pro-6000-blackwell-96gb-x2/fraserprice-deepseek-v4-flash-dspark.html">DeepSeek-V4-Flash-DSpark</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M5 Max 128GB<span class="rig-count">12 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m5-max-128gb/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./m5-max-128gb/pipenetwork-laguna-s-2-1-mlx-4bit.html">Laguna-S-2.1-MLX-4bit</a></li>
+      <li><a href="./m5-max-128gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 4090 24GB<span class="rig-count">12 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-4090-24gb/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./rtx-4090-24gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+      <li><a href="./rtx-4090-24gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./rtx-4090-24gb/unsloth-qwen3-5-27b-gguf.html">Qwen3.5-27B-GGUF</a></li>
+      <li><a href="./rtx-4090-24gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">GTX 1080 Ti 11GB<span class="rig-count">11 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./gtx-1080-ti-11gb/qwen-qwen3-5-27b.html">Qwen3.5-27B</a></li>
+      <li><a href="./gtx-1080-ti-11gb/qwen-qwen3-5-9b.html">Qwen3.5-9B</a></li>
+      <li><a href="./gtx-1080-ti-11gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Multi-GPU 72GB ×3<span class="rig-count">10 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./multi-gpu-72gb-x3/inclusionai-ling-3-0-flash.html">Ling-3.0-flash</a></li>
+      <li><a href="./multi-gpu-72gb-x3/poolside-laguna-s-2-1.html">Laguna-S-2.1</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M3 Ultra 512GB<span class="rig-count">9 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m3-ultra-512gb/avlp12-glm-5-2-alis-mlx-dynamic-2-56bpw.html">GLM-5.2-Alis-MLX-Dynamic-2.56bpw</a></li>
+      <li><a href="./m3-ultra-512gb/mistralai-mistral-small-3-2-24b-instruct-2506.html">Mistral-Small-3.2-24B-Instruct-2506</a></li>
+      <li><a href="./m3-ultra-512gb/nvidia-nemotron-cascade-2-30b-a3b.html">Nemotron-Cascade-2-30B-A3B</a></li>
+      <li><a href="./m3-ultra-512gb/unsloth-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3090 24GB ×4<span class="rig-count">9 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3090-24gb-x4/cyankiwi-qwen3-5-122b-a10b-awq-4bit.html">Qwen3.5-122B-A10B-AWQ-4bit</a></li>
+      <li><a href="./rtx-3090-24gb-x4/nvidia-nvidia-nemotron-3-super-120b-a12b-nvfp4.html">NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4</a></li>
+      <li><a href="./rtx-3090-24gb-x4/unsloth-deepseek-v4-flash-0731-gguf.html">DeepSeek-V4-Flash-0731-GGUF</a></li>
+      <li><a href="./rtx-3090-24gb-x4/unsloth-nvidia-nemotron-3-super-120b-a12b-gguf.html">NVIDIA-Nemotron-3-Super-120B-A12B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 2080 8GB<span class="rig-count">8 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-2080-8gb/google-gemma-3-12b-it.html">gemma-3-12b-it</a></li>
+      <li><a href="./rtx-2080-8gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rtx-2080-8gb/qwen-qwen2-5-14b-instruct.html">Qwen2.5-14B-Instruct</a></li>
+      <li><a href="./rtx-2080-8gb/qwen-qwen2-5-coder-14b-instruct.html">Qwen2.5-Coder-14B-Instruct</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Tesla P100 32GB ×2<span class="rig-count">8 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./tesla-p100-32gb-x2/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+      <li><a href="./tesla-p100-32gb-x2/unsloth-qwen3-6-35b-a3b-gguf.html">Qwen3.6-35B-A3B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M5 Pro 24GB<span class="rig-count">7 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m5-pro-24gb/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+      <li><a href="./m5-pro-24gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html">Qwen3.6-35B-A3B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M1 Max 64GB<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m1-max-64gb/badtheorylabs-btl-3-compact.html">BTL-3-Compact</a></li>
+      <li><a href="./m1-max-64gb/google-gemma-4-26b-a4b-it.html">gemma-4-26B-A4B-it</a></li>
+      <li><a href="./m1-max-64gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon AI Pro R9700 57GB<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-ai-pro-r9700-57gb/qwen-qwen2-5-0-5b-instruct.html">Qwen2.5-0.5B-Instruct</a></li>
+      <li><a href="./radeon-ai-pro-r9700-57gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon RX 7900 XTX 24GB<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-rx-7900-xtx-24gb/qwen-qwen3-6-27b.html">Qwen3.6-27B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5060 Ti 16GB ×2<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5060-ti-16gb-x2/cyankiwi-qwen3-6-27b-awq-int4.html">Qwen3.6-27B-AWQ-INT4</a></li>
+      <li><a href="./rtx-5060-ti-16gb-x2/lorbus-qwen3-6-27b-int4-autoround.html">Qwen3.6-27B-int4-AutoRound</a></li>
+      <li><a href="./rtx-5060-ti-16gb-x2/unsloth-qwen3-6-27b-mtp-gguf.html">Qwen3.6-27B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5080 16GB<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5080-16gb/meta-llama-meta-llama-3-8b-instruct.html">Meta-Llama-3-8B-Instruct</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 7700 XT 12GB<span class="rig-count">6 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-7700-xt-12gb/empero-ai-qwythos-9b-v2-gguf.html">Qwythos-9B-v2-GGUF</a></li>
+      <li><a href="./rx-7700-xt-12gb/internscience-agents-a1-4b-q4-k-m-gguf.html">Agents-A1-4B-Q4_K_M-GGUF</a></li>
+      <li><a href="./rx-7700-xt-12gb/unsloth-lfm2-5-8b-a1b-gguf.html">LFM2.5-8B-A1B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">GTX 1060 3GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./gtx-1060-3gb/ibm-granite-granite-4-0-h-micro.html">granite-4.0-h-micro</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M4 Pro 48GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m4-pro-48gb/mlx-community-qwen3-5-4b-mlx-8bit.html">Qwen3.5-4B-MLX-8bit</a></li>
+      <li><a href="./m4-pro-48gb/mlx-community-qwen3-5-9b-mlx-8bit.html">Qwen3.5-9B-MLX-8bit</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Multi-GPU 28GB ×2<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./multi-gpu-28gb-x2/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5060 Ti 16GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5060-ti-16gb/unsloth-gemma-4-26b-a4b-it-gguf.html">gemma-4-26B-A4B-it-GGUF</a></li>
+      <li><a href="./rtx-5060-ti-16gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html">Qwen3.6-35B-A3B-MTP-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 9060 XT 16GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-9060-xt-16gb/google-gemma-4-e4b-it.html">gemma-4-E4B-it</a></li>
+      <li><a href="./rx-9060-xt-16gb/qwen-qwen3guard-gen-4b.html">Qwen3Guard-Gen-4B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 9070 XT 16GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-9070-xt-16gb/liquidai-lfm2-5-230m.html">LFM2.5-230M</a></li>
+      <li><a href="./rx-9070-xt-16gb/liquidai-lfm2-5-350m.html">LFM2.5-350M</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Ryzen AI Max 395 103GB<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./ryzen-ai-max-395-103gb/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+      <li><a href="./ryzen-ai-max-395-103gb/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Tesla V100 32GB ×2<span class="rig-count">4 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./tesla-v100-32gb-x2/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+      <li><a href="./tesla-v100-32gb-x2/qwen-qwen3-coder-30b-a3b-instruct.html">Qwen3-Coder-30B-A3B-Instruct</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">AMD Ryzen 7 8745H w/ Radeon 780M<span class="rig-count">3 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./cpu-amd-ryzen-7-8745h-w-radeon-780m/qwen-qwen3-5-4b.html">Qwen3.5-4B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3090 Ti 24GB<span class="rig-count">3 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3090-ti-24gb/unsloth-qwen3-6-27b-gguf.html">Qwen3.6-27B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 7900 XT 20GB ×2<span class="rig-count">3 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-7900-xt-20gb-x2/ggml-org-nvidia-nemotron-3-5-lightning-30b-a3b-gguf.html">NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">GB10 Grace Blackwell 256GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./gb10-grace-blackwell-256gb/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">GTX 1060 3GB ×2<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./gtx-1060-3gb-x2/liquidai-lfm2-8b-a1b.html">LFM2-8B-A1B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">M4 Max 64GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./m4-max-64gb/unsloth-qwen3-6-27b-ud-mlx-4bit.html">Qwen3.6-27B-UD-MLX-4bit</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Multi-GPU 48GB ×2<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./multi-gpu-48gb-x2/cyankiwi-qwen3-5-27b-awq-bf16-int4.html">Qwen3.5-27B-AWQ-BF16-INT4</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon 890M 32GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-890m-32gb/qwen-qwen3-8b.html">Qwen3-8B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon AI Pro R9700 32GB ×2<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-ai-pro-r9700-32gb-x2/qwen-qwen3-6-35b-a3b.html">Qwen3.6-35B-A3B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">Radeon AI Pro R9700 32GB ×4<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./radeon-ai-pro-r9700-32gb-x4/deepseek-ai-deepseek-v4-flash.html">DeepSeek-V4-Flash</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3050 8GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3050-8gb/unsloth-gemma-4-e4b-it-gguf.html">gemma-4-E4B-it-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 3090 24GB ×7<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-3090-24gb-x7/unsloth-deepseek-v4-flash-0731-gguf.html">DeepSeek-V4-Flash-0731-GGUF</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5000 16GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5000-16gb/davidau-qwen3-5-9b-claude-4-6-highiq-instruct-heretic-uncensored.html">Qwen3.5-9B-Claude-4.6-HighIQ-INSTRUCT-HERETIC-UNCENSORED</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5070 Ti 16GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5070-ti-16gb/liquidai-lfm2-5-8b-a1b.html">LFM2.5-8B-A1B</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX 5090 32GB ×2<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-5090-32gb-x2/sakamakismile-qwen3-6-27b-text-nvfp4-mtp.html">Qwen3.6-27B-Text-NVFP4-MTP</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RTX A6000 48GB ×2<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rtx-a6000-48gb-x2/cyankiwi-qwen3-6-27b-awq-bf16-int4.html">Qwen3.6-27B-AWQ-BF16-INT4</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 5700 8GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-5700-8gb/google-gemma-4-e2b-it.html">gemma-4-E2B-it</a></li>
+    </ul>
+  </section>
+
+  <section class="rig-group">
+    <h2 class="rig-name">RX 6700 10GB<span class="rig-count">2 verified runs</span></h2>
+    <ul class="model-list">
+      <li><a href="./rx-6700-10gb/unsloth-qwen3-5-0-8b.html">Qwen3.5-0.8B</a></li>
+    </ul>
+  </section>
+  <div class="journeys">
+    <div class="j-head">Go deeper</div>
+    <a href="../index.html">I have a goal — find models that fit my use case →</a>
+    <a href="../hardware.html">I have hardware — browse everything my rig can run →</a>
+  </div>
+</main>
+<footer>
+  <div>can-i-run-it</div>
+  <div>community pool data via localmaxxing.com public API · snapshot 2026-08-13</div>
+</footer>
+</body>
+</html>

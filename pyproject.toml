@@ -1,0 +1,32 @@
+[project]
+name = "bestmodel"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+dependencies = [
+    "pydantic>=2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "psycopg[binary]>=3",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "python-multipart>=0.0.9",
+    "cryptography>=43",
+    "redis>=5",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "packages", "apps/public-api", "apps/intake-worker"]
+pythonpath = [
+    "packages/domain-schema/src",
+    "packages/roofline-kernel/src",
+    "packages/runtime-probes/src",
+    "packages/recommendation-engine/src",
+    "apps/public-api",
+    "apps/intake-worker/src",
+    "packages/fake-adapters/src",
+]

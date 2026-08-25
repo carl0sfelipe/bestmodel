@@ -1,0 +1,10 @@
+{
+  "scannedAt": "2026-01-01T00:00:00+00:00",
+  "models": [
+    {"file": "big-9g.safetensors", "dir": "checkpoints", "bytes": 9000000000, "format": "safetensors"},
+    {"file": "tight-7g.safetensors", "dir": "checkpoints", "bytes": 7000000000, "format": "safetensors"},
+    {"file": "ok-2g.safetensors", "dir": "diffusion_models", "bytes": 2000000000, "format": "safetensors"},
+    {"file": "small-1g.safetensors", "dir": "checkpoints", "bytes": 1000000000, "format": "safetensors"},
+    {"file": "aux-vae.pt", "dir": "vae", "bytes": 300000000, "format": "pt"}
+  ]
+}

@@ -1,0 +1,8 @@
+[project]
+name = "domain-schema"
+version = "0.1.0"
+description = "Domain schema models for the inference matching platform"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2",
+]

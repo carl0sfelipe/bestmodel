@@ -1,0 +1,23 @@
+# apps/public-api — Map
+
+FastAPI service (REST/JSON + multipart intake). Layered: routes → services →
+dependencies (providers). `main.py` builds the app (`create_app`), wiring state
+from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PATH`, `ARTIFACT_VAULT_DIR`).
+
+| Dir/File | Content |
+|---|---|
+| `routes/hardware_match_route.py` | `POST /v1/match/hardware-to-models` (§9.4 contract, field names frozen) |
+| `routes/model_match_route.py` | `POST /v1/match/model-to-hardware` (minimum/recommended/cost_efficient roles) |
+| `routes/benchmark_submission_route.py` | `POST /v1/submissions` (multipart) + `GET /v1/submissions/nonce` |
+| `routes/leaderboard_route.py` | `GET /v1/leaderboard` with hardware/model/runtime/quant/context filters |
+| `services/submit_benchmark_run.py` | intake pipeline: schema → digest → signature (Ed25519, env `TRUSTED_ED25519_PUBLIC_KEY_PATH`) → artifact digests → dedupe → insert → enqueue |
+| `services/query_hardware_match.py` / `query_model_match.py` | match logic over catalog + roofline kernel |
+| `services/query_leaderboard.py` | filters + Decimal→float coercion + recommendation-engine ranking |
+| `dependencies/database_session_provider.py` | `DatabaseSession` ABC + PostgresSession; jsonb via `Json()` (finding B2) |
+| `dependencies/artifact_vault_provider.py` | LocalArtifactVault (filesystem under `ARTIFACT_VAULT_DIR`) |
+| `dependencies/redis_queue_provider.py` | RedisStreamQueue, lazy connect, stream `benchmark_runs` |
+| `schemas/` | Pydantic request/form models (SubmissionForm carries optional catalog binding overrides) |
+
+Tests: `tests/` use fake-adapters via `conftest.py` (`client`, `leaderboard_client`
+fixtures). Known limits: gpu-bound filtering needs bound hardware rows; community
+submissions create anonymous hardware rows (S09 design note; Phase 1 accounts fix).

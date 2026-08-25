@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can the RTX 5090 32GB run Muse-Glimmer-30B-NVFP4?</title>
+<meta name="description" content="Community-verified: the RTX 5090 32GB runs Muse-Glimmer-30B-NVFP4 at 94.1 tok/s (2 runs, 4-bit) on the localmaxxing pool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/theme.css">
+<style>/* S8 static answer pages — layout only; tokens/components from theme.css. */
+.page{max-width:780px;margin:0 auto;padding:0 24px 120px}
+.nav-top{
+  position:sticky;top:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:20px 56px;
+  background:rgba(11,12,14,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--hair);
+  font-family:var(--mono);font-size:13px;letter-spacing:-.01em;
+}
+.wordmark{color:var(--ink);display:flex;align-items:center;gap:10px}
+.wordmark .prompt{color:var(--muted)}
+.nav-top .links{display:flex;gap:20px;color:var(--muted);flex-wrap:wrap}
+.nav-top .links a{color:inherit;text-decoration:none;transition:color .25s}
+.nav-top .links a:hover{color:var(--ink)}
+.hero{padding:72px 0 32px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.6vw,54px);line-height:1.04;letter-spacing:-.03em;max-width:720px}
+.answer{margin-top:24px;font-family:var(--display);font-weight:500;font-size:clamp(18px,2.2vw,24px);letter-spacing:-.01em}
+.answer .yes{color:var(--green)}
+.answer .em{color:var(--amber)}
+.sub{margin-top:12px;color:var(--muted);font-size:15px;max-width:600px}
+.data-table{margin-top:44px;width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+.data-table th,.data-table td{padding:14px 18px;text-align:left;font-family:var(--mono);font-size:12px}
+.data-table thead th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--hair);background:var(--surface-2)}
+.data-table tbody tr{border-top:1px solid var(--hair)}
+.data-table tbody tr:first-child{border-top:0}
+.data-table td.num{font-variant-numeric:tabular-nums;color:var(--ink)}
+.journeys{margin-top:44px;display:flex;flex-direction:column;gap:12px;padding:22px;border:1px solid var(--hair);border-radius:12px;background:var(--surface)}
+.j-head{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.journeys a{color:var(--amber);text-decoration:none;font-family:var(--mono);font-size:13px;transition:color .25s}
+.journeys a:hover{color:#E9B36F}
+.rig-group{margin-top:56px}
+.rig-name{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.rig-count{font-family:var(--mono);font-size:11px;color:var(--dim);font-weight:400}
+.model-list{list-style:none;margin-top:16px;display:flex;flex-direction:column}
+.model-list li{padding:10px 0;border-top:1px solid var(--hair)}
+.model-list a{color:var(--ink);text-decoration:none;font-family:var(--mono);font-size:13px;transition:color .25s}
+.model-list a:hover{color:var(--amber)}
+@media (max-width:900px){
+  .nav-top{padding:16px 20px}
+  .page{padding:0 20px 80px}
+  .hero{padding:48px 0 24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}</style>
+</head>
+<body>
+<header class="nav-top">
+  <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+  <div class="links">
+    <a href="../../index.html">I have a goal</a>
+    <a href="../../hardware.html">I have hardware</a>
+    <a href="../index.html">All answers</a>
+  </div>
+</header>
+<main class="page">
+  <section class="hero">
+    <div class="kicker">community-verified · measured pool data</div>
+    <h1>Can the RTX 5090 32GB run Muse-Glimmer-30B-NVFP4?</h1>
+    <p class="answer"><span class="yes">Yes</span> — community-measured at <span class="em">94.1 tok/s</span> (2 runs at 4-bit).</p>
+    <p class="sub">Verified single-stream runs on the RTX 5090 32GB from the localmaxxing public pool. Every number on this page is measured — nothing here is estimated.</p>
+  </section>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Quantization</th>
+        <th>Median tok/s</th>
+        <th>TTFT (ms)</th>
+        <th>Peak VRAM</th>
+        <th>Max context tested</th>
+        <th>Engines</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>4-bit</td>
+      <td class="num">94.1</td>
+      <td class="num">31.4</td>
+      <td class="num">—</td>
+      <td class="num">8,192</td>
+      <td>vllm</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="journeys">
+    <div class="j-head">Go deeper</div>
+    <a href="../../index.html">I have a goal — find models that fit my use case →</a>
+    <a href="../../hardware.html">I have hardware — browse everything my rig can run →</a>
+    <a href="../index.html">All machine × model answer pages →</a>
+  </div>
+</main>
+<footer>
+  <div>can-i-run-it</div>
+  <div>community pool data via localmaxxing.com public API · snapshot 2026-08-13</div>
+</footer>
+</body>
+</html>

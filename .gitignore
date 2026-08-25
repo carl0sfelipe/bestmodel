@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Rust
+target/
+
+# Node
+node_modules/
+
+# Environment
+.env
+
+# Local data / OS junk
+*.zip
+artifacts/
+.DS_Store

@@ -1,0 +1,165 @@
+{
+  "$defs": {
+    "ArtifactKind": {
+      "enum": [
+        "runtime_stdout",
+        "runtime_stderr",
+        "runtime_config",
+        "gpu_smi_trace",
+        "system_topology",
+        "screenshot",
+        "prompt_template"
+      ],
+      "title": "ArtifactKind",
+      "type": "string"
+    },
+    "BenchmarkArtifact": {
+      "properties": {
+        "artifact_kind": {
+          "$ref": "#/$defs/ArtifactKind"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_kind",
+        "sha256"
+      ],
+      "title": "BenchmarkArtifact",
+      "type": "object"
+    },
+    "BenchmarkMetrics": {
+      "properties": {
+        "ttft_ms": {
+          "minimum": 0,
+          "title": "Ttft Ms",
+          "type": "number"
+        },
+        "prefill_tok_s": {
+          "minimum": 0,
+          "title": "Prefill Tok S",
+          "type": "number"
+        },
+        "decode_tok_s": {
+          "minimum": 0,
+          "title": "Decode Tok S",
+          "type": "number"
+        },
+        "peak_vram_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Peak Vram Mib",
+          "type": "integer"
+        },
+        "power_watt_avg": {
+          "minimum": 0,
+          "title": "Power Watt Avg",
+          "type": "number"
+        }
+      },
+      "required": [
+        "ttft_ms",
+        "prefill_tok_s",
+        "decode_tok_s",
+        "peak_vram_mib",
+        "power_watt_avg"
+      ],
+      "title": "BenchmarkMetrics",
+      "type": "object"
+    },
+    "BenchmarkScenario": {
+      "properties": {
+        "prompt_tokens": {
+          "minimum": 0,
+          "title": "Prompt Tokens",
+          "type": "integer"
+        },
+        "generated_tokens": {
+          "exclusiveMinimum": 0,
+          "title": "Generated Tokens",
+          "type": "integer"
+        },
+        "batch_size": {
+          "exclusiveMinimum": 0,
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "context_tokens": {
+          "exclusiveMinimum": 0,
+          "title": "Context Tokens",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "prompt_tokens",
+        "generated_tokens",
+        "batch_size",
+        "context_tokens"
+      ],
+      "title": "BenchmarkScenario",
+      "type": "object"
+    },
+    "RuntimeEngine": {
+      "enum": [
+        "llama_cpp",
+        "ollama",
+        "vllm",
+        "sglang",
+        "exllamav2",
+        "tensorrt_llm",
+        "mlx",
+        "lmstudio"
+      ],
+      "title": "RuntimeEngine",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "0.9.0",
+      "default": "0.9.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "runtime": {
+      "$ref": "#/$defs/RuntimeEngine"
+    },
+    "runtime_version": {
+      "title": "Runtime Version",
+      "type": "string"
+    },
+    "hardware_fingerprint": {
+      "title": "Hardware Fingerprint",
+      "type": "string"
+    },
+    "scenario": {
+      "$ref": "#/$defs/BenchmarkScenario"
+    },
+    "metrics": {
+      "$ref": "#/$defs/BenchmarkMetrics"
+    },
+    "artifacts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/BenchmarkArtifact"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run_id",
+    "runtime",
+    "runtime_version",
+    "hardware_fingerprint",
+    "scenario",
+    "metrics"
+  ],
+  "title": "BenchmarkReport",
+  "type": "object"
+}

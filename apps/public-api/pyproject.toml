@@ -1,0 +1,14 @@
+[project]
+name = "public-api"
+version = "0.1.0"
+description = "Public REST/JSON API for the inference matching platform"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "psycopg[binary]>=3",
+    "python-multipart>=0.0.9",
+    "cryptography>=43",
+    "redis>=5",
+]

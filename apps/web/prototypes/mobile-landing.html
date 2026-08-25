@@ -1,0 +1,1831 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0C0E">
+<meta name="description" content="The compatibility engine for local AI. Tell us what you want to run — we'll tell you exactly which models fit your machine, with verified benchmarks.">
+<title>Can I Run It — Local AI compatibility engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CAN I RUN IT — MOBILE-FIRST AD LANDING
+   Optimized for paid traffic: instant comprehension,
+   thumb-zone CTAs, zero friction, fast FCP.
+   ============================================================ */
+
+:root{
+  --bg:#0B0C0E;
+  --surface:#121417;
+  --surface-2:#181B20;
+  --surface-3:#1F2328;
+  --hair:rgba(255,255,255,.08);
+  --hair-strong:rgba(255,255,255,.16);
+  --ink:#EDEEF0;
+  --muted:#8B9096;
+  --dim:#4A4F57;
+  --amber:#E0A458;
+  --amber-soft:rgba(224,164,88,.08);
+  --green:#9BC4A9;
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --display:'Inter Tight', 'Inter', system-ui, sans-serif;
+  --body:'Inter', system-ui, sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --safe-top:env(safe-area-inset-top, 0px);
+  --safe-bot:env(safe-area-inset-bottom, 0px);
+  --nav-h:56px;
+  --bottom-h:72px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  padding-top:calc(var(--nav-h) + var(--safe-top));
+  padding-bottom:calc(var(--bottom-h) + var(--safe-bot) + 8px);
+  touch-action:manipulation;
+}
+::selection{background:var(--amber);color:#000}
+button,input,select{font:inherit;color:inherit;background:none;border:0;outline:0}
+button{cursor:pointer;touch-action:manipulation}
+
+/* subtle vignette */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(120% 70% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
+  mix-blend-mode:multiply;opacity:.8;
+}
+
+/* ============================================================
+   TOP BAR — sticky, minimal, journey switcher always visible
+   ============================================================ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding-top:var(--safe-top);
+  background:rgba(11,12,14,.88);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--hair);
+}
+.topbar-inner{
+  display:flex;flex-direction:column;gap:10px;
+  padding:10px 16px;
+}
+.topbar-row{
+  display:flex;justify-content:space-between;align-items:center;
+  height:var(--nav-h);
+}
+.wordmark{
+  font-family:var(--mono);font-size:13px;letter-spacing:-.01em;
+  color:var(--ink);display:flex;align-items:center;gap:6px;
+}
+.wordmark .prompt{color:var(--muted)}
+.menu-btn{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;transition:background .2s;
+}
+.menu-btn:active{background:rgba(255,255,255,.06)}
+.menu-btn .bars{display:flex;flex-direction:column;gap:3px}
+.menu-btn .bars span{display:block;width:14px;height:1.5px;background:var(--ink);border-radius:1px}
+
+/* Journey segmented control — primary wayfinding */
+.journey-seg{
+  display:flex;padding:3px;gap:2px;
+  background:var(--surface);border:1px solid var(--hair);border-radius:10px;
+}
+.journey-btn{
+  flex:1;padding:8px 4px;border-radius:7px;
+  font-family:var(--mono);font-size:11px;letter-spacing:-.005em;
+  color:var(--muted);transition:background .2s, color .2s;
+  white-space:nowrap;
+}
+.journey-btn.on{background:var(--surface-3);color:var(--ink)}
+.journey-btn:active:not(.on){background:var(--surface-2)}
+
+/* ============================================================
+   BOTTOM BAR — sticky CTA, thumb-zone, persistent
+   ============================================================ */
+.bottombar{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  padding:10px 16px calc(10px + var(--safe-bot));
+  background:rgba(11,12,14,.92);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--hair);
+}
+.bottombar-inner{display:flex;flex-direction:column;gap:8px}
+.bottom-status{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  min-height:18px;letter-spacing:-.005em;
+}
+.bottom-status .dot{width:5px;height:5px;border-radius:50%;background:var(--dim);transition:background .3s}
+.bottom-status.active .dot{background:var(--amber);box-shadow:0 0 0 3px rgba(224,164,88,.2)}
+.bottom-status .chips{display:flex;gap:4px;flex-wrap:wrap;flex:1;overflow:hidden}
+.mini-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 7px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--hair);
+  font-family:var(--mono);font-size:10px;color:var(--ink);
+  white-space:nowrap;
+}
+.mini-chip.amber{border-color:rgba(224,164,88,.3)}
+.mini-chip.green{border-color:rgba(155,196,169,.3)}
+
+.cta-primary{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:15px;border-radius:12px;
+  background:var(--amber);color:#0B0C0E;
+  font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;
+  transition:transform .15s, background .2s;
+  box-shadow:0 6px 24px rgba(224,164,88,.25);
+}
+.cta-primary:active{transform:scale(.98);background:#E9B36F}
+.cta-primary .arrow{transition:transform .2s}
+.cta-primary:active .arrow{transform:translateX(2px)}
+
+/* ============================================================
+   COMMON — panels, sections
+   ============================================================ */
+main{position:relative;z-index:2}
+.panel{
+  padding:24px 20px;
+  min-height:calc(100vh - var(--nav-h) - var(--bottom-h));
+  display:flex;flex-direction:column;
+  border-bottom:1px solid var(--hair);
+  scroll-margin-top:calc(var(--nav-h) + var(--safe-top) + 8px);
+}
+.panel:last-child{border-bottom:0}
+
+.kicker{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.kicker::before{content:"";width:12px;height:1px;background:var(--amber)}
+
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(34px,9vw,44px);line-height:1.02;letter-spacing:-.025em;
+  margin-bottom:16px;
+}
+h1 .em{color:var(--amber)}
+h2{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(26px,7vw,34px);line-height:1.08;letter-spacing:-.02em;
+  margin-bottom:12px;
+}
+h2 .em{color:var(--amber)}
+.sub{color:var(--muted);font-size:15px;line-height:1.5;margin-bottom:24px;max-width:560px}
+
+/* ============================================================
+   HERO — goal journey default
+   ============================================================ */
+.trust{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 12px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--hair);
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  margin-bottom:22px;width:fit-content;
+}
+.trust .live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(155,196,169,.2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.hero-sub{
+  font-family:var(--mono);font-size:13px;color:var(--muted);
+  margin-top:-6px;margin-bottom:28px;letter-spacing:-.005em;
+}
+
+.intent-q{margin-bottom:28px}
+.intent-q .lbl{
+  font-family:var(--mono);font-size:11px;color:var(--muted);
+  letter-spacing:.05em;text-transform:uppercase;margin-bottom:12px;
+}
+.intent-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.intent-chip{
+  padding:14px 16px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--hair);
+  text-align:left;transition:border-color .2s, background .2s, transform .15s;
+  display:flex;flex-direction:column;gap:4px;
+}
+.intent-chip:active{transform:scale(.98);border-color:var(--hair-strong);background:var(--surface-2)}
+.intent-chip.on{
+  background:linear-gradient(180deg, rgba(224,164,88,.12), rgba(224,164,88,.04));
+  border-color:rgba(224,164,88,.4);
+}
+.intent-chip .io{
+  font-family:var(--mono);font-size:12px;color:var(--ink);
+  letter-spacing:-.005em;display:flex;align-items:center;gap:6px;
+}
+.intent-chip.on .io{color:var(--amber)}
+.intent-chip .io .arr{color:var(--dim);font-size:10px}
+.intent-chip.on .io .arr{color:var(--amber)}
+.intent-chip .ex{font-size:12px;color:var(--muted);line-height:1.3}
+
+.machine-mini{
+  padding:16px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--hair);
+  display:flex;align-items:center;gap:14px;
+  transition:border-color .2s;
+}
+.machine-mini:active{border-color:var(--hair-strong)}
+.machine-mini .ic{
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(155,196,169,.08);border:1px solid rgba(155,196,169,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:16px;color:var(--green);
+  flex-shrink:0;
+}
+.machine-mini .txt{flex:1;min-width:0}
+.machine-mini .lbl{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.machine-mini .dsc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+.machine-mini .chev{color:var(--dim);font-size:14px;flex-shrink:0}
+
+/* ============================================================
+   UNIVERSE / FILTER
+   ============================================================ */
+.universe{
+  padding:28px 20px;border-radius:16px;
+  background:var(--surface);border:1px solid var(--hair);
+  position:relative;overflow:hidden;margin-top:20px;
+}
+.universe::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 30%, rgba(224,164,88,.08), transparent 60%);
+  pointer-events:none;
+}
+.universe-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:2}
+.universe-top .t{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+.universe-top .big{font-family:var(--display);font-weight:600;font-size:42px;letter-spacing:-.02em;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums}
+.universe-top .big .s{font-size:14px;color:var(--muted);font-weight:500}
+.universe-desc{position:relative;z-index:2;margin-top:10px;font-size:14px;color:var(--muted);line-height:1.45}
+.universe-desc b{color:var(--ink);font-weight:500}
+
+/* Constellation — mini canvas */
+.constellation{
+  position:relative;z-index:2;
+  height:140px;margin-top:20px;border-radius:10px;
+  background:rgba(0,0,0,.2);border:1px solid var(--hair);
+  overflow:hidden;
+}
+.constellation canvas{width:100%;height:100%;display:block}
+
+/* ============================================================
+   SPECTRUM (mobile horizontal scroll)
+   ============================================================ */
+.spectrum{margin-top:20px}
+.spectrum-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.spectrum-head .t{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em;text-transform:uppercase}
+.spectrum-head .q{
+  display:flex;gap:2px;padding:2px;border-radius:8px;
+  background:var(--surface);border:1px solid var(--hair);
+}
+.spectrum-head .q button{
+  padding:6px 10px;border-radius:6px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  transition:background .2s, color .2s;
+}
+.spectrum-head .q button.on{background:var(--surface-3);color:var(--amber)}
+
+.spectrum-track{
+  display:flex;gap:10px;overflow-x:auto;
+  padding:4px 20px 16px 0;margin:0 -20px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.spectrum-track::-webkit-scrollbar{display:none}
+.spec-node{
+  flex:0 0 200px;scroll-snap-align:start;
+  padding:14px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--hair);
+  transition:border-color .2s, transform .2s;
+}
+.spec-node:active{transform:scale(.98);border-color:var(--hair-strong)}
+.spec-node.on{
+  background:linear-gradient(180deg, rgba(224,164,88,.08), var(--surface));
+  border-color:rgba(224,164,88,.4);
+}
+.spec-node .row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.spec-node .name{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.15;flex:1;min-width:0}
+.spec-node .fit{
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 7px;border-radius:999px;white-space:nowrap;flex-shrink:0;
+}
+.spec-node .fit.head{background:rgba(155,196,169,.12);color:var(--green);border:1px solid rgba(155,196,169,.25)}
+.spec-node .fit.ok{background:rgba(224,164,88,.1);color:var(--amber);border:1px solid rgba(224,164,88,.25)}
+.spec-node .fit.tight{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--hair)}
+.spec-node .fit.no{background:rgba(214,123,123,.08);color:#D67B7B;border:1px solid rgba(214,123,123,.25)}
+.spec-node .stats{display:flex;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.spec-node .stats .s{flex:1}
+.spec-node .stats .s b{color:var(--ink);font-weight:500;font-size:13px;display:block;margin-bottom:1px;font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   HARDWARE JOURNEY
+   ============================================================ */
+.detect-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+  padding:22px 18px;margin-top:8px;
+}
+.detect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.detect-head .t{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.detect-head .m{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+
+.detect-primary{
+  display:flex;align-items:center;gap:14px;
+  width:100%;padding:16px;border-radius:12px;
+  background:linear-gradient(135deg, rgba(224,164,88,.14), rgba(224,164,88,.04));
+  border:1px solid rgba(224,164,88,.35);
+  text-align:left;transition:transform .15s, background .2s;
+}
+.detect-primary:active{transform:scale(.98);background:linear-gradient(135deg, rgba(224,164,88,.18), rgba(224,164,88,.06))}
+.detect-primary .icon{
+  width:36px;height:36px;border-radius:9px;
+  background:rgba(224,164,88,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:16px;color:var(--amber);flex-shrink:0;
+}
+.detect-primary .txt{flex:1;min-width:0}
+.detect-primary .lbl{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em}
+.detect-primary .dsc{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+.detect-or{
+  text-align:center;padding:10px 0;
+  font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;
+}
+.detect-select{
+  width:100%;padding:14px 44px 14px 16px;
+  background:var(--surface-2);border:1px solid var(--hair);border-radius:12px;
+  font-family:var(--mono);font-size:13px;color:var(--ink);
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none' stroke='%238B9096' stroke-width='1.2'><path d='M1 1l4 4 4-4'/></svg>");
+  background-repeat:no-repeat;background-position:right 16px center;
+}
+
+.detect-foot{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--hair);
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+}
+.detect-foot .lock{color:var(--green)}
+
+/* Spec card (hardware journey) */
+.spec-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+  padding:22px 18px;margin-top:20px;position:relative;overflow:hidden;
+}
+.spec-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, var(--amber), transparent);
+  opacity:.4;
+}
+.spec-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.spec-head .name{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.015em}
+.spec-head .tag{
+  font-family:var(--mono);font-size:9px;color:var(--green);
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 8px;border:1px solid rgba(155,196,169,.3);border-radius:999px;
+  background:rgba(155,196,169,.05);
+}
+
+.spec-row{
+  display:grid;grid-template-columns:80px 1fr auto;gap:10px;
+  padding:11px 0;border-top:1px solid var(--hair);align-items:center;
+}
+.spec-row:first-of-type{border-top:0}
+.spec-row .lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.spec-row .val{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spec-row .num{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+
+/* Category pillars (mobile grid 2x3) */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.pillar{
+  padding:16px 14px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--hair);
+  text-align:left;transition:border-color .2s, transform .15s, background .2s;
+}
+.pillar:active{transform:scale(.98);border-color:var(--hair-strong)}
+.pillar.on{
+  background:linear-gradient(180deg, rgba(224,164,88,.1), var(--surface));
+  border-color:rgba(224,164,88,.4);
+}
+.pillar .icon{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,.03);border:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:14px;color:var(--muted);
+  margin-bottom:12px;transition:color .2s, border-color .2s, background .2s;
+}
+.pillar.on .icon{color:var(--amber);border-color:rgba(224,164,88,.3);background:rgba(224,164,88,.08)}
+.pillar .name{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:-.01em;margin-bottom:3px}
+.pillar .count{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.pillar .count b{color:var(--amber);font-weight:500}
+
+/* Catalog (mobile cards) */
+.catalog-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+.catalog-top h2{margin-bottom:4px;flex:1}
+.catalog-top .cat{color:var(--amber)}
+.catalog-controls{display:flex;gap:4px;flex-shrink:0}
+.cat-btn{
+  padding:7px 10px;border-radius:7px;
+  background:var(--surface);border:1px solid var(--hair);
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  transition:background .2s, color .2s, border-color .2s;
+}
+.cat-btn.on{background:var(--amber-soft);border-color:rgba(224,164,88,.4);color:var(--amber)}
+
+.catalog-scroll{
+  display:flex;gap:10px;overflow-x:auto;
+  padding:4px 20px 16px 0;margin:0 -20px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.catalog-scroll::-webkit-scrollbar{display:none}
+
+.model-card{
+  flex:0 0 260px;scroll-snap-align:start;
+  padding:16px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--hair);
+  display:flex;flex-direction:column;
+  transition:border-color .2s, transform .2s;
+}
+.model-card:active{transform:scale(.98);border-color:var(--hair-strong)}
+.model-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.model-card .name{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.15;flex:1;min-width:0}
+.model-card .params{
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 7px;border:1px solid var(--hair);border-radius:999px;flex-shrink:0;
+}
+.model-card .meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:12px}
+.model-card .stats{display:flex;gap:10px;margin-bottom:12px;padding-top:12px;border-top:1px solid var(--hair)}
+.model-card .stat{flex:1}
+.model-card .stat .lbl{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.model-card .stat .val{font-family:var(--mono);font-size:12px;color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.model-card .stat .val.good{color:var(--green)}
+.model-card .stat .val.tight{color:var(--amber)}
+.model-card .run{
+  margin-top:auto;padding:10px;border-radius:8px;
+  background:var(--amber-soft);border:1px solid rgba(224,164,88,.25);
+  font-family:var(--mono);font-size:11px;color:var(--amber);
+  letter-spacing:.04em;text-transform:uppercase;text-align:center;
+}
+
+/* ============================================================
+   TEST DRIVE — both journeys converge here
+   ============================================================ */
+.td-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+  padding:20px 18px;margin-top:8px;
+}
+.td-model{margin-bottom:16px}
+.td-model .name{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:-.02em;line-height:1.1;margin-bottom:4px}
+.td-model .meta{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:-.005em}
+
+.td-vram{margin-top:16px}
+.td-vram .bar{position:relative;height:20px;background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.td-vram .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg, var(--green), #C8D9CE);transition:width 1s var(--ease)}
+.td-vram .fill.warn{background:linear-gradient(90deg, var(--amber), #EAC593)}
+.td-vram .lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+.td-speed{display:flex;align-items:baseline;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--hair)}
+.td-speed .num{font-family:var(--mono);font-weight:500;font-size:32px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.td-speed .unit{font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+.preview{
+  margin-top:16px;padding:14px;border-radius:12px;
+  background:var(--surface-2);border:1px solid var(--hair);
+  min-height:180px;position:relative;overflow:hidden;
+}
+.preview-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase}
+.preview-body{position:relative;min-height:140px}
+.preview-text{font-family:var(--mono);font-size:12px;color:var(--ink);line-height:1.6;white-space:pre-wrap}
+.preview-text .cur{display:inline-block;width:7px;height:13px;background:var(--amber);vertical-align:text-bottom;margin-left:2px;animation:blink 1s steps(2) infinite}
+.preview canvas{width:100%;height:140px;display:block;border-radius:6px}
+@keyframes blink{50%{opacity:0}}
+
+.td-cta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn-secondary{
+  flex:1;min-width:140px;padding:12px 14px;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--hair);
+  font-size:13px;color:var(--ink);text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:border-color .2s;
+}
+.btn-secondary:active{border-color:var(--hair-strong)}
+
+/* ============================================================
+   RECOMMENDATIONS STACK
+   ============================================================ */
+.rec-stack{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.rec{
+  padding:16px 18px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--hair);
+  transition:border-color .2s, transform .2s;
+}
+.rec:active{transform:scale(.99);border-color:var(--hair-strong)}
+.rec.best{
+  background:linear-gradient(180deg, rgba(224,164,88,.08), var(--surface));
+  border-color:rgba(224,164,88,.35);
+}
+.rec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.rec .badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rec.best .badge{color:var(--amber)}
+.rec .reason-short{font-family:var(--mono);font-size:10px;color:var(--muted);padding:3px 7px;border:1px solid var(--hair);border-radius:999px;white-space:nowrap}
+.rec .name{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.015em;line-height:1.15;margin-bottom:3px}
+.rec .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px}
+.rec .hd{position:relative;height:5px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.rec .hd-fill{position:absolute;inset:0 auto 0 0;background:var(--green)}
+.rec .hd-fill.warn{background:var(--amber)}
+.rec .reason{font-size:13px;color:var(--muted);line-height:1.45}
+.rec .reason b{color:var(--ink);font-weight:500}
+
+/* ============================================================
+   COHORT / SOCIAL PROOF
+   ============================================================ */
+.cohort{
+  padding:20px 18px;border-radius:14px;
+  background:var(--surface);border:1px solid var(--hair);
+  margin-top:12px;
+}
+.cohort-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px}
+.cohort-head .t{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.cohort-head .m{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+.cohort-head .live{
+  padding:3px 8px;border-radius:999px;
+  background:rgba(155,196,169,.1);border:1px solid rgba(155,196,169,.25);
+  font-family:var(--mono);font-size:10px;color:var(--green);
+  display:flex;align-items:center;gap:5px;
+}
+.cohort-head .live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+.top-list{list-style:none}
+.top-list li{
+  display:grid;grid-template-columns:18px 1fr auto;gap:10px;
+  padding:10px 0;border-top:1px solid var(--hair);align-items:center;
+  font-size:13px;
+}
+.top-list li:first-child{border-top:0}
+.top-list .rank{font-family:var(--mono);font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums}
+.top-list .rank.top{color:var(--amber)}
+.top-list .name{font-family:var(--display);font-weight:500;letter-spacing:-.005em;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-list .ts{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.stat-box{background:var(--surface-2);border-radius:10px;padding:12px}
+.stat-box .t{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.stat-box .n{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat-box .n .u{font-size:11px;color:var(--muted);margin-left:3px}
+.stat-box .s{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ============================================================
+   FINAL / OS
+   ============================================================ */
+.final{padding:32px 20px 40px}
+.final h2{font-size:clamp(28px,8vw,38px);line-height:1.05;letter-spacing:-.02em;margin-bottom:14px}
+.final .tag{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:22px;line-height:1.5}
+
+.eco{width:100%;aspect-ratio:4/3;max-height:320px;margin:16px 0 24px}
+.eco svg{width:100%;height:100%}
+.eco-node{fill:var(--surface);stroke:var(--hair);stroke-width:1}
+.eco-node.center{fill:var(--surface);stroke:var(--amber);stroke-width:1.5}
+.eco-line{stroke:var(--hair-strong);stroke-width:1;fill:none}
+.eco-lbl{font-family:var(--mono);font-size:9px;fill:var(--muted);text-anchor:middle;letter-spacing:.02em}
+.eco-core-lbl{font-family:var(--display);font-size:11px;fill:var(--ink);text-anchor:middle;font-weight:600;letter-spacing:-.01em}
+
+.install{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;background:var(--surface);border:1px solid var(--hair);border-radius:10px;
+  font-family:var(--mono);font-size:12px;color:var(--ink);
+  margin-bottom:14px;
+}
+.install .prompt{color:var(--muted)}
+.install .cmd{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.install .cp{
+  padding:5px 10px;border-radius:5px;background:rgba(255,255,255,.04);
+  color:var(--muted);font-size:10px;flex-shrink:0;
+  transition:background .2s, color .2s;
+}
+.install .cp:active{background:rgba(255,255,255,.08);color:var(--ink)}
+.install .cp.done{color:var(--green)}
+
+.final-links{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px}
+.final-links a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:1px}
+
+/* ============================================================
+   BOTTOM SHEET (for pickers, mobile-native feel)
+   ============================================================ */
+.sheet{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.sheet.on{opacity:1;pointer-events:auto}
+.sheet-inner{
+  position:absolute;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--hair);
+  border-radius:16px 16px 0 0;
+  padding:8px 8px calc(20px + var(--safe-bot));
+  transform:translateY(100%);transition:transform .3s var(--ease);
+  max-height:80vh;overflow-y:auto;
+}
+.sheet.on .sheet-inner{transform:translateY(0)}
+.sheet-handle{
+  width:40px;height:4px;border-radius:2px;background:var(--hair-strong);
+  margin:8px auto 16px;
+}
+.sheet-title{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin:0 8px 14px}
+.sheet-list{display:flex;flex-direction:column;gap:2px;padding:0 4px}
+.sheet-item{
+  padding:14px 12px;border-radius:10px;
+  font-size:14px;text-align:left;
+  display:flex;align-items:center;gap:12px;
+  transition:background .15s;
+}
+.sheet-item:active{background:var(--surface-2)}
+.sheet-item.on{background:var(--amber-soft)}
+.sheet-item .ic{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:14px;color:var(--muted);flex-shrink:0;
+}
+.sheet-item.on .ic{color:var(--amber);border-color:rgba(224,164,88,.3);background:rgba(224,164,88,.08)}
+.sheet-item .txt{flex:1;min-width:0}
+.sheet-item .lbl{font-family:var(--display);font-weight:500;font-size:14px}
+.sheet-item .dsc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast{
+  position:fixed;top:calc(var(--nav-h) + var(--safe-top) + 10px);left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  z-index:200;padding:10px 16px;border-radius:10px;
+  background:rgba(18,20,23,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--hair);
+  font-family:var(--mono);font-size:12px;color:var(--ink);
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+  opacity:0;transition:opacity .25s, transform .25s;
+  pointer-events:none;max-width:calc(100vw - 32px);
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}
+  .trust .live,.cohort-head .live::before{animation:none}
+}
+
+/* ============================================================
+   TABLET+ ADJUSTMENTS — optional, graceful scaling
+   ============================================================ */
+@media (min-width:640px){
+  .topbar-inner{padding:10px 24px}
+  .panel{padding:32px 28px}
+  .bottombar{padding:12px 24px calc(12px + var(--safe-bot))}
+  h1{font-size:clamp(40px,6vw,56px)}
+  .intent-grid{grid-template-columns:repeat(3, 1fr)}
+  .pillars{grid-template-columns:repeat(3, 1fr)}
+  .final{padding:48px 28px 60px;max-width:900px;margin:0 auto}
+}
+@media (min-width:1024px){
+  body{font-size:17px}
+  .panel{max-width:1100px;margin:0 auto;padding:48px 32px}
+  .final{max-width:1000px}
+  .intent-grid{grid-template-columns:repeat(4, 1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-row">
+      <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+      <button class="menu-btn" aria-label="Menu"><div class="bars"><span></span><span></span><span></span></div></button>
+    </div>
+    <!-- Journey switcher — the primary navigation decision -->
+    <div class="journey-seg" role="tablist" aria-label="Choose your starting point">
+      <button class="journey-btn on" data-journey="goal" role="tab" aria-selected="true">I have a goal</button>
+      <button class="journey-btn" data-journey="hardware" role="tab" aria-selected="false">I have hardware</button>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer class="panel final" id="finalPanel">
+  <div class="kicker">The bigger picture</div>
+  <h2>Not a catalog. <br>The <span class="em">operating system</span> for local AI compatibility.</h2>
+  <div class="tag">Benchmarks are community-submitted and re-verified on reference rigs.</div>
+
+  <div class="eco">
+    <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="ecoGlow"><stop offset="0" stop-color="rgba(224,164,88,.1)"/><stop offset="1" stop-color="transparent"/></radialGradient></defs>
+      <circle cx="400" cy="225" r="180" fill="url(#ecoGlow)"/>
+      <line class="eco-line" x1="400" y1="225" x2="140" y2="100"/>
+      <line class="eco-line" x1="400" y1="225" x2="680" y2="90"/>
+      <line class="eco-line" x1="400" y1="225" x2="720" y2="320"/>
+      <line class="eco-line" x1="400" y1="225" x2="540" y2="400"/>
+      <line class="eco-line" x1="400" y1="225" x2="240" y2="410"/>
+      <line class="eco-line" x1="400" y1="225" x2="80" y2="290"/>
+      <circle class="eco-node center" cx="400" cy="225" r="42"/>
+      <text class="eco-core-lbl" x="400" y="222">can-i-run-it</text>
+      <text class="eco-core-lbl" x="400" y="238" font-size="9" fill="#8B9096" font-weight="400">engine</text>
+      <circle class="eco-node" cx="140" cy="100" r="26"/><text class="eco-lbl" x="140" y="70">benchmarks</text>
+      <circle class="eco-node" cx="680" cy="90" r="26"/><text class="eco-lbl" x="680" y="60">Rust CLI</text>
+      <circle class="eco-node" cx="720" cy="320" r="26"/><text class="eco-lbl" x="720" y="360">MCP server</text>
+      <circle class="eco-node" cx="540" cy="400" r="26"/><text class="eco-lbl" x="540" y="435">telemetry</text>
+      <circle class="eco-node" cx="240" cy="410" r="26"/><text class="eco-lbl" x="240" y="440">model index</text>
+      <circle class="eco-node" cx="80" cy="290" r="26"/><text class="eco-lbl" x="80" y="325">community</text>
+    </svg>
+  </div>
+
+  <div class="install">
+    <span class="prompt">$</span>
+    <span class="cmd" id="installCmd">curl -sSf canirun.it/sh | sh</span>
+    <button class="cp" id="cpBtn">copy</button>
+  </div>
+
+  <div class="final-links">
+    <a href="#">How scoring works</a>
+    <a href="#">Contribute</a>
+    <a href="#">Discord</a>
+    <a href="#">GitHub ↗</a>
+  </div>
+</footer>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-inner">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="sheetTitle">Pick</div>
+    <div class="sheet-list" id="sheetList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Saved</span></div>
+
+<!-- STICKY BOTTOM CTA -->
+<aside class="bottombar">
+  <div class="bottombar-inner">
+    <div class="bottom-status" id="bottomStatus">
+      <span class="dot"></span>
+      <div class="chips" id="bottomChips"></div>
+    </div>
+    <button class="cta-primary" id="mainCta">
+      <span id="ctaText">See models that fit</span>
+      <span class="arrow">→</span>
+    </button>
+  </div>
+</aside>
+
+<script>
+/* =============================================================
+   DATA — shared truth
+   ============================================================= */
+const MACHINES = {
+  "4090":    {name:"RTX 4090 desktop",  gpu:"NVIDIA RTX 4090",  vram:24, bw:1008, cpu:"i9-13900K",  ram:64,  cpuCores:24},
+  "m3max":   {name:"MacBook M3 Max",    gpu:"Apple M3 Max",     vram:64, bw:400,  cpu:"M3 Max",     ram:64,  cpuCores:16},
+  "m2ultra": {name:"M2 Ultra studio",   gpu:"Apple M2 Ultra",   vram:192,bw:800,  cpu:"M2 Ultra",   ram:192, cpuCores:24},
+  "4080":    {name:"RTX 4080 laptop",   gpu:"NVIDIA RTX 4080",  vram:12, bw:512,  cpu:"i9-13950HX", ram:32,  cpuCores:24},
+  "a100":    {name:"8× A100 reference", gpu:"NVIDIA A100 ×8",   vram:640,bw:16000,cpu:"EPYC 7742",  ram:512, cpuCores:128},
+  "3060":    {name:"RTX 3060 · 12GB",   gpu:"NVIDIA RTX 3060",  vram:12, bw:360,  cpu:"i7-12700K",  ram:32,  cpuCores:12},
+  "auto":    {name:"This machine",      gpu:"Auto-detected",    vram:16, bw:700,  cpu:"detect",     ram:32,  cpuCores:12}
+};
+
+const MODELS = [
+  {name:"Llama 3.1 8B",       paramsB:8,   io:["text","text"],   category:"llm",   vram:{fp16:16, q8:8.5, q6:6.5, q4:4.8},  refTs:{4090:185, m3max:95,  m2ultra:220, 4080:120, a100:380, 3060:62}},
+  {name:"Llama 3.1 70B",      paramsB:70,  io:["text","text"],   category:"llm",   vram:{fp16:140,q8:72,  q6:56,  q4:40},   refTs:{4090:42,  m3max:32,  m2ultra:85,  4080:22,  a100:120, 3060:0}},
+  {name:"Qwen 2.5 7B",        paramsB:7,   io:["text","text"],   category:"llm",   vram:{fp16:14, q8:7.5, q6:5.8, q4:4.2},  refTs:{4090:195, m3max:100, m2ultra:230, 4080:130, a100:395, 3060:68}},
+  {name:"Qwen 2.5 14B",       paramsB:14,  io:["text","text"],   category:"llm",   vram:{fp16:28, q8:15,  q6:11,  q4:8.4},  refTs:{4090:98,  m3max:62,  m2ultra:165, 4080:58,  a100:240, 3060:42}},
+  {name:"Qwen 2.5 32B",       paramsB:32,  io:["text","text"],   category:"llm",   vram:{fp16:64, q8:33,  q6:25,  q4:19},   refTs:{4090:48,  m3max:38,  m2ultra:112, 4080:28,  a100:140, 3060:0}},
+  {name:"Qwen 2.5 72B",       paramsB:72,  io:["text","text"],   category:"llm",   vram:{fp16:144,q8:74,  q6:58,  q4:43},   refTs:{4090:38,  m3max:28,  m2ultra:82,  4080:20,  a100:115, 3060:0}},
+  {name:"Mistral 7B v0.3",    paramsB:7,   io:["text","text"],   category:"llm",   vram:{fp16:14, q8:7.6, q6:5.9, q4:4.4},  refTs:{4090:190, m3max:98,  m2ultra:225, 4080:128, a100:390, 3060:66}},
+  {name:"Mixtral 8x7B",       paramsB:47,  io:["text","text"],   category:"llm",   vram:{fp16:94, q8:48,  q6:38,  q4:28},   refTs:{4090:62,  m3max:42,  m2ultra:135, 4080:35,  a100:180, 3060:0}},
+  {name:"Gemma 2 9B",         paramsB:9,   io:["text","text"],   category:"llm",   vram:{fp16:18, q8:9.5, q6:7.3, q4:5.4},  refTs:{4090:170, m3max:88,  m2ultra:205, 4080:115, a100:350, 3060:58}},
+  {name:"Phi-3 Medium",       paramsB:14,  io:["text","text"],   category:"llm",   vram:{fp16:28, q8:15,  q6:11,  q4:8.2},  refTs:{4090:100, m3max:64,  m2ultra:170, 4080:60,  a100:250, 3060:44}},
+  {name:"LLaVA 1.6 13B",      paramsB:13,  io:["image","text"],  category:"vision",vram:{fp16:26, q8:14, q6:10, q4:7.8}, refTs:{4090:110, m3max:70, m2ultra:175, 4080:65, a100:265, 3060:45}},
+  {name:"Qwen-VL-Chat",       paramsB:9,   io:["image","text"],  category:"vision",vram:{fp16:18, q8:10, q6:7.2, q4:5.5}, refTs:{4090:165, m3max:85, m2ultra:210, 4080:110, a100:340, 3060:55}},
+  {name:"Flux.1 [schnell]",   paramsB:12,  io:["text","image"],  category:"image", vram:{fp16:24, q8:13, q6:10, q4:7.8}, refTs:{4090:6.5, m3max:2.8, m2ultra:8.2, 4080:3.8, a100:14, 3060:1.8}},
+  {name:"SDXL 1.0",           paramsB:6.6, io:["text","image"],  category:"image", vram:{fp16:13, q8:7,  q6:5.4, q4:4.2}, refTs:{4090:9.5, m3max:4.2, m2ultra:12, 4080:5.6, a100:20, 3060:3.2}},
+  {name:"SD3 Medium",         paramsB:2.5, io:["text","image"],  category:"image", vram:{fp16:5,  q8:2.8,q6:2.2,q4:1.8}, refTs:{4090:14,  m3max:6.5, m2ultra:17, 4080:8.5, a100:28, 3060:5.2}},
+  {name:"Whisper large v3",   paramsB:1.5, io:["audio","text"],  category:"audio", vram:{fp16:3,  q8:1.7,q6:1.3,q4:1.1}, refTs:{4090:240, m3max:130, m2ultra:320, 4080:155, a100:480, 3060:92}},
+  {name:"Whisper medium",     paramsB:0.76,io:["audio","text"],  category:"audio", vram:{fp16:1.5,q8:0.9,q6:0.7,q4:0.6}, refTs:{4090:420, m3max:240, m2ultra:560, 4080:290, a100:820, 3060:180}},
+  {name:"Moonshine base",     paramsB:0.28,io:["audio","text"],  category:"audio", vram:{fp16:0.6,q8:0.4,q6:0.3,q4:0.25},refTs:{4090:680, m3max:420, m2ultra:920, 4080:480, a100:1300,3060:290}},
+  {name:"Bark",               paramsB:1.2, io:["text","audio"],  category:"audio", vram:{fp16:2.5,q8:1.5,q6:1.2,q4:1.0}, refTs:{4090:18,  m3max:9,   m2ultra:26,  4080:11,  a100:40,  3060:6}},
+  {name:"DeepSeek-Coder 6.7B",paramsB:6.7, io:["text","text"],   category:"code",  vram:{fp16:13, q8:7,  q6:5.4,q4:4.1}, refTs:{4090:200, m3max:105, m2ultra:240, 4080:135, a100:410, 3060:72}},
+  {name:"StarCoder2 15B",     paramsB:15,  io:["text","text"],   category:"code",  vram:{fp16:30, q8:16, q6:12, q4:9},   refTs:{4090:95,  m3max:60,  m2ultra:160, 4080:55,  a100:240, 3060:40}},
+];
+
+const CATEGORIES = [
+  {id:"llm",    name:"LLMs",      icon:"▭", desc:"text generation"},
+  {id:"image",  name:"Image gen", icon:"▦", desc:"text → image"},
+  {id:"audio",  name:"Audio",     icon:"∿", desc:"speech / TTS"},
+  {id:"code",   name:"Code",      icon:"<", desc:"coding models"},
+  {id:"vision", name:"Vision",    icon:"◉", desc:"image understanding"},
+  {id:"video",  name:"Video",     icon:"▶", desc:"video gen"}
+];
+
+const INTENTS = [
+  {id:"text>image",  input:"text",  output:"image",  label:"text → image",  ex:"Generate images from prompts"},
+  {id:"text>text",   input:"text",  output:"text",   label:"text → text",   ex:"Chat, reasoning, writing"},
+  {id:"audio>text",  input:"audio", output:"text",   label:"audio → text",  ex:"Transcribe recordings"},
+  {id:"image>text",  input:"image", output:"text",   label:"image → text",  ex:"Describe images, OCR"},
+  {id:"text>audio",  input:"text",  output:"audio",  label:"text → audio",  ex:"Generate speech"},
+  {id:"text>video",  input:"text",  output:"video",  label:"text → video",  ex:"Generate video clips"}
+];
+
+const MACHINE_OPTS = [
+  {id:"auto", label:"Auto-detect this device", dsc:"fastest · nothing leaves your browser", ic:"⌘"},
+  {id:"4090", label:"RTX 4090 desktop", dsc:"24 GB VRAM · 1.0 TB/s", ic:"▦"},
+  {id:"m3max",label:"MacBook M3 Max",  dsc:"64 GB unified · 400 GB/s", ic:"▦"},
+  {id:"m2ultra",label:"Mac Studio M2 Ultra", dsc:"192 GB unified · 800 GB/s", ic:"▦"},
+  {id:"4080", label:"RTX 4080 laptop", dsc:"12 GB VRAM · 512 GB/s", ic:"▦"},
+  {id:"3060", label:"RTX 3060",        dsc:"12 GB VRAM · 360 GB/s", ic:"▦"},
+  {id:"a100", label:"8× A100 reference", dsc:"640 GB · server tier", ic:"▦"}
+];
+
+const SAMPLE_TEXT = `The morning light settled across the workshop like a thin sheet of tin. She wiped the lens with the hem of her shirt, then aimed it at the engine block. "Tell me what this is," she said. The model hesitated, then began: a V-twin, cast iron, the kind that outlives the people who bolt it in.`;
+
+/* =============================================================
+   STATE — single source of truth
+   ============================================================= */
+const state = {
+  journey: "goal",           // "goal" | "hardware"
+  input: "text",
+  output: "image",
+  machine: null,             // null until detected/selected
+  machineSource: "auto",     // "auto" | "selected"
+  category: "llm",
+  quant: "q4",
+  selectedModel: null,
+  sort: "speed"
+};
+
+/* =============================================================
+   SCORING
+   ============================================================= */
+function vramFor(model, quant){
+  const v = model.vram[quant];
+  if(v!=null) return v;
+  const f = model.vram.fp16;
+  return f * ({fp16:1, q8:0.52, q6:0.4, q4:0.3}[quant] || 0.3);
+}
+function autoQuant(model, machine){
+  const qs = ["q4","q6","q8","fp16"];
+  for(const q of qs){
+    if(vramFor(model, q) <= machine.vram * 0.92) return q;
+  }
+  return qs[0];
+}
+function scoreModel(model, machine, quant){
+  const need = vramFor(model, quant);
+  const have = machine.vram;
+  if(need > have) return {fit:"no", vram:need, ts:0, headroom:0};
+  const headroom = (have - need) / have;
+  let fit = "head";
+  if(headroom < 0.08) fit = "tight";
+  else if(headroom < 0.35) fit = "ok";
+  const machineId = Object.keys(MACHINES).find(k=>MACHINES[k]===machine) || "4090";
+  const ref = model.refTs[machineId] || model.refTs["4090"] || 0;
+  const bwScale = machine.bw / MACHINES["4090"].bw;
+  const ts = ref * Math.pow(bwScale, 0.7);
+  return {fit, vram:need, ts, headroom};
+}
+function intentMatch(model){
+  return model.io[0] === state.input && model.io[1] === state.output;
+}
+
+/* =============================================================
+   RENDER — main content based on journey
+   ============================================================= */
+function render(){
+  const main = document.getElementById("main");
+  main.innerHTML = state.journey === "goal" ? renderGoalJourney() : renderHardwareJourney();
+  bindEvents();
+  updateBottomBar();
+  updateFinalCTA();
+}
+
+/* ------------------ GOAL JOURNEY ------------------ */
+function renderGoalJourney(){
+  const currentIntent = INTENTS.find(i=>i.id===`${state.input}>${state.output}`) || INTENTS[0];
+  const machine = state.machine ? MACHINES[state.machine] : null;
+
+  let filtered = [];
+  let bestMatch = null;
+  if(machine){
+    filtered = MODELS
+      .map(m=>{
+        const q = autoQuant(m, machine);
+        const s = scoreModel(m, machine, q);
+        return {model:m, quant:q, score:s, ioMatch:intentMatch(m)};
+      })
+      .filter(x=>x.ioMatch && x.score.fit !== "no")
+      .sort((a,b)=>{
+        const order = {head:3, ok:2, tight:1, no:0};
+        return (order[b.score.fit]||0) - (order[a.score.fit]||0) || b.score.ts - a.score.ts;
+      });
+    bestMatch = filtered[0];
+  }
+
+  return `
+    <!-- PANEL 1: HERO -->
+    <section class="panel" id="p-hero">
+      <div class="trust">
+        <span class="live"></span>
+        <span>14,320 devs ran models today</span>
+      </div>
+
+      <h1>What do you want <span class="em">your machine</span> to do?</h1>
+      <div class="hero-sub">Every model that fits — scored against your exact hardware.</div>
+
+      <div class="intent-q">
+        <div class="lbl">Pick an intent</div>
+        <div class="intent-grid">
+          ${INTENTS.map(i=>`
+            <button class="intent-chip ${i.id===currentIntent.id?'on':''}" data-intent="${i.id}">
+              <div class="io">${i.input} <span class="arr">→</span> ${i.output}</div>
+              <div class="ex">${i.ex}</div>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+
+      <button class="machine-mini" id="machinePick">
+        <div class="ic">${machine ? "✓" : "⌘"}</div>
+        <div class="txt">
+          <div class="lbl">${machine ? machine.name : "Pick your machine"}</div>
+          <div class="dsc">${machine ? `${machine.vram} GB · ${machine.bw>=1000?(machine.bw/1000).toFixed(1)+" TB/s":machine.bw+" GB/s"}` : "Auto-detect or choose a rig"}</div>
+        </div>
+        <div class="chev">›</div>
+      </button>
+    </section>
+
+    ${machine ? `
+    <!-- PANEL 2: UNIVERSE -->
+    <section class="panel" id="p-universe">
+      <div class="kicker">The universe filtered</div>
+      <div class="universe">
+        <div class="universe-top">
+          <div>
+            <div class="t">public models worth running</div>
+            <div class="big">1,247 <span class="s">→</span></div>
+          </div>
+          <div>
+            <div class="t">match your intent</div>
+            <div class="big">${filtered.length}</div>
+          </div>
+        </div>
+        <div class="universe-desc">
+          We scanned the public model index and kept only <b>${filtered.length}</b> that do <b>${state.input} → ${state.output}</b> and fit inside <b>${machine.vram} GB</b>.
+        </div>
+        <div class="constellation">
+          <canvas id="constellationCanvas"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: SPECTRUM -->
+    <section class="panel" id="p-spectrum">
+      <div class="kicker">Compatibility is a spectrum</div>
+      <h2>Not just "yes or no" — <span class="em">how well</span> it runs.</h2>
+      <div class="sub">Swipe to see every model that fits, scored by how much headroom your machine has.</div>
+
+      <div class="spectrum">
+        <div class="spectrum-head">
+          <div class="t">${filtered.length} candidates</div>
+          <div class="q">
+            ${["fp16","q8","q6","q4"].map(q=>`<button class="${state.quant===q?'on':''}" data-quant="${q}">${q.toUpperCase()}</button>`).join("")}
+          </div>
+        </div>
+        <div class="spectrum-track" id="specTrack">
+          ${filtered.length === 0 ? `
+            <div class="spec-node" style="flex:0 0 280px">
+              <div class="name">No models match</div>
+              <div class="stats" style="margin-top:10px">Try a different intent or looser quantization.</div>
+            </div>
+          ` : filtered.slice(0, 20).map((x,i)=>`
+            <button class="spec-node ${i===0?'on':''}" data-model="${escapeAttr(x.model.name)}">
+              <div class="row">
+                <div class="name">${x.model.name}</div>
+                <div class="fit ${x.score.fit}">${x.score.fit === "head" ? "headroom" : x.score.fit}</div>
+              </div>
+              <div class="stats">
+                <div class="s"><b>${x.score.ts.toFixed(1)}</b>t/s</div>
+                <div class="s"><b>${x.score.vram.toFixed(1)}</b>GB</div>
+                <div class="s"><b>${x.model.paramsB}</b>B</div>
+              </div>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </section>
+
+    ${bestMatch ? `
+    <!-- PANEL 4: TEST DRIVE -->
+    <section class="panel" id="p-td">
+      <div class="kicker">Test drive</div>
+      <h2>See what it <span class="em">actually</span> feels like.</h2>
+      <div class="sub">Simulation based on verified benchmarks from 2,400+ rigs like yours.</div>
+
+      <div class="td-card">
+        <div class="td-model">
+          <div class="name" id="tdName">${bestMatch.model.name}</div>
+          <div class="meta" id="tdMeta">${bestMatch.model.paramsB}B · ${bestMatch.quant.toUpperCase()} · ${bestMatch.model.io[0]} → ${bestMatch.model.io[1]}</div>
+
+          <div class="td-vram">
+            <div class="bar"><div class="fill ${(bestMatch.score.vram/machine.vram*100)>80?'warn':''}" style="width:${(bestMatch.score.vram/machine.vram*100).toFixed(0)}%"></div></div>
+            <div class="lbl"><span>${bestMatch.score.vram.toFixed(1)} / ${machine.vram} GB</span><span>weights + KV</span></div>
+          </div>
+
+          <div class="td-speed">
+            <div class="num">${bestMatch.score.ts.toFixed(1)}</div>
+            <div class="unit">${bestMatch.model.io[1]==="image"?"it/sec":(bestMatch.model.io[1]==="audio"?"realtime ×":"tokens / sec")}</div>
+          </div>
+        </div>
+
+        <div class="preview">
+          <div class="preview-head">
+            <span>live preview</span>
+            <span>${bestMatch.model.io[0]} → ${bestMatch.model.io[1]}</span>
+          </div>
+          <div class="preview-body">
+            <div class="preview-text" id="prevText"></div>
+            <canvas id="prevCanvas"></canvas>
+          </div>
+        </div>
+
+        <div class="td-cta">
+          <button class="btn-secondary" id="copyRunCmd">Copy run command</button>
+          <button class="btn-secondary" id="changeModel">Change model</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 5: RECOMMENDATIONS -->
+    <section class="panel" id="p-recs">
+      <div class="kicker">Your top 3</div>
+      <h2>Three models <span class="em">you can actually run.</span></h2>
+
+      <div class="rec-stack">
+        ${top3(filtered, machine).map((r,i)=>`
+          <div class="rec ${i===0?'best':''}">
+            <div class="rec-head">
+              <div class="badge">${r.tag}</div>
+              <div class="reason-short">${r.short}</div>
+            </div>
+            <div class="name">${r.model.name}</div>
+            <div class="meta">${r.model.paramsB}B · ${r.quant.toUpperCase()} · ${r.score.ts.toFixed(1)} ${r.model.io[1]==="image"?"it/s":"t/s"}</div>
+            <div class="hd"><div class="hd-fill ${r.score.headroom<0.15?'warn':''}" style="width:${(r.score.headroom*100).toFixed(0)}%"></div></div>
+            <div class="reason">${r.reason}</div>
+          </div>
+        `).join("")}
+      </div>
+    </section>
+
+    <!-- PANEL 6: COHORT -->
+    <section class="panel" id="p-cohort">
+      <div class="kicker">Your cohort</div>
+      <h2><span class="em">People with ${machine.name}</span> are running these.</h2>
+      <div class="sub">Anonymized telemetry · 2,400+ rigs · past 30 days.</div>
+
+      <div class="cohort">
+        <div class="cohort-head">
+          <div>
+            <div class="t">Top on your rig</div>
+            <div class="m">past 30 days</div>
+          </div>
+          <div class="live">live</div>
+        </div>
+        <ul class="top-list">
+          ${cohortTop(machine).map((c,i)=>`
+            <li>
+              <span class="rank ${i===0?'top':''}">${String(i+1).padStart(2,"0")}</span>
+              <span class="name">${c.mod.name}</span>
+              <span class="ts">${c.score.ts.toFixed(0)} ${c.mod.io[1]==="image"?"it/s":"t/s"}</span>
+            </li>
+          `).join("")}
+        </ul>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="t">rigs like yours</div>
+          <div class="n">${(2400 + Math.floor(Math.random()*1800)).toLocaleString()}</div>
+          <div class="s">past 30 days</div>
+        </div>
+        <div class="stat-box">
+          <div class="t">models fit</div>
+          <div class="n">${filtered.length}</div>
+          <div class="s">your envelope</div>
+        </div>
+      </div>
+    </section>
+    ` : ""}
+    ` : `
+    <!-- PANEL 2 (no machine): prompt -->
+    <section class="panel" id="p-prompt">
+      <div class="kicker">One more thing</div>
+      <h2>Tell us your <span class="em">machine</span>.</h2>
+      <div class="sub">We'll instantly show you every ${state.input} → ${state.output} model it can run — with verified speeds.</div>
+      <button class="machine-mini" id="machinePick2" style="margin-top:8px">
+        <div class="ic">⌘</div>
+        <div class="txt">
+          <div class="lbl">Pick your machine</div>
+          <div class="dsc">Auto-detect or choose a rig</div>
+        </div>
+        <div class="chev">›</div>
+      </button>
+    </section>
+    `}
+  `;
+}
+
+/* ------------------ HARDWARE JOURNEY ------------------ */
+function renderHardwareJourney(){
+  const machine = state.machine ? MACHINES[state.machine] : null;
+
+  let filtered = [];
+  let categoryCounts = {};
+  if(machine){
+    CATEGORIES.forEach(cat=>{
+      categoryCounts[cat.id] = MODELS.filter(m=>{
+        if(m.category !== cat.id) return false;
+        const q = autoQuant(m, machine);
+        return vramFor(m, q) <= machine.vram;
+      }).length;
+    });
+    filtered = MODELS
+      .filter(m=>m.category === state.category)
+      .map(m=>{
+        const q = autoQuant(m, machine);
+        return {model:m, quant:q, score:scoreModel(m, machine, q)};
+      })
+      .filter(x=>x.score.fit !== "no");
+    if(state.sort === "speed") filtered.sort((a,b)=>b.score.ts - a.score.ts);
+    else if(state.sort === "capable") filtered.sort((a,b)=>b.model.paramsB - a.model.paramsB);
+    else filtered.sort((a,b)=>{const o={head:3,ok:2,tight:1};return (o[b.score.fit]||0)-(o[a.score.fit]||0)});
+  }
+
+  const bestMatch = filtered[0];
+
+  return `
+    <!-- PANEL 1: HERO -->
+    <section class="panel" id="p-hero">
+      <div class="trust">
+        <span class="live"></span>
+        <span>14,320 devs ran models today</span>
+      </div>
+
+      <h1>Your machine is <span class="em">under‑used</span>.</h1>
+      <div class="hero-sub">We'll show you every model it can actually run — and what it feels like to run them.</div>
+
+      <div class="detect-card">
+        <div class="detect-head">
+          <div class="t">${machine ? "Your machine" : "Tell us your rig"}</div>
+          <div class="m">${machine ? state.machineSource : "~2 sec"}</div>
+        </div>
+
+        ${machine ? `
+          <div style="padding:14px;border-radius:12px;background:var(--surface-2);border:1px solid var(--hair);margin-bottom:12px">
+            <div style="font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em">${machine.name}</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px">${machine.gpu} · ${machine.vram} GB · ${machine.bw>=1000?(machine.bw/1000).toFixed(1)+" TB/s":machine.bw+" GB/s"}</div>
+          </div>
+          <button class="detect-primary" id="changeMachine" style="background:var(--surface-2);border-color:var(--hair)">
+            <div class="icon" style="background:rgba(255,255,255,.05);color:var(--ink)">↻</div>
+            <div class="txt">
+              <div class="lbl" style="color:var(--ink)">Change machine</div>
+              <div class="dsc">try a different rig</div>
+            </div>
+          </button>
+        ` : `
+          <button class="detect-primary" id="autoDetectBtn">
+            <div class="icon">⌘</div>
+            <div class="txt">
+              <div class="lbl">Auto‑detect this device</div>
+              <div class="dsc">reads GPU, VRAM, RAM · nothing leaves your browser</div>
+            </div>
+          </button>
+
+          <div class="detect-or">or choose a rig</div>
+          <button class="detect-select" id="pickMachineBtn" style="display:block;text-align:left">— pick a reference rig —</button>
+        `}
+
+        <div class="detect-foot">
+          <span class="lock">●</span>
+          <span>Privacy-first · re-verified on reference rigs</span>
+        </div>
+      </div>
+    </section>
+
+    ${machine ? `
+    <!-- PANEL 2: ENVELOPE -->
+    <section class="panel" id="p-envelope">
+      <div class="kicker">Your envelope</div>
+      <h2>This is what your machine <span class="em">can hold</span>.</h2>
+      <div class="sub">VRAM decides what runs. Bandwidth decides how fast. We'll use both to score every model.</div>
+
+      <div class="spec-card">
+        <div class="spec-head">
+          <div class="name">${machine.name}</div>
+          <div class="tag">${state.machineSource}</div>
+        </div>
+
+        <div class="spec-row"><div class="lbl">GPU</div><div class="val">${machine.gpu}</div><div class="num"></div></div>
+        <div class="spec-row"><div class="lbl">VRAM</div><div class="val">${machine.vram} GB</div><div class="num">key number</div></div>
+        <div class="spec-row"><div class="lbl">Bandwidth</div><div class="val">${machine.bw>=1000?(machine.bw/1000).toFixed(1)+" TB/s":machine.bw+" GB/s"}</div><div class="num">→ speed</div></div>
+        <div class="spec-row"><div class="lbl">CPU</div><div class="val">${machine.cpu}</div><div class="num">${machine.cpuCores}c</div></div>
+        <div class="spec-row"><div class="lbl">RAM</div><div class="val">${machine.ram} GB</div><div class="num">system</div></div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: CATEGORIES -->
+    <section class="panel" id="p-cats">
+      <div class="kicker">What fits</div>
+      <h2><span class="em">${Object.values(categoryCounts).reduce((a,b)=>a+b,0)} models</span> across 6 categories.</h2>
+      <div class="sub">Tap a category. Every number is a live count of models that fit your exact VRAM.</div>
+
+      <div class="pillars">
+        ${CATEGORIES.map(c=>`
+          <button class="pillar ${c.id===state.category?'on':''}" data-cat="${c.id}">
+            <div class="icon">${c.icon}</div>
+            <div class="name">${c.name}</div>
+            <div class="count"><b>${categoryCounts[c.id]}</b> fit</div>
+          </button>
+        `).join("")}
+      </div>
+    </section>
+
+    <!-- PANEL 4: CATALOG -->
+    <section class="panel" id="p-catalog">
+      <div class="catalog-top">
+        <h2><span class="cat">${CATEGORIES.find(c=>c.id===state.category).name}</span> that fit.</h2>
+        <div class="catalog-controls">
+          <button class="cat-btn ${state.sort==='speed'?'on':''}" data-sort="speed">fast</button>
+          <button class="cat-btn ${state.sort==='capable'?'on':''}" data-sort="capable">big</button>
+          <button class="cat-btn ${state.sort==='quality'?'on':''}" data-sort="quality">best fit</button>
+        </div>
+      </div>
+
+      ${filtered.length === 0 ? `
+        <div style="padding:40px 20px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;background:var(--surface);border-radius:12px;border:1px solid var(--hair)">
+          No ${CATEGORIES.find(c=>c.id===state.category).name.toLowerCase()} models fit this rig. Try another category.
+        </div>
+      ` : `
+        <div class="catalog-scroll" id="catScroll">
+          ${filtered.map(x=>{
+            const unit = x.model.io[1]==="image"?"it/s":(x.model.io[1]==="audio"?"rt×":"t/s");
+            const fitClass = x.score.fit==="head"?"good":(x.score.fit==="ok"?"good":"tight");
+            return `
+              <button class="model-card" data-model="${escapeAttr(x.model.name)}">
+                <div class="top">
+                  <div class="name">${x.model.name}</div>
+                  <div class="params">${x.model.paramsB}B</div>
+                </div>
+                <div class="meta">${x.quant.toUpperCase()} · ${x.model.io[0]} → ${x.model.io[1]}</div>
+                <div class="stats">
+                  <div class="stat"><div class="lbl">SPEED</div><div class="val ${fitClass}">${x.score.ts.toFixed(1)} ${unit}</div></div>
+                  <div class="stat"><div class="lbl">VRAM</div><div class="val ${fitClass}">${x.score.vram.toFixed(1)}</div></div>
+                  <div class="stat"><div class="lbl">FIT</div><div class="val ${fitClass}">${x.score.fit}</div></div>
+                </div>
+                <div class="run">Test drive →</div>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      `}
+    </section>
+
+    ${bestMatch ? `
+    <!-- PANEL 5: TEST DRIVE -->
+    <section class="panel" id="p-td">
+      <div class="kicker">Test drive</div>
+      <h2>See it <span class="em">run</span>.</h2>
+
+      <div class="td-card">
+        <div class="td-model">
+          <div class="name">${bestMatch.model.name}</div>
+          <div class="meta">${bestMatch.model.paramsB}B · ${bestMatch.quant.toUpperCase()} · ${bestMatch.model.io[0]} → ${bestMatch.model.io[1]}</div>
+          <div class="td-vram">
+            <div class="bar"><div class="fill ${(bestMatch.score.vram/machine.vram*100)>80?'warn':''}" style="width:${(bestMatch.score.vram/machine.vram*100).toFixed(0)}%"></div></div>
+            <div class="lbl"><span>${bestMatch.score.vram.toFixed(1)} / ${machine.vram} GB</span><span>weights + KV</span></div>
+          </div>
+          <div class="td-speed">
+            <div class="num">${bestMatch.score.ts.toFixed(1)}</div>
+            <div class="unit">${bestMatch.model.io[1]==="image"?"it/sec":(bestMatch.model.io[1]==="audio"?"realtime ×":"tokens / sec")}</div>
+          </div>
+        </div>
+        <div class="preview">
+          <div class="preview-head">
+            <span>live preview</span>
+            <span>${bestMatch.model.io[0]} → ${bestMatch.model.io[1]}</span>
+          </div>
+          <div class="preview-body">
+            <div class="preview-text" id="prevText"></div>
+            <canvas id="prevCanvas"></canvas>
+          </div>
+        </div>
+        <div class="td-cta">
+          <button class="btn-secondary" id="copyRunCmd">Copy run command</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 6: COHORT -->
+    <section class="panel" id="p-cohort">
+      <div class="kicker">Your cohort</div>
+      <h2><span class="em">People with ${machine.name}</span> run these.</h2>
+
+      <div class="cohort">
+        <div class="cohort-head">
+          <div>
+            <div class="t">Top on your rig</div>
+            <div class="m">past 30 days</div>
+          </div>
+          <div class="live">live</div>
+        </div>
+        <ul class="top-list">
+          ${cohortTop(machine).map((c,i)=>`
+            <li>
+              <span class="rank ${i===0?'top':''}">${String(i+1).padStart(2,"0")}</span>
+              <span class="name">${c.mod.name}</span>
+              <span class="ts">${c.score.ts.toFixed(0)} ${c.mod.io[1]==="image"?"it/s":"t/s"}</span>
+            </li>
+          `).join("")}
+        </ul>
+      </div>
+    </section>
+    ` : ""}
+    ` : ""}
+  `;
+}
+
+/* =============================================================
+   HELPERS
+   ============================================================= */
+function top3(filtered, machine){
+  const bySpeed = [...filtered].sort((a,b)=>b.score.ts - a.score.ts);
+  const byCap = [...filtered].sort((a,b)=>b.model.paramsB - a.model.paramsB);
+  const best = filtered[0];
+  const fastest = bySpeed.find(x=>x.model.name !== best.model.name) || bySpeed[0];
+  const capable = byCap.find(x=>x.model.name !== best.model.name && x.model.name !== fastest.model.name) || byCap[0];
+  return [
+    {tag:"Best overall", short:"balanced", model:best.model, quant:best.quant, score:best.score,
+     reason:`Fits in <b>${machine.vram} GB</b> at ${best.quant.toUpperCase()} with <b>${(best.score.headroom*machine.vram).toFixed(0)} GB</b> headroom.`},
+    {tag:"Fastest", short:"quickest", model:fastest.model, quant:fastest.quant, score:fastest.score,
+     reason:`Runs at <b>${fastest.score.ts.toFixed(0)} ${fastest.model.io[1]==="image"?"it/s":"t/s"}</b> — fastest in your pool.`},
+    {tag:"Most capable", short:"smartest", model:capable.model, quant:capable.quant, score:capable.score,
+     reason:`<b>${capable.model.paramsB}B</b> parameters — largest model that still fits.`}
+  ];
+}
+
+function cohortTop(machine){
+  return MODELS
+    .map(m=>{
+      const q = autoQuant(m, machine);
+      const s = scoreModel(m, machine, q);
+      return s.fit === "no" ? null : {mod:m, score:s};
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.score.ts - a.score.ts)
+    .slice(0, 5);
+}
+
+function escapeAttr(s){return s.replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function escapeHtml(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h}
+
+/* =============================================================
+   EVENTS
+   ============================================================ */
+let previewTimer = null;
+function bindEvents(){
+  // Intent chips
+  document.querySelectorAll(".intent-chip").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const [i,o] = btn.dataset.intent.split(">");
+      state.input = i; state.output = o;
+      render();
+      haptic();
+    });
+  });
+
+  // Machine pick
+  const mp = document.getElementById("machinePick") || document.getElementById("machinePick2");
+  if(mp) mp.addEventListener("click", ()=>openMachineSheet());
+
+  // Hardware: auto-detect
+  const ad = document.getElementById("autoDetectBtn");
+  if(ad) ad.addEventListener("click", ()=>{
+    ad.innerHTML = `<div class="icon" style="color:var(--amber)">…</div><div class="txt"><div class="lbl">Detecting…</div><div class="dsc">reading GPU, VRAM, RAM</div></div>`;
+    setTimeout(()=>{
+      const ram = navigator.deviceMemory || 8;
+      const cores = navigator.hardwareConcurrency || 4;
+      let detected = "4090";
+      if(ram >= 128 && cores >= 20) detected = "m2ultra";
+      else if(ram >= 48 && cores >= 14 && /mac/i.test(navigator.userAgent)) detected = "m3max";
+      else if(ram >= 24) detected = "4090";
+      else if(ram >= 16) detected = "4080";
+      else detected = "3060";
+      setMachine(detected, "detected");
+    }, 800);
+    haptic();
+  });
+
+  // Hardware: pick machine via sheet
+  const pm = document.getElementById("pickMachineBtn");
+  if(pm) pm.addEventListener("click", ()=>openMachineSheet());
+
+  // Hardware: change machine
+  const cm = document.getElementById("changeMachine");
+  if(cm) cm.addEventListener("click", ()=>openMachineSheet());
+
+  // Categories
+  document.querySelectorAll(".pillar").forEach(p=>{
+    p.addEventListener("click", ()=>{
+      state.category = p.dataset.cat;
+      render();
+      haptic();
+    });
+  });
+
+  // Sort
+  document.querySelectorAll(".cat-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      state.sort = b.dataset.sort;
+      render();
+      haptic();
+    });
+  });
+
+  // Model cards
+  document.querySelectorAll(".model-card, .spec-node").forEach(c=>{
+    c.addEventListener("click", ()=>{
+      const name = c.dataset.model;
+      const model = MODELS.find(m=>m.name === name);
+      if(model){
+        state.selectedModel = model;
+        render();
+        haptic();
+        setTimeout(()=>{
+          const td = document.getElementById("p-td");
+          if(td) td.scrollIntoView({behavior:"smooth", block:"start"});
+        }, 100);
+      }
+    });
+  });
+
+  // Quant toggle
+  document.querySelectorAll("[data-quant]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      state.quant = b.dataset.quant;
+      render();
+      haptic();
+    });
+  });
+
+  // Copy run command
+  const crc = document.getElementById("copyRunCmd");
+  if(crc) crc.addEventListener("click", async ()=>{
+    const mod = state.selectedModel || (state.journey === "goal" ? top3(getFiltered(), MACHINES[state.machine])[0].model : null);
+    if(!mod) return;
+    const cmd = `can-i-run-it run ${mod.name.toLowerCase().replace(/[\s.]/g,"-")}`;
+    try{
+      await navigator.clipboard.writeText(cmd);
+      toast("Command copied: " + cmd);
+    }catch(e){ toast("Copy failed"); }
+    haptic();
+  });
+
+  const chm = document.getElementById("changeModel");
+  if(chm) chm.addEventListener("click", ()=>{
+    const p = document.getElementById("p-spectrum");
+    if(p) p.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  // Start preview if test drive exists
+  const tdName = document.getElementById("tdName");
+  if(tdName){
+    const model = MODELS.find(m=>m.name === tdName.textContent);
+    if(model) runPreview(model);
+  }
+
+  // Constellation canvas
+  drawConstellation();
+}
+
+function getFiltered(){
+  if(!state.machine) return [];
+  const m = MACHINES[state.machine];
+  return MODELS
+    .map(mod=>{
+      const q = autoQuant(mod, m);
+      const s = scoreModel(mod, m, q);
+      return {model:mod, quant:q, score:s, ioMatch:intentMatch(mod)};
+    })
+    .filter(x=>x.ioMatch && x.score.fit !== "no")
+    .sort((a,b)=>{
+      const o={head:3,ok:2,tight:1,no:0};
+      return (o[b.score.fit]||0)-(o[a.score.fit]||0) || b.score.ts - a.score.ts;
+    });
+}
+
+/* =============================================================
+   BOTTOM SHEET — mobile-native pickers
+   ============================================================= */
+const sheet = document.getElementById("sheet");
+const sheetTitle = document.getElementById("sheetTitle");
+const sheetList = document.getElementById("sheetList");
+let sheetCallback = null;
+
+function openSheet(title, items, onSelect){
+  sheetTitle.textContent = title;
+  sheetList.innerHTML = items.map(it=>`
+    <button class="sheet-item ${it.active?'on':''}" data-id="${it.id}">
+      <div class="ic">${it.icon||"·"}</div>
+      <div class="txt">
+        <div class="lbl">${it.label}</div>
+        ${it.dsc ? `<div class="dsc">${it.dsc}</div>` : ""}
+      </div>
+    </button>
+  `).join("");
+  sheetCallback = onSelect;
+  sheet.classList.add("on");
+  haptic();
+}
+function closeSheet(){
+  sheet.classList.remove("on");
+  sheetCallback = null;
+}
+sheet.addEventListener("click", e=>{
+  if(e.target === sheet) closeSheet();
+  const item = e.target.closest(".sheet-item");
+  if(item && sheetCallback){
+    sheetCallback(item.dataset.id);
+    closeSheet();
+  }
+});
+
+function openMachineSheet(){
+  openSheet("Pick your machine", MACHINE_OPTS.map(o=>({
+    id:o.id, label:o.label, dsc:o.dsc, icon:o.ic,
+    active: state.machine === o.id
+  })), (id)=>{
+    if(id === "auto"){
+      const ram = navigator.deviceMemory || 8;
+      const cores = navigator.hardwareConcurrency || 4;
+      let detected = "4090";
+      if(ram >= 128 && cores >= 20) detected = "m2ultra";
+      else if(ram >= 48 && /mac/i.test(navigator.userAgent)) detected = "m3max";
+      else if(ram >= 24) detected = "4090";
+      else if(ram >= 16) detected = "4080";
+      else detected = "3060";
+      setMachine(detected, "detected");
+    } else {
+      setMachine(id, "selected");
+    }
+  });
+}
+
+function setMachine(id, source){
+  state.machine = id;
+  state.machineSource = source;
+  state.selectedModel = null;
+  render();
+  toast(`${MACHINES[id].name} · ready`);
+}
+
+/* =============================================================
+   BOTTOM BAR — updates with state
+   ============================================================ */
+function updateBottomBar(){
+  const chips = document.getElementById("bottomChips");
+  const status = document.getElementById("bottomStatus");
+  const parts = [];
+  if(state.journey === "goal"){
+    parts.push({label:`${state.input} → ${state.output}`, cls:"amber"});
+  } else {
+    parts.push({label:"hardware-first", cls:"amber"});
+  }
+  if(state.machine) parts.push({label:MACHINES[state.machine].name.split(" ").slice(0,2).join(" "), cls:"green"});
+
+  chips.innerHTML = parts.map(p=>`<span class="mini-chip ${p.cls}">${p.label}</span>`).join("");
+  status.classList.toggle("active", !!state.machine);
+}
+
+function updateFinalCTA(){
+  const btn = document.getElementById("mainCta");
+  const txt = document.getElementById("ctaText");
+  if(!state.machine){
+    txt.textContent = state.journey === "goal" ? "Pick your machine" : "Detect your machine";
+    btn.onclick = ()=>openMachineSheet();
+  } else {
+    txt.textContent = state.journey === "goal" ? "See my top 3 models" : "See all models";
+    btn.onclick = ()=>{
+      const target = state.journey === "goal" ? "p-recs" : "p-catalog";
+      const el = document.getElementById(target);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+      else document.getElementById("finalPanel").scrollIntoView({behavior:"smooth", block:"start"});
+    };
+  }
+}
+
+/* =============================================================
+   PREVIEW
+   ============================================================ */
+function runPreview(model){
+  if(previewTimer){ clearInterval(previewTimer); previewTimer = null; }
+  const canvas = document.getElementById("prevCanvas");
+  const text = document.getElementById("prevText");
+  if(!canvas || !text) return;
+  const ctx = canvas.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+
+  const io = model.io[1];
+  if(io === "image"){
+    text.style.display = "none"; canvas.style.display = "block";
+    let step = 0; const seed = hashStr(model.name);
+    const palette = [[224,164,88],[155,196,169],[237,238,240]];
+    previewTimer = setInterval(()=>{
+      step++;
+      const noise = Math.max(0.02, 1 - step/30);
+      const img = ctx.createImageData(W, H);
+      for(let y=0;y<H;y++){
+        for(let x=0;x<W;x++){
+          const i = (y*W+x)*4;
+          const cx = W/2, cy = H/2;
+          const dx = (x-cx)/W, dy = (y-cy)/H;
+          const d = Math.sqrt(dx*dx+dy*dy);
+          const c = palette[Math.floor((Math.sin(dx*10+seed)+Math.sin(dy*7+seed*1.3)+2)%3)];
+          const shade = Math.max(0, 1 - d*1.8);
+          const n = (Math.random()-0.5)*noise;
+          img.data[i]=Math.max(0,Math.min(255,c[0]*shade+n*200));
+          img.data[i+1]=Math.max(0,Math.min(255,c[1]*shade+n*200));
+          img.data[i+2]=Math.max(0,Math.min(255,c[2]*shade+n*200));
+          img.data[i+3]=255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+      if(step>=30) clearInterval(previewTimer);
+    }, 140);
+  } else if(io === "audio"){
+    text.style.display = "none"; canvas.style.display = "block";
+    let t = 0;
+    previewTimer = setInterval(()=>{
+      t++;
+      ctx.fillStyle = "rgba(18,20,23,0.2)"; ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle = "#E0A458"; ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      for(let x=0;x<W;x+=2){
+        const y = H/2 + Math.sin(x*0.05+t*0.2)*40 + Math.sin(x*0.12+t*0.35)*20;
+        if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }, 80);
+  } else {
+    canvas.style.display = "none"; text.style.display = "block";
+    let pos = 0;
+    text.innerHTML = '<span class="cur"></span>';
+    previewTimer = setInterval(()=>{
+      pos += 4;
+      if(pos > SAMPLE_TEXT.length) pos = SAMPLE_TEXT.length;
+      text.innerHTML = escapeHtml(SAMPLE_TEXT.slice(0, pos)) + '<span class="cur"></span>';
+      if(pos >= SAMPLE_TEXT.length) clearInterval(previewTimer);
+    }, 60);
+  }
+}
+
+function drawConstellation(){
+  const canvas = document.getElementById("constellationCanvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+
+  const filtered = getFiltered();
+  const N = 120;
+  const points = [];
+  for(let i=0;i<N;i++){
+    points.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() < (filtered.length / N) ? 2 : 1,
+      lit: Math.random() < (filtered.length / N),
+      vx: (Math.random()-0.5)*0.2,
+      vy: (Math.random()-0.5)*0.2
+    });
+  }
+
+  function frame(){
+    ctx.fillStyle = "rgba(18,20,23,0.15)";
+    ctx.fillRect(0,0,W,H);
+    points.forEach(p=>{
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      ctx.fillStyle = p.lit ? "#E0A458" : "#4A4F57";
+      ctx.globalAlpha = p.lit ? 0.9 : 0.4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* =============================================================
+   TOAST & HAPTIC
+   ============================================================ */
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById("toast");
+  document.getElementById("toastMsg").textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("on"), 2200);
+}
+function haptic(){
+  if(navigator.vibrate) navigator.vibrate(8);
+}
+
+/* =============================================================
+   INSTALL COMMAND
+   ============================================================ */
+document.getElementById("cpBtn").addEventListener("click", async ()=>{
+  const cmd = document.getElementById("installCmd").textContent;
+  try{
+    await navigator.clipboard.writeText(cmd);
+    const btn = document.getElementById("cpBtn");
+    btn.textContent = "copied ✓";
+    btn.classList.add("done");
+    setTimeout(()=>{btn.textContent="copy";btn.classList.remove("done")}, 1800);
+  }catch(e){ toast("Copy failed"); }
+  haptic();
+});
+
+/* =============================================================
+   JOURNEY SWITCHER — the main navigation
+   ============================================================ */
+document.querySelectorAll(".journey-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".journey-btn").forEach(b=>{
+      b.classList.remove("on");
+      b.setAttribute("aria-selected","false");
+    });
+    btn.classList.add("on");
+    btn.setAttribute("aria-selected","true");
+    state.journey = btn.dataset.journey;
+    render();
+    window.scrollTo({top:0, behavior:"instant"});
+    haptic();
+    // Update URL hash without reload (good for ads retargeting)
+    try{ history.replaceState(null, "", "#" + state.journey); }catch(e){}
+  });
+});
+
+/* =============================================================
+   INIT
+   ============================================================ */
+(function init(){
+  // Check hash for journey (useful for ads deep links)
+  const hash = window.location.hash.replace("#","");
+  if(hash === "hardware" || hash === "goal"){
+    state.journey = hash;
+    document.querySelectorAll(".journey-btn").forEach(b=>{
+      b.classList.toggle("on", b.dataset.journey === state.journey);
+      b.setAttribute("aria-selected", b.dataset.journey === state.journey ? "true" : "false");
+    });
+  }
+  // Auto-detect if hardware journey via deep link
+  if(state.journey === "hardware" && !state.machine){
+    // don't auto-detect yet, let user choose
+  }
+  render();
+})();
+
+// Close sheet on Escape
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape") closeSheet();
+});
+
+</script>
+</body>
+</html>

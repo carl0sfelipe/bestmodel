@@ -1,0 +1,34 @@
+[
+  {
+    "id": "llama-cpp",
+    "engine": "llama_cpp",
+    "version": "b4284",
+    "supports_tensor_parallel": false,
+    "supports_kv_cache_quant": true,
+    "supports_cpu_offload": true
+  },
+  {
+    "id": "ollama",
+    "engine": "ollama",
+    "version": "0.5.13",
+    "supports_tensor_parallel": false,
+    "supports_kv_cache_quant": true,
+    "supports_cpu_offload": true
+  },
+  {
+    "id": "vllm",
+    "engine": "vllm",
+    "version": "0.7.3",
+    "supports_tensor_parallel": true,
+    "supports_kv_cache_quant": true,
+    "supports_cpu_offload": false
+  },
+  {
+    "id": "exllamav2",
+    "engine": "exllamav2",
+    "version": "0.1.11",
+    "supports_tensor_parallel": false,
+    "supports_kv_cache_quant": true,
+    "supports_cpu_offload": false
+  }
+]

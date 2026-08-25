@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can I Run It — A compatibility engine for local AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/theme.css">
+<style>
+/* ============================================================
+   CAN I RUN IT — "I HAVE A GOAL" journey (site/index.html)
+   Ported from prototypes/goal-first.html (spec S6).
+   Shared tokens/components come from theme.css; this block keeps
+   only the scene-specific styles. All numbers are real pool data
+   via goal-page.mjs + loadDerived() — no mock (CONTRATO §7.2).
+   ============================================================ */
+
+select{font:inherit;color:inherit;background:none;border:0;outline:0}
+
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(120% 80% at 50% 40%, transparent 60%, rgba(0,0,0,.45) 100%);
+  mix-blend-mode:multiply;opacity:.9;
+}
+
+.narrow-notice{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;font-family:var(--mono);color:var(--muted);font-size:13px;padding:24px;text-align:center}
+@media (max-width:1024px){ .narrow-notice{display:flex} main,header,footer{display:none!important} }
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:28px 56px;
+  font-family:var(--mono);font-size:13px;letter-spacing:-.01em;
+  transition:backdrop-filter .4s, border-color .4s, background .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(11,12,14,.72);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--hair);
+}
+.wordmark{color:var(--ink)}
+.wordmark .prompt{color:var(--muted);margin-right:4px}
+
+.journey-switcher{
+  display:flex;align-items:center;gap:2px;padding:3px;
+  background:var(--surface);border:1px solid var(--hair);border-radius:999px;
+}
+.journey-btn{
+  padding:7px 14px;border-radius:999px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.02em;color:var(--muted);cursor:pointer;
+  transition:background .25s, color .25s;
+  white-space:nowrap;text-decoration:none;
+}
+.journey-btn.on{background:rgba(255,255,255,.06);color:var(--ink)}
+.journey-btn:hover:not(.on){color:var(--ink)}
+
+.nav-links{display:flex;gap:28px;color:var(--muted)}
+.nav-links a{color:inherit;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+
+/* ============ CHAPTER RAIL ============ */
+.chapter-rail{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:30;display:flex;flex-direction:column;gap:18px;
+}
+.tic{
+  display:flex;align-items:center;gap:10px;justify-content:flex-end;
+  cursor:pointer;user-select:none;
+  font-family:var(--mono);font-size:10px;color:var(--dim);
+  transition:color .3s;
+}
+.tic .bar{width:1px;height:14px;background:var(--hair-strong);transition:height .4s var(--ease), background .3s}
+.tic.active{color:var(--ink)}
+.tic.active .bar{height:28px;background:var(--ink)}
+
+/* ============ SCENES / TRACKS ============ */
+.scene{position:relative;width:100%}
+.stage{
+  position:sticky;top:0;height:100vh;
+  width:100%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.container{width:min(1400px, calc(100vw - 200px));margin:0 auto;position:relative}
+.scene .bg-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ============ SCENE 01 — THE QUESTION ============ */
+.s01{min-height:260vh}
+.s01 .stage{flex-direction:column;justify-content:center}
+.s01-over{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px;opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
+.s01.on .s01-over{opacity:1;transform:none}
+.s01-head{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(48px,7.2vw,120px);line-height:1;letter-spacing:-.03em;
+  max-width:1300px;
+}
+.s01-head .w{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .6s var(--ease), transform .7s var(--ease);white-space:nowrap}
+.s01.on .s01-head .w{opacity:1;transform:none}
+.s01.on .s01-head .w:nth-child(1){transition-delay:.05s}
+.s01.on .s01-head .w:nth-child(2){transition-delay:.1s}
+.s01.on .s01-head .w:nth-child(3){transition-delay:.15s}
+.s01.on .s01-head .w:nth-child(4){transition-delay:.2s}
+.s01.on .s01-head .w:nth-child(5){transition-delay:.25s}
+.s01.on .s01-head .w:nth-child(6){transition-delay:.3s}
+
+.token{
+  display:inline-flex;align-items:center;gap:2px;
+  padding:4px 14px;border-radius:8px;
+  background:rgba(224,164,88,.08);
+  border-bottom:1px solid rgba(224,164,88,.35);
+  color:var(--amber);cursor:pointer;
+  font-family:var(--mono);font-weight:500;font-size:.65em;
+  transition:background .25s, border-color .25s, transform .3s var(--ease);
+  position:relative;
+}
+.token:hover{background:rgba(224,164,88,.14);border-color:var(--amber)}
+.token .chev{opacity:.5;margin-left:4px;font-size:.7em}
+.token.static{cursor:default}
+.token.static:hover{background:rgba(224,164,88,.08);border-color:rgba(224,164,88,.35)}
+
+.s01-sub{margin-top:36px;color:var(--muted);font-size:17px;opacity:0;transition:opacity .6s .55s var(--ease)}
+.s01.on .s01-sub{opacity:1}
+
+.scroll-cue{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;
+}
+.scroll-cue .line{width:1px;height:48px;background:linear-gradient(to bottom, var(--hair), var(--hair-strong));position:relative;overflow:hidden}
+.scroll-cue .dot{position:absolute;left:-2px;width:5px;height:5px;border-radius:50%;background:var(--ink);animation:sdot 2.4s var(--ease) infinite}
+@keyframes sdot{0%{top:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:43px;opacity:0}}
+
+/* ============ SCENE 02 — THE UNIVERSE ============ */
+.s02{min-height:300vh}
+.s02 .stage{flex-direction:column;justify-content:center}
+.s02-copy{position:relative;z-index:3;text-align:center}
+.s02-copy .k{font-family:var(--display);font-weight:600;font-size:clamp(40px,5.5vw,88px);line-height:1.05;letter-spacing:-.025em;max-width:980px;margin:0 auto}
+.s02-copy .k .num{font-family:var(--mono);color:var(--amber);font-weight:500;display:inline-block;min-width:1.2em;text-align:right;transition:color .4s}
+.s02-copy .k .sub{display:block;font-size:.4em;color:var(--muted);font-weight:500;margin-top:18px;letter-spacing:0;font-family:var(--mono)}
+
+/* ============ SCENE 03 — THE MACHINE ============ */
+.s03{min-height:300vh}
+.s03 .stage{align-items:center}
+.s03-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.term{
+  background:var(--surface);border:1px solid var(--hair);border-radius:10px;
+  padding:20px 22px;font-family:var(--mono);font-size:13px;line-height:1.7;
+  min-height:380px;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+.term::before{
+  content:"";position:absolute;top:10px;left:14px;width:8px;height:8px;border-radius:50%;background:#333;
+  box-shadow:14px 0 0 #333, 28px 0 0 #333;
+}
+.term-body{margin-top:22px;color:var(--muted)}
+.term-line{white-space:pre;opacity:0;transform:translateX(-4px);transition:opacity .3s var(--ease), transform .3s var(--ease)}
+.term-line.on{opacity:1;transform:none}
+.term .cmd{color:var(--ink)}
+.term .ok{color:var(--green)}
+.term .lbl{color:var(--muted);display:inline-block;min-width:90px}
+.term .val{color:var(--ink)}
+.term .caret{display:inline-block;width:8px;height:14px;background:var(--amber);vertical-align:middle;margin-left:2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.schematic{
+  position:relative;width:100%;aspect-ratio:1/1;
+}
+.schematic svg{width:100%;height:100%;display:block}
+.schematic .part{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease), transform .8s var(--ease)}
+.schematic .part.on{opacity:1;transform:none}
+.schematic .part:hover path{stroke:var(--amber)}
+.schematic .lbl{font-family:var(--mono);font-size:10px;fill:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.schematic .leader{stroke:var(--hair-strong);stroke-width:1;fill:none;stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset .8s var(--ease)}
+.schematic.on .leader{stroke-dashoffset:0}
+
+.rig-pick{
+  position:absolute;bottom:-40px;right:0;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+}
+.rig-pick select{
+  background:var(--surface);border:1px solid var(--hair);color:var(--ink);
+  padding:6px 10px;border-radius:6px;font-family:var(--mono);font-size:12px;cursor:pointer;
+}
+
+/* ============ SCENE 04 — FIT SPECTRUM ============ */
+.s04{min-height:340vh}
+.s04 .stage{flex-direction:column;justify-content:center}
+.plates-row{display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:center;width:100%}
+.plate{
+  background:var(--surface);border:1px solid var(--hair);border-radius:12px;
+  padding:20px 22px;font-family:var(--mono);font-size:12px;
+}
+.plate .t{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;margin-bottom:6px;color:var(--ink)}
+.plate .m{color:var(--muted)}
+.loom{width:120px;height:2px;background:linear-gradient(90deg, transparent, var(--hair-strong), transparent);position:relative}
+.loom::before,.loom::after{content:"";position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--surface);border:1px solid var(--hair-strong)}
+.loom::before{left:-4px}.loom::after{right:-4px}
+
+.spectrum{
+  width:100%;margin-top:80px;position:relative;
+  padding:40px 0 60px;
+}
+.axis{position:relative;height:2px;background:var(--hair-strong);margin:0 20px}
+.tick{
+  position:absolute;top:-6px;width:1px;height:14px;background:var(--hair-strong);
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-top:18px;letter-spacing:.02em;
+}
+.tick.no{left:0%}.tick.tight{left:28%}.tick.ok{left:58%}.tick.head{left:90%}
+
+.spec-nodes{position:absolute;left:20px;right:20px;top:-10px;height:60px;pointer-events:none}
+.snode{
+  position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
+  background:var(--amber);transform:translate(-50%,-50%) scale(0);
+  transition:left .7s var(--ease), transform .7s var(--ease), opacity .4s, background .3s;
+  box-shadow:0 0 0 1px rgba(224,164,88,.2);
+  pointer-events:auto;cursor:pointer;
+}
+.snode:hover{background:var(--ink);z-index:4}
+.snode[data-fit="no"]{background:var(--dim);opacity:.3}
+.snode[data-fit="none"]{background:var(--dim);opacity:.18}
+.snode[data-fit="tight"]{background:#C58E52}
+.snode[data-fit="head"]{background:var(--green);box-shadow:0 0 0 1px rgba(155,196,169,.2)}
+.snode.on{transform:translate(-50%,-50%) scale(1)}
+
+/* ============ SCENE 05 — SIMULATION ============ */
+.s05{min-height:300vh}
+.s05 .stage{flex-direction:column;justify-content:center}
+.sim{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start}
+.sim-cand .name{font-family:var(--display);font-weight:600;font-size:56px;line-height:1;letter-spacing:-.025em}
+.sim-cand .meta{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;letter-spacing:-.01em}
+.vram-vessel{margin-top:36px}
+.vram-bar{position:relative;height:28px;background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:4px;overflow:hidden}
+.vram-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg, var(--green), #C8D9CE);transition:width 1.2s var(--ease)}
+.vram-fill.warn{background:linear-gradient(90deg, var(--amber), #EAC593)}
+.vram-lbl{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ctx-ribbon{margin-top:24px;position:relative;height:34px}
+.ctx-bar{position:absolute;left:0;top:8px;right:0;height:2px;background:var(--hair-strong)}
+.ctx-bar .reach{position:absolute;left:0;top:0;bottom:0;background:var(--ink);transition:width 1s var(--ease)}
+.ctx-bar .ghost{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(90deg, var(--hair-strong) 0 4px, transparent 4px 8px)}
+.ctx-tick{position:absolute;top:0;font-family:var(--mono);font-size:10px;color:var(--muted);transform:translateX(-50%)}
+.ctx-cap{position:absolute;top:22px;left:0;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.speed-row{margin-top:24px;display:flex;align-items:baseline;gap:12px}
+.speed-num{font-family:var(--mono);font-weight:500;font-size:48px;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.speed-unit{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+.preview{
+  background:var(--surface);border:1px solid var(--hair);border-radius:12px;
+  padding:20px;min-height:380px;position:relative;overflow:hidden;
+}
+.preview-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px;letter-spacing:.04em;text-transform:uppercase}
+.preview-body{position:relative;height:300px;overflow:hidden}
+.preview-text{font-family:var(--mono);font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
+.preview-text .cur{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:text-bottom;margin-left:2px;animation:blink 1s steps(2) infinite}
+.preview-canvas{position:absolute;inset:0}
+.preview-steps{position:absolute;bottom:14px;right:16px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* ============ SCENE 06 — THE ANSWER ============ */
+.s06{min-height:260vh}
+.s06 .stage{flex-direction:column;justify-content:center}
+.ans-head{font-family:var(--display);font-weight:600;font-size:clamp(36px,4.2vw,64px);letter-spacing:-.025em;line-height:1.05;margin-bottom:40px;max-width:820px}
+.ans-head .dim{color:var(--muted);font-weight:500}
+.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rec{
+  background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:24px;
+  position:relative;transition:border-color .3s, transform .4s var(--ease);
+}
+.rec:hover{border-color:var(--hair-strong);transform:translateY(-2px)}
+.rec .badge{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rec.best .badge{color:var(--amber)}
+.rec .name{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.rec .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:18px}
+.rec .hd-room{position:relative;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.rec .hd-fill{position:absolute;inset:0 auto 0 0;background:var(--green)}
+.rec .hd-fill.warn{background:var(--amber)}
+.rec .reason{font-size:14px;color:var(--muted);line-height:1.5}
+.rec .reason b{color:var(--ink);font-weight:500}
+.rec .ts{font-family:var(--mono);font-size:12px;color:var(--ink);margin-top:14px}
+.rec .basis-badge{display:inline-block}
+
+.ghost-row{display:flex;gap:32px;margin-top:56px;flex-wrap:wrap}
+.ghost{
+  display:inline-flex;align-items:center;gap:10px;padding:12px 18px;
+  border:1px solid var(--hair);border-radius:8px;
+  font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer;
+  transition:border-color .25s, color .25s, background .25s;
+}
+.ghost:hover{border-color:var(--hair-strong);color:var(--ink);background:rgba(255,255,255,.02)}
+.ghost input{width:160px;background:transparent;font-family:var(--mono);font-size:12px;color:var(--ink)}
+.ghost input::placeholder{color:var(--dim)}
+
+/* disabled modal options (image/audio/video/embeddings — no community data yet) */
+.pop-item.disabled{opacity:.4;cursor:not-allowed}
+.pop-item.disabled:hover{background:transparent;color:var(--muted)}
+
+/* ============ SCENE 07 — THE SYSTEM ============ */
+.s07{min-height:220vh}
+.s07 .stage{flex-direction:column;justify-content:center}
+.final{margin-top:56px;text-align:left;max-width:1040px}
+.final h2{font-family:var(--display);font-weight:600;font-size:clamp(40px,5.2vw,88px);line-height:1;letter-spacing:-.025em}
+.final h2 .em{color:var(--amber)}
+.final .tag{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:20px;letter-spacing:-.01em}
+
+.ghost-link{display:inline-block;margin-left:24px;font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:color .25s}
+.ghost-link:hover{color:var(--ink)}
+
+.scoring{
+  margin-top:72px;max-width:640px;padding-top:32px;border-top:1px solid var(--hair);
+}
+.scoring .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:16px}
+.scoring ol{list-style:none;display:flex;flex-direction:column;gap:10px}
+.scoring li{font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.5}
+.scoring li b{color:var(--ink);font-weight:500}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.3s!important}
+  .s01-head .w{opacity:1!important;transform:none!important;transition:none!important}
+  .scroll-cue .dot{animation:none!important;opacity:.5}
+}
+</style>
+</head>
+<body>
+
+<div class="narrow-notice">Designed for wide screens · min 1024px.</div>
+
+<header class="nav" id="nav">
+  <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+  <div class="journey-switcher">
+    <a class="journey-btn on" href="./index.html">I have a goal</a>
+    <a class="journey-btn" href="./hardware.html">I have hardware</a>
+  </div>
+  <nav class="nav-links">
+    <a href="#scoring">Scoring</a>
+    <a href="#">Benchmarks</a>
+    <a href="#">GitHub ↗</a>
+  </nav>
+</header>
+
+<!-- STATE RAIL -->
+<div class="rail" id="rail"></div>
+
+<!-- CHAPTER RAIL -->
+<aside class="chapter-rail" id="chapter">
+  <div class="tic" data-target="s01"><span class="bar"></span><span>01</span></div>
+  <div class="tic" data-target="s02"><span class="bar"></span><span>02</span></div>
+  <div class="tic" data-target="s03"><span class="bar"></span><span>03</span></div>
+  <div class="tic" data-target="s04"><span class="bar"></span><span>04</span></div>
+  <div class="tic" data-target="s05"><span class="bar"></span><span>05</span></div>
+  <div class="tic" data-target="s06"><span class="bar"></span><span>06</span></div>
+  <div class="tic" data-target="s07"><span class="bar"></span><span>07</span></div>
+</aside>
+
+<main>
+
+<!-- SCENE 01 — THE QUESTION -->
+<section class="scene s01" id="s01" data-scene="01">
+  <canvas class="bg-canvas" id="bg01"></canvas>
+  <div class="stage">
+    <div class="container">
+      <div class="s01-over">A compatibility engine for local AI</div>
+      <h1 class="s01-head" id="heroHead">
+        <span class="w">I</span>
+        <span class="w">want</span>
+        <span class="w">to</span>
+        <span class="w">turn</span>
+        <span class="w"><span class="token static" data-k="input">text</span></span>
+        <span class="w">into</span>
+        <span class="w"><span class="token" data-k="output">text<span class="chev">⌄</span></span></span>
+        <span class="w">—</span>
+        <span class="w">on</span>
+        <span class="w"><span class="token" data-k="machine">this&nbsp;machine<span class="chev">⌄</span></span></span>
+        <span class="w">.</span>
+      </h1>
+      <p class="s01-sub">Every model that can do this — scored against your exact machine.</p>
+    </div>
+    <div class="scroll-cue"><div class="line"><div class="dot"></div></div>scroll</div>
+  </div>
+</section>
+
+<!-- SCENE 02 — THE UNIVERSE ANSWERS -->
+<section class="scene s02" id="s02" data-scene="02">
+  <canvas class="bg-canvas" id="bg02"></canvas>
+  <div class="stage">
+    <div class="container s02-copy">
+      <h2 class="k">
+        There are <span class="num" id="univTotal">—</span> public models speed-tested by the community.
+        <span class="sub"><span id="univMatch">—</span> can do what you asked.</span>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 03 — THE MACHINE -->
+<section class="scene s03" id="s03" data-scene="03">
+  <div class="stage">
+    <div class="container s03-wrap">
+      <div class="term" id="term">
+        <div class="term-body" id="termBody"></div>
+      </div>
+      <div>
+        <div class="schematic" id="schematic">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <g class="part" data-part="mb">
+              <path d="M60 280 L340 280 L360 310 L40 310 Z" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+              <line x1="60" y1="280" x2="60" y2="300" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+              <line x1="340" y1="280" x2="360" y2="310" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+              <line class="leader" x1="200" y1="295" x2="200" y2="355"/>
+              <text class="lbl" x="200" y="370" text-anchor="middle" id="mbLbl">motherboard</text>
+            </g>
+            <g class="part" data-part="gpu">
+              <path d="M90 180 L260 180 L280 200 L110 200 Z" fill="rgba(224,164,88,.05)" stroke="rgba(224,164,88,.5)" stroke-width="1"/>
+              <path d="M90 180 L90 200 M260 180 L280 200" fill="none" stroke="rgba(224,164,88,.5)" stroke-width="1"/>
+              <circle cx="130" cy="190" r="8" fill="none" stroke="rgba(224,164,88,.5)" stroke-width="1"/>
+              <circle cx="170" cy="190" r="8" fill="none" stroke="rgba(224,164,88,.5)" stroke-width="1"/>
+              <circle cx="210" cy="190" r="8" fill="none" stroke="rgba(224,164,88,.5)" stroke-width="1"/>
+              <line class="leader" x1="180" y1="185" x2="30" y2="140"/>
+              <text class="lbl" x="30" y="132" text-anchor="start" id="gpuLbl">—</text>
+            </g>
+            <g class="part" data-part="cpu">
+              <path d="M290 160 L350 160 L360 175 L300 175 Z" fill="rgba(155,196,169,.05)" stroke="rgba(155,196,169,.4)" stroke-width="1"/>
+              <line class="leader" x1="325" y1="165" x2="370" y2="90"/>
+              <text class="lbl" x="370" y="82" text-anchor="end" id="cpuLbl">—</text>
+            </g>
+            <g class="part" data-part="ram">
+              <path d="M70 210 L80 210 L80 260 L70 260 Z" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <path d="M88 210 L98 210 L98 260 L88 260 Z" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <path d="M106 210 L116 210 L116 260 L106 260 Z" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <path d="M124 210 L134 210 L134 260 L124 260 Z" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <line class="leader" x1="100" y1="220" x2="30" y2="240"/>
+              <text class="lbl" x="30" y="255" text-anchor="start" id="ramLbl">—</text>
+            </g>
+            <g class="part" data-part="ssd">
+              <path d="M280 240 L340 240 L345 250 L285 250 Z" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+              <line class="leader" x1="310" y1="245" x2="380" y2="290"/>
+              <text class="lbl" x="380" y="305" text-anchor="end" id="ssdLbl">—</text>
+            </g>
+          </svg>
+        </div>
+        <div class="rig-pick">
+          or pick a reference rig
+          <select id="rigSelect"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 04 — FIT SPECTRUM -->
+<section class="scene s04" id="s04" data-scene="04">
+  <div class="stage">
+    <div class="container">
+      <div class="plates-row">
+        <div class="plate" id="plateA"><div class="t" id="plateAT">—</div><div class="m" id="plateAM">—</div></div>
+        <div class="loom"></div>
+        <div class="plate"><div class="t" id="plateBT">text → text</div><div class="m" id="plateBM">intent · text inference</div></div>
+      </div>
+
+      <div class="spectrum" id="spectrum">
+        <div class="axis">
+          <div class="tick no">won't run</div>
+          <div class="tick tight">runs, tight</div>
+          <div class="tick ok">comfortable</div>
+          <div class="tick head">headroom</div>
+        </div>
+        <div class="spec-nodes" id="specNodes"></div>
+      </div>
+
+      <div class="quant-row">
+        <div class="quant-lbl">quantization</div>
+        <div class="quant-seg" id="quantSeg">
+          <button class="qbtn" data-q="FP16">FP16</button>
+          <button class="qbtn" data-q="Q8">Q8</button>
+          <button class="qbtn" data-q="Q6">Q6</button>
+          <button class="qbtn on" data-q="Q4">Q4</button>
+        </div>
+        <div class="match-count"><b id="mcMatch">—</b> fit → <b id="mcOk">—</b> comfortable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 05 — THE SIMULATION -->
+<section class="scene s05" id="s05" data-scene="05">
+  <div class="stage">
+    <div class="container">
+      <div class="sim">
+        <div class="sim-cand">
+          <div class="name" id="simName">—</div>
+          <div class="meta" id="simMeta">—</div>
+
+          <div class="vram-vessel">
+            <div class="vram-bar"><div class="vram-fill" id="vramFill" style="width:0%"></div></div>
+            <div class="vram-lbl"><span id="vramLbl">—</span><span>weights + KV cache</span></div>
+          </div>
+
+          <div class="ctx-ribbon" id="ctxRibbon">
+            <div class="ctx-bar">
+              <div class="reach" id="ctxReach" style="width:0%"></div>
+              <div class="ghost" id="ctxGhost" style="display:none"></div>
+            </div>
+            <div class="ctx-tick" style="left:0%">0</div>
+            <div class="ctx-tick" style="left:25%">16k</div>
+            <div class="ctx-tick" style="left:50%">32k</div>
+            <div class="ctx-tick" style="left:75%">64k</div>
+            <div class="ctx-tick" style="left:100%">128k</div>
+            <div class="ctx-cap" id="ctxCap"></div>
+          </div>
+
+          <div class="speed-row">
+            <div class="speed-num"><span id="speedNum">—</span></div>
+            <div class="speed-unit" id="speedUnit">tokens / sec</div>
+          </div>
+          <div class="speed-sub" id="speedSub" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px"></div>
+        </div>
+
+        <div class="preview">
+          <div class="preview-head">
+            <span>live preview</span>
+            <span id="prevMode">text → text</span>
+          </div>
+          <div class="preview-body" id="prevBody">
+            <div class="preview-text" id="prevText"></div>
+            <canvas class="preview-canvas" id="prevCanvas" width="640" height="300"></canvas>
+          </div>
+          <div class="preview-steps" id="prevSteps"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 06 — THE ANSWER -->
+<section class="scene s06" id="s06" data-scene="06">
+  <div class="stage">
+    <div class="container">
+      <h2 class="ans-head">Three models <span class="dim">that actually fit your machine and your intent.</span></h2>
+      <div class="rec-grid" id="recGrid"></div>
+      <div class="ghost-row">
+        <label class="ghost">Search a specific model
+          <input type="text" id="modelSearch" placeholder="llama 3.1, qwen, gemma…">
+        </label>
+        <button class="ghost" id="ghostMachine">Change machine →</button>
+        <button class="ghost" id="ghostIntent">Change intent →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 07 — THE SYSTEM -->
+<section class="scene s07" id="s07" data-scene="07">
+  <div class="stage">
+    <div class="container">
+      <div class="eco">
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="ecoGlow"><stop offset="0" stop-color="rgba(224,164,88,.1)"/><stop offset="1" stop-color="transparent"/></radialGradient>
+          </defs>
+          <circle cx="400" cy="225" r="180" fill="url(#ecoGlow)"/>
+          <line class="eco-line" x1="400" y1="225" x2="140" y2="100"/>
+          <line class="eco-line" x1="400" y1="225" x2="680" y2="90"/>
+          <line class="eco-line" x1="400" y1="225" x2="720" y2="320"/>
+          <line class="eco-line" x1="400" y1="225" x2="540" y2="400"/>
+          <line class="eco-line" x1="400" y1="225" x2="240" y2="410"/>
+          <line class="eco-line" x1="400" y1="225" x2="80" y2="290"/>
+          <circle class="eco-node center" cx="400" cy="225" r="42"/>
+          <text class="eco-core-lbl" x="400" y="222">can-i-run-it</text>
+          <text class="eco-core-lbl" x="400" y="238" font-size="10" fill="#8B9096" font-weight="400">engine</text>
+          <circle class="eco-node" cx="140" cy="100" r="26"/><text class="eco-lbl" x="140" y="65">verified benchmarks</text>
+          <circle class="eco-node" cx="680" cy="90" r="26"/><text class="eco-lbl" x="680" y="55">Rust CLI</text>
+          <circle class="eco-node" cx="720" cy="320" r="26"/><text class="eco-lbl" x="720" y="360">MCP server</text>
+          <circle class="eco-node" cx="540" cy="400" r="26"/><text class="eco-lbl" x="540" y="435">hardware telemetry</text>
+          <circle class="eco-node" cx="240" cy="410" r="26"/><text class="eco-lbl" x="240" y="440">model index</text>
+          <circle class="eco-node" cx="80" cy="290" r="26"/><text class="eco-lbl" x="80" y="325">community configs</text>
+        </svg>
+      </div>
+
+      <div class="final">
+        <h2>This isn't a database. <br>It's the <span class="em">operating system</span> for local AI compatibility.</h2>
+        <div class="tag">Benchmarks are community-submitted and re-verified on reference rigs.</div>
+
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+          <div class="install" hidden>
+            <span class="prompt">$</span><span id="installCmd">curl -sSf canirun.it/sh | sh</span>
+            <button class="cp" id="cpBtn">copy</button>
+          </div>
+          <a href="#scoring" class="ghost-link">Read how scoring works →</a>
+        </div>
+
+        <div class="scoring" id="scoring">
+          <div class="kicker">How scoring works</div>
+          <ol>
+            <li><b>measured</b> — the median of many community runs on your exact rig and quantization.</li>
+            <li><b>reported</b> — one or two community runs on the same rig, shown honestly.</li>
+            <li><b>extrapolated</b> — scaled by memory bandwidth from the closest tested rig.</li>
+            <li><b>formula</b> — a published VRAM rule when no measurement exists yet.</li>
+            <li><b>no data yet</b> — when we have nothing, we say so instead of inventing a number.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="footer"></footer>
+
+<div class="popover" id="popover"></div>
+<div class="tip" id="tip"></div>
+
+<script type="module" src="./assets/goal-page.mjs"></script>
+</body>
+</html>

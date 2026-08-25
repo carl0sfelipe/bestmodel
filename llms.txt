@@ -1,0 +1,42 @@
+# bestmodel
+
+> bestmodel.run — the open compatibility engine for local AI. Answers "can it
+> run / how fast / is it worth it?" for any model on any machine, from a
+> signed, validated community measurement pool instead of static formulas.
+
+Core principle: number honesty. Every displayed number declares its basis:
+measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
+> formula > no data yet.
+
+## Docs
+
+- [README](README.md): product overview, monorepo map, quickstart
+- [Architecture](docs/architecture.md): module dependency graph
+- [Findings](docs/findings.md): calibration findings F1–F8 + open decisions
+- [Backlog](docs/backlog.md): canonical roadmap tracks A/B/C/D
+- [Research 2026-08](docs/research-2026-08.md): competitive landscape teardown
+- [Specs index](specs/en/AGENTS.md): executable specs S00–S12 (done), L01/L02 (planned)
+
+## Components
+
+- apps/public-api: FastAPI — matching, submission intake, leaderboard
+- apps/intake-worker: anti-fraud validation pipeline, trust scoring
+- apps/web: the static site at bestmodel.run + frozen data snapshot pipeline
+- apps/pool-backend: pool sync, plausibility curation, local match API
+- packages/roofline-kernel: VRAM footprint + throughput prediction engine
+- packages/domain-schema, runtime-probes, recommendation-engine, fake-adapters
+- cli/benchmark-probe: Rust agent — hardware detection, standardized scenarios,
+  Ed25519-signed reports
+- cli/comfy-lab: ComfyUI probe/workflow analyzer/lab runner (diffusion vertical)
+
+## API surface
+
+- POST /v1/match/hardware-to-models — models for a machine
+- POST /v1/match/model-to-hardware — machines for a model
+- POST /v1/submissions (+ GET /v1/submissions/nonce) — signed benchmark intake
+- GET /v1/leaderboard — ranked results with hardware/model/runtime/quant filters
+
+## License
+
+AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**
+(permissive engine/tools).

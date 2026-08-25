@@ -1,0 +1,101 @@
+[
+  {
+    "id": "q-fp16",
+    "display_name": "FP16",
+    "weight_format": "fp16",
+    "weight_bits": 16,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 1.0
+  },
+  {
+    "id": "q-bf16",
+    "display_name": "BF16",
+    "weight_format": "bf16",
+    "weight_bits": 16,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 1.0
+  },
+  {
+    "id": "q-fp8",
+    "display_name": "FP8",
+    "weight_format": "fp8",
+    "weight_bits": 8,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 0.99
+  },
+  {
+    "id": "q-awq-int4",
+    "display_name": "AWQ INT4",
+    "weight_format": "awq",
+    "weight_bits": 4,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": 128,
+    "calibration_set": "wikitext-2",
+    "expected_quality_retention": 0.9775
+  },
+  {
+    "id": "q-gptq-int4",
+    "display_name": "GPTQ INT4",
+    "weight_format": "gptq",
+    "weight_bits": 4,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": 128,
+    "calibration_set": "wikitext-2",
+    "expected_quality_retention": 0.97
+  },
+  {
+    "id": "q-exl2-4.0bpw",
+    "display_name": "EXL2 4.0bpw",
+    "weight_format": "exl2",
+    "weight_bits": 4,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 0.9675
+  },
+  {
+    "id": "q-gguf-q4-k-m",
+    "display_name": "GGUF Q4_K_M",
+    "weight_format": "gguf_q4",
+    "weight_bits": 4.5,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 0.96
+  },
+  {
+    "id": "q-gguf-q3-k-m",
+    "display_name": "GGUF Q3_K_M",
+    "weight_format": "gguf_q3",
+    "weight_bits": 3.5,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 0.915
+  },
+  {
+    "id": "q-gguf-q2-k",
+    "display_name": "GGUF Q2_K",
+    "weight_format": "gguf_q2",
+    "weight_bits": 2.5,
+    "kv_cache_format": "fp16",
+    "kv_cache_bits": 16,
+    "group_size": null,
+    "calibration_set": null,
+    "expected_quality_retention": 0.79
+  }
+]

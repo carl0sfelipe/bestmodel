@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can I Run It — I have hardware</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/theme.css">
+<style>
+/* ============================================================
+   CAN I RUN IT — "I HAVE HARDWARE" journey (site/hardware.html)
+   Ported from prototypes/hardware-first.html (spec S5).
+   Shared tokens/components come from theme.css; this block keeps
+   only the page-specific scene styles. All numbers are real pool
+   data via hardware-page.mjs + loadDerived() — no mock (CONTRATO §7.2).
+   ============================================================ */
+
+/* select reset (theme.css covers button/input only) */
+select{font:inherit;color:inherit;background:none;border:0;outline:0}
+
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(120% 80% at 50% 40%, transparent 60%, rgba(0,0,0,.45) 100%);
+  mix-blend-mode:multiply;opacity:.9;
+}
+
+.narrow-notice{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;font-family:var(--mono);color:var(--muted);font-size:13px;padding:24px;text-align:center}
+@media (max-width:1024px){ .narrow-notice{display:flex} main,header,footer{display:none!important} }
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 56px;
+  font-family:var(--mono);font-size:13px;letter-spacing:-.01em;
+  transition:backdrop-filter .4s, border-color .4s, background .4s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(11,12,14,.78);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--hair);
+}
+.wordmark{color:var(--ink);display:flex;align-items:center;gap:10px}
+.wordmark .prompt{color:var(--muted);margin-right:4px}
+
+.journey-switcher{
+  display:flex;align-items:center;gap:2px;padding:3px;
+  background:var(--surface);border:1px solid var(--hair);border-radius:999px;
+}
+.journey-btn{
+  padding:7px 14px;border-radius:999px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.02em;color:var(--muted);cursor:pointer;
+  transition:background .25s, color .25s;
+  white-space:nowrap;
+}
+.journey-btn.on{background:rgba(255,255,255,.06);color:var(--ink)}
+.journey-btn:hover:not(.on){color:var(--ink)}
+
+.nav-links{display:flex;gap:24px;color:var(--muted);align-items:center}
+.nav-links a{color:inherit;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--ink)}
+
+/* ============ CHAPTER RAIL ============ */
+.chapter-rail{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  z-index:30;display:flex;flex-direction:column;gap:18px;
+}
+.tic{
+  display:flex;align-items:center;gap:10px;justify-content:flex-end;
+  cursor:pointer;user-select:none;
+  font-family:var(--mono);font-size:10px;color:var(--dim);
+  transition:color .3s;
+}
+.tic .bar{width:1px;height:14px;background:var(--hair-strong);transition:height .4s var(--ease), background .3s}
+.tic.active{color:var(--ink)}
+.tic.active .bar{height:28px;background:var(--ink)}
+
+/* ============ SCENES ============ */
+.scene{position:relative;width:100%}
+.stage{
+  position:sticky;top:0;height:100vh;
+  width:100%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.container{width:min(1400px, calc(100vw - 200px));margin:0 auto;position:relative}
+.scene .bg-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ============ SCENE 01 — THE DETECT ============ */
+/* Scene tracks trimmed from the prototype's 140-280vh: hardware scenes have
+   no scroll-scrubbed animation (unlike goal), so extra track was dead scroll
+   — owner-reported on visual approval. ~115vh keeps the sticky snap feel. */
+.s01{min-height:115vh}
+.s01 .stage{flex-direction:column;justify-content:center}
+.s01-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.s01-copy .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:24px;opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
+.s01.on .s01-copy .kicker{opacity:1;transform:none}
+.s01-copy h1{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(48px,6.4vw,104px);line-height:1;letter-spacing:-.03em;
+  max-width:680px;
+}
+.s01-copy h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .6s var(--ease), transform .7s var(--ease);white-space:nowrap}
+.s01.on .s01-copy h1 .w{opacity:1;transform:none}
+.s01.on .s01-copy h1 .w:nth-child(1){transition-delay:.1s}
+.s01.on .s01-copy h1 .w:nth-child(2){transition-delay:.15s}
+.s01.on .s01-copy h1 .w:nth-child(3){transition-delay:.2s}
+.s01.on .s01-copy h1 .w:nth-child(4){transition-delay:.25s}
+.s01.on .s01-copy h1 .w:nth-child(5){transition-delay:.3s}
+.s01.on .s01-copy h1 .w:nth-child(6){transition-delay:.35s}
+.s01.on .s01-copy h1 .w:nth-child(7){transition-delay:.4s}
+.s01.on .s01-copy h1 .w:nth-child(8){transition-delay:.45s}
+
+.s01-copy h1 .em{color:var(--amber)}
+
+.s01-copy .sub{margin-top:28px;color:var(--muted);font-size:17px;max-width:520px;opacity:0;transition:opacity .6s .65s var(--ease)}
+.s01.on .s01-copy .sub{opacity:1}
+
+.detect-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+  padding:36px 32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3);
+  opacity:0;transform:translateY(16px);
+  transition:opacity .8s .3s var(--ease), transform .8s .3s var(--ease);
+}
+.s01.on .detect-card{opacity:1;transform:none}
+
+.detect-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.detect-head .t{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.015em}
+.detect-head .m{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+.detect-primary{
+  display:flex;align-items:center;gap:16px;
+  width:100%;padding:18px 22px;border-radius:10px;
+  background:linear-gradient(135deg, rgba(224,164,88,.12), rgba(224,164,88,.04));
+  border:1px solid rgba(224,164,88,.3);
+  cursor:pointer;text-align:left;
+  transition:border-color .3s, transform .3s var(--ease), background .3s;
+}
+.detect-primary:hover{border-color:var(--amber);transform:translateY(-1px);background:linear-gradient(135deg, rgba(224,164,88,.18), rgba(224,164,88,.06))}
+.detect-primary:active{transform:translateY(0)}
+.detect-primary .icon{
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(224,164,88,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:18px;color:var(--amber);
+  flex-shrink:0;
+}
+.detect-primary .txt{flex:1}
+.detect-primary .lbl{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.detect-primary .dsc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px}
+.detect-primary .arr{color:var(--amber);font-size:18px;transition:transform .3s var(--ease)}
+.detect-primary:hover .arr{transform:translateX(3px)}
+
+.detect-alt{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.detect-or{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:4px 0}
+.detect-select{
+  width:100%;padding:14px 18px;
+  background:var(--surface-2);border:1px solid var(--hair);border-radius:10px;
+  font-family:var(--mono);font-size:13px;color:var(--ink);
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none' stroke='%238B9096' stroke-width='1.2'><path d='M1 1l4 4 4-4'/></svg>");
+  background-repeat:no-repeat;background-position:right 18px center;padding-right:44px;
+  transition:border-color .25s;
+}
+.detect-select:hover,.detect-select:focus{border-color:var(--hair-strong)}
+.detect-select option{background:var(--surface);color:var(--ink)}
+
+.detect-foot{margin-top:18px;padding-top:16px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.detect-foot .lock{color:var(--green)}
+
+/* ============ SCENE 02 — THE ENVELOPE ============ */
+.s02{min-height:115vh}
+.s02 .stage{flex-direction:column;justify-content:center}
+.envelope{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center;
+}
+.envelope-copy .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:24px;opacity:0;transform:translateY(8px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
+.s02.on .envelope-copy .kicker{opacity:1;transform:none}
+.envelope-copy h2{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(40px,5.2vw,84px);line-height:1.02;letter-spacing:-.025em;
+  max-width:600px;
+}
+.envelope-copy h2 .em{color:var(--amber)}
+.envelope-copy .sub{margin-top:24px;color:var(--muted);font-size:16px;max-width:480px}
+
+.spec-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:16px;
+  padding:28px;position:relative;overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.5);
+}
+.spec-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, var(--amber), transparent);
+  opacity:0.4;
+}
+.spec-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.spec-head .name{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:-.02em}
+.spec-head .tag{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(155,196,169,.3);border-radius:999px;background:rgba(155,196,169,.05)}
+.spec-row{display:grid;grid-template-columns:120px 1fr auto;gap:20px;padding:14px 0;border-top:1px solid var(--hair);align-items:center}
+.spec-row:first-of-type{border-top:0}
+.spec-row .lbl{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.spec-row .val{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em}
+.spec-row .bar{height:3px;background:rgba(255,255,255,.04);border-radius:2px;position:relative;overflow:hidden;width:140px}
+.spec-row .bar .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg, var(--green), var(--amber));transition:width 1.4s var(--ease)}
+.spec-row .bar .fill.high{background:linear-gradient(90deg, var(--amber), #EAC593)}
+.spec-row .num{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:120px;text-align:right}
+
+.spec-save{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;padding:10px 16px;border-radius:8px;
+  background:rgba(255,255,255,.03);border:1px solid var(--hair);
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+  cursor:pointer;transition:color .25s, border-color .25s, background .25s;
+}
+.spec-save:hover{color:var(--ink);border-color:var(--hair-strong);background:rgba(255,255,255,.05)}
+.spec-save.done{color:var(--green);border-color:rgba(155,196,169,.3)}
+
+/* ============ SCENE 03 — THE PILLARS ============ */
+.s03{min-height:115vh}
+.s03 .stage{flex-direction:column;justify-content:center}
+.pillars-head{margin-bottom:56px}
+.pillars-head .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.pillars-head h2{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(36px,4.8vw,76px);line-height:1.02;letter-spacing:-.025em;
+  max-width:900px;
+}
+.pillars-head h2 .em{color:var(--amber)}
+.pillars-head .sub{margin-top:20px;color:var(--muted);font-size:16px;max-width:620px}
+
+.pillars{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.pillar{
+  background:var(--surface);border:1px solid var(--hair);border-radius:14px;
+  padding:24px 20px;cursor:pointer;
+  transition:border-color .3s, transform .4s var(--ease), background .3s;
+  position:relative;overflow:hidden;
+}
+.pillar:hover{border-color:var(--hair-strong);transform:translateY(-2px)}
+.pillar.on{border-color:var(--amber);background:linear-gradient(180deg, rgba(224,164,88,.06), var(--surface))}
+.pillar.disabled{opacity:.55;cursor:default}
+.pillar.disabled:hover{border-color:var(--hair);transform:none}
+.pillar .icon{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:16px;color:var(--muted);
+  margin-bottom:18px;transition:color .3s, border-color .3s, background .3s;
+}
+.pillar.on .icon{color:var(--amber);border-color:rgba(224,164,88,.3);background:rgba(224,164,88,.08)}
+.pillar .name{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:6px}
+.pillar .count{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.02em}
+.pillar .count b{color:var(--amber);font-weight:500}
+.pillar .count.nodata{color:var(--dim)}
+
+/* ============ SCENE 04 — THE CATALOG ============ */
+.s04{min-height:115vh}
+.s04 .stage{flex-direction:column;justify-content:center;padding:40px 0}
+.catalog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;gap:40px;flex-wrap:wrap}
+.catalog-top h2{font-family:var(--display);font-weight:600;font-size:clamp(32px,4vw,56px);line-height:1.05;letter-spacing:-.02em}
+.catalog-top h2 .cat{color:var(--amber)}
+.catalog-top .sub{margin-top:10px;color:var(--muted);font-size:15px;max-width:540px}
+.catalog-controls{display:flex;gap:10px;flex-wrap:wrap}
+.cat-btn{
+  padding:8px 14px;border-radius:8px;
+  background:var(--surface);border:1px solid var(--hair);
+  font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer;
+  transition:border-color .25s, color .25s, background .25s;
+}
+.cat-btn:hover{color:var(--ink);border-color:var(--hair-strong)}
+.cat-btn.on{background:rgba(224,164,88,.08);border-color:rgba(224,164,88,.4);color:var(--amber)}
+
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:16px;max-height:60vh;overflow-y:auto;padding-right:4px}
+.catalog-grid::-webkit-scrollbar{width:4px}
+.catalog-grid::-webkit-scrollbar-thumb{background:var(--hair-strong);border-radius:2px}
+.catalog-grid::-webkit-scrollbar-track{background:transparent}
+
+.model-card{
+  background:var(--surface);border:1px solid var(--hair);border-radius:12px;
+  padding:20px;cursor:pointer;
+  transition:border-color .3s, transform .4s var(--ease);
+  display:flex;flex-direction:column;
+}
+.model-card:hover{border-color:var(--hair-strong);transform:translateY(-2px)}
+.model-card .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px}
+.model-card .name{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;line-height:1.2}
+.model-card .params{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--hair);border-radius:999px;flex-shrink:0}
+.model-card .meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:-.01em}
+.model-card .stats{display:flex;gap:14px;margin-bottom:16px;padding-top:14px;border-top:1px solid var(--hair)}
+.model-card .stat{flex:1}
+.model-card .stat .lbl{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.model-card .stat .val{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500}
+.model-card .stat .val.good{color:var(--green)}
+.model-card .stat .val.tight{color:var(--amber)}
+.model-card .stat .val.bad{color:var(--dim)}
+.model-card .stat .basis-badge{display:inline-block;margin-top:4px}
+
+.model-card .run{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:auto;padding:10px;border-radius:8px;
+  background:rgba(224,164,88,.08);border:1px solid rgba(224,164,88,.25);
+  font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.04em;text-transform:uppercase;
+  transition:background .25s, border-color .25s;
+}
+.model-card:hover .run{background:rgba(224,164,88,.14);border-color:var(--amber)}
+
+/* ============ SCENE 05 — TEST DRIVE ============ */
+.s05{min-height:115vh}
+.s05 .stage{flex-direction:column;justify-content:center}
+.test-drive{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;align-items:start}
+.td-head .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.td-head h2{font-family:var(--display);font-weight:600;font-size:clamp(32px,4vw,56px);line-height:1.05;letter-spacing:-.02em;margin-bottom:14px}
+.td-head h2 .em{color:var(--amber)}
+.td-head .sub{color:var(--muted);font-size:15px;margin-bottom:32px;max-width:500px}
+
+.td-model{
+  background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:24px;
+  margin-bottom:24px;
+}
+.td-model .name{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.td-model .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.td-vram{margin-top:8px}
+.td-vram .bar{position:relative;height:24px;background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.td-vram .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg, var(--green), #C8D9CE);transition:width 1.2s var(--ease)}
+.td-vram .fill.warn{background:linear-gradient(90deg, var(--amber), #EAC593)}
+.td-vram .lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.td-speed{display:flex;align-items:baseline;gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--hair)}
+.td-speed .num{font-family:var(--mono);font-weight:500;font-size:40px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.td-speed .unit{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+.td-preview{
+  background:var(--surface);border:1px solid var(--hair);border-radius:14px;
+  padding:20px;min-height:420px;position:relative;overflow:hidden;
+}
+.td-preview .head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px;letter-spacing:.04em;text-transform:uppercase}
+.td-preview .body{position:relative;height:320px;overflow:hidden}
+.td-preview .text{font-family:var(--mono);font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
+.td-preview .text .cur{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:text-bottom;margin-left:2px;animation:blink 1s steps(2) infinite}
+.td-preview canvas{position:absolute;inset:0;width:100%;height:100%}
+@keyframes blink{50%{opacity:0}}
+
+.td-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;border-radius:10px;
+  background:var(--amber);color:#0B0C0E;font-weight:500;font-size:14px;
+  cursor:pointer;letter-spacing:-.005em;
+  transition:background .25s, transform .25s;
+}
+.btn-primary:hover{background:#E9B36F;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary .arrow{transition:transform .25s}
+.btn-primary:hover .arrow{transform:translateX(2px)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;border-radius:10px;
+  border:1px solid var(--hair);color:var(--muted);font-size:14px;
+  cursor:pointer;transition:color .25s, border-color .25s;
+}
+.btn-ghost:hover{color:var(--ink);border-color:var(--hair-strong)}
+
+/* ============ SCENE 06 — COMMUNITY ============ */
+.s06{min-height:115vh}
+.s06 .stage{flex-direction:column;justify-content:center}
+.community-head{margin-bottom:48px}
+.community-head .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.community-head h2{font-family:var(--display);font-weight:600;font-size:clamp(36px,4.8vw,72px);line-height:1.02;letter-spacing:-.025em;max-width:980px}
+.community-head h2 .em{color:var(--amber)}
+.community-head .sub{margin-top:20px;color:var(--muted);font-size:16px;max-width:620px}
+
+.community-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.comm-panel{background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:24px}
+.comm-panel .t{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;margin-bottom:4px}
+.comm-panel .m{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:20px}
+
+.top-list{list-style:none}
+.top-list li{
+  display:grid;grid-template-columns:24px 1fr auto auto;gap:14px;
+  padding:12px 0;border-top:1px solid var(--hair);align-items:center;
+  font-size:14px;
+}
+.top-list li:first-child{border-top:0}
+.top-list .rank{font-family:var(--mono);font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.top-list .rank.top{color:var(--amber)}
+.top-list .name{font-family:var(--display);font-weight:500;letter-spacing:-.01em}
+.top-list .meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.top-list .ppl{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.top-list .ppl::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.stat-box{background:var(--surface-2);border-radius:10px;padding:18px}
+.stat-box .t{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.stat-box .n{font-family:var(--mono);font-size:32px;font-weight:500;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat-box .n .u{font-size:14px;color:var(--muted);margin-left:4px}
+.stat-box .s{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
+
+/* ============ SCENE 07 — THE OS + FINAL CTA ============ */
+.s07{min-height:120vh;padding:80px 0}
+.s07 .stage{position:relative;height:auto;min-height:100vh}
+.final-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:center}
+.final-copy .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:24px}
+.final-copy h2{
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(44px,5.6vw,88px);line-height:1;letter-spacing:-.025em;
+  max-width:720px;
+}
+.final-copy h2 .em{color:var(--amber)}
+.final-copy .tag{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:24px;letter-spacing:-.01em}
+
+.install-block{margin-top:36px}
+.install-foot{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap}
+.ghost-link{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:color .25s}
+.ghost-link:hover{color:var(--ink)}
+
+/* hardware journey eco: 4/3 (theme default is 16/9 for the goal journey) */
+.eco{position:relative;width:100%;aspect-ratio:4/3;max-height:none}
+.s07.on .eco-line{stroke-dashoffset:0}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.3s!important}
+  .s01-copy h1 .w{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="narrow-notice">Designed for wide screens · min 1024px.</div>
+
+<header class="nav" id="nav">
+  <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+  <div class="journey-switcher">
+    <button class="journey-btn" data-journey="goal">I have a goal</button>
+    <button class="journey-btn on" data-journey="hardware">I have hardware</button>
+  </div>
+  <nav class="nav-links">
+    <a href="#">Docs</a>
+    <a href="#">Benchmarks</a>
+    <a href="#">GitHub ↗</a>
+  </nav>
+</header>
+
+<div class="rail" id="rail"></div>
+
+<aside class="chapter-rail" id="chapter">
+  <div class="tic active" data-target="s01"><span class="bar"></span><span>01</span></div>
+  <div class="tic" data-target="s02"><span class="bar"></span><span>02</span></div>
+  <div class="tic" data-target="s03"><span class="bar"></span><span>03</span></div>
+  <div class="tic" data-target="s04"><span class="bar"></span><span>04</span></div>
+  <div class="tic" data-target="s05"><span class="bar"></span><span>05</span></div>
+  <div class="tic" data-target="s06"><span class="bar"></span><span>06</span></div>
+  <div class="tic" data-target="s07"><span class="bar"></span><span>07</span></div>
+</aside>
+
+<main>
+
+<!-- SCENE 01 — THE DETECT -->
+<section class="scene s01" id="s01" data-scene="01">
+  <canvas class="bg-canvas" id="bg01"></canvas>
+  <div class="stage">
+    <div class="container">
+      <div class="s01-inner">
+        <div class="s01-copy">
+          <div class="kicker">The hardware-first path</div>
+          <h1>
+            <span class="w">Your</span>
+            <span class="w">machine</span>
+            <span class="w">is</span>
+            <span class="w"><span class="em">under‑used</span>.</span>
+            <span class="w">Let's</span>
+            <span class="w">fix</span>
+            <span class="w">that.</span>
+          </h1>
+          <p class="sub">Tell us what you're working with. We'll show you every model it can run — and what it would feel like to run them.</p>
+        </div>
+
+        <div class="detect-card" id="detectCard">
+          <div class="detect-head">
+            <div class="t">Your machine</div>
+            <div class="m">~2 seconds</div>
+          </div>
+
+          <button class="detect-primary" id="detectBtn">
+            <div class="icon">⌘</div>
+            <div class="txt">
+              <div class="lbl">Auto‑detect this machine</div>
+              <div class="dsc">WebGPU probe · nothing leaves your browser</div>
+            </div>
+            <div class="arr">→</div>
+          </button>
+
+          <div class="detect-alt">
+            <div class="detect-or">or choose a rig</div>
+            <select class="detect-select" id="rigSelect"></select>
+          </div>
+
+          <div class="detect-foot">
+            <span class="lock">●</span>
+            <span>All detection stays local in your browser · nothing leaves this page</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 02 — THE ENVELOPE -->
+<section class="scene s02" id="s02" data-scene="02">
+  <canvas class="bg-canvas" id="bg02"></canvas>
+  <div class="stage">
+    <div class="container">
+      <div class="envelope">
+        <div class="envelope-copy">
+          <div class="kicker">Your envelope</div>
+          <h2>
+            This is <span class="em">what your machine can hold</span> in memory at once.
+          </h2>
+          <p class="sub">Memory decides which models fit. Bandwidth decides how fast they run. The rest is context window and quantization trade‑offs — we'll show you all of it.</p>
+        </div>
+
+        <div class="spec-card" id="specCard">
+          <div class="spec-head">
+            <div class="name" id="specName">—</div>
+            <div class="tag" id="specTag">—</div>
+          </div>
+
+          <div class="spec-row">
+            <div class="lbl">GPU</div>
+            <div class="val" id="specGpu">—</div>
+            <div class="bar"><div class="fill" id="specGpuBar" style="width:0%"></div></div>
+          </div>
+          <div class="spec-row">
+            <div class="lbl">VRAM</div>
+            <div class="val" id="specVram">—</div>
+            <div class="num" id="specVramNum">—</div>
+            <div class="bar" style="grid-column:3"><div class="fill" id="specVramBar" style="width:0%"></div></div>
+          </div>
+          <div class="spec-row">
+            <div class="lbl">Bandwidth</div>
+            <div class="val" id="specBw">—</div>
+            <div class="num" id="specBwNum">—</div>
+            <div class="bar" style="grid-column:3"><div class="fill" id="specBwBar" style="width:0%"></div></div>
+          </div>
+          <div class="spec-row">
+            <div class="lbl">Class</div>
+            <div class="val" id="specClass">—</div>
+          </div>
+
+          <button class="spec-save" id="saveBtn">
+            <span>★</span><span id="saveLbl">Save this rig</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 03 — THE PILLARS -->
+<section class="scene s03" id="s03" data-scene="03">
+  <div class="stage">
+    <div class="container">
+      <div class="pillars-head">
+        <div class="kicker">What fits</div>
+        <h2>
+          Your machine fits models across <span class="em">two categories</span> — chat and code.
+        </h2>
+        <p class="sub">Text inference is the only community-verified modality today. Every count below is real: models that fit this exact rig at 4-bit.</p>
+      </div>
+      <div class="pillars" id="pillars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 04 — THE CATALOG -->
+<section class="scene s04" id="s04" data-scene="04">
+  <div class="stage">
+    <div class="container">
+      <div class="catalog-top">
+        <div>
+          <h2>Models in <span class="cat" id="catName">Chat</span> <span style="color:var(--muted);font-weight:500">that fit your rig.</span></h2>
+          <div class="sub">Sorted by speed. Click any card to see a live simulation of what it would feel like to run.</div>
+        </div>
+        <div class="catalog-controls" id="catControls">
+          <button class="cat-btn on" data-sort="speed">fastest</button>
+          <button class="cat-btn" data-sort="capable">most capable</button>
+          <button class="cat-btn" data-sort="quality">best fit</button>
+        </div>
+      </div>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 05 — TEST DRIVE -->
+<section class="scene s05" id="s05" data-scene="05">
+  <div class="stage">
+    <div class="container">
+      <div class="test-drive">
+        <div class="td-head">
+          <div class="kicker">Test drive</div>
+          <h2>See what it <span class="em">actually</span> feels like.</h2>
+          <p class="sub" id="tdSub">Pick a model above to see its real pool speed on this rig.</p>
+
+          <div class="td-model">
+            <div class="name" id="tdName">—</div>
+            <div class="meta" id="tdMeta">—</div>
+
+            <div class="td-vram">
+              <div class="bar"><div class="fill" id="tdVramFill" style="width:0%"></div></div>
+              <div class="lbl"><span id="tdVramLbl">— / — GB</span><span>weights + KV cache</span></div>
+            </div>
+
+            <div class="td-speed">
+              <div class="num" id="tdSpeed">0.0</div>
+              <div class="unit" id="tdUnit">tokens / sec</div>
+            </div>
+          </div>
+
+          <div class="td-cta">
+            <button class="btn-primary" id="runBtn">
+              <span>Run this model</span>
+              <span class="arrow">→</span>
+            </button>
+            <button class="btn-ghost" id="copyCmdBtn">
+              <span>Copy install command</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="td-preview">
+          <div class="head">
+            <span>live preview</span>
+            <span id="tdPrevMode">—</span>
+          </div>
+          <div class="body" id="tdPrevBody">
+            <div class="text" id="tdPrevText"></div>
+            <canvas id="tdPrevCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 06 — COMMUNITY -->
+<section class="scene s06" id="s06" data-scene="06">
+  <div class="stage">
+    <div class="container">
+      <div class="community-head">
+        <div class="kicker">Your cohort</div>
+        <h2>
+          <span class="em">People with your rig</span> are running these right now.
+        </h2>
+        <p class="sub">Community pool data on this exact rig — aggregated from verified single-stream runs.</p>
+      </div>
+
+      <div class="community-grid">
+        <div class="comm-panel">
+          <div class="t">Top 5 on your rig</div>
+          <div class="m">by run count · community pool</div>
+          <ul class="top-list" id="topList"></ul>
+        </div>
+
+        <div class="comm-panel">
+          <div class="t">Cohort stats</div>
+          <div class="m">verified pool · snapshot</div>
+          <div class="stat-row" id="statRow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENE 07 — THE OS + FINAL CTA -->
+<section class="scene s07" id="s07" data-scene="07">
+  <div class="stage">
+    <div class="container">
+      <div class="final-grid">
+        <div class="final-copy">
+          <div class="kicker">The bigger picture</div>
+          <h2>
+            This isn't a catalog. It's the <span class="em">operating system</span> for local AI compatibility.
+          </h2>
+          <div class="tag">Benchmarks are community-submitted, verified single-stream runs from the public pool.</div>
+
+          <div class="install-block">
+            <!-- CONTRATO §7.3: installer does not exist yet → hidden -->
+            <div class="install" hidden>
+              <span class="prompt">$</span>
+              <span id="installCmd">curl -sSf canirun.it/sh | sh</span>
+              <button class="cp" id="cpBtn">copy</button>
+            </div>
+            <div class="install-foot">
+              <a href="#" class="ghost-link">Read how scoring works →</a>
+              <a href="#" class="ghost-link">Contribute a benchmark →</a>
+              <a href="#" class="ghost-link">Join Discord →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="eco">
+          <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="ecoGlow"><stop offset="0" stop-color="rgba(224,164,88,.1)"/><stop offset="1" stop-color="transparent"/></radialGradient>
+            </defs>
+            <circle cx="400" cy="225" r="180" fill="url(#ecoGlow)"/>
+            <line class="eco-line" x1="400" y1="225" x2="140" y2="100"/>
+            <line class="eco-line" x1="400" y1="225" x2="680" y2="90"/>
+            <line class="eco-line" x1="400" y1="225" x2="720" y2="320"/>
+            <line class="eco-line" x1="400" y1="225" x2="540" y2="400"/>
+            <line class="eco-line" x1="400" y1="225" x2="240" y2="410"/>
+            <line class="eco-line" x1="400" y1="225" x2="80" y2="290"/>
+            <circle class="eco-node center" cx="400" cy="225" r="42"/>
+            <text class="eco-core-lbl" x="400" y="222">can-i-run-it</text>
+            <text class="eco-core-lbl" x="400" y="238" font-size="10" fill="#8B9096" font-weight="400">engine</text>
+            <circle class="eco-node" cx="140" cy="100" r="26"/><text class="eco-lbl" x="140" y="65">verified benchmarks</text>
+            <circle class="eco-node" cx="680" cy="90" r="26"/><text class="eco-lbl" x="680" y="55">Rust CLI</text>
+            <circle class="eco-node" cx="720" cy="320" r="26"/><text class="eco-lbl" x="720" y="360">MCP server</text>
+            <circle class="eco-node" cx="540" cy="400" r="26"/><text class="eco-lbl" x="540" y="435">hardware telemetry</text>
+            <circle class="eco-node" cx="240" cy="410" r="26"/><text class="eco-lbl" x="240" y="440">model index</text>
+            <circle class="eco-node" cx="80" cy="290" r="26"/><text class="eco-lbl" x="80" y="325">community configs</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="footer"></footer>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Saved</span></div>
+
+<script type="module" src="./assets/hardware-page.mjs"></script>
+</body>
+</html>

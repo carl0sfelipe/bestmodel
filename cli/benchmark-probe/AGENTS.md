@@ -1,0 +1,28 @@
+# cli/benchmark-probe — Map
+
+Rust CLI: the measurement agent a user's machine (or their AI agent) runs.
+Workspace member of the root Cargo workspace — binaries land in repo-root
+`target/`, not here. Non-interactive by design (agent-friendly); plain-text
+user output + machine-readable artifacts.
+
+| Module | Content |
+|---|---|
+| `main.rs` | arg parsing (flags, no subcommands yet), orchestration, usage text |
+| `lib.rs` | exposes modules + `Runtime` enum for integration tests |
+| `collect_system_topology.rs` | GPU/CPU/OS fingerprint — macOS via sysctl/system_profiler; **Linux gap (backlog A4)** |
+| `detect_runtime_installations.rs` | PATH scan for llama-cli/ollama + versions |
+| `execute_benchmark_scenario.rs` | scenario → engine run; mock mode built-in |
+| `parse_runtime_output.rs` | engine stdout → Metrics (mirror of packages/runtime-probes logic) |
+| `sign_submission_payload.rs` | report build, canonical JSON, SHA-256 digest, Ed25519 sign; **PKCS8 v1 PEM hand-encoded (decision D6 — don't "modernize" back to crate default)** |
+| `upload_benchmark_report.rs` | nonce fetch + multipart POST |
+| `tests/cli_smoke.rs` | drives the real binary end-to-end |
+
+Key flags: `--runtime mock|llama_cpp|ollama`, `--output <path>` (writes report
++ .digest + .signature + .artifact_0.txt), `--report-runtime <engine>` (override
+reported engine, e.g. mock rehearsals), `--artifact`, `--sign`, `--upload`.
+Env: `BENCHMARK_PROBE_KEY_PATH` (default ~/.config/benchmark-probe/ed25519.pem),
+`BENCHMARK_PROBE_API_URL` (default http://localhost:8000).
+
+Future = CLI v2 Local Lab (spec specs/en/L01-cli-v2-local-lab.md): plan → lab →
+report → contribute commands; borrow llama-optimus/throughput-lab/picchio
+patterns (docs/research-2026-08.md).

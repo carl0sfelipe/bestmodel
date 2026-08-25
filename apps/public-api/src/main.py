@@ -13,9 +13,11 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from src.dependencies.artifact_vault_provider import LocalArtifactVault
+from src.dependencies.auth_provider import WebAuthnConfig
 from src.dependencies.database_session_provider import DatabaseSessionProvider
 from src.dependencies.redis_queue_provider import RedisStreamQueue
 from src.routes import (
+    auth_route,
     benchmark_submission_route,
     hardware_match_route,
     leaderboard_route,
@@ -38,10 +40,12 @@ def create_app() -> FastAPI:
     app.state.benchmark_queue = RedisStreamQueue(
         os.environ.get("REDIS_URL", DEFAULT_REDIS_URL)
     )
+    app.state.auth_config = WebAuthnConfig.from_env()
     app.include_router(hardware_match_route.router)
     app.include_router(model_match_route.router)
     app.include_router(leaderboard_route.router)
     app.include_router(benchmark_submission_route.router)
+    app.include_router(auth_route.router)
     return app
 
 

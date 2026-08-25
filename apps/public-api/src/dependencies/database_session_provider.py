@@ -105,6 +105,64 @@ class DatabaseSession(ABC):
         """Insert a benchmark_artifact row."""
 
     @abstractmethod
+    def find_app_user_by_handle(self, handle: str) -> dict[str, Any] | None:
+        """Return the app_user row for ``handle`` or None."""
+
+    @abstractmethod
+    def find_app_user_by_id(self, user_id: str) -> dict[str, Any] | None:
+        """Return the app_user row for ``user_id`` or None."""
+
+    @abstractmethod
+    def insert_app_user(self, record: dict[str, Any]) -> None:
+        """Insert an app_user row plus its zeroed user_reputation row."""
+
+    @abstractmethod
+    def insert_auth_challenge(self, record: dict[str, Any]) -> None:
+        """Insert an auth_challenge row (upsert on challenge)."""
+
+    @abstractmethod
+    def fetch_auth_challenge(self, challenge: str) -> dict[str, Any] | None:
+        """Return a non-expired auth_challenge row or None."""
+
+    @abstractmethod
+    def delete_auth_challenge(self, challenge: str) -> None:
+        """Delete the auth_challenge row with the given challenge value."""
+
+    @abstractmethod
+    def insert_webauthn_credential(self, record: dict[str, Any]) -> None:
+        """Insert a webauthn_credential row."""
+
+    @abstractmethod
+    def fetch_webauthn_credentials_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        """Return every webauthn_credential row for ``user_id``."""
+
+    @abstractmethod
+    def update_webauthn_credential_sign_count(
+        self, credential_id: bytes, sign_count: int, last_used_at: str
+    ) -> None:
+        """Persist the new signature counter after a successful assertion."""
+
+    @abstractmethod
+    def insert_auth_token(self, record: dict[str, Any]) -> None:
+        """Insert an auth_token row."""
+
+    @abstractmethod
+    def fetch_auth_token_by_hash(self, token_hash: str) -> dict[str, Any] | None:
+        """Return the auth_token row for ``token_hash`` or None."""
+
+    @abstractmethod
+    def list_auth_tokens_for_user(self, user_id: str) -> list[dict[str, Any]]:
+        """Return non-revoked auth_token metadata rows for ``user_id``."""
+
+    @abstractmethod
+    def revoke_owned_auth_token(self, user_id: str, token_id: str, revoked_at: str) -> int:
+        """Revoke a token owned by ``user_id``; return affected rows (0/1)."""
+
+    @abstractmethod
+    def touch_auth_token_last_used(self, token_id: str, last_used_at: str) -> None:
+        """Update ``last_used_at`` for the token."""
+
+    @abstractmethod
     def commit(self) -> None:
         """Persist pending writes."""
 
@@ -282,6 +340,103 @@ class PostgresSession(DatabaseSession):
             "VALUES (%(id)s, %(benchmark_run_id)s, %(artifact_kind)s, %(sha256_digest)s, "
             "%(storage_key)s, %(size_bytes)s)",
             record,
+        )
+
+    def find_app_user_by_handle(self, handle: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM app_user WHERE handle = %s", (handle,))
+
+    def find_app_user_by_id(self, user_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM app_user WHERE id = %s", (user_id,))
+
+    def insert_app_user(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO app_user (id, handle, display_name) "
+            "VALUES (%(id)s, %(handle)s, %(display_name)s)",
+            record,
+        )
+        self._connection.execute(
+            "INSERT INTO user_reputation (app_user_id) VALUES (%(app_user_id)s)",
+            {"app_user_id": record["id"]},
+        )
+
+    def insert_auth_challenge(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO auth_challenge (challenge, purpose, app_user_id, expires_at) "
+            "VALUES (%(challenge)s, %(purpose)s, %(app_user_id)s, %(expires_at)s) "
+            "ON CONFLICT (challenge) DO UPDATE SET purpose = EXCLUDED.purpose, "
+            "app_user_id = EXCLUDED.app_user_id, expires_at = EXCLUDED.expires_at",
+            record,
+        )
+
+    def fetch_auth_challenge(self, challenge: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM auth_challenge "
+            "WHERE challenge = %s AND expires_at > now()",
+            (challenge,),
+        )
+
+    def delete_auth_challenge(self, challenge: str) -> None:
+        self._connection.execute(
+            "DELETE FROM auth_challenge WHERE challenge = %s", (challenge,)
+        )
+
+    def insert_webauthn_credential(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO webauthn_credential "
+            "(id, app_user_id, credential_id, public_key, sign_count, transports) "
+            "VALUES (%(id)s, %(app_user_id)s, %(credential_id)s, %(public_key)s, "
+            "%(sign_count)s, %(transports)s)",
+            record,
+        )
+
+    def fetch_webauthn_credentials_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT * FROM webauthn_credential WHERE app_user_id = %s ORDER BY created_at",
+            (user_id,),
+        )
+
+    def update_webauthn_credential_sign_count(
+        self, credential_id: bytes, sign_count: int, last_used_at: str
+    ) -> None:
+        self._connection.execute(
+            "UPDATE webauthn_credential SET sign_count = %s, last_used_at = %s "
+            "WHERE credential_id = %s",
+            (sign_count, last_used_at, psycopg.Binary(credential_id)),
+        )
+
+    def insert_auth_token(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO auth_token (id, app_user_id, kind, token_hash, name, expires_at) "
+            "VALUES (%(id)s, %(app_user_id)s, %(kind)s, %(token_hash)s, %(name)s, %(expires_at)s)",
+            record,
+        )
+
+    def fetch_auth_token_by_hash(self, token_hash: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM auth_token WHERE token_hash = %s", (token_hash,)
+        )
+
+    def list_auth_tokens_for_user(self, user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT id, kind, name, expires_at, revoked_at, created_at, last_used_at "
+            "FROM auth_token WHERE app_user_id = %s AND revoked_at IS NULL "
+            "ORDER BY created_at DESC",
+            (user_id,),
+        )
+
+    def revoke_owned_auth_token(self, user_id: str, token_id: str, revoked_at: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE auth_token SET revoked_at = %s "
+                "WHERE id = %s AND app_user_id = %s AND revoked_at IS NULL",
+                (revoked_at, token_id, user_id),
+            )
+            return cursor.rowcount
+
+    def touch_auth_token_last_used(self, token_id: str, last_used_at: str) -> None:
+        self._connection.execute(
+            "UPDATE auth_token SET last_used_at = %s WHERE id = %s",
+            (last_used_at, token_id),
         )
 
     def commit(self) -> None:

@@ -36,6 +36,12 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 - POST /v1/submissions (+ GET /v1/submissions/nonce) — signed benchmark intake
 - GET /v1/leaderboard — ranked results with hardware/model/runtime/quant filters
 
+## Auth (S13)
+
+- POST /v1/auth/passkey/register/options + /verify — create account, add passkey (WebAuthn)
+- POST /v1/auth/passkey/login/options + /verify — assert passkey, receive session bearer token
+- POST/GET/DELETE /v1/auth/tokens — long-lived agent tokens (shown once, SHA-256 at rest)
+
 ## License
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bestmodel · console</title>
+<link rel="stylesheet" href="console.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="./index.html">bestmodel<span>.run</span></a>
+  <nav>
+    <button data-view="feed" class="active">feed</button>
+    <button data-view="claim">claim</button>
+    <span id="session-area"></span>
+  </nav>
+</header>
+
+<main>
+  <!-- AUTH -->
+  <section id="view-auth" class="card">
+    <h1>Sign in with a passkey</h1>
+    <p class="muted">No email, no password. Your device holds the key.</p>
+    <form id="form-register">
+      <label>handle <input name="handle" required pattern="[a-z0-9][a-z0-9_-]{1,31}" placeholder="lowercase, 2–32 chars"></label>
+      <button type="submit">create account</button>
+    </form>
+    <form id="form-login">
+      <label>handle <input name="handle" required placeholder="existing handle"></label>
+      <button type="submit">sign in</button>
+    </form>
+    <pre id="auth-status" class="status" hidden></pre>
+  </section>
+
+  <!-- FEED -->
+  <section id="view-feed" class="card" hidden>
+    <div class="row">
+      <h1>Claims</h1>
+      <select id="feed-scope">
+        <option value="global">global</option>
+        <option value="following">following</option>
+      </select>
+      <select id="feed-sort">
+        <option value="recent">recent</option>
+        <option value="controversial">controversial</option>
+        <option value="strongest">strongest</option>
+      </select>
+      <select id="feed-status">
+        <option value="">all</option>
+        <option value="open">open</option>
+        <option value="settled_verified">settled</option>
+        <option value="refuted">refuted</option>
+      </select>
+      <button id="btn-refresh">refresh</button>
+    </div>
+    <ul id="claim-list" class="claim-list"></ul>
+  </section>
+
+  <!-- CLAIM DETAIL -->
+  <section id="view-detail" class="card" hidden>
+    <button class="linkish" data-view="feed">&larr; back</button>
+    <div id="detail-body"></div>
+    <div class="vote-row" id="vote-row" hidden>
+      <button class="up" data-verdict="plausible">▲ plausible</button>
+      <button class="down" data-verdict="impossible">▼ impossible</button>
+    </div>
+    <div id="settle-box" hidden>
+      <h2>Prove it</h2>
+      <p class="muted">Run the probe with your account token, then upload with:</p>
+      <code id="settle-command"></code>
+    </div>
+    <img id="card-preview" alt="share card" hidden>
+  </section>
+
+  <!-- NEW CLAIM -->
+  <section id="view-claim" class="card" hidden>
+    <h1>Claim a run</h1>
+    <p class="muted">Assert what your machine did. The community will judge it — then prove it.</p>
+    <form id="form-claim">
+      <label>model release id <input name="model_release_id" required placeholder="model-qwen25-coder-7b"></label>
+      <label>decode tok/s <input name="decode_tok_s" type="number" step="any" min="0" required></label>
+      <label>quantization id <input name="quantization_profile_id" placeholder="optional"></label>
+      <label>gpu model id <input name="gpu_model_id" placeholder="optional — unlocks engine prior"></label>
+      <label>context tokens <input name="context_tokens" type="number" min="1" placeholder="optional"></label>
+      <label>note <input name="note" maxlength="2000" placeholder="optional color"></label>
+      <button type="submit">post claim</button>
+    </form>
+    <pre id="claim-status" class="status" hidden></pre>
+  </section>
+</main>
+
+<footer class="foot muted">
+  honesty ladder: measured &gt; reported &gt; extrapolated &gt; formula &gt; no data yet
+</footer>
+
+<script src="console.js" type="module"></script>
+</body>
+</html>

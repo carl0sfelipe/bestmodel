@@ -9,6 +9,7 @@ snapshot derived from the community measurement pool.
 | Path | Content |
 |---|---|
 | `site/` | Deployable static site (index, hardware journey, mobile landing, SEO pages) |
+| `console/` | Interactive web console (S19): passkey sign-in, feed, vote, claim, settle command — vanilla JS over the public API; API base via `window.BESTMODEL_API` |
 | `data/derived/` | Frozen JSON snapshot consumed by the site (`models`, `hardware`, `pool`, `stats`) |
 | `data/seed/` | Verified bandwidth seed values |
 | `prototypes/` | Final visual spec (do not edit): goal-first, hardware-first, mobile |
@@ -26,6 +27,14 @@ Every displayed number carries a declared basis, in strict order:
 An invented number is a critical bug.
 
 ## Rebuild the data snapshot
+
+Console oracle (structure + every API touchpoint of the no-terminal loop):
+
+```bash
+node scripts/check-console.mjs
+```
+
+Data pipeline:
 
 ```bash
 cd apps/web

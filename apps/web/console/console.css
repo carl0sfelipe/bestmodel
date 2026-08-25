@@ -1,0 +1,89 @@
+:root {
+  --bg: #0b0f14;
+  --panel: #101820;
+  --line: #1f2d3d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #5fd3a8;
+  --blue: #79c0ff;
+  --warn: #f0883e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+  line-height: 1.5;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { color: var(--text); text-decoration: none; font-weight: bold; }
+.brand span { color: var(--accent); }
+
+.topbar nav { display: flex; gap: 10px; align-items: center; }
+.topbar button, .linkish {
+  background: none; color: var(--muted);
+  border: 1px solid var(--line); padding: 6px 12px;
+  cursor: pointer; font: inherit;
+}
+.topbar button.active { color: var(--accent); border-color: var(--accent); }
+
+main { max-width: 860px; margin: 24px auto; padding: 0 16px; display: grid; gap: 16px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 20px;
+}
+.card[hidden] { display: none; }
+
+h1 { font-size: 22px; margin: 0 0 8px; }
+h2 { font-size: 17px; margin: 18px 0 6px; }
+.muted { color: var(--muted); }
+
+form { display: grid; gap: 10px; margin: 14px 0; max-width: 460px; }
+label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+input, select {
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); padding: 8px; font: inherit;
+}
+button[type="submit"], #btn-refresh {
+  background: var(--accent); color: #04140c; border: 0;
+  padding: 9px 14px; font-weight: bold; cursor: pointer;
+}
+
+.status { white-space: pre-wrap; border-left: 3px solid var(--line); padding-left: 10px; }
+
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.row h1 { margin-right: auto; }
+
+.claim-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.claim-list li { border: 1px solid var(--line); padding: 12px; cursor: pointer; }
+.claim-list li:hover { border-color: var(--blue); }
+.claim-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.badge { font-size: 11px; padding: 2px 7px; border: 1px solid var(--line); color: var(--muted); }
+.badge.open { color: var(--warn); border-color: var(--warn); }
+.badge.settled_verified { color: var(--accent); border-color: var(--accent); }
+
+.vote-row { display: flex; gap: 10px; margin-top: 14px; }
+.vote-row .up { background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 16px; cursor: pointer; }
+.vote-row .down { background: none; border: 1px solid #f85149; color: #f85149; padding: 8px 16px; cursor: pointer; }
+
+code {
+  display: block; background: var(--bg); border: 1px dashed var(--line);
+  padding: 10px; overflow-x: auto; user-select: all;
+}
+
+#card-preview { width: 100%; max-width: 480px; margin-top: 14px; border: 1px solid var(--line); }
+
+.foot { text-align: center; padding: 20px; font-size: 12px; }

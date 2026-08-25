@@ -96,3 +96,23 @@ fn absent_runtime_reports_install_hint() {
     assert!(err.contains("llama.cpp is not installed"), "stderr: {err}");
     assert!(err.contains("hint:"), "stderr: {err}");
 }
+
+#[test]
+fn settle_claim_without_upload_is_rejected_with_usage_error() {
+    let output = run_binary(&["--runtime", "mock", "--settle-claim", "abc123"]);
+    assert!(!output.status.success());
+    let text = stderr_text(&output);
+    assert!(
+        text.contains("--settle-claim requires --upload"),
+        "unexpected stderr: {text}"
+    );
+}
+
+#[test]
+fn help_documents_settle_claim_and_token_env() {
+    let output = run_binary(&["--help"]);
+    assert!(output.status.success());
+    let text = stdout_text(&output);
+    assert!(text.contains("--settle-claim"));
+    assert!(text.contains("BENCHMARK_PROBE_API_TOKEN"));
+}

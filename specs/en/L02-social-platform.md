@@ -101,6 +101,9 @@ endpoints — no SPA framework unless a spec justifies one.
   ahead of cards so the loop could be oracled end-to-end early).
 - S20 — embeddable verified-run badges (C5) and reputation-scaled rate
   limits (anti-abuse section): claims 2–50/24h, votes 5–250/h by tier.
+- DONE since S20: B4 claim→verification conversion — the CLI ships
+  `--settle-claim <id>` + `BENCHMARK_PROBE_API_TOKEN`, closing the one-command
+  prove-it loop end to end.
 - Still open from Track B/C: duel challenges crediting both parties (C2),
   bounty points beyond the disputed-settle bonus, notification digests.
 

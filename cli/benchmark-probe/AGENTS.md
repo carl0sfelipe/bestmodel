@@ -26,3 +26,11 @@ Env: `BENCHMARK_PROBE_KEY_PATH` (default ~/.config/benchmark-probe/ed25519.pem),
 Future = CLI v2 Local Lab (spec specs/en/L01-cli-v2-local-lab.md): plan → lab →
 report → contribute commands; borrow llama-optimus/throughput-lab/picchio
 patterns (docs/research-2026-08.md).
+## Settlement uploads (S16/S21)
+
+`--settle-claim <id>` binds the uploaded run to one of the account's open
+claims. It requires `--upload` and `BENCHMARK_PROBE_API_TOKEN` (an agent
+token from `POST /v1/auth/tokens`); anonymous uploads never settle. The API
+responds with `linked_claim_id`; settlement completes server-side only after
+the intake worker validates the run.
+

@@ -2,6 +2,10 @@
 //!
 //! Flow: fetch a challenge nonce, then POST the report, signature, digest,
 //! nonce, client version and artifact files as multipart/form-data.
+//!
+//! Settlement (L02 B4/S16): when ``settle_claim_id`` is set the request must
+//! carry an API bearer token (``api_token``); the platform binds the run to
+//! the caller's open claim and returns ``linked_claim_id`` on success.
 
 use reqwest::blocking::multipart::{Form, Part};
 use reqwest::blocking::Client;
@@ -20,11 +24,16 @@ pub struct UploadRequest {
     pub challenge_nonce: String,
     pub client_version: String,
     pub artifacts: Vec<ArtifactUpload>,
+    /// Open claim to settle with this run (requires ``api_token``).
+    pub settle_claim_id: Option<String>,
+    /// Bearer token from the account's agent tokens (S13).
+    pub api_token: Option<String>,
 }
 
 pub struct UploadOutcome {
     pub status_code: u16,
     pub run_id: Option<String>,
+    pub linked_claim_id: Option<String>,
 }
 
 pub fn fetch_challenge_nonce(base_url: &str) -> Result<String, String> {
@@ -53,10 +62,11 @@ pub fn upload_benchmark_report(
     request: &UploadRequest,
 ) -> Result<UploadOutcome, String> {
     let url = format!("{base_url}{SUBMISSIONS_PATH}");
-    let form = build_multipart_form(request);
-    let response = Client::new()
-        .post(&url)
-        .multipart(form)
+    let mut post = Client::new().post(&url).multipart(build_multipart_form(request));
+    if let Some(token) = &request.api_token {
+        post = post.bearer_auth(token);
+    }
+    let response = post
         .send()
         .map_err(|err| format!("submission request to {url} failed: {err}"))?;
     let status_code = response.status().as_u16();
@@ -64,15 +74,16 @@ pub fn upload_benchmark_report(
         return Ok(UploadOutcome {
             status_code,
             run_id: None,
+            linked_claim_id: None,
         });
     }
     let body: serde_json::Value = response
         .json()
         .map_err(|err| format!("submission response from {url} is not JSON: {err}"))?;
-    let run_id = body["run_id"].as_str().map(str::to_string);
     Ok(UploadOutcome {
         status_code,
-        run_id,
+        run_id: body["run_id"].as_str().map(str::to_string),
+        linked_claim_id: body["linked_claim_id"].as_str().map(str::to_string),
     })
 }
 
@@ -86,6 +97,9 @@ fn build_multipart_form(request: &UploadRequest) -> Form {
             Part::text(request.challenge_nonce.clone()),
         )
         .part("client_version", Part::text(request.client_version.clone()));
+    if let Some(claim_id) = &request.settle_claim_id {
+        form = form.part("settle_claim_id", Part::text(claim_id.clone()));
+    }
     for (index, artifact) in request.artifacts.iter().enumerate() {
         let part = Part::bytes(artifact.bytes.clone()).file_name(format!("artifact_{index}"));
         form = form.part(format!("artifact_{index}"), part);

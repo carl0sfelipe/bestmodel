@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.dependencies.artifact_vault_provider import LocalArtifactVault
 from src.dependencies.auth_provider import WebAuthnConfig
@@ -35,8 +36,22 @@ DEFAULT_REDIS_URL = "redis://localhost:6380/0"
 DEFAULT_ARTIFACT_VAULT_DIR = "./artifacts"
 
 
+DEFAULT_CORS_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000"
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="bestmodel Public API", version="0.1.0")
+    origins = [
+        origin.strip()
+        for origin in os.environ.get("CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",")
+        if origin.strip()
+    ]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.state.database_provider = DatabaseSessionProvider(
         os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
     )

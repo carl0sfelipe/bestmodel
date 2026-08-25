@@ -23,6 +23,7 @@ edit wins. Root → subtree:
 | Path | What it maps |
 |---|---|
 | `docs/AGENTS.md` | Planning docs: architecture, findings, backlog, research |
+| `docs/en/deploy.md` | Production runbook: Vercel front + Docker backend, backups, cloud migration, closed-source boundary |
 | `specs/en/AGENTS.md` | Executable specs (Phase 0: S00–S12 done; Phase 1+: L01, L02) |
 | `infra/AGENTS.md` | Docker stack (ports!), migrations, seed, gate, scripts |
 | `packages/AGENTS.md` | Shared Python packages (+ one per package) |
@@ -79,8 +80,10 @@ External-facing LLM entry point: `llms.txt` (root).
 - Phase 1: **S13–S20 DONE** (auth; rigs/profiles; claims+voting with frozen
   priors; settle flow + reputation; follows/notifications/feed; share cards;
   web console oracle; embeddable badges + reputation-scaled rate limits).
-  L02 social platform is feature-complete on the API side. Next candidates:
-  CLI --settle-claim flag (L01), duel challenges, production deploy.
+  L02 social platform feature-complete; CLI --settle-claim shipped
+  (B4 loop closed, integration gate PASS). Deployment artifacts live in
+  deploy/ (compose prod stack, Caddy edge/tunnel profiles, backup scripts)
+  with frontend on Vercel — see docs/en/deploy.md.
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
   `specs/en/L02-social-platform.md`; backlog tracks B/C.
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).

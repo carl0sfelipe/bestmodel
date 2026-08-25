@@ -1,0 +1,12 @@
+# Caddy edge: automatic HTTPS for the API domain.
+{$API_DOMAIN} {
+	reverse_proxy api:8000
+	# Multipart submissions can carry artifact files.
+	request_body {
+		max_size 64MB
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+	}
+}

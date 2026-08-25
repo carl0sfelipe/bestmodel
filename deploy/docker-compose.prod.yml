@@ -1,0 +1,119 @@
+# Production stack for the beelink (or any Docker host).
+#
+# Migration contract: every durable byte lives in a NAMED VOLUME or a bind
+# mount under ./volumes — nothing stateful is baked into images. Moving to
+# another cloud = pg_dump/restore + rsync volumes + DNS flip.
+#
+#   docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d
+
+name: bestmodel-prod
+
+services:
+  postgres:
+    build:
+      context: ../infra/docker
+      dockerfile: postgres.Dockerfile
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set in deploy/.env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in deploy/.env}
+      POSTGRES_DB: ${POSTGRES_DB:-bestmodel}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bestmodel} -d ${POSTGRES_DB:-bestmodel}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/docker/api.Dockerfile
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+      ARTIFACT_VAULT_DIR: /artifacts
+      TRUSTED_ED25519_PUBLIC_KEY_PATH: /secrets/trusted_public.pem
+      AUTH_RP_ID: ${AUTH_RP_ID:-bestmodel.run}
+      AUTH_RP_NAME: bestmodel
+      AUTH_EXPECTED_ORIGIN: ${AUTH_EXPECTED_ORIGIN:-https://bestmodel.run}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://bestmodel.run,http://localhost:3000}
+    volumes:
+      - artifacts:/artifacts
+      - ./secrets:/secrets:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/api.Dockerfile
+    command: >
+      sh -c "cd /app/apps/intake-worker &&
+             PYTHONPATH=/app/apps/intake-worker/src python -m src.worker"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+      ARTIFACT_VAULT_DIR: /artifacts
+      TRUSTED_ED25519_PUBLIC_KEY_PATH: /secrets/trusted_public.pem
+    volumes:
+      - artifacts:/artifacts
+      - ./secrets:/secrets:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Auto-HTTPS edge for api.<domain>. The static site + console live on Vercel
+  # and reach this through the rewrite in apps/web/vercel.json.
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_DOMAIN: ${API_DOMAIN:-api.bestmodel.run}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on:
+      - api
+    restart: unless-stopped
+    profiles: ["edge"]
+
+  # Port-less alternative to `caddy` when the host cannot expose ports:
+  # create the tunnel once (`cloudflared tunnel login`) and set TUNNEL_TOKEN.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on:
+      - api
+    restart: unless-stopped
+    profiles: ["tunnel"]
+
+volumes:
+  pgdata:
+  redisdata:
+  artifacts:
+  caddydata:
+  caddyconfig:

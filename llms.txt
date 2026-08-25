@@ -73,6 +73,14 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
   5–250 per hour (L0→L4); verified activity raises your ceiling
 - Web console (apps/web/console): passkey sign-in → browse → vote → claim →
   settle command + card preview, zero dependencies
+
+## Deployment (S21)
+
+- Frontend: Vercel (apps/web, vercel.json rewrites /v1/* to the API)
+- Backend: deploy/docker-compose.prod.yml on any Docker host (api, worker,
+  postgres timescale+vector, redis); Caddy auto-TLS or Cloudflare tunnel
+- Migration contract: named volumes + pg_dump scripts in deploy/scripts;
+- Runbook: docs/en/deploy.md
 - GET /v1/notifications + POST /v1/notifications/{id}/read — settlement and
   new-follower events land here
 

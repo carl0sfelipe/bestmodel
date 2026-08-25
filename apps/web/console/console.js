@@ -8,7 +8,8 @@
  *   <script> window.BESTMODEL_API = "https://api.bestmodel.run"; </script>
  */
 
-const API_BASE = window.BESTMODEL_API || "http://localhost:8000";
+// Same-origin by default (Vercel rewrite / reverse proxy). Override in config.js.
+const API_BASE = window.BESTMODEL_API || "";
 const TOKEN_KEY = "bm_token";
 
 const $ = (selector) => document.querySelector(selector);

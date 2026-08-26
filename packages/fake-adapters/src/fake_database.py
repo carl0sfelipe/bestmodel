@@ -341,6 +341,14 @@ class FakeDatabase(DatabaseSession):
             )
         ]
 
+    def fetch_all_models(self) -> list[dict[str, Any]]:
+        return [dict(row) for row in self._models]
+
+    def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:
+        return next(
+            (c for c in self._claims if c.get("external_ref") == external_ref), None
+        )
+
     def fetch_pool_measurements(
         self, model_release_id: str, quantization_profile_id: str | None
     ) -> dict[str, Any]:
@@ -368,7 +376,10 @@ class FakeDatabase(DatabaseSession):
         }
 
     def insert_run_claim(self, record: dict[str, Any]) -> None:
-        self._claims.append(dict(record))
+        stored = dict(record)
+        stored.setdefault("external_ref", None)
+        stored.setdefault("source", None)
+        self._claims.append(stored)
 
     def find_run_claim_by_id(self, claim_id: str) -> dict[str, Any] | None:
         return next((row for row in self._claims if row["id"] == claim_id), None)
@@ -382,7 +393,15 @@ class FakeDatabase(DatabaseSession):
         return affected
 
     def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
-        rows = [row for row in self._claims if status is None or row["status"] == status]
+        handles = {u["id"]: u["handle"] for u in self._users}
+        rows = []
+        for row in self._claims:
+            if status is not None and row["status"] != status:
+                continue
+            handle = handles.get(row.get("claimant_id"))
+            rows.append(
+                {**row, "claimant_handle": handle or "localmaxxing pool"}
+            )
         rows.sort(key=lambda r: str(r["created_at"]), reverse=True)
         return [dict(row) for row in rows[offset : offset + limit]]
 
@@ -494,7 +513,7 @@ class FakeDatabase(DatabaseSession):
         wanted = None if user_ids is None else set(user_ids)
         handles = {u["id"]: u["handle"] for u in self._users}
         rows = [
-            {**c, "claimant_handle": handles.get(c["claimant_id"])}
+            {**c, "claimant_handle": handles.get(c["claimant_id"]) or "localmaxxing pool"}
             for c in self._claims
             if wanted is None or c["claimant_id"] in wanted
         ]

@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse, Response
 
 from src.dependencies.database_session_provider import DatabaseSession, get_database_session
 from src.services.auth_common import AuthError
+from src.services.claim_view import handle_for_claim
 from src.services.render_claim_card import render_claim_card_markdown, render_claim_card_svg
 from src.services.vote_on_claim import get_claim_with_tally
 
@@ -42,5 +43,4 @@ def claim_card_markdown(
 
 
 def _handle_for(session: DatabaseSession, view: dict) -> str | None:
-    user = session.find_app_user_by_id(view.get("claimant_id"))
-    return user["handle"] if user else None
+    return handle_for_claim(session, view)

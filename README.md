@@ -62,6 +62,18 @@ Architecture: [`docs/architecture.md`](docs/architecture.md)
   ([spec](specs/en/L02-social-platform.md))
 - Track B/C details: [`docs/backlog.md`](docs/backlog.md)
 
+## Data sources & attribution
+
+- **localmaxxing.com community pool** — the launch seed of the *claimed*
+  track: 551 aggregated cells imported as unverified claims (owner-approved,
+  open data). They never enter the leaderboard; the community votes and can
+  settle each one with a signed CLI run. Refresh with
+  `bash apps/pool-backend/scripts/sync-all.sh` then
+  `uv run python infra/scripts/import_localmaxxing.py --apply` (idempotent).
+- **HuggingFace model configs** — catalog expansion
+  (`infra/scripts/expand_catalog_from_hf.py`) pulls architectural specs
+  straight from each model's config.json; nothing is hand-typed.
+
 ## License
 
 Hybrid licensing, chosen so the commons stays open and adoption is frictionless:

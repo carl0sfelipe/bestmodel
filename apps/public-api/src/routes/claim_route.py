@@ -14,6 +14,7 @@ from src.dependencies.auth_provider import (
 from src.dependencies.database_session_provider import DatabaseSession, get_database_session
 from src.schemas.claim_schemas import CLAIM_SORTS, ClaimVoteRequest, CreateRunClaimRequest
 from src.services.auth_common import AuthError
+from src.services.claim_view import handle_for_claim
 from src.services.create_run_claim import create_run_claim
 from src.services.query_run_claims import list_run_claims
 from src.services.vote_on_claim import (
@@ -61,7 +62,9 @@ def get_claim(
     session: DatabaseSession = Depends(get_database_session),
 ) -> Any:
     try:
-        return get_claim_with_tally(session, claim_id)
+        view = get_claim_with_tally(session, claim_id)
+        view["handle"] = handle_for_claim(session, view)
+        return view
     except AuthError as exc:
         return _error(exc)
 

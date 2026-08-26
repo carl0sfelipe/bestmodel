@@ -199,6 +199,14 @@ class DatabaseSession(ABC):
         """Return badge rows for ``user_id`` ordered by awarded_at."""
 
     @abstractmethod
+    def fetch_all_models(self) -> list[dict[str, Any]]:
+        """Return every model_release row."""
+
+    @abstractmethod
+    def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:
+        """Imported claim for this external reference (idempotency key)."""
+
+    @abstractmethod
     def fetch_pool_measurements(
         self, model_release_id: str, quantization_profile_id: str | None
     ) -> dict[str, Any]:
@@ -644,6 +652,14 @@ class PostgresSession(DatabaseSession):
             (user_id,),
         )
 
+    def fetch_all_models(self) -> list[dict[str, Any]]:
+        return self._fetchall("SELECT * FROM model_release ORDER BY id")
+
+    def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM run_claim WHERE external_ref = %s", (external_ref,)
+        )
+
     def fetch_pool_measurements(
         self, model_release_id: str, quantization_profile_id: str | None
     ) -> dict[str, Any]:
@@ -683,14 +699,19 @@ class PostgresSession(DatabaseSession):
         record = dict(record)
         record["claimed_metrics"] = Json(record["claimed_metrics"])
         record["prior_snapshot"] = Json(record["prior_snapshot"])
+        record.setdefault("claimant_id", None)
+        record.setdefault("source", None)
+        record.setdefault("external_ref", None)
         self._connection.execute(
             "INSERT INTO run_claim (id, claimant_id, rig_id, model_release_id, "
             "quantization_profile_id, inference_runtime_id, gpu_model_id, context_tokens, "
-            "claimed_metrics, note, status, prior_snapshot, created_at, updated_at) "
+            "claimed_metrics, note, status, prior_snapshot, source, external_ref, "
+            "created_at, updated_at) "
             "VALUES (%(id)s, %(claimant_id)s, %(rig_id)s, %(model_release_id)s, "
             "%(quantization_profile_id)s, %(inference_runtime_id)s, %(gpu_model_id)s, "
-            "%(context_tokens)s, %(claimed_metrics)s, %(note)s, 'open', "
-            "%(prior_snapshot)s, %(created_at)s, %(updated_at)s)",
+            "%(context_tokens)s, %(claimed_metrics)s, %(note)s, %(status)s, "
+            "%(prior_snapshot)s, %(source)s, %(external_ref)s, "
+            "%(created_at)s, %(updated_at)s)",
             record,
         )
 
@@ -707,14 +728,17 @@ class PostgresSession(DatabaseSession):
             return cursor.rowcount
 
     def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
+        base_sql = (
+            "SELECT c.*, COALESCE(u.handle, 'localmaxxing pool') AS claimant_handle "
+            "FROM run_claim c LEFT JOIN app_user u ON u.id = c.claimant_id "
+        )
         if status is not None:
             return self._fetchall(
-                "SELECT * FROM run_claim WHERE status = %s ORDER BY created_at DESC "
-                "LIMIT %s OFFSET %s",
+                base_sql + "WHERE c.status = %s ORDER BY c.created_at DESC LIMIT %s OFFSET %s",
                 (status, limit, offset),
             )
         return self._fetchall(
-            "SELECT * FROM run_claim ORDER BY created_at DESC LIMIT %s OFFSET %s",
+            base_sql + "ORDER BY c.created_at DESC LIMIT %s OFFSET %s",
             (limit, offset),
         )
 
@@ -828,8 +852,9 @@ class PostgresSession(DatabaseSession):
 
     def list_recent_claims_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
         return self._fetchall(
-            "SELECT c.*, u.handle AS claimant_handle FROM run_claim c "
-            "JOIN app_user u ON u.id = c.claimant_id "
+            "SELECT c.*, COALESCE(u.handle, 'localmaxxing pool') AS claimant_handle "
+            "FROM run_claim c "
+            "LEFT JOIN app_user u ON u.id = c.claimant_id "
             "WHERE %s::uuid[] IS NULL OR c.claimant_id = ANY(%s::uuid[]) "
             "ORDER BY c.created_at DESC LIMIT %s",
             (user_ids, user_ids, limit),

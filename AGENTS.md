@@ -24,6 +24,8 @@ edit wins. Root → subtree:
 |---|---|
 | `docs/AGENTS.md` | Planning docs: architecture, findings, backlog, research |
 | `docs/en/deploy.md` | Production runbook: Vercel front + Docker backend, backups, cloud migration, closed-source boundary |
+| `infra/scripts/import_localmaxxing.py` | S22: localmaxxing pool → run_claims (owner-approved, idempotent per external_ref) |
+| `infra/scripts/expand_catalog_from_hf.py` | S22: HF config.json → candidate model_release records (specs sourced, never invented) |
 | `specs/en/AGENTS.md` | Executable specs (Phase 0: S00–S12 done; Phase 1+: L01, L02) |
 | `infra/AGENTS.md` | Docker stack (ports!), migrations, seed, gate, scripts |
 | `packages/AGENTS.md` | Shared Python packages (+ one per package) |
@@ -83,7 +85,9 @@ External-facing LLM entry point: `llms.txt` (root).
   L02 social platform feature-complete; CLI --settle-claim shipped
   (B4 loop closed, integration gate PASS). Deployment artifacts live in
   deploy/ (compose prod stack, Caddy edge/tunnel profiles, backup scripts)
-  with frontend on Vercel — see docs/en/deploy.md.
+  with frontend on Vercel — see docs/en/deploy.md. **S22 DONE**: localmaxxing
+  import (551 owner-approved claims live in prod, community-votable) +
+  catalog expansion 57→76 models / 23→29 GPUs from HF configs.
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
   `specs/en/L02-social-platform.md`; backlog tracks B/C.
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).

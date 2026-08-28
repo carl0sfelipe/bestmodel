@@ -1,0 +1,11 @@
+{"ts": 0.0, "type": "status", "data": {"status_str": "Preparing", "node": null}}
+{"ts": 0.2, "type": "executing", "data": {"node": "1"}}
+{"ts": 1.1, "type": "executed", "data": {"node": "1"}}
+{"ts": 1.2, "type": "executing", "data": {"node": "8"}}
+{"ts": 1.5, "type": "progress", "data": {"node": "8", "value": 0, "max": 20}}
+{"ts": 2.5, "type": "progress", "data": {"node": "8", "value": 10, "max": 20}}
+{"ts": 3.5, "type": "progress", "data": {"node": "8", "value": 20, "max": 20}}
+{"ts": 3.6, "type": "progress", "data": {"node": "10", "value": 40, "max": 81}}
+{"ts": 3.9, "type": "executed", "data": {"node": "8"}}
+{"ts": 4.0, "type": "executed", "data": {"node": "10"}}
+{"ts": 4.0, "type": "output", "data": {"node": "11", "output": {"11": {"images": [{"filename": "wan22_flf2v_00001_.webp"}]}}}}

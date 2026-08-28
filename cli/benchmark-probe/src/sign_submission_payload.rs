@@ -24,6 +24,26 @@ pub struct ScenarioFields {
     pub context_tokens: u32,
 }
 
+/// Video scenario (Épico 1). Own fields, never the token fields above (AD-1).
+#[derive(Clone, Serialize)]
+pub struct VideoScenarioFields {
+    pub scenario_kind: &'static str,
+    pub width: u32,
+    pub height: u32,
+    pub frames: u32,
+    pub steps: u32,
+    pub cfg: f64,
+    pub shift: f64,
+    pub seed: u64,
+}
+
+#[derive(Clone, Serialize)]
+#[serde(untagged)]
+pub enum ScenarioPayload {
+    Llm(ScenarioFields),
+    Video(VideoScenarioFields),
+}
+
 #[derive(Clone, Serialize)]
 pub struct MetricFields {
     pub ttft_ms: f64,
@@ -31,6 +51,14 @@ pub struct MetricFields {
     pub decode_tok_s: f64,
     pub peak_vram_mib: f64,
     pub power_watt_avg: f64,
+    // Video/diffusion metrics (Épico 1). Optional so LLM reports stay
+    // byte-identical to schema 0.9.0 (digest stability).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seconds_per_clip: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub it_per_s: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frames_per_s: Option<f64>,
 }
 
 #[derive(Clone, Serialize)]
@@ -46,9 +74,12 @@ pub struct BenchmarkReportPayload {
     pub runtime: String,
     pub runtime_version: String,
     pub hardware_fingerprint: String,
-    pub scenario: ScenarioFields,
+    pub scenario: ScenarioPayload,
     pub metrics: MetricFields,
     pub artifacts: Vec<ArtifactEntry>,
+    // Video runs reference the standardized workload they measured (Épico 1).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recipe_id: Option<String>,
 }
 
 pub fn canonicalize_report(report: &BenchmarkReportPayload) -> Result<String, String> {
@@ -162,23 +193,27 @@ mod tests {
             runtime: "llama_cpp".to_string(),
             runtime_version: "b4568".to_string(),
             hardware_fingerprint: "sha256:abc".to_string(),
-            scenario: ScenarioFields {
+            scenario: ScenarioPayload::Llm(ScenarioFields {
                 prompt_tokens: 4096,
                 generated_tokens: 512,
                 batch_size: 1,
                 context_tokens: 8192,
-            },
+            }),
             metrics: MetricFields {
                 ttft_ms: 812.0,
                 prefill_tok_s: 5041.0,
                 decode_tok_s: 18.7,
                 peak_vram_mib: 21811.0,
                 power_watt_avg: 412.0,
+                seconds_per_clip: None,
+                it_per_s: None,
+                frames_per_s: None,
             },
             artifacts: vec![ArtifactEntry {
                 artifact_kind: "runtime_stdout".to_string(),
                 sha256: "deadbeef".to_string(),
             }],
+            recipe_id: None,
         }
     }
 

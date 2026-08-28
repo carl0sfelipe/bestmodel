@@ -1,4 +1,5 @@
 pub mod collect_system_topology;
+pub mod comfyui_adapter;
 pub mod detect_runtime_installations;
 pub mod execute_benchmark_scenario;
 pub mod parse_runtime_output;
@@ -10,6 +11,7 @@ pub enum Runtime {
     LlamaCpp,
     Ollama,
     Mock,
+    ComfyUi,
 }
 
 impl Runtime {
@@ -18,6 +20,7 @@ impl Runtime {
             Runtime::LlamaCpp => "llama.cpp",
             Runtime::Ollama => "Ollama",
             Runtime::Mock => "mock",
+            Runtime::ComfyUi => "ComfyUI",
         }
     }
 
@@ -26,6 +29,7 @@ impl Runtime {
             Runtime::LlamaCpp => "llama_cpp",
             Runtime::Ollama => "ollama",
             Runtime::Mock => "mock",
+            Runtime::ComfyUi => "comfyui",
         }
     }
 }

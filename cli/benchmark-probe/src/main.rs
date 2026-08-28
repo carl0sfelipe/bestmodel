@@ -1,11 +1,17 @@
+use std::io::Read;
 use std::path::PathBuf;
 use std::process::exit;
 
+use benchmark_probe::comfyui_adapter::{
+    build_plan, detect_comfy_cli, execute_comfy_workflow, print_plan, print_run_metrics,
+    sampler_node_ids, ComfyRunMetrics, ComfyScenario,
+};
 use benchmark_probe::execute_benchmark_scenario::{run_scenario, Scenario};
 use benchmark_probe::parse_runtime_output::Metrics;
 use benchmark_probe::sign_submission_payload::{
     generate_run_id, payload_digest, resolve_key_path, sha256_hex, sign_payload_digest,
-    ArtifactEntry, BenchmarkReportPayload, MetricFields, ScenarioFields, SCHEMA_VERSION,
+    ArtifactEntry, BenchmarkReportPayload, MetricFields, ScenarioFields, ScenarioPayload,
+    VideoScenarioFields, SCHEMA_VERSION,
 };
 use benchmark_probe::upload_benchmark_report::{
     fetch_challenge_nonce, upload_benchmark_report, ArtifactUpload, UploadRequest,
@@ -30,6 +36,11 @@ struct CliArgs {
     report_runtime: Option<String>,
     sign: bool,
     upload: bool,
+    scenario: Option<String>,
+    recipe: Option<PathBuf>,
+    workflow_out: Option<PathBuf>,
+    execute: bool,
+    print_command: bool,
     settle_claim_id: Option<String>,
     model_release_id: Option<String>,
     quantization_profile_id: Option<String>,
@@ -57,8 +68,17 @@ fn main() {
 }
 
 fn run(cli: &CliArgs) -> Result<(), i32> {
+    if cli.print_command {
+        println!("{}", build_command_line(cli));
+        return Ok(());
+    }
+
     let topology = collect_system_topology::collect_system_topology();
     print_topology(&topology);
+
+    if let Runtime::ComfyUi = cli.runtime {
+        return run_comfy_plan(cli, &topology);
+    }
 
     let installs = detect_runtime_installations::detect_runtime_installations();
     let scenario = Scenario {
@@ -81,6 +101,7 @@ fn run(cli: &CliArgs) -> Result<(), i32> {
             .and_then(|i| i.version.as_deref()),
         Runtime::Ollama => installs.ollama.as_ref().and_then(|i| i.version.as_deref()),
         Runtime::Mock => Some("mock-1.0.0"),
+        Runtime::ComfyUi => unreachable!("comfyui is handled by run_comfy_plan before this point"),
     };
     print_metrics(cli.runtime, &scenario, &result.metrics, runtime_version);
 
@@ -124,6 +145,161 @@ fn run(cli: &CliArgs) -> Result<(), i32> {
     Ok(())
 }
 
+fn run_comfy_plan(
+    cli: &CliArgs,
+    topology: &collect_system_topology::SystemTopology,
+) -> Result<(), i32> {
+    let scenario_raw = match cli.scenario.as_deref() {
+        Some("-") => {
+            let mut buffer = String::new();
+            if let Err(err) = std::io::stdin().read_to_string(&mut buffer) {
+                eprintln!("error: unable to read --scenario from stdin: {err}");
+                return Err(2);
+            }
+            buffer
+        }
+        Some(json) => json.to_string(),
+        None => {
+            eprintln!("error: --runtime comfyui requires --scenario <json|->");
+            return Err(2);
+        }
+    };
+    if scenario_raw.trim().is_empty() {
+        eprintln!("error: --scenario is empty (stdin gave no JSON)");
+        return Err(2);
+    }
+    let scenario: ComfyScenario = serde_json::from_str(scenario_raw.trim()).map_err(|err| {
+        eprintln!("error: invalid --scenario JSON: {err}");
+        2
+    })?;
+    let Some(recipe_path) = cli.recipe.as_ref() else {
+        eprintln!("error: --runtime comfyui requires --recipe <path>");
+        return Err(2);
+    };
+    let plan = build_plan(recipe_path, &scenario).map_err(|err| {
+        eprintln!("{err}");
+        1
+    })?;
+
+    if !cli.execute {
+        if let Some(out_path) = &cli.workflow_out {
+            std::fs::write(out_path, &plan.workflow_json).map_err(|err| {
+                eprintln!("error: unable to write '{}': {err}", out_path.display());
+                1
+            })?;
+            println!("Wrote materialized workflow to {}", out_path.display());
+            println!();
+        }
+        let comfy_cli = detect_comfy_cli();
+        print_plan(&plan, cli.workflow_out.as_deref(), comfy_cli.as_deref());
+        return Ok(());
+    }
+
+    // --execute: real headless run (Story 1.2).
+    let workflow_out = cli.workflow_out.clone().unwrap_or_else(|| {
+        std::env::temp_dir().join(format!("benchmark-probe-comfyui-{}.json", std::process::id()))
+    });
+    std::fs::write(&workflow_out, &plan.workflow_json).map_err(|err| {
+        eprintln!("error: unable to write '{}': {err}", workflow_out.display());
+        1
+    })?;
+    let workflow: serde_json::Value = serde_json::from_str(&plan.workflow_json)
+        .map_err(|err| {
+            eprintln!("error: internal: materialized workflow lost validity: {err}");
+            1
+        })?;
+    let samplers = sampler_node_ids(&workflow);
+    let execution =
+        execute_comfy_workflow(&workflow_out, &samplers, plan.scenario.frames).map_err(|err| {
+            eprintln!("error: {err}");
+            1
+        })?;
+    if cli.workflow_out.is_none() {
+        let _ = std::fs::remove_file(&workflow_out);
+    }
+    print_run_metrics(&plan, &execution.metrics);
+
+    if !cli.sign && !cli.upload && cli.output_path.is_none() {
+        return Ok(());
+    }
+    let fingerprint = hardware_fingerprint(topology);
+    let comfy_version = detect_comfy_cli().unwrap_or_else(|| "unknown".to_string());
+    let evidence = build_video_evidence(&execution.metrics);
+    let report = build_video_report(&plan, &execution.metrics, &fingerprint, &comfy_version, &evidence);
+    let canonical = canonical_or_exit(&report);
+    let digest = payload_digest(&canonical);
+    let key_path = resolve_key_path();
+    let signing_key = benchmark_probe::sign_submission_payload::load_or_create_signing_key(&key_path)
+        .map_err(|err| {
+            eprintln!("error: {err}");
+            1
+        })?;
+    let signature = sign_payload_digest(&signing_key, &digest);
+    if let Some(path) = &cli.output_path {
+        write_report_files(path, &canonical, &digest, &signature, &evidence)?;
+        println!();
+        println!("Wrote report files next to {}", path.display());
+    }
+    if cli.sign {
+        print_signature_block(&canonical, &digest, &signature, &key_path);
+    }
+    if cli.upload {
+        submit_report(cli, &canonical, &digest, &signature)?;
+    }
+    Ok(())
+}
+
+fn build_video_report(
+    plan: &benchmark_probe::comfyui_adapter::ComfyPlan,
+    metrics: &ComfyRunMetrics,
+    fingerprint: &str,
+    comfy_version: &str,
+    evidence: &str,
+) -> BenchmarkReportPayload {
+    BenchmarkReportPayload {
+        schema_version: SCHEMA_VERSION.to_string(),
+        run_id: generate_run_id(),
+        runtime: "comfyui".to_string(),
+        runtime_version: comfy_version.to_string(),
+        hardware_fingerprint: fingerprint.to_string(),
+        scenario: ScenarioPayload::Video(VideoScenarioFields {
+            scenario_kind: "video",
+            width: plan.scenario.width,
+            height: plan.scenario.height,
+            frames: plan.scenario.frames,
+            steps: plan.scenario.steps,
+            cfg: plan.scenario.cfg,
+            shift: plan.scenario.shift,
+            seed: plan.scenario.seed,
+        }),
+        metrics: MetricFields {
+            ttft_ms: 0.0,
+            prefill_tok_s: 0.0,
+            decode_tok_s: 0.0,
+            peak_vram_mib: metrics.peak_vram_mib,
+            power_watt_avg: 0.0,
+            seconds_per_clip: Some(metrics.seconds_per_clip),
+            it_per_s: metrics.it_per_s,
+            frames_per_s: Some(metrics.frames_per_s),
+        },
+        artifacts: vec![ArtifactEntry {
+            artifact_kind: "runtime_stdout".to_string(),
+            sha256: sha256_hex(evidence.as_bytes()),
+        }],
+        recipe_id: Some(plan.recipe_id.clone()),
+    }
+}
+
+fn build_video_evidence(metrics: &ComfyRunMetrics) -> String {
+    format!(
+        "metric seconds_per_clip {:.3}\nmetric it_per_s {:.3}\nmetric frames_per_s {:.3}\nmetric peak_vram_mib {:.0}\n",
+        metrics.seconds_per_clip,
+        metrics.it_per_s.unwrap_or(0.0),
+        metrics.frames_per_s,
+        metrics.peak_vram_mib
+    )
+}
+
 fn build_report(
     cli: &CliArgs,
     scenario: &Scenario,
@@ -157,21 +333,91 @@ fn build_report(
             .unwrap_or_else(|| cli.runtime.engine_name().to_string()),
         runtime_version: runtime_version.unwrap_or("unknown").to_string(),
         hardware_fingerprint: fingerprint.to_string(),
-        scenario: ScenarioFields {
+        scenario: ScenarioPayload::Llm(ScenarioFields {
             prompt_tokens: scenario.prompt_tokens,
             generated_tokens: scenario.generated_tokens,
             batch_size: scenario.batch_size,
             context_tokens: scenario.context_tokens,
-        },
+        }),
         metrics: MetricFields {
             ttft_ms: metrics.ttft_ms,
             prefill_tok_s: metrics.prefill_tok_s,
             decode_tok_s: metrics.decode_tok_s,
             peak_vram_mib: metrics.peak_vram_mib,
             power_watt_avg: metrics.power_watt_avg,
+            seconds_per_clip: None,
+            it_per_s: None,
+            frames_per_s: None,
         },
         artifacts,
+        recipe_id: None,
     }
+}
+
+/// Story 5.1: tokens of an equivalent, re-runnable invocation of this probe.
+/// Excludes network/signing flags on purpose — the printed command must be
+/// safe to run anywhere (the contribution docs explain adding --sign --upload).
+fn command_tokens(cli: &CliArgs) -> Vec<String> {
+    let mut tokens = vec![
+        "benchmark-probe".to_string(),
+        "--runtime".to_string(),
+        cli.runtime.engine_name().to_string(),
+        "--model".to_string(),
+        cli.model.clone(),
+        "--prompt-tokens".to_string(),
+        cli.prompt_tokens.to_string(),
+        "--generated-tokens".to_string(),
+        cli.generated_tokens.to_string(),
+        "--batch-size".to_string(),
+        cli.batch_size.to_string(),
+        "--context-tokens".to_string(),
+        cli.context_tokens.to_string(),
+    ];
+    for artifact in &cli.artifact_paths {
+        tokens.push("--artifact".to_string());
+        tokens.push(artifact.display().to_string());
+    }
+    if let Some(report_runtime) = &cli.report_runtime {
+        tokens.push("--report-runtime".to_string());
+        tokens.push(report_runtime.clone());
+    }
+    if let Some(scenario) = &cli.scenario {
+        tokens.push("--scenario".to_string());
+        tokens.push(scenario.clone());
+    }
+    if let Some(recipe) = &cli.recipe {
+        tokens.push("--recipe".to_string());
+        tokens.push(recipe.display().to_string());
+    }
+    if let Some(workflow_out) = &cli.workflow_out {
+        tokens.push("--workflow-out".to_string());
+        tokens.push(workflow_out.display().to_string());
+    }
+    tokens
+}
+
+/// Single shell-safe line: every token single-quoted so any model name, path
+/// or JSON scenario survives a copy-paste into sh/bash.
+fn build_command_line(cli: &CliArgs) -> String {
+    command_tokens(cli)
+        .iter()
+        .map(|token| shell_quote(token))
+        .collect::<Vec<String>>()
+        .join(" ")
+}
+
+fn shell_quote(value: &str) -> String {
+    let mut quoted = String::with_capacity(value.len() + 2);
+    quoted.push('\'');
+    for ch in value.chars() {
+        if ch == '\'' {
+            quoted.push_str("'\\''");
+        } else {
+            quoted.push(ch);
+        }
+    }
+    quoted.push('\'');
+    quoted
 }
 
 fn artifact_kind_for_index(index: usize) -> String {
@@ -339,6 +585,11 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
     let mut report_runtime: Option<String> = None;
     let mut sign = false;
     let mut upload = false;
+    let mut scenario: Option<String> = None;
+    let mut recipe: Option<PathBuf> = None;
+    let mut workflow_out: Option<PathBuf> = None;
+    let mut execute = false;
+    let mut print_command = false;
     let mut settle_claim_id: Option<String> = None;
     let mut model_release_id: Option<String> = None;
     let mut quantization_profile_id: Option<String> = None;
@@ -381,6 +632,11 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
             "--artifact" => artifact_paths.push(PathBuf::from(take_value(&mut index)?)),
             "--output" => output_path = Some(PathBuf::from(take_value(&mut index)?)),
             "--report-runtime" => report_runtime = Some(take_value(&mut index)?),
+            "--scenario" => scenario = Some(take_value(&mut index)?),
+            "--recipe" => recipe = Some(PathBuf::from(take_value(&mut index)?)),
+            "--workflow-out" => workflow_out = Some(PathBuf::from(take_value(&mut index)?)),
+            "--execute" => execute = true,
+            "--print-command" => print_command = true,
             "--settle-claim" => settle_claim_id = Some(take_value(&mut index)?),
             "--model-release-id" => model_release_id = Some(take_value(&mut index)?),
             "--quantization-profile-id" => quantization_profile_id = Some(take_value(&mut index)?),
@@ -392,8 +648,16 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
     }
 
     let runtime = runtime.ok_or_else(|| {
-        "missing required argument '--runtime <llama_cpp|ollama|mock>'".to_string()
+        "missing required argument '--runtime <llama_cpp|ollama|comfyui|mock>'".to_string()
     })?;
+    if let Runtime::ComfyUi = runtime {
+        scenario.as_ref().ok_or_else(|| {
+            "missing required argument '--scenario <json|->' for --runtime comfyui".to_string()
+        })?;
+        recipe.as_ref().ok_or_else(|| {
+            "missing required argument '--recipe <path>' for --runtime comfyui".to_string()
+        })?;
+    }
     if settle_claim_id.is_some() && !upload {
         return Err(
             "--settle-claim requires --upload (the run must be submitted to settle the claim)"
@@ -412,6 +676,11 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
         report_runtime,
         sign,
         upload,
+        scenario,
+        recipe,
+        workflow_out,
+        execute,
+        print_command,
         settle_claim_id,
         model_release_id,
         quantization_profile_id,
@@ -423,8 +692,9 @@ fn parse_runtime(value: &str) -> Result<Runtime, String> {
         "llama_cpp" => Ok(Runtime::LlamaCpp),
         "ollama" => Ok(Runtime::Ollama),
         "mock" => Ok(Runtime::Mock),
+        "comfyui" => Ok(Runtime::ComfyUi),
         other => Err(format!(
-            "invalid value for '--runtime': '{other}' (expected one of: llama_cpp, ollama, mock)"
+            "invalid value for '--runtime': '{other}' (expected one of: llama_cpp, ollama, comfyui, mock)"
         )),
     }
 }
@@ -483,10 +753,11 @@ fn print_usage() {
     println!("runs a standardized benchmark scenario, and prints plain-text metrics.");
     println!();
     println!("USAGE:");
-    println!("    benchmark-probe --runtime <llama_cpp|ollama|mock> [OPTIONS]");
+    println!("    benchmark-probe --runtime <llama_cpp|ollama|comfyui|mock> [OPTIONS]");
     println!();
     println!("REQUIRED:");
-    println!("    --runtime <runtime>    Runtime to benchmark: llama_cpp, ollama, or mock");
+    println!("    --runtime <runtime>    Runtime to benchmark: llama_cpp, ollama, comfyui, or mock");
+    println!("                           comfyui also requires --scenario and --recipe (video dry-run)");
     println!();
     println!("OPTIONS:");
     println!("    --model <model>            Model name or GGUF path (default: {DEFAULT_MODEL})");
@@ -494,6 +765,11 @@ fn print_usage() {
     println!("    --generated-tokens <n>     Tokens to generate (default: 512)");
     println!("    --batch-size <n>           Prefill batch size (default: 1)");
     println!("    --context-tokens <n>       Context window size (default: 8192)");
+    println!("    --scenario <json|->        (comfyui) Video scenario JSON inline, or '-' to read stdin");
+    println!("    --recipe <path>            (comfyui) Recipe manifest with the workflow template");
+    println!("    --workflow-out <path>      (comfyui) Write the materialized workflow JSON to this path");
+    println!("    --execute                  (comfyui) Run the workflow headlessly and measure the clip");
+    println!("    --print-command            Print an equivalent, re-runnable command line and exit");
     println!("    --artifact <path>          Attach a file as an upload artifact (repeatable)");
     println!("    --output <path>            Write the signed report files (report, .digest, .signature, .artifact_0.txt)");
     println!("    --report-runtime <engine>  Override the runtime declared in the report (e.g. llama_cpp)");
@@ -517,4 +793,103 @@ fn print_usage() {
     );
     println!("    benchmark-probe --runtime mock --upload --settle-claim 7d1e... # prove your claim");
     println!("    benchmark-probe --runtime ollama --model qwen2.5-coder:32b");
+    println!(
+        "    benchmark-probe --runtime comfyui --scenario '{{\"model\":\"wan22-i2v-flf2v\",\"width\":1280,\"height\":720,\"frames\":81,\"steps\":20,\"cfg\":3.5,\"shift\":5.0,\"seed\":42,\"first_image\":\"in/first.png\",\"last_image\":\"in/last.png\"}}' --recipe recipes/wan22-flf2v-720p-81f-v1.json --workflow-out /tmp/wan22.json"
+    );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn args(tokens: &[&str]) -> Vec<String> {
+        tokens.iter().map(|t| t.to_string()).collect()
+    }
+
+    fn base_cli() -> CliArgs {
+        CliArgs {
+            runtime: Runtime::Mock,
+            model: "test-model".to_string(),
+            prompt_tokens: 4096,
+            generated_tokens: 512,
+            batch_size: 1,
+            context_tokens: 8192,
+            artifact_paths: vec![],
+            output_path: None,
+            report_runtime: None,
+            sign: false,
+            upload: false,
+            scenario: None,
+            recipe: None,
+            workflow_out: None,
+            execute: false,
+            print_command: false,
+            settle_claim_id: None,
+            model_release_id: None,
+            quantization_profile_id: None,
+        }
+    }
+
+    #[test]
+    fn print_command_round_trips_through_parse_args() {
+        let mut cli = base_cli();
+        cli.runtime = Runtime::Ollama;
+        cli.model = "qwen2.5-coder:32b".to_string();
+        cli.report_runtime = Some("ollama".to_string());
+        let line = build_command_line(&cli);
+        assert!(line.starts_with("'benchmark-probe'"));
+
+        let tokens: Vec<String> = line
+            .split(' ')
+            .map(|quoted| unquote_token(quoted))
+            .collect();
+        let reparsed = parse_args(&tokens[1..]).expect("reparsed");
+        let cli = reparsed.expect("some cli");
+        assert!(matches!(cli.runtime, Runtime::Ollama));
+        assert_eq!(cli.model, "qwen2.5-coder:32b");
+        assert_eq!(cli.prompt_tokens, 4096);
+        assert_eq!(cli.context_tokens, 8192);
+        assert_eq!(cli.report_runtime.as_deref(), Some("ollama"));
+        assert!(!cli.sign && !cli.upload && !cli.execute);
+    }
+
+    #[test]
+    fn shell_quote_escapes_embedded_quotes() {
+        assert_eq!(shell_quote("plain"), "'plain'");
+        assert_eq!(shell_quote("it's"), "'it'\\''s'");
+        assert_eq!(shell_quote(""), "''");
+    }
+
+    #[test]
+    fn comfyui_command_carries_scenario_and_recipe() {
+        let mut cli = base_cli();
+        cli.runtime = Runtime::ComfyUi;
+        cli.scenario = Some("{\"width\":1280}".to_string());
+        cli.recipe = Some(PathBuf::from("recipes/wan22-flf2v-720p-81f-v1.json"));
+        let tokens = command_tokens(&cli);
+        let line = tokens.join(" ");
+        assert!(line.contains("--scenario"));
+        assert!(line.contains("{\"width\":1280}"));
+        assert!(line.contains("--recipe"));
+        assert!(line.contains("recipes/wan22-flf2v-720p-81f-v1.json"));
+        // The generated command must stay a dry-run: --execute is never emitted.
+        assert!(!tokens.iter().any(|token| token == "--execute"));
+    }
+
+    #[test]
+    fn print_command_flag_parses_without_other_flags() {
+        let parsed = parse_args(&args(&["--runtime", "mock", "--print-command"]))
+            .expect("parsed")
+            .expect("some cli");
+        assert!(parsed.print_command);
+    }
+
+    /// Minimal inverse of `shell_quote` for round-trip assertions above.
+    fn unquote_token(quoted: &str) -> String {
+        let body = quoted
+            .strip_prefix('\'')
+            .and_then(|rest| rest.strip_suffix('\''))
+            .expect("shell-quoted token");
+        body.replace("'\\''", "'")
+    }
 }

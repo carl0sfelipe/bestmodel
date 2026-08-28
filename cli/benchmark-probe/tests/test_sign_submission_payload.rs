@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use benchmark_probe::sign_submission_payload::{
     canonicalize_report, load_or_create_signing_key, payload_digest, sha256_hex,
     sign_payload_digest, ArtifactEntry, BenchmarkReportPayload, MetricFields, ScenarioFields,
-    SCHEMA_VERSION,
+    ScenarioPayload, SCHEMA_VERSION,
 };
 use ed25519_dalek::{Signature, Verifier};
 
@@ -14,23 +14,27 @@ fn sample_report() -> BenchmarkReportPayload {
         runtime: "llama_cpp".to_string(),
         runtime_version: "b4568".to_string(),
         hardware_fingerprint: "sha256:fingerprint".to_string(),
-        scenario: ScenarioFields {
+        scenario: ScenarioPayload::Llm(ScenarioFields {
             prompt_tokens: 4096,
             generated_tokens: 512,
             batch_size: 1,
             context_tokens: 8192,
-        },
+        }),
         metrics: MetricFields {
             ttft_ms: 812.0,
             prefill_tok_s: 5041.0,
             decode_tok_s: 18.7,
             peak_vram_mib: 21811.0,
             power_watt_avg: 412.0,
+            seconds_per_clip: None,
+            it_per_s: None,
+            frames_per_s: None,
         },
         artifacts: vec![ArtifactEntry {
             artifact_kind: "runtime_stdout".to_string(),
             sha256: sha256_hex(b"stdout log"),
         }],
+        recipe_id: None,
     }
 }
 

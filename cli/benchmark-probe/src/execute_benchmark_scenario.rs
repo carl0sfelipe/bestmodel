@@ -54,6 +54,13 @@ pub fn run_scenario(
         Runtime::Mock => run_mock_scenario(scenario),
         Runtime::LlamaCpp => run_llama_cpp_scenario(&installs.llama_cpp, scenario),
         Runtime::Ollama => run_ollama_scenario(&installs.ollama, scenario),
+        // The comfyui runtime is video/diffusion and never runs an LLM scenario;
+        // main.rs routes it to comfyui_adapter::build_plan before reaching here.
+        Runtime::ComfyUi => Err(ScenarioError::RuntimeNotInstalled {
+            runtime: "ComfyUI".to_string(),
+            hint: "comfyui is a dry-run/plan runtime; it does not execute LLM scenarios"
+                .to_string(),
+        }),
     }
 }
 

@@ -1,0 +1,8 @@
+{
+  "recipe_id": "corrupt-leftover-marker-fixture",
+  "runtime": "comfyui",
+  "model_release": "fixture",
+  "comfyui_min_version": "0.3.48",
+  "workflow_template": "workflow-leftover.tpl",
+  "provenance": "test fixture: typo marker __STEPSS__ never substituted -> leftover marker error"
+}

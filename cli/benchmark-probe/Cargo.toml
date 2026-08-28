@@ -25,3 +25,6 @@ reqwest = { version = "0.12", features = ["blocking", "multipart", "json"] }
 # Vendored OpenSSL: static link so the release binary runs on any glibc host
 # (bullseye builds carry libssl.so.1.1, breaking on Ubuntu 22.04+ / OpenSSL 3).
 openssl-sys = { version = "0.9", features = ["vendored"] }
+
+[dev-dependencies]
+serde_json = "1"

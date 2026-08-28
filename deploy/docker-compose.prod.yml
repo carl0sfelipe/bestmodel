@@ -80,6 +80,14 @@ services:
       api:
         condition: service_healthy
     restart: unless-stopped
+    # The image HEALTHCHECK probes the uvicorn HTTP endpoint, which only the
+    # api serves. The worker is a stream consumer, so probe its process.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,sys; sys.exit(0 if any(b'src.worker' in open(f'/proc/{p}/cmdline','rb').read() for p in os.listdir('/proc') if p.isdigit()) else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   # Auto-HTTPS edge for api.<domain>. The static site + console live on Vercel
   # and reach this through the rewrite in apps/web/vercel.json.

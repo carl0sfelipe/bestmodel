@@ -30,5 +30,13 @@
     "supports_tensor_parallel": false,
     "supports_kv_cache_quant": true,
     "supports_cpu_offload": false
+  },
+  {
+    "id": "comfyui",
+    "engine": "comfyui",
+    "version": "0.3.48",
+    "supports_tensor_parallel": false,
+    "supports_kv_cache_quant": false,
+    "supports_cpu_offload": true
   }
 ]

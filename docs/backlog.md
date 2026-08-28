@@ -3,12 +3,18 @@
 Canonical backlog for post-Phase-0 work. Items are grouped by track; ids are
 stable and referenced from specs and discussions.
 
+> **Sequencing decision (2026-08-28, `docs/direction-2026-08-28.md`):**
+> L03 engine unification → S23 per-user signing keys → S24 source-class
+> badges in web → L01 CLI v2. The L03 port delivers most of Track D
+> (D1–D3) platform-side. Track A work starts only after unification.
+
 ## Track A — CLI v2 Local Lab (spec: specs/en/L01-cli-v2-local-lab.md)
 
 Open questions from the L01 spec (need a decision before/during build):
 
 - **A1 — Optimizer choice.** Embedded TPE (zero-dep, single-binary ethos) vs
-  `argmin`-based Bayesian optimization. Decide via L03 spike.
+  `argmin`-based Bayesian optimization. Decide via an optimizer spike spec
+  during L01 planning (the L03 id is now taken by engine unification).
 - **A2 — Model acquisition.** Should `lab` auto-pull models (Ollama built-in,
   llama.cpp requires local GGUF path)? Proposal: Ollama auto, llama.cpp manual.
 - **A3 — Contribute consent.** Opt-in with first-run prompt + always-honored

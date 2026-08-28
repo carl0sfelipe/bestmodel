@@ -21,6 +21,7 @@ commit time); L01+ is the active frontier.
 | S12-integration-gate | done | `make gate`, VRAM harness |
 | L01-cli-v2-local-lab | PLANNED (Phase 1) | stories L01–L07 inside |
 | L02-social-platform | PLANNED (Phase 1) | stories S13–S18 inside |
+| L03-engine-unification | ACTIVE (U0 done) | stories U0–U6 inside; direction in docs/direction-2026-08-28.md |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

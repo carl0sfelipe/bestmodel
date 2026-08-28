@@ -1,0 +1,17 @@
+[package]
+name = "canirunit"
+version = "0.1.0"
+edition = "2021"
+description = "canirunit CLI: best-model suggestions from measured runs (Épico 2)"
+
+[lib]
+name = "canirunit"
+path = "src/lib.rs"
+
+[[bin]]
+name = "canirunit"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

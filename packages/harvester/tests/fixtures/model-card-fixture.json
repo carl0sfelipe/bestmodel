@@ -1,0 +1,24 @@
+{
+  "source_url": "https://huggingface.co/example/model-card-fixture",
+  "harvested_at": "2026-08-26",
+  "cells": [
+    {
+      "gpu_model_id": "gpu-rtx-3090",
+      "model_release_id": "model-qwen3-8b",
+      "recipe_id": null,
+      "metric": "decode_tok_s",
+      "value": 42.5,
+      "unit": "tok/s",
+      "note": "single-stream decode, bf16 weights, 8k context, quiet machine"
+    },
+    {
+      "gpu_model_id": "gpu-rtx-4090",
+      "model_release_id": "model-wan22-i2v-flf2v-14b",
+      "recipe_id": "wan22-flf2v-720p-81f-v1",
+      "metric": "seconds_per_clip",
+      "value": 2957.8,
+      "unit": "s",
+      "note": "720p, 81 frames, flow-matching; wall-clock per generated clip"
+    }
+  ]
+}

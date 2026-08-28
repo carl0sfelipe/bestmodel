@@ -1,0 +1,48 @@
+[
+  {
+    "run_id": "run-3090-a",
+    "gpu_model_id": "gpu-rtx-3090",
+    "model_release_id": "model-qwen3-8b",
+    "recipe_id": null,
+    "source_class": "measured_signed",
+    "trust_score": 0.5,
+    "decode_tok_s": 88.0
+  },
+  {
+    "run_id": "run-3090-b",
+    "gpu_model_id": "gpu-rtx-3090",
+    "model_release_id": "model-qwen3-8b",
+    "recipe_id": null,
+    "source_class": "measured_signed",
+    "trust_score": 1.0,
+    "decode_tok_s": 92.0
+  },
+  {
+    "run_id": "run-3090-c",
+    "gpu_model_id": "gpu-rtx-3090",
+    "model_release_id": "model-qwen3-8b",
+    "recipe_id": null,
+    "source_class": "measured_signed",
+    "trust_score": 0.5,
+    "decode_tok_s": 96.0
+  },
+  {
+    "run_id": "run-3090-video",
+    "gpu_model_id": "gpu-rtx-3090",
+    "model_release_id": "model-wan22-i2v-flf2v-14b",
+    "recipe_id": "wan22-flf2v-720p-81f-v1",
+    "source_class": "measured_signed",
+    "trust_score": 0.8,
+    "seconds_per_clip": 123.4,
+    "frames_per_s": 0.66
+  },
+  {
+    "run_id": "run-4090-foreign",
+    "gpu_model_id": "gpu-rtx-4090",
+    "model_release_id": "model-qwen3-8b",
+    "recipe_id": null,
+    "source_class": "measured_signed",
+    "trust_score": 1.0,
+    "decode_tok_s": 130.0
+  }
+]

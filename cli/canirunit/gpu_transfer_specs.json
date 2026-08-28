@@ -1,0 +1,37 @@
+[
+  {
+    "id": "gpu-rtx-3090",
+    "arch_family": "ampere",
+    "fp16_tflops": 35.58,
+    "memory_bandwidth_gib_s": 936.0,
+    "has_native_fp8": false
+  },
+  {
+    "id": "gpu-rtx-4090",
+    "arch_family": "ada",
+    "fp16_tflops": 82.58,
+    "memory_bandwidth_gib_s": 1008.0,
+    "has_native_fp8": true
+  },
+  {
+    "id": "gpu-rtx-4080",
+    "arch_family": "ada",
+    "fp16_tflops": 48.74,
+    "memory_bandwidth_gib_s": 717.0,
+    "has_native_fp8": true
+  },
+  {
+    "id": "gpu-rtx-4070-ti-super",
+    "arch_family": "ada",
+    "fp16_tflops": 44.1,
+    "memory_bandwidth_gib_s": 672.0,
+    "has_native_fp8": true
+  },
+  {
+    "id": "gpu-rtx-5090",
+    "arch_family": "blackwell",
+    "fp16_tflops": 104.8,
+    "memory_bandwidth_gib_s": 1792.0,
+    "has_native_fp8": true
+  }
+]

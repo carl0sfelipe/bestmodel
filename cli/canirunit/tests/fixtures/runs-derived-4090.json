@@ -1,0 +1,13 @@
+[
+  {
+    "run_id": "c7a42e31-b932-5946-9416-0d4ac143c0a3",
+    "gpu_model_id": "gpu-rtx-4090",
+    "model_release_id": "model-wan22-i2v-flf2v-14b",
+    "recipe_id": "wan22-flf2v-720p-81f-v1",
+    "source_class": "derived",
+    "trust_score": null,
+    "age_days": 0.0,
+    "seconds_per_clip": 2957.815,
+    "frames_per_s": 0.0274
+  }
+]

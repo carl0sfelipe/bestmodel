@@ -30,4 +30,5 @@ pythonpath = [
     "apps/public-api",
     "apps/intake-worker/src",
     "packages/fake-adapters/src",
+    "packages/harvester/src",
 ]

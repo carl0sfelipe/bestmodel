@@ -20,6 +20,7 @@ class SubmissionForm(BaseModel):
     quantization_profile_id: str | None = None
     inference_runtime_id: str | None = None
     settle_claim_id: str | None = None
+    recipe_id: str | None = None
 
 
 class SubmissionAccepted(BaseModel):

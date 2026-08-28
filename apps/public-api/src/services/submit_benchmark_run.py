@@ -16,6 +16,7 @@ import uuid
 from typing import Any, Iterable
 
 from benchmark_report import BenchmarkReport
+from benchmark_scenario import VideoScenario
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
@@ -76,6 +77,7 @@ def submit_benchmark_run(
     quantization_profile_id = _resolve_quantization_profile_id(session, form)
     inference_runtime_id = _resolve_inference_runtime_id(session, form, report)
     scenario_id = _scenario_id(report)
+    recipe_id = _resolve_recipe_id(session, form, report)
     _reject_if_duplicate(
         session,
         hardware_submission_id,
@@ -96,6 +98,7 @@ def submit_benchmark_run(
         scenario_id,
         form,
         report,
+        recipe_id,
     )
     _insert_metrics(session, run_id, report)
     _insert_artifacts(session, run_id, report, artifact_records)
@@ -292,16 +295,57 @@ def _ensure_hardware_submission(
     )
 
 
+def _resolve_recipe_id(
+    session: DatabaseSession, form: SubmissionForm, report: BenchmarkReport
+) -> str | None:
+    """Resolve the recipe binding for video runs (Épico 1, Story 1.3).
+
+    The signed report wins over the form override; an unknown recipe id is a
+    400 so mis-typed ids never silently land as NULL.
+    """
+    recipe_id = report.recipe_id or form.recipe_id
+    if not recipe_id:
+        return None
+    if not session.fetch_recipe_by_id(recipe_id):
+        raise SubmissionRejected(400, f"unknown recipe_id: {recipe_id}")
+    return recipe_id
+
+
 def _scenario_record(scenario_id: str, report: BenchmarkReport) -> dict[str, Any]:
+    scenario = report.scenario
+    if isinstance(scenario, VideoScenario):
+        return {
+            "id": scenario_id,
+            "scenario_kind": "video",
+            "prompt_tokens": None,
+            "generated_tokens": None,
+            "context_tokens": None,
+            "batch_size": None,
+            "tensor_parallel": 1,
+            "width": scenario.width,
+            "height": scenario.height,
+            "frames": scenario.frames,
+            "steps": scenario.steps,
+            "cfg": scenario.cfg,
+            "shift": scenario.shift,
+            "seed": scenario.seed,
+        }
     return {
         "id": scenario_id,
+        "scenario_kind": "llm",
         "prompt_tokens": report.scenario.prompt_tokens,
         "generated_tokens": report.scenario.generated_tokens,
         "context_tokens": report.scenario.context_tokens,
         "batch_size": report.scenario.batch_size,
         "tensor_parallel": 1,
+        "width": None,
+        "height": None,
+        "frames": None,
+        "steps": None,
+        "cfg": None,
+        "shift": None,
+        "seed": None,
     }
-
 
 def _insert_run(
     session: DatabaseSession,
@@ -312,6 +356,7 @@ def _insert_run(
     benchmark_scenario_id: str,
     form: SubmissionForm,
     report: BenchmarkReport,
+    recipe_id: str | None,
 ) -> str:
     run_id = str(uuid.uuid4())
     session.insert_benchmark_run(
@@ -326,6 +371,12 @@ def _insert_run(
             "client_version": form.client_version,
             "signature": form.signature,
             "payload_digest": form.payload_digest,
+            "recipe_id": recipe_id,
+            "source_class": "measured_signed",
+            "seconds_per_clip": report.metrics.seconds_per_clip,
+            "it_per_s": report.metrics.it_per_s,
+            "frames_per_s": report.metrics.frames_per_s,
+            "source_url": None,
         }
     )
     return run_id

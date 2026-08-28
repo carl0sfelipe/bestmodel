@@ -222,6 +222,7 @@ def test_validated_run_appears_on_leaderboard(intake_stack):
             "peak_vram_mib": 21811.0,
             "power_watt_avg": 0.0,
             "quality_retention_estimate": 0.96,
+            "source_class": "measured_signed",
             "trust_score": 0.8,
             "vram_capacity_mib": 24576,
             "submitted_at": "2026-08-04T00:00:00Z",

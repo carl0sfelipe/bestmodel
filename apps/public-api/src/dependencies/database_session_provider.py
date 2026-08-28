@@ -57,6 +57,34 @@ class DatabaseSession(ABC):
         """Return the inference_runtime row for the given id or None."""
 
     @abstractmethod
+    def fetch_recipe_by_id(self, recipe_id: str) -> dict[str, Any] | None:
+        """Return the recipe row for the given recipe_id or None."""
+
+    @abstractmethod
+    def fetch_gpu_by_id(self, gpu_model_id: str) -> dict[str, Any] | None:
+        """Return the gpu_model row for the given id or None."""
+
+    @abstractmethod
+    def find_contributor_by_email(self, email: str) -> dict[str, Any] | None:
+        """Return the contributor_account row for the given email or None."""
+
+    @abstractmethod
+    def find_contributor_by_token_hash(self, token_hash: str) -> dict[str, Any] | None:
+        """Return the contributor_account row whose token hash matches or None."""
+
+    @abstractmethod
+    def insert_contributor(self, record: dict[str, Any]) -> None:
+        """Insert a contributor_account row."""
+
+    @abstractmethod
+    def count_reported_submissions_since(self, ip_address: str, hours: int) -> int:
+        """Count reported_submission_log rows for the IP within the last ``hours``."""
+
+    @abstractmethod
+    def insert_reported_submission_log(self, record: dict[str, Any]) -> None:
+        """Insert a reported_submission_log row."""
+
+    @abstractmethod
     def fetch_first_model_release_id(self) -> str:
         """Return a deterministic model_release id used as a Phase 0 fallback."""
 

@@ -26,12 +26,18 @@ _NUMERIC_FIELDS = (
     "quality_retention_estimate",
     "trust_score",
     "vram_capacity_mib",
+    "seconds_per_clip",
+    "it_per_s",
+    "frames_per_s",
 )
 
 
 def query_leaderboard(session: DatabaseSession, filters: dict[str, Any],
                       sort: str | None, limit: int | None, offset: int | None) -> dict[str, Any]:
     entries = [_coerce_numeric(entry) for entry in session.fetch_leaderboard_entries()]
+    # A cell without a source class never renders (Story 2.1): every leaderboard
+    # entry must declare where its number came from.
+    entries = [entry for entry in entries if entry.get("source_class")]
     entries = _apply_filters(entries, filters)
     entries = filter_feasible_models(mark_feasibility(entries))
     entries = calculate_ranking_score(entries)
@@ -59,6 +65,8 @@ def _apply_filters(entries: list[dict[str, Any]], filters: dict[str, Any]) -> li
         "quantization_profile_id",
         "quant_format",
         "batch_size",
+        "source_class",
+        "recipe_id",
     )
     filtered = entries
     for field in exact_fields:

@@ -124,3 +124,89 @@ def test_missing_form_fields_returns_400(client, trusted_key):
     )
     assert response.status_code == 400
     assert "submission fields" in response.json()["detail"]
+
+
+def sample_video_report_dict() -> dict:
+    """A valid comfyui video report referencing the seed recipe (Épico 1)."""
+    return {
+        "schema_version": "0.9.0",
+        "run_id": "01J9XYZTEST00000000000000V1",
+        "runtime": "comfyui",
+        "runtime_version": "comfy-cli 0.3.48",
+        "hardware_fingerprint": "sha256:abcdef0123456789",
+        "scenario": {
+            "scenario_kind": "video",
+            "width": 1280,
+            "height": 720,
+            "frames": 81,
+            "steps": 20,
+            "cfg": 3.5,
+            "shift": 5.0,
+            "seed": 42,
+        },
+        "metrics": {
+            "ttft_ms": 0.0,
+            "prefill_tok_s": 0.0,
+            "decode_tok_s": 0.0,
+            "peak_vram_mib": 22000,
+            "power_watt_avg": 0.0,
+            "seconds_per_clip": 123.4,
+            "it_per_s": 10.0,
+            "frames_per_s": 0.66,
+        },
+        "artifacts": [
+            {"artifact_kind": "runtime_stdout", "sha256": hashlib.sha256(b"comfy log").hexdigest()}
+        ],
+        "recipe_id": "wan22-flf2v-720p-81f-v1",
+    }
+
+
+def test_video_submission_persists_recipe_and_video_fields(
+    client, database, artifact_vault, benchmark_queue, trusted_key
+):
+    report = sample_video_report_dict()
+    data, files = _multipart(report, trusted_key, [b"comfy log"])
+    response = client.post("/v1/submissions", data=data, files=files)
+    assert response.status_code == 202, response.json()
+    run = database._runs[-1]
+    assert run["recipe_id"] == "wan22-flf2v-720p-81f-v1"
+    assert run["source_class"] == "measured_signed"
+    assert run["seconds_per_clip"] == 123.4
+    assert run["it_per_s"] == 10.0
+    assert run["frames_per_s"] == 0.66
+    scenario = database._scenarios[-1]
+    assert scenario["scenario_kind"] == "video"
+    assert scenario["frames"] == 81
+    assert scenario["width"] == 1280
+    assert scenario["prompt_tokens"] is None
+    # Video metrics are scalars on the run, not benchmark_metric rows.
+    assert all(metric["kind"] not in ("seconds_per_clip", "it_per_s", "frames_per_s")
+               for metric in database._metrics)
+
+
+def test_video_submission_with_unknown_recipe_returns_400(client, trusted_key):
+    report = sample_video_report_dict()
+    report["recipe_id"] = "no-such-recipe"
+    data, files = _multipart(report, trusted_key, [b"comfy log"])
+    response = client.post("/v1/submissions", data=data, files=files)
+    assert response.status_code == 400
+    assert "unknown recipe_id" in response.json()["detail"]
+
+
+def test_llm_report_without_recipe_still_accepted(client, trusted_key):
+    report = sample_report_dict()
+    assert "recipe_id" not in report
+    data, files = _multipart(report, trusted_key, [b"stdout log"])
+    response = client.post("/v1/submissions", data=data, files=files)
+    assert response.status_code == 202
+    assert database_runs_last(client)["recipe_id"] is None
+
+
+def database_runs_last(client) -> dict:
+    # The client fixture closes over its own FakeDatabase; re-read via the app
+    # dependency override to reach the same instance.
+    from src.dependencies.database_session_provider import get_database_session
+
+    app = client._transport.app  # TestClient's ASGI app
+    session = app.dependency_overrides[get_database_session]()
+    return session._runs[-1]

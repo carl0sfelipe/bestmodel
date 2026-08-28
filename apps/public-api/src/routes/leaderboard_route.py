@@ -20,6 +20,8 @@ def get_leaderboard(
     context_tokens_min: int | None = None,
     context_tokens_max: int | None = None,
     batch_size: int | None = None,
+    source_class: str | None = None,
+    recipe_id: str | None = None,
     sort: str | None = None,
     limit: int | None = None,
     offset: int | None = None,
@@ -34,5 +36,7 @@ def get_leaderboard(
         "context_tokens_min": context_tokens_min,
         "context_tokens_max": context_tokens_max,
         "batch_size": batch_size,
+        "source_class": source_class,
+        "recipe_id": recipe_id,
     }
     return query_leaderboard(session, filters, sort, limit, offset)

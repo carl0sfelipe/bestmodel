@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from conftest import make_leaderboard_entry
+
 
 def test_returns_feasible_validated_runs_with_scores(leaderboard_client):
     response = leaderboard_client.get("/v1/leaderboard")
@@ -45,3 +47,42 @@ def test_pagination_beyond_data_returns_empty_list(leaderboard_client):
     response = leaderboard_client.get("/v1/leaderboard", params={"limit": 10, "offset": 100})
     assert response.status_code == 200
     assert response.json() == {"runs": []}
+
+
+def test_entries_without_source_class_never_render(leaderboard_client, seeded_database):
+    seeded_database.add_leaderboard_entry(make_leaderboard_entry(run_id="run-no-class", source_class=None))
+    response = leaderboard_client.get("/v1/leaderboard", params={"limit": 100})
+    run_ids = [run["run_id"] for run in response.json()["runs"]]
+    assert "run-no-class" not in run_ids
+    assert run_ids  # the classified cells still render
+
+
+def test_source_class_and_video_metrics_surface_on_entries(leaderboard_client, seeded_database):
+    seeded_database.add_leaderboard_entry(
+        make_leaderboard_entry(
+            run_id="run-video-1",
+            runtime_engine="comfyui",
+            recipe_id="wan22-flf2v-720p-81f-v1",
+            seconds_per_clip=123.4,
+            it_per_s=10.0,
+            frames_per_s=0.66,
+            decode_tok_s=None,
+            source_class="measured_signed",
+        )
+    )
+    response = leaderboard_client.get(
+        "/v1/leaderboard", params={"source_class": "measured_signed", "recipe_id": "wan22-flf2v-720p-81f-v1", "limit": 100}
+    )
+    runs = response.json()["runs"]
+    video = next(run for run in runs if run["run_id"] == "run-video-1")
+    assert video["source_class"] == "measured_signed"
+    assert video["recipe_id"] == "wan22-flf2v-720p-81f-v1"
+    assert video["seconds_per_clip"] == 123.4
+    assert video["frames_per_s"] == 0.66
+
+
+def test_source_class_filter_excludes_other_classes(leaderboard_client, seeded_database):
+    seeded_database.add_leaderboard_entry(make_leaderboard_entry(run_id="run-harvest", source_class="harvested"))
+    response = leaderboard_client.get("/v1/leaderboard", params={"source_class": "harvested", "limit": 100})
+    run_ids = [run["run_id"] for run in response.json()["runs"]]
+    assert run_ids == ["run-harvest"]

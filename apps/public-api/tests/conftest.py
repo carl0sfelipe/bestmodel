@@ -55,6 +55,11 @@ def make_leaderboard_entry(**overrides) -> dict:
         "trust_score": 0.8,
         "vram_capacity_mib": 24576,
         "submitted_at": "2026-08-01T00:00:00Z",
+        "source_class": "measured_signed",
+        "recipe_id": None,
+        "seconds_per_clip": None,
+        "it_per_s": None,
+        "frames_per_s": None,
     }
     entry.update(overrides)
     return entry

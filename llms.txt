@@ -84,6 +84,18 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 - GET /v1/notifications + POST /v1/notifications/{id}/read — settlement and
   new-follower events land here
 
+## Reported runs & transparency (L03 engine surface)
+
+- POST /v1/contributors — lightweight contributor account (email + agent token, sha256 at rest)
+- POST /v1/submissions/reported — reported (unsigned) run intake with per-IP
+  quota backed by an auditable submission log; enters the ladder as `reported`
+- GET /v1/transparency/sources — where every number class comes from
+- GET /v1/leaderboard — now filtered by source_class/recipe_id; entries carry
+  video metrics (seconds_per_clip, it_per_s, frames_per_s); a cell without a
+  source class never renders
+- POST /v1/submissions — also accepts comfyui video reports (recipe_id binding,
+  source_class=measured_signed at intake)
+
 ## License
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**

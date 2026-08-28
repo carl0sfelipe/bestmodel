@@ -26,8 +26,11 @@ def is_feasible(peak_memory_mib: float, capacity_mib: float | None) -> bool:
 
 def mark_feasibility(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for candidate in candidates:
-        candidate["feasible"] = is_feasible(
-            candidate["peak_vram_mib"], candidate.get("vram_capacity_mib")
+        peak = candidate.get("peak_vram_mib")
+        # Video cells may report seconds_per_clip without a peak_vram_mib
+        # metric row; without a peak to compare there is nothing to disprove.
+        candidate["feasible"] = (
+            True if peak is None else is_feasible(peak, candidate.get("vram_capacity_mib"))
         )
     return candidates
 

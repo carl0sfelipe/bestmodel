@@ -125,3 +125,14 @@ hosted endpoint, priced on convenience, never on locking up the open data.
 *Committed together with `specs/en/L03-engine-unification.md`; registered in
 the baton log (§7) of the local handoff. No operational secrets in this file
 by design.*
+
+## Release note — L03 complete (2026-08-28, ZCode)
+
+U0–U6 executed per `specs/en/L03-engine-unification.md`: U1 domain schema +
+diffusion-step kernel (8c55c86), U2 migrations 0011/0012 + seed union (8772c77),
+U3 ComfyUI adapter bilateral merge (17a5c40), U4 reported/transparency API
+surface (9a3b0c3), U5 canirunit CLI + harvester (b22dc72), U6 this docs/archive
+freeze. Suites at close: 300 py + 58 rs, zero failures. The engine lineage is
+frozen as a read-only archive (tag `engine-epics-1-5-final`); all new work
+happens here. Migrations 0011+ remain owner-gated for prod deploy (after the
+Story 1.4 cell lands).

@@ -377,6 +377,45 @@ class PostgresSession(DatabaseSession):
     def fetch_runtime_by_id(self, runtime_id: str) -> dict[str, Any] | None:
         return self._fetchone("SELECT * FROM inference_runtime WHERE id = %s", (runtime_id,))
 
+    def fetch_recipe_by_id(self, recipe_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM recipe WHERE recipe_id = %s", (recipe_id,))
+
+    def fetch_gpu_by_id(self, gpu_model_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM gpu_model WHERE id = %s", (gpu_model_id,))
+
+    def find_contributor_by_email(self, email: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM contributor_account WHERE email = %s", (email,)
+        )
+
+    def find_contributor_by_token_hash(self, token_hash: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM contributor_account WHERE token_hash = %s", (token_hash,)
+        )
+
+    def insert_contributor(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO contributor_account (id, email, token_hash) "
+            "VALUES (%(id)s, %(email)s, %(token_hash)s)",
+            record,
+        )
+
+    def count_reported_submissions_since(self, ip_address: str, hours: int) -> int:
+        rows = self._fetchall(
+            "SELECT count(*) AS n FROM reported_submission_log "
+            "WHERE ip_address = %s AND created_at >= now() - (%s || ' hours')::interval",
+            (ip_address, str(hours)),
+        )
+        return int(rows[0]["n"])
+
+    def insert_reported_submission_log(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO reported_submission_log "
+            "(id, contributor_id, benchmark_run_id, ip_address) "
+            "VALUES (%(id)s, %(contributor_id)s, %(benchmark_run_id)s, %(ip_address)s)",
+            record,
+        )
+
     def fetch_first_model_release_id(self) -> str:
         row = self._fetchone("SELECT id FROM model_release ORDER BY id LIMIT 1")
         return row["id"]
@@ -400,6 +439,8 @@ class PostgresSession(DatabaseSession):
             "scenario.context_tokens, scenario.batch_size, "
             "run.trust_score, run.submitted_at, "
             "gpu.vram_mib AS vram_capacity_mib, "
+            "run.recipe_id, run.source_class, "
+            "run.seconds_per_clip, run.it_per_s, run.frames_per_s, "
             "m_decode.p50_value AS decode_tok_s, "
             "m_prefill.p50_value AS prefill_tok_s, "
             "m_ttft.p50_value AS ttft_ms, "

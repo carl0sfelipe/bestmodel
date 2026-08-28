@@ -41,3 +41,15 @@ RTX_4090 = GpuSpec(
     int8_tops=330.0,
     tdp_watt=450,
 )
+
+RTX_3090 = GpuSpec(
+    id="rtx-3090",
+    vendor="nvidia",
+    marketing_name="RTX 3090",
+    vram_mib=24576,
+    memory_bandwidth_gib_s=936.0,
+    fp16_tflops=35.6,
+    int8_tops=142.0,
+    tdp_watt=350,
+    supports_nvlink=True,
+)

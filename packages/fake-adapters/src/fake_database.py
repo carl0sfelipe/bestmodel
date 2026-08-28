@@ -36,11 +36,34 @@ class FakeDatabase(DatabaseSession):
         self._models = _load_seed("model_releases.json")
         self._quants = _load_seed("quantization_profiles.json")
         self._runtimes = _load_seed("inference_runtimes.json")
+        self._recipes = [
+            {
+                "recipe_id": "wan22-flf2v-720p-81f-v1",
+                "runtime": "comfyui",
+                "workflow_sha256": None,
+                "params": {
+                    "model": "wan22-i2v-flf2v",
+                    "width": 1280,
+                    "height": 720,
+                    "frames": 81,
+                    "steps": 20,
+                    "cfg": 3.5,
+                    "shift": 5.0,
+                    "seed": 42,
+                },
+                "model_release_id": "model-wan22-i2v-flf2v-14b",
+                "quantization_profile_id": None,
+                "comfyui_version": "0.3.48",
+                "author": "seed",
+            }
+        ]
         self._runs = []
         self._hardware_submissions = []
         self._scenarios = []
         self._metrics = []
         self._artifacts = []
+        self._contributors = []
+        self._reported_submission_log = []
         self._leaderboard_entries = []
         self._users: list[dict[str, Any]] = []
         self._reputations: list[dict[str, Any]] = []
@@ -115,6 +138,37 @@ class FakeDatabase(DatabaseSession):
 
     def fetch_runtime_by_id(self, runtime_id: str) -> dict[str, Any] | None:
         return next((row for row in self._runtimes if row["id"] == runtime_id), None)
+
+    def fetch_recipe_by_id(self, recipe_id: str) -> dict[str, Any] | None:
+        return next((row for row in self._recipes if row["recipe_id"] == recipe_id), None)
+
+    def fetch_gpu_by_id(self, gpu_model_id: str) -> dict[str, Any] | None:
+        return next((row for row in self._gpus if row["id"] == gpu_model_id), None)
+
+    def find_contributor_by_email(self, email: str) -> dict[str, Any] | None:
+        return next((row for row in self._contributors if row["email"] == email), None)
+
+    def find_contributor_by_token_hash(self, token_hash: str) -> dict[str, Any] | None:
+        return next(
+            (row for row in self._contributors if row["token_hash"] == token_hash), None
+        )
+
+    def insert_contributor(self, record: dict[str, Any]) -> None:
+        self._contributors.append(dict(record))
+
+    def count_reported_submissions_since(self, ip_address: str, hours: int) -> int:
+        del hours  # the fake treats every stored row as inside the window
+        return sum(
+            1 for row in self._reported_submission_log if row["ip_address"] == ip_address
+        )
+
+    def insert_reported_submission_log(self, record: dict[str, Any]) -> None:
+        self._reported_submission_log.append(dict(record))
+
+    @property
+    def reported_submission_log(self) -> list[dict[str, Any]]:
+        """Read-only view for tests asserting quota auditing."""
+        return list(self._reported_submission_log)
 
     def fetch_first_model_release_id(self) -> str:
         return self._models[0]["id"]

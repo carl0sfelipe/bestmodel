@@ -4,7 +4,7 @@ from typing import Literal
 from pydantic import BaseModel, field_validator
 
 from benchmark_metrics import BenchmarkMetrics
-from benchmark_scenario import BenchmarkScenario
+from benchmark_scenario import BenchmarkScenario, VideoScenario
 
 
 class RuntimeEngine(StrEnum):
@@ -16,6 +16,7 @@ class RuntimeEngine(StrEnum):
     tensorrt_llm = "tensorrt_llm"
     mlx = "mlx"
     lmstudio = "lmstudio"
+    comfyui = "comfyui"
 
 
 class HardwareClass(StrEnum):
@@ -46,9 +47,11 @@ class BenchmarkReport(BaseModel):
     runtime: RuntimeEngine
     runtime_version: str
     hardware_fingerprint: str
-    scenario: BenchmarkScenario
+    scenario: BenchmarkScenario | VideoScenario
     metrics: BenchmarkMetrics
     artifacts: list[BenchmarkArtifact] = []
+    # Video runs reference the standardized workload they measured (Épico 1).
+    recipe_id: str | None = None
 
     @field_validator("runtime", mode="before")
     @classmethod

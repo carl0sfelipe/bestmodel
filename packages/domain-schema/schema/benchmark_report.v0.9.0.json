@@ -48,7 +48,8 @@
           "type": "number"
         },
         "peak_vram_mib": {
-          "exclusiveMinimum": 0,
+          "default": 0,
+          "minimum": 0,
           "title": "Peak Vram Mib",
           "type": "integer"
         },
@@ -56,20 +57,65 @@
           "minimum": 0,
           "title": "Power Watt Avg",
           "type": "number"
+        },
+        "seconds_per_clip": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seconds Per Clip"
+        },
+        "it_per_s": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "It Per S"
+        },
+        "frames_per_s": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frames Per S"
         }
       },
       "required": [
         "ttft_ms",
         "prefill_tok_s",
         "decode_tok_s",
-        "peak_vram_mib",
         "power_watt_avg"
       ],
       "title": "BenchmarkMetrics",
       "type": "object"
     },
     "BenchmarkScenario": {
+      "description": "LLM scenario (0.9.0 contract; constructible as before).",
       "properties": {
+        "scenario_kind": {
+          "const": "llm",
+          "default": "llm",
+          "title": "Scenario Kind",
+          "type": "string"
+        },
         "prompt_tokens": {
           "minimum": 0,
           "title": "Prompt Tokens",
@@ -109,10 +155,67 @@
         "exllamav2",
         "tensorrt_llm",
         "mlx",
-        "lmstudio"
+        "lmstudio",
+        "comfyui"
       ],
       "title": "RuntimeEngine",
       "type": "string"
+    },
+    "VideoScenario": {
+      "description": "Video/diffusion scenario (\u00c9pico 1).\n\nOwn fields, never the token fields of BenchmarkScenario (AD-1).\n``scenario_kind`` is required so a video payload can never validate as an\nLLM scenario by accident.",
+      "properties": {
+        "scenario_kind": {
+          "const": "video",
+          "title": "Scenario Kind",
+          "type": "string"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "frames": {
+          "exclusiveMinimum": 0,
+          "title": "Frames",
+          "type": "integer"
+        },
+        "steps": {
+          "exclusiveMinimum": 0,
+          "title": "Steps",
+          "type": "integer"
+        },
+        "cfg": {
+          "exclusiveMinimum": 0,
+          "title": "Cfg",
+          "type": "number"
+        },
+        "shift": {
+          "default": 5.0,
+          "minimum": 0,
+          "title": "Shift",
+          "type": "number"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "scenario_kind",
+        "width",
+        "height",
+        "frames",
+        "steps",
+        "cfg",
+        "seed"
+      ],
+      "title": "VideoScenario",
+      "type": "object"
     }
   },
   "properties": {
@@ -138,7 +241,15 @@
       "type": "string"
     },
     "scenario": {
-      "$ref": "#/$defs/BenchmarkScenario"
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BenchmarkScenario"
+        },
+        {
+          "$ref": "#/$defs/VideoScenario"
+        }
+      ],
+      "title": "Scenario"
     },
     "metrics": {
       "$ref": "#/$defs/BenchmarkMetrics"
@@ -150,6 +261,18 @@
       },
       "title": "Artifacts",
       "type": "array"
+    },
+    "recipe_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recipe Id"
     }
   },
   "required": [

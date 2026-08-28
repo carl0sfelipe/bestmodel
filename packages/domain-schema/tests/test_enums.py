@@ -45,6 +45,7 @@ def test_runtime_engine_values():
         "tensorrt_llm",
         "mlx",
         "lmstudio",
+        "comfyui",
     ]
 
 
@@ -62,6 +63,9 @@ def test_metric_kind_values():
         "power_watt_avg",
         "temperature_c_max",
         "energy_joule",
+        "seconds_per_clip",
+        "it_per_s",
+        "frames_per_s",
     ]
 
 

@@ -108,8 +108,9 @@ pub fn parse_ollama_metrics(stdout: &str) -> Result<Metrics, ParseError> {
 }
 
 fn parse_ollama_timings(stdout: &str) -> Result<OllamaTimings, ParseError> {
-    let load_ns = capture_ns(&OL_LOAD_DUR_RE, stdout)
-        .ok_or(ParseError::MissingField("load duration".to_string()))?;
+    // Ollama omits "load duration" when the model is already resident (warm
+    // keep-alive); TTFT then legitimately excludes load time.
+    let load_ns = capture_ns(&OL_LOAD_DUR_RE, stdout).unwrap_or(0);
     let prompt_eval_count = group_u64(&OL_PROMPT_EVAL_COUNT_RE, stdout, 1)
         .ok_or(ParseError::MissingField("prompt eval count".to_string()))?;
     let prompt_eval_duration_ns = capture_ns(&OL_PROMPT_EVAL_DUR_RE, stdout)

@@ -26,6 +26,10 @@ pub struct UploadRequest {
     pub artifacts: Vec<ArtifactUpload>,
     /// Open claim to settle with this run (requires ``api_token``).
     pub settle_claim_id: Option<String>,
+    /// Catalog binding overrides sent as multipart form fields (Phase 0 report
+    /// does not carry the binding itself).
+    pub model_release_id: Option<String>,
+    pub quantization_profile_id: Option<String>,
     /// Bearer token from the account's agent tokens (S13).
     pub api_token: Option<String>,
 }
@@ -99,6 +103,15 @@ fn build_multipart_form(request: &UploadRequest) -> Form {
         .part("client_version", Part::text(request.client_version.clone()));
     if let Some(claim_id) = &request.settle_claim_id {
         form = form.part("settle_claim_id", Part::text(claim_id.clone()));
+    }
+    if let Some(model_release_id) = &request.model_release_id {
+        form = form.part("model_release_id", Part::text(model_release_id.clone()));
+    }
+    if let Some(quantization_profile_id) = &request.quantization_profile_id {
+        form = form.part(
+            "quantization_profile_id",
+            Part::text(quantization_profile_id.clone()),
+        );
     }
     for (index, artifact) in request.artifacts.iter().enumerate() {
         let part = Part::bytes(artifact.bytes.clone()).file_name(format!("artifact_{index}"));

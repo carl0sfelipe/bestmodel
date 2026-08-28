@@ -95,10 +95,17 @@ fn run_llama_cpp_scenario(
             message: err.to_string(),
         })?;
     let stdout = combine_stdout_and_stderr(&output);
-    let metrics = parse_llama_cpp_metrics(&stdout).map_err(|err| ScenarioError::ParseFailed {
+    let mut metrics = parse_llama_cpp_metrics(&stdout).map_err(|err| ScenarioError::ParseFailed {
         runtime: "llama.cpp".to_string(),
         message: err.to_string(),
     })?;
+    // llama.cpp's verbose output does not report VRAM; sample it right after the
+    // scenario so the report satisfies the >0 peak_vram_mib schema constraint.
+    if metrics.peak_vram_mib <= 0.0 {
+        if let Some(used_mib) = sample_gpu_memory_used_mib() {
+            metrics.peak_vram_mib = used_mib as f64;
+        }
+    }
     Ok(ScenarioResult { stdout, metrics })
 }
 
@@ -124,11 +131,32 @@ fn run_ollama_scenario(
             message: err.to_string(),
         })?;
     let stdout = combine_stdout_and_stderr(&output);
-    let metrics = parse_ollama_metrics(&stdout).map_err(|err| ScenarioError::ParseFailed {
+    let mut metrics = parse_ollama_metrics(&stdout).map_err(|err| ScenarioError::ParseFailed {
         runtime: "Ollama".to_string(),
         message: err.to_string(),
     })?;
+    // Ollama's verbose output does not report VRAM; sample it right after the
+    // scenario so the report satisfies the >0 peak_vram_mib schema constraint.
+    if metrics.peak_vram_mib <= 0.0 {
+        if let Some(used_mib) = sample_gpu_memory_used_mib() {
+            metrics.peak_vram_mib = used_mib as f64;
+        }
+    }
     Ok(ScenarioResult { stdout, metrics })
+}
+
+/// Max per-GPU memory used in MiB via nvidia-smi; None when unavailable
+/// (non-CUDA hosts keep the parser's 0.0 and the upload will be rejected).
+fn sample_gpu_memory_used_mib() -> Option<u64> {
+    let output = std::process::Command::new("nvidia-smi")
+        .arg("--query-gpu=memory.used")
+        .arg("--format=csv,noheader,nounits")
+        .output()
+        .ok()?;
+    let text = String::from_utf8_lossy(&output.stdout);
+    text.lines()
+        .filter_map(|line| line.trim().parse::<u64>().ok())
+        .max()
 }
 
 fn combine_stdout_and_stderr(output: &std::process::Output) -> String {

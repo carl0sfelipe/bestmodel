@@ -22,3 +22,6 @@ rand = "0.8"
 ed25519-dalek = { version = "2", features = ["pkcs8", "pem", "rand_core"] }
 base64 = "0.22"
 reqwest = { version = "0.12", features = ["blocking", "multipart", "json"] }
+# Vendored OpenSSL: static link so the release binary runs on any glibc host
+# (bullseye builds carry libssl.so.1.1, breaking on Ubuntu 22.04+ / OpenSSL 3).
+openssl-sys = { version = "0.9", features = ["vendored"] }

@@ -31,6 +31,8 @@ struct CliArgs {
     sign: bool,
     upload: bool,
     settle_claim_id: Option<String>,
+    model_release_id: Option<String>,
+    quantization_profile_id: Option<String>,
 }
 
 fn main() {
@@ -264,18 +266,16 @@ fn submit_report(
     signature: &str,
 ) -> Result<(), i32> {
     let base_url = std::env::var(API_URL_ENV_VAR).unwrap_or_else(|_| DEFAULT_API_URL.to_string());
-    let api_token = if cli.settle_claim_id.is_some() {
-        Some(
-            std::env::var(API_TOKEN_ENV_VAR).map_err(|_| {
-                eprintln!(
-                    "error: --settle-claim requires an API token; set {API_TOKEN_ENV_VAR} \
-                     to an agent token (POST /v1/auth/tokens)"
-                );
-                1
-            })?,
-        )
-    } else {
-        None
+    let api_token = match std::env::var(API_TOKEN_ENV_VAR) {
+        Ok(token) => Some(token),
+        Err(_) if cli.settle_claim_id.is_none() => None,
+        Err(_) => {
+            eprintln!(
+                "error: --settle-claim requires an API token; set {API_TOKEN_ENV_VAR} \
+                 to an agent token (POST /v1/auth/tokens)"
+            );
+            return Err(1);
+        }
     };
     let challenge_nonce = fetch_challenge_nonce(&base_url).map_err(|err| {
         eprintln!("error: {err}");
@@ -302,6 +302,8 @@ fn submit_report(
         client_version: VERSION.to_string(),
         artifacts,
         settle_claim_id: cli.settle_claim_id.clone(),
+        model_release_id: cli.model_release_id.clone(),
+        quantization_profile_id: cli.quantization_profile_id.clone(),
         api_token,
     };
     let outcome = upload_benchmark_report(&base_url, &request).map_err(|err| {
@@ -338,6 +340,8 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
     let mut sign = false;
     let mut upload = false;
     let mut settle_claim_id: Option<String> = None;
+    let mut model_release_id: Option<String> = None;
+    let mut quantization_profile_id: Option<String> = None;
 
     let mut index = 0;
     while index < raw_args.len() {
@@ -378,6 +382,8 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
             "--output" => output_path = Some(PathBuf::from(take_value(&mut index)?)),
             "--report-runtime" => report_runtime = Some(take_value(&mut index)?),
             "--settle-claim" => settle_claim_id = Some(take_value(&mut index)?),
+            "--model-release-id" => model_release_id = Some(take_value(&mut index)?),
+            "--quantization-profile-id" => quantization_profile_id = Some(take_value(&mut index)?),
             "--sign" => sign = true,
             "--upload" => upload = true,
             other => return Err(format!("unknown argument '{other}'")),
@@ -407,6 +413,8 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
         sign,
         upload,
         settle_claim_id,
+        model_release_id,
+        quantization_profile_id,
     }))
 }
 
@@ -492,6 +500,8 @@ fn print_usage() {
     println!("    --sign                     Sign the report with the local Ed25519 key");
     println!("    --upload                   Sign and upload the report to the Submission API");
     println!("    --settle-claim <id>        Settle one of your open claims with this run (requires --upload and a token)");
+    println!("    --model-release-id <id>    Catalog model binding override (e.g. model-qwen3-8b)");
+    println!("    --quantization-profile-id <id>  Catalog quantization binding override (e.g. q-gguf-q4-k-m)");
     println!("    -h, --help                 Print this help and exit");
     println!();
     println!("ENVIRONMENT:");

@@ -144,6 +144,8 @@ fn sample_request(nonce: &str) -> UploadRequest {
             bytes: b"artifact zero payload".to_vec(),
         }],
         settle_claim_id: None,
+        model_release_id: None,
+        quantization_profile_id: None,
         api_token: None,
     }
 }

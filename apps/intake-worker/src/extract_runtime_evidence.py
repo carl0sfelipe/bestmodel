@@ -6,10 +6,11 @@ run when key evidence is missing or contradicts the submitted metrics.
 
 from __future__ import annotations
 
-from worker_models import RunRecord
+from worker_models import RunRecord, scenario_is_video
 
 STDOUT_ARTIFACT_KIND = "runtime_stdout"
 EVIDENCE_METRIC_KEYS = ("ttft_ms", "prefill_tok_s", "decode_tok_s", "peak_vram_mib")
+VIDEO_METRIC_KEYS = ("seconds_per_clip", "it_per_s", "frames_per_s", "peak_vram_mib")
 RELATIVE_TOLERANCE = 0.10
 EVIDENCE_LINE_PREFIX = "metric "
 
@@ -20,7 +21,8 @@ def extract_runtime_evidence(record: RunRecord) -> list[str]:
     if stdout_content is None:
         return ["missing_runtime_stdout_evidence"]
     evidence = parse_metric_lines(stdout_content)
-    for key in EVIDENCE_METRIC_KEYS:
+    keys = VIDEO_METRIC_KEYS if scenario_is_video(record) else EVIDENCE_METRIC_KEYS
+    for key in keys:
         if key not in evidence:
             reasons.append(f"missing_evidence:{key}")
             continue

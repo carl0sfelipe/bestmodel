@@ -507,9 +507,12 @@ class PostgresSession(DatabaseSession):
     def insert_scenario(self, record: dict[str, Any]) -> None:
         self._connection.execute(
             "INSERT INTO benchmark_scenario "
-            "(id, prompt_tokens, generated_tokens, context_tokens, batch_size, tensor_parallel) "
-            "VALUES (%(id)s, %(prompt_tokens)s, %(generated_tokens)s, %(context_tokens)s, "
-            "%(batch_size)s, %(tensor_parallel)s) ON CONFLICT (id) DO NOTHING",
+            "(id, scenario_kind, prompt_tokens, generated_tokens, context_tokens, "
+            "batch_size, tensor_parallel, width, height, frames, steps, cfg, shift, seed) "
+            "VALUES (%(id)s, %(scenario_kind)s, %(prompt_tokens)s, %(generated_tokens)s, "
+            "%(context_tokens)s, %(batch_size)s, %(tensor_parallel)s, %(width)s, %(height)s, "
+            "%(frames)s, %(steps)s, %(cfg)s, %(shift)s, %(seed)s) "
+            "ON CONFLICT (id) DO NOTHING",
             record,
         )
 
@@ -518,10 +521,13 @@ class PostgresSession(DatabaseSession):
             "INSERT INTO benchmark_run "
             "(id, hardware_submission_id, model_release_id, quantization_profile_id, "
             "inference_runtime_id, benchmark_scenario_id, status, client_version, "
-            "signature, payload_digest) "
+            "signature, payload_digest, recipe_id, source_class, seconds_per_clip, "
+            "it_per_s, frames_per_s, source_url) "
             "VALUES (%(id)s, %(hardware_submission_id)s, %(model_release_id)s, "
             "%(quantization_profile_id)s, %(inference_runtime_id)s, %(benchmark_scenario_id)s, "
-            "%(status)s, %(client_version)s, %(signature)s, %(payload_digest)s)",
+            "%(status)s, %(client_version)s, %(signature)s, %(payload_digest)s, "
+            "%(recipe_id)s, %(source_class)s, %(seconds_per_clip)s, %(it_per_s)s, "
+            "%(frames_per_s)s, %(source_url)s)",
             record,
         )
 

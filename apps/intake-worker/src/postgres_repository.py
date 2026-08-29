@@ -194,7 +194,10 @@ class PostgresIntakeRepository:
             cursor.execute(
                 "SELECT r.id, r.model_release_id, r.quantization_profile_id, "
                 "rt.engine AS runtime_engine, rt.version AS runtime_version, "
-                "s.prompt_tokens, s.generated_tokens, s.batch_size, s.context_tokens, "
+                "s.scenario_kind, s.prompt_tokens, s.generated_tokens, s.batch_size, "
+                "s.context_tokens, s.width, s.height, s.frames, s.steps, s.cfg, "
+                "s.shift, s.seed, "
+                "r.seconds_per_clip, r.it_per_s, r.frames_per_s, "
                 "hs.gpu_model_id, hs.environment_snapshot "
                 "FROM benchmark_run r "
                 "JOIN benchmark_scenario s ON s.id = r.benchmark_scenario_id "
@@ -259,11 +262,37 @@ def _assemble_payload(
     snapshot = run_row["environment_snapshot"] or {}
     if isinstance(snapshot, str):
         snapshot = json.loads(snapshot)
-    decode_tok_s = metrics.get("decode_tok_s", 0.0)
-    generated = run_row["generated_tokens"]
-    duration_seconds = metrics.get("ttft_ms", 0.0) / 1000.0
-    if decode_tok_s > 0:
-        duration_seconds += generated / decode_tok_s
+    if run_row.get("scenario_kind") == "video":
+        # Video runs carry no token dimensions (AD-1); the clip wall time is
+        # the measured seconds_per_clip metric itself.
+        scenario = {
+            "scenario_kind": "video",
+            "width": run_row["width"],
+            "height": run_row["height"],
+            "frames": run_row["frames"],
+            "steps": run_row["steps"],
+            "cfg": run_row["cfg"],
+            "shift": run_row["shift"],
+            "seed": run_row["seed"],
+        }
+        # Video metrics are scalars on the run (AD-1), not metric rows; the
+        # worker evidence checks read them through the metrics dict.
+        metrics = {**metrics,
+                   "seconds_per_clip": run_row["seconds_per_clip"] or 0.0,
+                   "it_per_s": run_row["it_per_s"] or 0.0,
+                   "frames_per_s": run_row["frames_per_s"] or 0.0}
+        duration_seconds = metrics["seconds_per_clip"]
+    else:
+        scenario = {
+            "prompt_tokens": run_row["prompt_tokens"],
+            "generated_tokens": run_row["generated_tokens"],
+            "batch_size": run_row["batch_size"],
+            "context_tokens": run_row["context_tokens"],
+        }
+        decode_tok_s = metrics.get("decode_tok_s", 0.0)
+        duration_seconds = metrics.get("ttft_ms", 0.0) / 1000.0
+        if decode_tok_s > 0:
+            duration_seconds += run_row["generated_tokens"] / decode_tok_s
     gpu_model_id = run_row["gpu_model_id"] or UNBOUND_HARDWARE
     return {
         "run_id": str(run_row["id"]),
@@ -276,12 +305,7 @@ def _assemble_payload(
         "hardware": hardware,
         "model": model or {},
         "quant": quant or {},
-        "scenario": {
-            "prompt_tokens": run_row["prompt_tokens"],
-            "generated_tokens": generated,
-            "batch_size": run_row["batch_size"],
-            "context_tokens": run_row["context_tokens"],
-        },
+        "scenario": scenario,
         "metrics": metrics,
         "dimension": {
             "hardware_model_id": gpu_model_id,

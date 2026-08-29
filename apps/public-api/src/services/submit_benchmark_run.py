@@ -384,7 +384,7 @@ def _insert_run(
 
 def _insert_metrics(session: DatabaseSession, run_id: str, report: BenchmarkReport) -> None:
     for kind, value in report.metrics.model_dump().items():
-        if kind not in METRIC_UNITS:
+        if kind not in METRIC_UNITS or value is None:
             continue
         session.insert_benchmark_metric(
             {

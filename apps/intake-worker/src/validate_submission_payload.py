@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 
-from worker_models import SUPPORTED_SCHEMA_VERSION, RunRecord
+from worker_models import SUPPORTED_SCHEMA_VERSION, RunRecord, scenario_is_video
 
 DURATION_FLOOR_SECONDS = 1.0
 DURATION_CONSISTENCY_FRACTION = 0.5
@@ -35,8 +35,15 @@ def validate_submission_payload(record: RunRecord) -> list[str]:
 def _duration_plausible(record: RunRecord) -> bool:
     """A run must last at least a small floor AND be consistent with its own
     reported throughput: faking a high tok/s with a short duration is what the
-    check targets, so the bound scales with generated_tokens / decode_tok_s."""
+    check targets, so the bound scales with generated_tokens / decode_tok_s.
+    Video runs are checked the same way against frames / frames_per_s."""
     floor = DURATION_FLOOR_SECONDS
+    if scenario_is_video(record):
+        frames_per_s = record.metrics.get("frames_per_s", 0.0)
+        if frames_per_s > 0:
+            expected_seconds = record.scenario["frames"] / frames_per_s
+            floor = max(floor, DURATION_CONSISTENCY_FRACTION * expected_seconds)
+        return record.duration_seconds >= floor
     decode_tok_s = record.metrics.get("decode_tok_s", 0.0)
     if decode_tok_s > 0:
         expected_seconds = record.scenario["generated_tokens"] / decode_tok_s

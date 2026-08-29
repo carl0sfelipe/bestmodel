@@ -17,6 +17,12 @@ from quant_profile import QuantProfile
 
 SUPPORTED_SCHEMA_VERSION = "0.9.0"
 
+
+def scenario_is_video(record: "RunRecord") -> bool:
+    """Video runs carry clip dimensions instead of token dimensions (AD-1);
+    their evidence keys and plausibility rules differ from the LLM ones."""
+    return record.scenario.get("scenario_kind") == "video"
+
 EVIDENCE_ARTIFACT_KINDS = ("runtime_stdout", "runtime_config", "gpu_smi_trace")
 
 
@@ -62,8 +68,10 @@ def build_run_record(payload: dict[str, Any]) -> RunRecord:
         model_release_id=dimension_payload["model_release_id"],
         quantization_profile_id=dimension_payload["quantization_profile_id"],
         runtime_engine=dimension_payload["runtime_engine"],
-        context_tokens=int(dimension_payload["context_tokens"]),
-        batch_size=int(dimension_payload["batch_size"]),
+        # Video scenarios carry no token dimensions (AD-1); 0/1 keep the
+        # dimension group hashable without inventing token counts.
+        context_tokens=int(dimension_payload["context_tokens"] or 0),
+        batch_size=int(dimension_payload["batch_size"] or 1),
     )
     artifacts = [
         ArtifactRecord(

@@ -22,7 +22,7 @@ from extract_runtime_evidence import extract_runtime_evidence
 from publish_ranking_update import publish_ranking_update
 from settle_claims import settle_claims_for_run
 from validate_submission_payload import validate_submission_payload
-from worker_models import DimensionGroup, RunRecord, build_run_record
+from worker_models import DimensionGroup, RunRecord, build_run_record, scenario_is_video
 
 STATUS_VALIDATED = "validated"
 STATUS_QUARANTINED = "quarantined"
@@ -106,6 +106,11 @@ def _collect_plausibility_flags(record: RunRecord, outlier_flags: list[str]) -> 
         # Community submissions without a bound catalog GPU cannot be checked
         # against hardware limits; plausibility runs once hardware is bound.
         return
+    if scenario_is_video(record):
+        # The roofline and memory models are token-based (LLM); video runs are
+        # held by signature + evidence + duration consistency until a video
+        # roofline refit lands (Story 1.4 follow-up).
+        return
     roofline_flag = check_roofline_plausibility(record)
     if roofline_flag:
         outlier_flags.append(roofline_flag)
@@ -117,6 +122,8 @@ def _collect_plausibility_flags(record: RunRecord, outlier_flags: list[str]) -> 
 def _collect_statistical_flag(
     record: RunRecord, repository: IntakeRepository, outlier_flags: list[str]
 ) -> None:
+    if scenario_is_video(record):
+        return  # peer decode tok/s is meaningless for clip runs
     peer_values = repository.fetch_peer_decode_values(record.dimension, record.run_id)
     statistical_flag = check_statistical_plausibility(record, peer_values)
     if statistical_flag:

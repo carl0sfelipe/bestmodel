@@ -12,3 +12,5 @@ sessions run.
   the monorepo test flow (`make test` / `make gate`) and must not touch
   anything outside this directory.
 - `prototypes/` is the frozen visual spec — never edit.
+- Reader journey (human vs agent) lives in `site/assets/journey.js` +
+  `html[data-journey]`. Distinct from the human goal/hardware switcher.

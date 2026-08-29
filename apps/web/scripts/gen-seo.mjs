@@ -73,6 +73,7 @@ function pageHead(title, description, cssRel) {
 <meta name="description" content="${esc(description)}">
 ${FONT_LINKS}
 <link rel="stylesheet" href="${cssRel}/theme.css">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt — agent surface">
 <style>${PAGE_CSS}</style>
 </head>
 <body>`;

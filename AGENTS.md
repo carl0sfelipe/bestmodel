@@ -36,7 +36,11 @@ edit wins. Root → subtree:
 | `cli/comfy-lab/AGENTS.md` | Diffusion vertical tooling |
 | `tests/AGENTS.md` | Root-level integration/regression suites |
 
-External-facing LLM entry point: `llms.txt` (root).
+External-facing LLM entry point: `llms.txt` (root). Deployed site copy:
+`apps/web/site/llms.txt`. Reader journey (human vs agent) is
+`html[data-journey]` via `apps/web/site/assets/journey.js`
+(`data-key="bestmodel.run.journey"`). Do not confuse with the human-only
+goal vs hardware switcher (`.journey-btn[data-journey]`).
 
 ## Language & commit rules
 

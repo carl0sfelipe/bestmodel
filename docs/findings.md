@@ -60,3 +60,9 @@ needs `peak_ram_mib`, a cpu_model seed, and a RAM roofline. Tracked for 0.9.1.
 - PKCS8 v1 PEM for cross-language Ed25519 keys (B1/D6).
 Lesson: unit tests with fakes don't exercise serialization boundaries; the gate
 exists precisely to catch this class. Keep `make gate` green on every merge.
+
+## 2026-08-29 — Primeira célula de vídeo measured_signed (Story 1.4, B14)
+- **Medido:** Wan 2.2 I2V FLF2V 14B fp8_scaled, duas passadas (high/low noise, 10+10 steps euler/simple), 1280×720×81f, cfg 3.5, shift 5.0 — RTX 3090, ComfyUI 0.34.0: **4270.1 s/clipe (71,2 min)**, pico 24 114 MiB (98,1 % da VRAM de 24 576). run 2ced2df3, source_class measured_signed.
+- **Roofline estimate_diffusion_step v1 estimou 13 716 s (3,81 h) → superestimativa de 3,21×.** f_attn=0.05 era calibração declarada; o gap real é maior e inclui efeitos não modelados: split em duas passadas (half-steps por modelo), fp8_scaled na 3090 (sem aceleração nativa, mas bandwidth de weights pela metade) e o estimador ser single-model/single-pass.
+- **Refit pendência:** estender estimate_diffusion_step com modo two-pass + calibrar f_attn contra esta célula (e as próximas); enquanto isso, célula derivada de 3090 fica 3,2× pessimista — sinalizar em suggest/transfer.
+- **Regra operacional:** com 98 % de VRAM a célula é marcada infeasible pela margem de 95 % e some da leaderboard (11.10) — o dado fica no banco e nos endpoints de run/transparência; é comportamento honesto, não bug.

@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/theme.css">
+<link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt — agent surface">
+<script src="./assets/journey.js" data-key="bestmodel.run.journey" data-human-target=""></script>
 <style>
 /* ============================================================
    CAN I RUN IT — "I HAVE A GOAL" journey (site/index.html)
@@ -25,8 +27,11 @@ body::before{
   mix-blend-mode:multiply;opacity:.9;
 }
 
-.narrow-notice{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;font-family:var(--mono);color:var(--muted);font-size:13px;padding:24px;text-align:center}
-@media (max-width:1024px){ .narrow-notice{display:flex} main,header,footer{display:none!important} }
+.narrow-notice{display:none;position:fixed;inset:0;z-index:35;background:var(--bg);align-items:center;justify-content:center;font-family:var(--mono);color:var(--muted);font-size:13px;padding:24px;text-align:center}
+@media (max-width:1024px){
+  html[data-journey="human"] .narrow-notice{display:flex}
+  html[data-journey="human"] .for-human{display:none!important}
+}
 
 /* ============ NAV ============ */
 .nav{
@@ -331,19 +336,48 @@ body::before{
 <div class="narrow-notice">Designed for wide screens · min 1024px.</div>
 
 <header class="nav" id="nav">
-  <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
-  <div class="journey-switcher">
+  <div class="nav-brand">
+    <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+    <div class="who-is" data-journey-ui>
+      <span class="who-kicker">who</span>
+      <div class="who-seg" role="group" aria-label="Choose human or agent journey">
+        <button type="button" class="who-btn" data-as="human" aria-pressed="false">human</button>
+        <button type="button" class="who-btn" data-as="agent" aria-pressed="false">agent</button>
+      </div>
+      <a class="who-llms" href="./llms.txt">llms.txt</a>
+    </div>
+  </div>
+  <div class="journey-switcher for-human">
     <a class="journey-btn on" href="./index.html">I have a goal</a>
     <a class="journey-btn" href="./hardware.html">I have hardware</a>
   </div>
-  <nav class="nav-links">
+  <nav class="nav-links for-human">
     <a href="#scoring">Scoring</a>
-    <a href="#">Benchmarks</a>
-    <a href="#">GitHub ↗</a>
+    <a href="https://github.com/carl0sfelipe/bestmodel">GitHub ↗</a>
   </nav>
 </header>
 
-<!-- STATE RAIL -->
+<div class="for-ask reader-ask" id="ask">
+  <p class="reader-kicker">// agent-first · we did not guess</p>
+  <h1 class="reader-h">Who is reading?</h1>
+  <p class="reader-lede">Not enough deterministic signal to tell a human browser from an agent. URL <code>?as=</code>, a saved choice, a known agent user-agent, or a chat-product referrer would have been enough. None of those fired — so you pick.</p>
+  <p class="reader-how js-journey-how"></p>
+  <div class="reader-doors">
+    <button type="button" class="reader-door" data-as="human">
+      <span class="reader-door-k">for humans</span>
+      <span class="reader-door-t">the tour</span>
+      <span class="reader-door-d">goal-first or hardware-first. measured pool, no invented tok/s.</span>
+    </button>
+    <button type="button" class="reader-door reader-door-agent" data-as="agent">
+      <span class="reader-door-k">for agents</span>
+      <span class="reader-door-t">clone, then the contract</span>
+      <span class="reader-door-d">same facts as <code>llms.txt</code>. honesty ladder, match API, file map.</span>
+    </button>
+  </div>
+  <p class="reader-foot">Wrong door: switch in the header. Clients that skip HTML: <a href="./llms.txt">llms.txt</a>.</p>
+</div>
+
+<div class="for-human">
 <div class="rail" id="rail"></div>
 
 <!-- CHAPTER RAIL -->
@@ -609,11 +643,71 @@ body::before{
 </section>
 
 </main>
+</div>
 
-<footer id="footer"></footer>
+<main class="for-agent reader-agent" id="agent" aria-label="Agent surface">
+  <p class="reader-kicker">// agent surface · twin of <a href="./llms.txt">llms.txt</a> · <span class="js-journey-how"></span></p>
+  <h1>bestmodel.run</h1>
+  <p class="reader-lede">Open compatibility engine for local AI. Can it run / how fast / is it worth it — from a signed community pool. Every number declares its basis. AGPL-3.0 for apps/**, MIT for packages/** and cli/**.</p>
 
-<div class="popover" id="popover"></div>
-<div class="tip" id="tip"></div>
+  <section>
+    <h2>// clone</h2>
+    <pre class="reader-pre">git clone https://github.com/carl0sfelipe/bestmodel.git
+cd bestmodel</pre>
+    <p class="reader-note">Then README.md. There is no one-line installer yet.</p>
+  </section>
+
+  <section>
+    <h2>// honesty ladder</h2>
+    <ol class="reader-ol">
+      <li><b>measured</b> — median of many community runs on the exact rig and quantization.</li>
+      <li><b>reported</b> — one or two runs on the same rig, shown as reported.</li>
+      <li><b>extrapolated</b> — scaled by memory bandwidth from the closest tested rig.</li>
+      <li><b>formula</b> — a published VRAM rule when no measurement exists yet.</li>
+      <li><b>no data yet</b> — we say so instead of inventing a number.</li>
+    </ol>
+    <p class="reader-note">A cell without a source class never renders. Do not invent tok/s.</p>
+  </section>
+
+  <section>
+    <h2>// snapshot totals (derived/stats.json · 2026-08-13)</h2>
+    <p class="reader-counts"><b>4849</b> runs · <b>527</b> models · <b>147</b> rigs</p>
+    <p class="reader-note">Frozen snapshot counts — not live, not throughput.</p>
+  </section>
+
+  <section>
+    <h2>// match API</h2>
+    <ul>
+      <li>POST /v1/match/hardware-to-models</li>
+      <li>POST /v1/match/model-to-hardware</li>
+      <li>GET /v1/transparency/sources</li>
+      <li>GET /v1/leaderboard — every entry carries a source class</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>// human tours</h2>
+    <ul>
+      <li><a href="./index.html?as=human">index.html?as=human</a> — I have a goal (desktop ≥1024)</li>
+      <li><a href="./hardware.html?as=human">hardware.html?as=human</a> — I have hardware</li>
+      <li><a href="./m/index.html?as=human">m/index.html?as=human</a> — mobile</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>// do not</h2>
+    <ul>
+      <li>Invent a tok/s or fill an empty cell.</li>
+      <li>Render a number without a source class.</li>
+      <li>Treat snapshot totals as live throughput.</li>
+    </ul>
+  </section>
+</main>
+
+<footer id="footer" class="for-human"></footer>
+
+<div class="popover for-human" id="popover"></div>
+<div class="tip for-human" id="tip"></div>
 
 <script type="module" src="./assets/goal-page.mjs"></script>
 </body>

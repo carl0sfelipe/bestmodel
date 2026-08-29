@@ -8,6 +8,14 @@ Core principle: number honesty. Every displayed number declares its basis:
 measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 > formula > no data yet.
 
+## Reader journeys (site)
+
+- `?as=human` — cinematic tour (goal / hardware / mobile). Goal vs hardware
+  is a second axis, only for humans.
+- `?as=agent` — HTML contract: clone, honesty ladder, match API.
+- If the site asked who is reading, it did not have enough signal to guess.
+- Deployed twin of this file: `apps/web/site/llms.txt`
+
 ## Docs
 
 - [README](README.md): product overview, monorepo map, quickstart

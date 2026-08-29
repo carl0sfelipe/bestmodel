@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/theme.css">
+<link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt — agent surface">
+<script src="../assets/journey.js" data-key="bestmodel.run.journey" data-human-target=""></script>
 <style>
 /* ============================================================
    CAN I RUN IT — MOBILE-FIRST AD LANDING (site/m/index.html)
@@ -590,12 +592,11 @@ h2 .em{color:var(--amber)}
   .pillars{grid-template-columns:repeat(3, 1fr)}
   .final{padding:48px 28px 60px;max-width:900px;margin:0 auto}
 }
-@media (min-width:1024px){
-  body{font-size:17px}
-  .panel{max-width:1100px;margin:0 auto;padding:48px 32px}
-  .final{max-width:1000px}
-  .intent-grid{grid-template-columns:repeat(4, 1fr)}
+html[data-journey="ask"] body,
+html[data-journey="agent"] body{
+  padding-bottom:24px;
 }
+.topbar-row .who-is{margin-left:auto;margin-right:8px}
 </style>
 </head>
 <body>
@@ -604,20 +605,92 @@ h2 .em{color:var(--amber)}
   <div class="topbar-inner">
     <div class="topbar-row">
       <div class="wordmark"><span class="prompt">$</span>can-i-run-it</div>
+      <div class="who-is" data-journey-ui>
+        <div class="who-seg" role="group" aria-label="Choose human or agent journey">
+          <button type="button" class="who-btn" data-as="human" aria-pressed="false">human</button>
+          <button type="button" class="who-btn" data-as="agent" aria-pressed="false">agent</button>
+        </div>
+        <a class="who-llms" href="../llms.txt">llms.txt</a>
+      </div>
       <button class="menu-btn" aria-label="Menu"><div class="bars"><span></span><span></span><span></span></div></button>
     </div>
     <!-- Journey switcher — the primary navigation decision -->
-    <div class="journey-seg" role="tablist" aria-label="Choose your starting point">
+    <div class="journey-seg for-human" role="tablist" aria-label="Choose your starting point">
       <button class="journey-btn on" data-journey="goal" role="tab" aria-selected="true">I have a goal</button>
       <button class="journey-btn" data-journey="hardware" role="tab" aria-selected="false">I have hardware</button>
     </div>
   </div>
 </header>
 
-<main id="main"></main>
+<div class="for-ask reader-ask" id="ask">
+  <p class="reader-kicker">// agent-first · we did not guess</p>
+  <h1 class="reader-h">Who is reading?</h1>
+  <p class="reader-lede">Not enough deterministic signal to tell a human browser from an agent. URL <code>?as=</code>, a saved choice, a known agent user-agent, or a chat-product referrer would have been enough. None of those fired — so you pick.</p>
+  <p class="reader-how js-journey-how"></p>
+  <div class="reader-doors">
+    <button type="button" class="reader-door" data-as="human">
+      <span class="reader-door-k">for humans</span>
+      <span class="reader-door-t">the tour</span>
+      <span class="reader-door-d">goal-first or hardware-first. measured pool, no invented tok/s.</span>
+    </button>
+    <button type="button" class="reader-door reader-door-agent" data-as="agent">
+      <span class="reader-door-k">for agents</span>
+      <span class="reader-door-t">clone, then the contract</span>
+      <span class="reader-door-d">same facts as <code>llms.txt</code>. honesty ladder, match API, file map.</span>
+    </button>
+  </div>
+  <p class="reader-foot">Wrong door: switch in the header. Clients that skip HTML: <a href="../llms.txt">llms.txt</a>.</p>
+</div>
+
+<main class="for-agent reader-agent" id="agent" aria-label="Agent surface">
+  <p class="reader-kicker">// agent surface · twin of <a href="../llms.txt">llms.txt</a> · <span class="js-journey-how"></span></p>
+  <h1>bestmodel.run</h1>
+  <p class="reader-lede">Open compatibility engine for local AI. Can it run / how fast / is it worth it — from a signed community pool. Every number declares its basis. AGPL-3.0 for apps/**, MIT for packages/** and cli/**.</p>
+  <section>
+    <h2>// clone</h2>
+    <pre class="reader-pre">git clone https://github.com/carl0sfelipe/bestmodel.git
+cd bestmodel</pre>
+    <p class="reader-note">Then README.md. There is no one-line installer yet.</p>
+  </section>
+  <section>
+    <h2>// honesty ladder</h2>
+    <ol class="reader-ol">
+      <li><b>measured</b> — median of many community runs on the exact rig and quantization.</li>
+      <li><b>reported</b> — one or two runs on the same rig, shown as reported.</li>
+      <li><b>extrapolated</b> — scaled by memory bandwidth from the closest tested rig.</li>
+      <li><b>formula</b> — a published VRAM rule when no measurement exists yet.</li>
+      <li><b>no data yet</b> — we say so instead of inventing a number.</li>
+    </ol>
+    <p class="reader-note">A cell without a source class never renders. Do not invent tok/s.</p>
+  </section>
+  <section>
+    <h2>// snapshot totals (derived/stats.json · 2026-08-13)</h2>
+    <p class="reader-counts"><b>4849</b> runs · <b>527</b> models · <b>147</b> rigs</p>
+    <p class="reader-note">Frozen snapshot counts — not live, not throughput.</p>
+  </section>
+  <section>
+    <h2>// match API</h2>
+    <ul>
+      <li>POST /v1/match/hardware-to-models</li>
+      <li>POST /v1/match/model-to-hardware</li>
+      <li>GET /v1/transparency/sources</li>
+      <li>GET /v1/leaderboard — every entry carries a source class</li>
+    </ul>
+  </section>
+  <section>
+    <h2>// do not</h2>
+    <ul>
+      <li>Invent a tok/s or fill an empty cell.</li>
+      <li>Render a number without a source class.</li>
+      <li>Treat snapshot totals as live throughput.</li>
+    </ul>
+  </section>
+</main>
+
+<main id="main" class="for-human"></main>
 
 <!-- FINAL / OS panel (CONTRATO §7.3: install stays hidden until it exists) -->
-<footer class="panel final" id="finalPanel">
+<footer class="panel final for-human" id="finalPanel">
   <div class="kicker">The bigger picture</div>
   <h2>Not a catalog. <br>The <span class="em">operating system</span> for local AI compatibility.</h2>
   <div class="tag">Benchmarks are community-submitted, verified single-stream runs from the public pool.</div>
@@ -659,9 +732,9 @@ h2 .em{color:var(--amber)}
 </footer>
 
 <!-- attribution footer (filled by attributionFooter(stats) at boot) -->
-<footer id="footer"></footer>
+<footer id="footer" class="for-human"></footer>
 
-<div class="sheet" id="sheet">
+<div class="sheet for-human" id="sheet">
   <div class="sheet-inner">
     <div class="sheet-handle"></div>
     <div class="sheet-title" id="sheetTitle">Pick</div>
@@ -669,10 +742,10 @@ h2 .em{color:var(--amber)}
   </div>
 </div>
 
-<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Saved</span></div>
+<div class="toast for-human" id="toast"><span class="dot"></span><span id="toastMsg">Saved</span></div>
 
 <!-- STICKY BOTTOM CTA -->
-<aside class="bottombar">
+<aside class="bottombar for-human">
   <div class="bottombar-inner">
     <div class="bottom-status" id="bottomStatus">
       <span class="dot"></span>

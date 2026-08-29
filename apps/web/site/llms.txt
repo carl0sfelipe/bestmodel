@@ -1,0 +1,68 @@
+# bestmodel.run
+
+> Open compatibility engine for local AI. Answers "can it run / how fast /
+> is it worth it?" from a signed, validated community measurement pool.
+> LICENSE: AGPL-3.0 for apps/**, MIT for packages/** and cli/**.
+
+This file is the agent surface for the deployed site. Humans get the
+cinematic tour at index.html?as=human (desktop), hardware.html?as=human,
+or m/index.html?as=human (mobile). If a page asked who is reading, it did
+not have enough deterministic signal to guess.
+
+Core principle: number honesty. Every displayed number declares its basis:
+measured (pool median) > reported (1-2 runs) > extrapolated (bandwidth-scaled)
+> formula > no data yet. A cell without a source class never renders.
+Do not invent tok/s.
+
+## Clone
+
+```bash
+git clone https://github.com/carl0sfelipe/bestmodel.git
+cd bestmodel
+```
+
+Then README.md. There is no one-line installer yet.
+
+## Honesty ladder
+
+1. measured — median of many community runs on the exact rig and quantization
+2. reported — one or two runs on the same rig, shown as reported
+3. extrapolated — scaled by memory bandwidth from the closest tested rig
+4. formula — a published VRAM rule when no measurement exists yet
+5. no data yet — we say so instead of inventing a number
+
+## Snapshot totals (apps/web/data/derived/stats.json, 2026-08-13)
+
+- runs: 4849
+- models: 527
+- rigs: 147
+
+Frozen snapshot counts — not live, not throughput.
+
+## Match API
+
+- POST /v1/match/hardware-to-models
+- POST /v1/match/model-to-hardware
+- GET /v1/transparency/sources
+- GET /v1/leaderboard — every entry carries a source_class
+- POST /v1/submissions (+ GET /v1/submissions/nonce) — signed intake
+
+## Human tours
+
+- index.html?as=human — I have a goal (desktop, min 1024px)
+- hardware.html?as=human — I have hardware
+- m/index.html?as=human — mobile
+- console/ — passkey console (not a tour)
+
+## Read next
+
+- https://github.com/carl0sfelipe/bestmodel/blob/main/README.md
+- https://github.com/carl0sfelipe/bestmodel/blob/main/llms.txt
+- https://github.com/carl0sfelipe/bestmodel/blob/main/docs/architecture.md
+- index.html?as=agent — HTML twin of this file
+
+## Do not
+
+- Invent a tok/s or fill an empty cell
+- Render a number without a source class
+- Treat snapshot totals as live throughput

@@ -75,7 +75,7 @@ export function copyButton(text) {
 
 export function attributionFooter(stats) {
   const date = stats?.snapshotAt ? String(stats.snapshotAt).slice(0, 10) : "no snapshot date";
-  return el("footer", null, [
+  return el("footer", { class: "for-human" }, [
     el("div", null, "can-i-run-it"),
     el("div", null, `${ATTRIBUTION} · snapshot ${date}`),
   ]);

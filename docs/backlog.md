@@ -17,7 +17,16 @@ Open questions from the L01 spec (need a decision before/during build):
   during L01 planning (the L03 id is now taken by engine unification).
 - **A2 — Model acquisition.** Should `lab` auto-pull models (Ollama built-in,
   llama.cpp requires local GGUF path)? Proposal: Ollama auto, llama.cpp manual.
-- **A3 — Contribute consent.** Opt-in with first-run prompt + always-honored
+- **A3 — Contribute consent. DECIDIDO PELO DONO (2026-08-30):** opt-out
+  TRANSPARENTE — checkbox VISÍVEL e marcado por default na primeira
+  execução, com a moldura "o sucesso da predição está na comunidade: quanto
+  mais gente compartilha, melhor a predição pra todos"; desmarcar é um
+  clique e é sempre honrado. (Registro: opt-in com first-run prompt era a
+  proposta; o dono escolheu opt-out transparente — coleta por default COM
+  o usuário vendo, nunca escondido.) Gamificação associada (decisão da
+  mesma data): quem registra/compartilha ganha pontos no rank de giveaway
+  de free tokens do llms-surf no lançamento — ver docs/go-live no repo
+  llms.surf (listas separadas por produto). Opt-in with first-run prompt + always-honored
   `--no-upload`. Confirm default direction.
 - **A4 — Linux topology collection** (prerequisite): nvidia-smi/lspci/procfs in
   `collect_system_topology`; without it fleet fingerprints are empty.

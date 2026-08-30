@@ -180,3 +180,21 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   free OpenRouter → `opencode auth login` → 1 dispatch tier:cheap pela
   cadeia → conferir no ledger provider_efetivo=openrouter +
   allowlist_status=ok e custo 0 no painel.
+
+## S30 (2026-08-31): site completo no skin do dono — Mural + Track Record
+
+- Dono reprovou o zip do round 1 como skin (intents do zip agrupavam
+  text-to-text numa opção só, rigs aleatórias "Reference rig A") e
+  mandou construir: protótipo dele como base + órgãos do zip.
+- NADA do protótipo regrediu: só navegação ganhou 2 links. Páginas novas
+  nascem na gramática dele (theme.css S4).
+- leaderboard.html ("The wall"): 1565 células reais, basis por linha
+  (439 measured / 1126 reported), filtros por dimensão separados
+  (hardware × categoria × sort), ranking PROVISÓRIO declarado, capture/
+  correct → console.
+- track-record.html: escada E6 (Contributor/Replicator/Auditor) com
+  live-vs-proposta rotulado (×2/×5 vivos; ×3 reprodução pendente do flow).
+- Prompt round 2 (páginas sociais com API ao vivo: claims wall, detail,
+  submit com source_url, perfil) permanece em
+  llms.surf/docs/go-live/PROMPT-CLAUDE-DESIGN-S29-REDE-DE-CAPTURA.md
+  para quando o dono quiser a camada dinâmica da rede.

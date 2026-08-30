@@ -33,6 +33,10 @@ DEFAULT_QUANTIZATION_PROFILE_ID = "q-fp16"
 STATUS_SUBMITTED = "submitted"
 DIGEST_PREFIX = "sha256:"
 
+# LOAD-BEARING (D4, AD-1): a metric kind absent here is SILENTLY DROPPED at
+# insert — the run stores fine, the leaderboard never sees the number. Any
+# new MetricKind in packages/domain-schema must land in this table, in the
+# worker's evidence keys, and in the seed vocabulary, same commit.
 METRIC_UNITS = {
     "ttft_ms": "ms",
     "prefill_tok_s": "tok/s",

@@ -9,6 +9,10 @@ from __future__ import annotations
 
 from typing import Any
 
+# LOAD-BEARING (D4): the 95% feasibility margin (plan §11.2) — peak must fit
+# within 95% of capacity. Leaderboard hides infeasible rows and zeroes their
+# rank; tests demo infeasibility against this exact number (filters suite).
+# Changing it is a product decision, not a tweak: it reclassifies every row.
 SAFETY_MARGIN = 0.95
 
 

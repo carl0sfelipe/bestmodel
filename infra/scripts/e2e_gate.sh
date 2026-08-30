@@ -210,6 +210,19 @@ check_exit "$VSEEN" "leaderboard video row carries source_class + recipe + scala
 uv run pytest tests/test_session_video_roundtrip.py -q >/dev/null 2>&1
 check_exit "$?" "S25a-rt round-trip both backends (Postgres leg via DATABASE_URL)"
 
+# D4: presence-only enforcement — content freshness cannot be honestly
+# mechanized, presence can. Every directory on the run-data path must carry
+# an AGENTS.md with the two mandatory sections at the edit site.
+D4_DIRS="packages/domain-schema packages/fake-adapters packages/roofline-kernel packages/recommendation-engine apps/public-api apps/intake-worker cli/benchmark-probe infra/migrations infra/seed"
+D4_MISSING=0
+for d in $D4_DIRS; do
+  if [ ! -f "$d/AGENTS.md" ] || ! grep -q "## Change checklist" "$d/AGENTS.md"; then
+    echo "  D4 GAP: $d/AGENTS.md missing or without '## Change checklist'"
+    D4_MISSING=1
+  fi
+done
+check_exit "$D4_MISSING" "D4: AGENTS.md with Change checklist present in all run-data dirs"
+
 echo "=== 7. Exit criteria ==="
 uv run python -m tests.regression.vram_error_harness | tail -3
 check_exit "${PIPESTATUS[0]}" "VRAM prediction P50 < 10%"

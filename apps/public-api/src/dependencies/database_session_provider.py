@@ -18,7 +18,11 @@ from psycopg.types.json import Json
 
 
 class DatabaseSession(ABC):
-    """Thin data-access interface implemented by Postgres and the fake."""
+    """Thin data-access interface implemented by Postgres and the fake.
+    Lockstep rule (D4): every method here ships with fake + postgres +
+    contract-row updates in the same commit — the S25a introspection test
+    fails naming the first backend that lags.
+    """
 
     @abstractmethod
     def fetch_gpus_by_ids(self, ids: Sequence[str]) -> list[dict[str, Any]]:

@@ -17,3 +17,18 @@ safety margin 0.95, runtime base overhead {llama_cpp: 0.8 GiB, vllm: 2.0 GiB, ot
 
 Real-data calibration status: VRAM P50 6.18% (harness:
 `tests/regression/vram_error_harness.py`); decode ceiling tension F2; MoE gaps F3/F4/F5.
+
+
+## Change checklist
+
+- Touched a VRAM/throughput formula? The gate's VRAM-prediction criterion
+  (P50 error < 10%) is the regression net — `make gate` in the same commit.
+- Kernel constants feed the recommendation engine and the web estimator:
+  formula change = engine tests + derived data regenerate (apps/web
+  scripts/derive.mjs) in the same commit.
+
+## Load-bearing decisions
+
+- Prediction constants are calibrated against measured rig data (the gate
+  prints predicted vs measured per model); do not "fix" a formula to make
+  one cell pass — recalibrate with data.

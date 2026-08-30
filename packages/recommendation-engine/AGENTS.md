@@ -10,3 +10,17 @@ Ranking layer (plan §11.10 balanced mode; cost/latency modes deferred).
 Consumers: `apps/public-api` leaderboard service. Energy uses decode/power
 (zero power → 0 — documented gap until power data exists). Percentile =
 linear interpolation over the feasible cohort.
+
+## Change checklist
+
+- Touched SAFETY_MARGIN or the ranking formula? Same commit: the filters
+  suite (feasibility demos pin the 95% margin), the e2e leaderboard
+  assertions, and the LOAD-BEARING comment at the constant's site.
+- New entry field consumed here? It must come from the derived leaderboard
+  row (fake derives it too — S26), never from a canned test value.
+
+## Load-bearing decisions
+
+- SAFETY_MARGIN = 0.95 (plan §11.2): peak must fit within 95% of capacity;
+  infeasible rows are hidden and rank-zeroed. Changing it reclassifies
+  every leaderboard row — product decision, not a tweak.

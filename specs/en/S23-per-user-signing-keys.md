@@ -55,11 +55,11 @@ citado foi verificado no disco. NUNCA use declare const como workaround.
 
 Round-trip + API nos DOIS backends, e a suíte nova:
 
-VERIFICACAO: python3 -m pytest tests/test_signing_keys.py -q && python3 -m pytest tests/test_session_contract.py tests/test_session_video_roundtrip.py -q
+VERIFICACAO: uv run pytest tests/test_signing_keys.py apps/public-api/tests/test_signing_keys_route.py -q
 
 ## Oráculo
 
-- comando: test -f tests/test_signing_keys.py && python3 -m pytest tests/test_signing_keys.py -q && grep -q signature_key_id packages/domain-schema/src/run_record.py && grep -q signing_key infra/migrations/0013_signing_keys.sql
+- comando: test -f tests/test_signing_keys.py && uv run pytest tests/test_signing_keys.py apps/public-api/tests/test_signing_keys_route.py -q && grep -q signature_key_id packages/domain-schema/src/run_record.py && grep -q signing_key infra/migrations/0013_signing_keys.sql
 - exit esperado: 0 — chave registrada/revogada por usuário, submissão
   assinada atribuída (`signature_key_id` na run lida de volta nos dois
   backends), chave alheia 403, revogada 400, legado global intacto.

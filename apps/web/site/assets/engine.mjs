@@ -97,3 +97,17 @@ function better(a, b) {
   if (slugCmp !== 0) return slugCmp < 0;
   return a.bits < b.bits;
 }
+
+
+// S24: source-class taxonomy — the honesty UI vocabulary. Pure on purpose:
+// testable without a DOM. Mirrors the product's run source_class.
+export const SOURCE_TEXT = {
+  community_reported: "community-reported",
+  measured_signed: "measured · signed",
+  reported: "reported",
+  mock: "mock",
+};
+
+export function sourceText(sourceClass) {
+  return SOURCE_TEXT[sourceClass ?? "unknown"] ?? "unknown source";
+}

@@ -2,7 +2,7 @@
 // Each session adds its target and appends it to DELIVERED (contract §8).
 import { readFile } from "node:fs/promises";
 
-const DELIVERED = ["raw", "derived", "engine", "uikit", "page:hardware", "page:goal", "page:mobile", "seo"];
+const DELIVERED = ["raw", "derived", "engine", "uikit", "page:hardware", "page:goal", "page:mobile", "seo", "s24-badges"];
 
 const ATTRIBUTION = "community pool data via localmaxxing.com public API";
 
@@ -273,10 +273,28 @@ async function checkSeo() {
   ok(`seo: ${pages.length} pages, sitemap ${locs} locs, samples clean, all pages backed by n>=2 cells`);
 }
 
+
+// S24: source-class badges — the honesty UI (derived field + pure taxonomy +
+// render wiring + legend on the footer).
+async function checkS24Badges() {
+  const models = (await loadJson("data/derived/models.json")).models;
+  const missing = models.filter((m) => m.sourceClass !== "community_reported");
+  if (missing.length) fail(`derived models without sourceClass: ${missing.length}`);
+  const engine = await readFile("site/assets/engine.mjs", "utf8");
+  if (!engine.includes("export function sourceText")) fail("engine.mjs lacks sourceText");
+  if (!engine.includes("community_reported")) fail("engine.mjs lacks the taxonomy");
+  const ui = await readFile("site/assets/ui.mjs", "utf8");
+  if (!ui.includes("sourceBadge")) fail("ui.mjs lacks sourceBadge");
+  if (!ui.includes("sourceLegend")) fail("ui.mjs lacks sourceLegend");
+  const goal = await readFile("site/assets/goal-page.mjs", "utf8");
+  if (!goal.includes("sourceBadge(")) fail("goal-page does not render source badges");
+  ok(`s24-badges: ${models.length}/${models.length} models classified, badge wired`);
+}
+
 const TARGETS = {
   raw: checkRaw, derived: checkDerived, engine: checkEngine, uikit: checkUikit,
   "page:hardware": checkPageHardware, "page:goal": checkPageGoal,
-  "page:mobile": checkPageMobile, seo: checkSeo,
+  "page:mobile": checkPageMobile, seo: checkSeo, "s24-badges": checkS24Badges,
 };
 
 async function run(target) {

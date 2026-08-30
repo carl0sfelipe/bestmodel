@@ -142,6 +142,11 @@ for (const run of runs) {
       isMoE: cat?.isMoE ?? false,
       category: /coder|starcoder|codestral|code/i.test(display) ? "code" : "chat",
       runCount: 0, medianTokS: cat?.speedStats?.medianTokS != null ? round2(cat.speedStats.medianTokS) : null,
+      // S24: data provenance badge — every run in the current pool comes from
+      // the localmaxxing community harvest (APPROVED speedTests), so the whole
+      // derived set is community_reported. When bestmodel's own signed runs
+      // flow in, this becomes per-run (measured_signed) and derive mixes them.
+      sourceClass: "community_reported",
       evalScore: cat?.evalScore ?? null, vramMeasuredGb: {}, maxContextTested: null,
       _vramSamples: new Map(), _tokS: [],
     });

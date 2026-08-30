@@ -42,6 +42,26 @@ export function fmt(n, digits = 1) {
   return v.toLocaleString("en-US", { maximumFractionDigits: digits });
 }
 
+// S24: source-class badges — the honesty UI. Taxonomy lives in engine.mjs
+// (pure, DOM-free, tested there); this is only the rendering.
+import { sourceText } from "./engine.mjs";
+
+export function sourceBadge(sourceClass) {
+  return el(
+    "span",
+    { class: "source-badge", "data-source": sourceClass ?? "unknown" },
+    sourceText(sourceClass)
+  );
+}
+
+export function sourceLegend() {
+  return el(
+    "div",
+    { class: "source-legend" },
+    "data sources: community-reported (harvested pool) · measured · signed (bestmodel signed runs) · mock (fixtures)"
+  );
+}
+
 export function basisBadge(basis) {
   const key = basis ?? "none";
   return el("span", { class: "basis-badge", "data-basis": key }, BASIS_TEXT[basis] ?? "no data yet");
@@ -78,5 +98,6 @@ export function attributionFooter(stats) {
   return el("footer", { class: "for-human" }, [
     el("div", null, "can-i-run-it"),
     el("div", null, `${ATTRIBUTION} · snapshot ${date}`),
+    sourceLegend(),
   ]);
 }

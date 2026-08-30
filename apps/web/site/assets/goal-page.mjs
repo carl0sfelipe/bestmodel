@@ -2,7 +2,7 @@
 // All data comes from data/derived/* via loadDerived(); every displayed
 // number carries a basis (CONTRATO §1). The engine does fit/speed; this
 // module only wires DOM + the real pool. No formulas live here.
-import { el, fmt, basisBadge, fitLabel, attributionFooter } from "./ui.mjs";
+import { el, fmt, basisBadge, fitLabel, attributionFooter, sourceBadge } from "./ui.mjs";
 import { loadDerived } from "./load-data.mjs";
 import {
   quantBits, usableMemGb, vramNeededGb, fitClass, estimateTokS, topPicks,
@@ -470,6 +470,7 @@ function recCard(pick, rank) {
     el("div", { class: "badge" }, tag),
     el("div", { class: "name" }, pick.model.displayName),
     el("div", { class: "meta" }, `${paramsLabel(pick.model)} · ${pick.model.category} · ${bits}-bit · ${fitLbl.text}`),
+    sourceBadge(pick.model.sourceClass),
     el("div", { class: "hd-room" }, [el("div", { class: "hd-fill" + (warn ? " warn" : ""), style: `width:${headPct}%` })]),
     el("div", { class: "reason" }, [
       est
@@ -517,7 +518,8 @@ function searchCard(m, fit, bits) {
   const card = el("div", { class: "rec" }, [
     el("div", { class: "badge" }, m.displayName === state.query ? "exact match" : "search"),
     el("div", { class: "name" }, m.displayName),
-    el("div", { class: "meta" }, `${paramsLabel(m)} · ${m.category} · hf ${m.hfId}`),
+    el("div", { class: "meta" }, [`${paramsLabel(m)} · ${m.category} · hf ${m.hfId}`]),
+    sourceBadge(m.sourceClass),
   ]);
   if (fit === "no") {
     // Found but doesn't fit: suggest the largest quant that would fit, if any.

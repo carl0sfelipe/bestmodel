@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-13T02:55:58.697626+00:00",
+ "snapshotAt": "2026-08-30T04:43:50.758Z",
  "cells": [
   {
    "rigKey": "5060-ti-16gb",
@@ -16,17 +16,59 @@
    ]
   },
   {
-   "rigKey": "arc-pro-b60-24gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
+   "rigKey": "a100-40gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
    "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 62.71,
-   "tokSPrefillMedian": 983.54,
-   "ttftMsMedian": 531.5,
-   "peakVramGbMedian": null,
-   "maxContextTested": 4096,
+   "n": 1,
+   "tokSOutMedian": 41.13,
+   "tokSPrefillMedian": 1053,
+   "ttftMsMedian": 10666.5,
+   "peakVramGbMedian": 19,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "a100-40gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 33.72,
+   "tokSPrefillMedian": 1088.2,
+   "ttftMsMedian": 10193.9,
+   "peakVramGbMedian": 30,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "frosty40-quest-30b-rl-b70-turbo-gguf",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 77.15,
+   "tokSPrefillMedian": 998.58,
+   "ttftMsMedian": 512.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "llmfan46-qwen3-6-35b-a3b-uncensored-heretic-native-mtp-preserved-gptq-int4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 25.4,
+   "tokSPrefillMedian": 380.9,
+   "ttftMsMedian": 84.01,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -87,6 +129,48 @@
   },
   {
    "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 62.71,
+   "tokSPrefillMedian": 983.54,
+   "ttftMsMedian": 531.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "poolside-laguna-xs-2-1",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 72.53,
+   "tokSPrefillMedian": 817.24,
+   "ttftMsMedian": 626.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "qwen-qwen3-4b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 75.99,
+   "tokSPrefillMedian": 1971.48,
+   "ttftMsMedian": 264.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
    "modelSlug": "qwen-qwen3-5-9b",
    "bits": 8,
    "n": 2,
@@ -100,15 +184,43 @@
    ]
   },
   {
-   "rigKey": "arc-pro-b60-24gb-x2",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "qwen-qwen3-6-35b-a3b",
    "bits": 4,
    "n": 2,
-   "tokSOutMedian": 62.58,
-   "tokSPrefillMedian": 983.22,
-   "ttftMsMedian": 532.3,
+   "tokSOutMedian": 42.61,
+   "tokSPrefillMedian": 870.05,
+   "ttftMsMedian": 589.6,
    "peakVramGbMedian": null,
-   "maxContextTested": 4096,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 21.2,
+   "tokSPrefillMedian": 504.4,
+   "ttftMsMedian": 146.71,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 15.99,
+   "tokSPrefillMedian": 643.13,
+   "ttftMsMedian": 796.1,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -163,6 +275,20 @@
    "tokSOutMedian": 40.14,
    "tokSPrefillMedian": 1234.86,
    "ttftMsMedian": 459.9,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b60-24gb-x2",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 62.58,
+   "tokSPrefillMedian": 983.22,
+   "ttftMsMedian": 532.3,
    "peakVramGbMedian": null,
    "maxContextTested": 4096,
    "engines": [
@@ -325,56 +451,14 @@
   },
   {
    "rigKey": "arc-pro-b70-32gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 74.3,
-   "tokSPrefillMedian": 440.8,
-   "ttftMsMedian": 72.59,
-   "peakVramGbMedian": null,
-   "maxContextTested": 262144,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "arc-pro-b70-32gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 5,
-   "n": 3,
-   "tokSOutMedian": 69.27,
-   "tokSPrefillMedian": 1589.77,
-   "ttftMsMedian": null,
-   "peakVramGbMedian": null,
-   "maxContextTested": 262144,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "arc-pro-b70-32gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 6,
-   "n": 2,
-   "tokSOutMedian": 50.3,
-   "tokSPrefillMedian": 553.9,
-   "ttftMsMedian": 57.77,
-   "peakVramGbMedian": null,
-   "maxContextTested": 262144,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "frosty40-nex-n2-mini-b70-turbo-gguf",
    "bits": 5,
-   "n": 5,
-   "tokSOutMedian": 62.67,
-   "tokSPrefillMedian": 867.92,
+   "n": 4,
+   "tokSOutMedian": 65.78,
+   "tokSPrefillMedian": 1196.39,
    "ttftMsMedian": 1343,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 65664,
    "engines": [
     "llama.cpp"
    ]
@@ -383,12 +467,12 @@
    "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "frosty40-ornith-1-0-35b-b70-turbo",
    "bits": 5,
-   "n": 5,
-   "tokSOutMedian": 63.07,
-   "tokSPrefillMedian": 873.29,
+   "n": 4,
+   "tokSOutMedian": 65.79,
+   "tokSPrefillMedian": 1198.91,
    "ttftMsMedian": 1343,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 65664,
    "engines": [
     "llama.cpp"
    ]
@@ -399,10 +483,10 @@
    "bits": 5,
    "n": 5,
    "tokSOutMedian": 8.81,
-   "tokSPrefillMedian": 282.99,
-   "ttftMsMedian": null,
+   "tokSPrefillMedian": 655.75,
+   "ttftMsMedian": 381.5,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 129325,
    "engines": [
     "llama.cpp"
    ]
@@ -425,12 +509,54 @@
    "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "frosty40-siq-1-35b-b70-turbo-gguf",
    "bits": 5,
-   "n": 5,
-   "tokSOutMedian": 63.06,
-   "tokSPrefillMedian": 876,
+   "n": 4,
+   "tokSOutMedian": 65.6,
+   "tokSPrefillMedian": 1204.84,
    "ttftMsMedian": 1335,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 65664,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "frozenlock-qwen3-8-27b-int4-autoround",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 60.2,
+   "tokSPrefillMedian": 1964.7,
+   "ttftMsMedian": 739.05,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ggml-org-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 27.82,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 255.42,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "google-gemma-4-26b-a4b-it",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 43.27,
+   "tokSPrefillMedian": 1303.37,
+   "ttftMsMedian": 392.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -445,6 +571,20 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "hauhaucs-gemma4-26b-a4b-qat-uncensored-hauhaucs-balanced-mtp",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 58.4,
+   "tokSPrefillMedian": 1333,
+   "ttftMsMedian": 2135,
+   "peakVramGbMedian": 23.2,
+   "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
    ]
@@ -473,6 +613,34 @@
    "ttftMsMedian": 76.91,
    "peakVramGbMedian": null,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "johannrplaster-qwen3-8-27b-uncensored-int4-autoround",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 97.8,
+   "tokSPrefillMedian": 1782.1,
+   "ttftMsMedian": 356.33,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "liquidai-lfm2-5-2-6b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 132.35,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
    ]
@@ -551,15 +719,85 @@
    "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-bf16",
    "bits": 4,
-   "n": 8,
-   "tokSOutMedian": 92.83,
-   "tokSPrefillMedian": 4900,
+   "n": 9,
+   "tokSOutMedian": 93,
+   "tokSPrefillMedian": 6030,
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 16384,
    "engines": [
     "llama.cpp",
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 74.3,
+   "tokSPrefillMedian": 440.8,
+   "ttftMsMedian": 72.59,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 5,
+   "n": 3,
+   "tokSOutMedian": 69.27,
+   "tokSPrefillMedian": 1589.77,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 6,
+   "n": 2,
+   "tokSOutMedian": 50.3,
+   "tokSPrefillMedian": 553.9,
+   "ttftMsMedian": 57.77,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 131.46,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 153.24,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "ornith-ai-ornith-1-5-9b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 49.59,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -578,14 +816,42 @@
   },
   {
    "rigKey": "arc-pro-b70-32gb",
-   "modelSlug": "poolside-laguna-xs-2-1-gguf",
-   "bits": 5,
+   "modelSlug": "poolside-laguna-xs-2-1",
+   "bits": 4,
    "n": 1,
-   "tokSOutMedian": 63.71,
-   "tokSPrefillMedian": 338.98,
-   "ttftMsMedian": null,
+   "tokSOutMedian": 87.81,
+   "tokSPrefillMedian": 1043.75,
+   "ttftMsMedian": 490.5,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "qwen-qwen3-30b-a3b-instruct-2507",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 100.49,
+   "tokSPrefillMedian": 1464.13,
+   "ttftMsMedian": 349.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "qwen-qwen3-4b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 100.51,
+   "tokSPrefillMedian": 2860.65,
+   "ttftMsMedian": 183.85,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -650,10 +916,10 @@
    "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "qwen-qwen3-6-27b",
    "bits": 4,
-   "n": 11,
-   "tokSOutMedian": 42.64,
-   "tokSPrefillMedian": 1007,
-   "ttftMsMedian": 1162.64,
+   "n": 14,
+   "tokSOutMedian": 43.45,
+   "tokSPrefillMedian": 670,
+   "ttftMsMedian": 1155.99,
    "peakVramGbMedian": 17.5,
    "maxContextTested": 131072,
    "engines": [
@@ -679,10 +945,10 @@
    "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "qwen-qwen3-6-35b-a3b",
    "bits": 4,
-   "n": 6,
-   "tokSOutMedian": 71.47,
-   "tokSPrefillMedian": 2128,
-   "ttftMsMedian": 203,
+   "n": 8,
+   "tokSOutMedian": 70.02,
+   "tokSPrefillMedian": 1603.49,
+   "ttftMsMedian": 372,
    "peakVramGbMedian": 22,
    "maxContextTested": 32768,
    "engines": [
@@ -702,6 +968,49 @@
    "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 7,
+   "tokSOutMedian": 28.9,
+   "tokSPrefillMedian": 1121.4,
+   "ttftMsMedian": 157.4,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp",
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "sergiiob-ornith-1-5-35b-a3b-gptq-int4-sym-g128-mtp-bf16-mixedcal-v2",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 94.1,
+   "tokSPrefillMedian": 9072.9,
+   "ttftMsMedian": 297.14,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "sergiiob-qwen3-8-27b-gptq-int4-sym-g128-mtp-bf16",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 80.55,
+   "tokSPrefillMedian": 1075.3,
+   "ttftMsMedian": 266.45,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -742,6 +1051,20 @@
    "ttftMsMedian": 1501.77,
    "peakVramGbMedian": null,
    "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "unsloth-nvidia-nemotron-3-5-lightning-30b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 72.17,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
    ]
@@ -804,6 +1127,48 @@
   },
   {
    "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 31.15,
+   "tokSPrefillMedian": 566.5,
+   "ttftMsMedian": 2995,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 2,
+   "tokSOutMedian": 24.07,
+   "tokSPrefillMedian": 712.09,
+   "ttftMsMedian": 354.1,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 16.05,
+   "tokSPrefillMedian": 895.95,
+   "ttftMsMedian": 571.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb",
    "modelSlug": "unsloth-qwen3-coder-30b-a3b-instruct-gguf",
    "bits": 4,
    "n": 1,
@@ -825,6 +1190,48 @@
    "tokSPrefillMedian": null,
    "ttftMsMedian": 541.36,
    "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb-x2",
+   "modelSlug": "devan-carlin-qwen3-8-27b-int4-autoround",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 101.21,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 1054.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb-x2",
+   "modelSlug": "ggml-org-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 45.9,
+   "tokSPrefillMedian": 165.05,
+   "ttftMsMedian": 173.57,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb-x2",
+   "modelSlug": "goldhub-qwen3-8-27b-int4-w4a16-autoround",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 67.73,
+   "tokSPrefillMedian": 770,
+   "ttftMsMedian": 133.3,
+   "peakVramGbMedian": 29,
    "maxContextTested": 2048,
    "engines": [
     "vllm"
@@ -952,6 +1359,20 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": 31.21,
    "maxContextTested": 65536,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb-x2",
+   "modelSlug": "qwen-qwen3-8-27b-fp8",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 58.54,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 108.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 256,
    "engines": [
     "vllm"
    ]
@@ -1213,11 +1634,11 @@
    "rigKey": "arc-pro-b70-32gb-x4",
    "modelSlug": "qwen-qwen3-6-35b-a3b",
    "bits": 4,
-   "n": 2,
+   "n": 1,
    "tokSOutMedian": 68.8,
-   "tokSPrefillMedian": 930.65,
+   "tokSPrefillMedian": 1622,
    "ttftMsMedian": null,
-   "peakVramGbMedian": 73.6,
+   "peakVramGbMedian": 60,
    "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
@@ -1295,6 +1716,20 @@
   },
   {
    "rigKey": "arc-pro-b70-32gb-x4",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 161.9,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 2872.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "arc-pro-b70-32gb-x4",
    "modelSlug": "unsloth-qwen3-6-27b",
    "bits": 4,
    "n": 3,
@@ -1331,6 +1766,118 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 512,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "jackrong-qwen3-8-27b-mtp-gguf",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 57.95,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "jackrong-qwen3-8-27b-mtp-gguf",
+   "bits": 8,
+   "n": 31,
+   "tokSOutMedian": 25.97,
+   "tokSPrefillMedian": 712.8,
+   "ttftMsMedian": 1718.1,
+   "peakVramGbMedian": null,
+   "maxContextTested": 132352,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "lued-qwen3-8-27b-int8-w8a16-mtp",
+   "bits": 8,
+   "n": 6,
+   "tokSOutMedian": 161.06,
+   "tokSPrefillMedian": 1849.15,
+   "ttftMsMedian": 5318.5,
+   "peakVramGbMedian": 54.55,
+   "maxContextTested": 65536,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "qwen-qwen3-6-35b-a3b-fp8",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 288.12,
+   "tokSPrefillMedian": 1578.75,
+   "ttftMsMedian": 55,
+   "peakVramGbMedian": 55.84,
+   "maxContextTested": 65536,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "bits": 8,
+   "n": 3,
+   "tokSOutMedian": 104.93,
+   "tokSPrefillMedian": 1560.94,
+   "ttftMsMedian": 328,
+   "peakVramGbMedian": null,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 13,
+   "tokSOutMedian": 37,
+   "tokSPrefillMedian": 790,
+   "ttftMsMedian": 1435,
+   "peakVramGbMedian": null,
+   "maxContextTested": 132352,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 30,
+   "tokSOutMedian": 23.46,
+   "tokSPrefillMedian": 617.2,
+   "ttftMsMedian": 1795.3,
+   "peakVramGbMedian": null,
+   "maxContextTested": 132352,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cmp-170hx-64gb",
+   "modelSlug": "unsloth-qwen3-8-flash-next-gguf",
+   "bits": 1,
+   "n": 5,
+   "tokSOutMedian": 44.55,
+   "tokSPrefillMedian": 68.44,
+   "ttftMsMedian": 321.45,
+   "peakVramGbMedian": 42.12,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -2232,6 +2779,62 @@
    ]
   },
   {
+   "rigKey": "cpu-amd-ryzen-7-9800x3d",
+   "modelSlug": "afrideva-tinystories-gpt-0-1-3m-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 6090.28,
+   "tokSPrefillMedian": 7342.09,
+   "ttftMsMedian": 69.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-amd-ryzen-7-9800x3d",
+   "modelSlug": "delphi-suite-stories-llama2-50k",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 36715.73,
+   "tokSPrefillMedian": 189913.42,
+   "ttftMsMedian": 2.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-amd-ryzen-7-9800x3d",
+   "modelSlug": "ggml-org-models-moved",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 16740.73,
+   "tokSPrefillMedian": 12338.49,
+   "ttftMsMedian": 41.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-amd-ryzen-threadripper-9960x-24-cores",
+   "modelSlug": "synapticode-bitnet-b1-58-2b-4t-tq2-0-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 52.21,
+   "tokSPrefillMedian": 829.46,
+   "ttftMsMedian": 617.3,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
    "rigKey": "cpu-intel-r-core-tm-ultra-7-155h",
    "modelSlug": "google-gemma-4-e2b-it",
    "bits": 4,
@@ -2281,6 +2884,20 @@
    "tokSOutMedian": 13.36,
    "tokSPrefillMedian": 35.79,
    "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-intel-r-xeon-r-cpu-e5-2699-v4-2-20ghz",
+   "modelSlug": "unsloth-gpt-oss-120b-gguf",
+   "bits": 6,
+   "n": 2,
+   "tokSOutMedian": 12.35,
+   "tokSPrefillMedian": 171.15,
+   "ttftMsMedian": 524.24,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -2358,6 +2975,20 @@
    ]
   },
   {
+   "rigKey": "gb10-grace-blackwell-121gb",
+   "modelSlug": "qwen-qwen3-6-35b-a3b-fp8",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 54.05,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 128000,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
    "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "0xsero-deepseek-v4-flash-180b",
    "bits": 8,
@@ -2403,10 +3034,10 @@
    "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-nvfp4",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 8,
+   "n": 4,
+   "tokSOutMedian": 33.5,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 25000,
+   "ttftMsMedian": 13000,
    "peakVramGbMedian": 108,
    "maxContextTested": 256000,
    "engines": [
@@ -2457,16 +3088,16 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-128gb",
-   "modelSlug": "bartowski-mimo-v2-5-gguf",
+   "modelSlug": "cyankiwi-minimax-m2-7-awq-4bit",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 16.08,
+   "n": 4,
+   "tokSOutMedian": 27.04,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 606,
+   "ttftMsMedian": 132.4,
    "peakVramGbMedian": null,
-   "maxContextTested": 1000000,
+   "maxContextTested": 196608,
    "engines": [
-    "llama.cpp"
+    "vllm"
    ]
   },
   {
@@ -2529,12 +3160,12 @@
    "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "intel-qwen3-5-122b-a10b-int4-autoround",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 33.92,
+   "n": 2,
+   "tokSOutMedian": 31.01,
    "tokSPrefillMedian": null,
    "ttftMsMedian": 439.66,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
+   "maxContextTested": 262144,
    "engines": [
     "vllm"
    ]
@@ -2579,6 +3210,20 @@
    "maxContextTested": 108000,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "nvidia-gemma-4-26b-a4b-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 227.5,
+   "tokSPrefillMedian": 3548.3,
+   "ttftMsMedian": 200,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -2709,6 +3354,20 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "qwen-qwen-agentworld-35b-a3b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 49.05,
+   "tokSPrefillMedian": 514.5,
+   "ttftMsMedian": 680,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "qwen-qwen3-5-122b-a10b",
    "bits": 6,
    "n": 1,
@@ -2731,6 +3390,20 @@
    "ttftMsMedian": 658.47,
    "peakVramGbMedian": 113.5,
    "maxContextTested": 20000,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "qwen-qwen3-5-35b-a3b-fp8",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 51.4,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
    "engines": [
     "vllm"
    ]
@@ -2809,6 +3482,49 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "qwen-qwen3-8-27b-fp8",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 14.8,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 65536,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "radixark-qwen3-8-27b-nvfp4",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 23.6,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 226.2,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "sglang",
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "radixark-qwen3-8-27b-nvfp4-bf16-lmhead",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 25.25,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 239.65,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "sglang"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "rdtand-qwen3-6-27b-prismascout-blackwell-nvfp4-bf16-vllm",
    "bits": 4,
    "n": 1,
@@ -2879,6 +3595,34 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 50.7,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 38.8,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "unsloth-minimax-m2-7",
    "bits": 4,
    "n": 2,
@@ -2907,12 +3651,40 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "unsloth-qwen3-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 60.3,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "unsloth-qwen3-5-35b-a3b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 35.1,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
    "modelSlug": "unsloth-qwen3-6-27b-nvfp4",
    "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 19.27,
-   "tokSPrefillMedian": 889,
-   "ttftMsMedian": 661.7,
+   "n": 3,
+   "tokSOutMedian": 26.4,
+   "tokSPrefillMedian": 440.4,
+   "ttftMsMedian": 486.85,
    "peakVramGbMedian": 91.11,
    "maxContextTested": 262144,
    "engines": [
@@ -2930,6 +3702,21 @@
    "peakVramGbMedian": null,
    "maxContextTested": 32768,
    "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-128gb",
+   "modelSlug": "unsloth-qwen3-8-27b-nvfp4",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 10.98,
+   "tokSPrefillMedian": 373.7,
+   "ttftMsMedian": 198.03,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "sglang",
     "vllm"
    ]
   },
@@ -2991,6 +3778,20 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "deepseek-ai-deepseek-v4-flash-0731",
+   "bits": 8,
+   "n": 3,
+   "tokSOutMedian": 24.9,
+   "tokSPrefillMedian": 135.15,
+   "ttftMsMedian": 185.28,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
    "modelSlug": "drowzeys-keys-deepseekv4-flash-ga-0731-dspark-abliterated-32-32",
    "bits": 4,
    "n": 1,
@@ -3019,6 +3820,34 @@
   },
   {
    "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "jiunsong-superdeepseek-v4-flash-abliterated-mq-2xdgx",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 37.3,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "jiunsong-superdeepseek-v4-flash-abliterated-mq-2xdgx",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 36.3,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
    "modelSlug": "lukealonso-minimax-m2-5-nvfp4",
    "bits": 4,
    "n": 1,
@@ -3041,6 +3870,48 @@
    "ttftMsMedian": 597.48,
    "peakVramGbMedian": null,
    "maxContextTested": 1048576,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 16,
+   "n": 1,
+   "tokSOutMedian": 8.2,
+   "tokSPrefillMedian": 261.6,
+   "ttftMsMedian": 282.91,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "unsloth-qwen3-8-27b-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 17.4,
+   "tokSPrefillMedian": 440,
+   "ttftMsMedian": 168.19,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "gb10-grace-blackwell-256gb",
+   "modelSlug": "zai-org-glm-5-3-flash",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 19.84,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 367.24,
+   "peakVramGbMedian": 105,
+   "maxContextTested": 1000000,
    "engines": [
     "vllm"
    ]
@@ -3522,6 +4393,34 @@
    ]
   },
   {
+   "rigKey": "h100-nvl-94gb-x2",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 293.3,
+   "tokSPrefillMedian": 1080.5,
+   "ttftMsMedian": 69.41,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "sglang"
+   ]
+  },
+  {
+   "rigKey": "instinct-mi100-32gb-x4",
+   "modelSlug": "curvedinf-qwen3-8-27b-gptq-int8-w8a8-gs128",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 132.36,
+   "tokSPrefillMedian": 1202.74,
+   "ttftMsMedian": 28.18,
+   "peakVramGbMedian": 128,
+   "maxContextTested": 64000,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
    "rigKey": "m1-max-64gb",
    "modelSlug": "badtheorylabs-btl-3-compact",
    "bits": 2,
@@ -3548,6 +4447,20 @@
    "maxContextTested": 2048,
    "engines": [
     "ollama"
+   ]
+  },
+  {
+   "rigKey": "m1-max-64gb",
+   "modelSlug": "ggml-org-gpt-oss-20b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 74.64,
+   "tokSPrefillMedian": 916.24,
+   "ttftMsMedian": 558.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -3818,6 +4731,34 @@
    ]
   },
   {
+   "rigKey": "m1-pro-32gb",
+   "modelSlug": "bartowski-ornith-1-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 32.2,
+   "tokSPrefillMedian": 334.9,
+   "ttftMsMedian": 95.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "ollama"
+   ]
+  },
+  {
+   "rigKey": "m1-pro-32gb",
+   "modelSlug": "youssofal-qwen3-8-27b-mtplx-optimized-speed-fp16",
+   "bits": 16,
+   "n": 1,
+   "tokSOutMedian": 11.1,
+   "tokSPrefillMedian": 40.4,
+   "ttftMsMedian": 7000,
+   "peakVramGbMedian": 26,
+   "maxContextTested": 262144,
+   "engines": [
+    "mlx"
+   ]
+  },
+  {
    "rigKey": "m2-pro-16gb",
    "modelSlug": "mlx-community-qwen3-5-9b-4bit",
    "bits": 4,
@@ -3875,34 +4816,6 @@
   },
   {
    "rigKey": "m3-ultra-512gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 89.06,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 110.9,
-   "peakVramGbMedian": null,
-   "maxContextTested": 8192,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "m3-ultra-512gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 77.52,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 103.7,
-   "peakVramGbMedian": null,
-   "maxContextTested": 8192,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "m3-ultra-512gb",
    "modelSlug": "deepseek-ai-deepseek-v4-flash",
    "bits": 2,
    "n": 1,
@@ -3927,6 +4840,20 @@
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "google-gemma-4-26b-a4b-it",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 76.85,
+   "tokSPrefillMedian": 2095.55,
+   "ttftMsMedian": 278.72,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "mlx"
    ]
   },
   {
@@ -3959,6 +4886,20 @@
   },
   {
    "rigKey": "m3-ultra-512gb",
+   "modelSlug": "mlx-community-gemma-4-26b-a4b-it-4bit",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 96.71,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 145,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "mlx"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
    "modelSlug": "nvidia-nemotron-cascade-2-30b-a3b",
    "bits": 4,
    "n": 2,
@@ -3970,6 +4911,34 @@
    "engines": [
     "llama.cpp",
     "mlx"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 89.06,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 110.9,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 77.52,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 103.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -4012,6 +4981,62 @@
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "qwen-qwen3-235b-a22b-thinking-2507",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 15.6,
+   "tokSPrefillMedian": 167,
+   "ttftMsMedian": 3460.75,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "mlx"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "qwen-qwen3-30b-a3b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 101.95,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 76,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "qwen-qwen3-6-35b-a3b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 31.85,
+   "tokSPrefillMedian": 957.2,
+   "ttftMsMedian": 620.24,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "mlx"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "qwen-qwen3-8-flash-next",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 13.95,
+   "tokSPrefillMedian": 301.75,
+   "ttftMsMedian": 2052.67,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "mlx"
    ]
   },
   {
@@ -4064,6 +5089,20 @@
    "tokSOutMedian": 18.52,
    "tokSPrefillMedian": null,
    "ttftMsMedian": 574.2,
+   "peakVramGbMedian": null,
+   "maxContextTested": 8192,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "m3-ultra-512gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 84.61,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 224.2,
    "peakVramGbMedian": null,
    "maxContextTested": 8192,
    "engines": [
@@ -4184,20 +5223,6 @@
   },
   {
    "rigKey": "m4-pro-48gb",
-   "modelSlug": "bartowski-nvidia-nemotron-3-5-lightning-30b-a3b-gguf",
-   "bits": 5,
-   "n": 1,
-   "tokSOutMedian": 49.2,
-   "tokSPrefillMedian": 483.9,
-   "ttftMsMedian": 1140.7,
-   "peakVramGbMedian": null,
-   "maxContextTested": 64000,
-   "engines": [
-    "lmstudio"
-   ]
-  },
-  {
-   "rigKey": "m4-pro-48gb",
    "modelSlug": "lmstudio-community-gemma-4-26b-a4b-it-qat-mlx-4bit",
    "bits": 4,
    "n": 1,
@@ -4212,30 +5237,15 @@
   },
   {
    "rigKey": "m4-pro-48gb",
-   "modelSlug": "mlx-community-lfm2-5-2-6b-optiq-4bit",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 106.6,
-   "tokSPrefillMedian": 1092.6,
-   "ttftMsMedian": 497,
-   "peakVramGbMedian": null,
-   "maxContextTested": 64000,
-   "engines": [
-    "lmstudio"
-   ]
-  },
-  {
-   "rigKey": "m4-pro-48gb",
    "modelSlug": "mlx-community-qwen3-5-4b-mlx-8bit",
    "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 48.39,
-   "tokSPrefillMedian": 772.75,
-   "ttftMsMedian": 736,
+   "n": 1,
+   "tokSOutMedian": 47.79,
+   "tokSPrefillMedian": 802.29,
+   "ttftMsMedian": null,
    "peakVramGbMedian": 6.2,
-   "maxContextTested": 262144,
+   "maxContextTested": 2176,
    "engines": [
-    "lmstudio",
     "mlx"
    ]
   },
@@ -4243,29 +5253,14 @@
    "rigKey": "m4-pro-48gb",
    "modelSlug": "mlx-community-qwen3-5-9b-mlx-8bit",
    "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 26.44,
-   "tokSPrefillMedian": 415.64,
-   "ttftMsMedian": 1418,
-   "peakVramGbMedian": 11.18,
-   "maxContextTested": 249088,
-   "engines": [
-    "lmstudio",
-    "mlx"
-   ]
-  },
-  {
-   "rigKey": "m4-pro-48gb",
-   "modelSlug": "mlx-community-qwen3-6-35b-a3b-optiq-4bit",
-   "bits": 4,
    "n": 1,
-   "tokSOutMedian": 61.4,
-   "tokSPrefillMedian": 717.8,
-   "ttftMsMedian": 762,
-   "peakVramGbMedian": null,
-   "maxContextTested": 154112,
+   "tokSOutMedian": 27.37,
+   "tokSPrefillMedian": 445.48,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 11.18,
+   "maxContextTested": 2176,
    "engines": [
-    "lmstudio"
+    "mlx"
    ]
   },
   {
@@ -4448,6 +5443,20 @@
    "maxContextTested": 4096,
    "engines": [
     "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "m5-max-128gb",
+   "modelSlug": "mcsplain-qwen3-8-27b-oq8-mtp",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 39.6,
+   "tokSPrefillMedian": 806.2,
+   "ttftMsMedian": 1270,
+   "peakVramGbMedian": 28.8,
+   "maxContextTested": 4096,
+   "engines": [
+    "mlx"
    ]
   },
   {
@@ -5306,6 +6315,20 @@
    ]
   },
   {
+   "rigKey": "multi-gpu-24gb-x2",
+   "modelSlug": "qwen-qwen3-8b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 113.5,
+   "tokSPrefillMedian": 334.1,
+   "ttftMsMedian": 186.05,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
    "rigKey": "multi-gpu-28gb-x2",
    "modelSlug": "bartowski-qwen-qwen3-5-0-8b-gguf",
    "bits": 4,
@@ -5370,6 +6393,20 @@
    "tokSPrefillMedian": null,
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "multi-gpu-56gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 36.73,
+   "tokSPrefillMedian": 1099.06,
+   "ttftMsMedian": 3082,
+   "peakVramGbMedian": 45.5,
    "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
@@ -5755,6 +6792,48 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "bartowski-ling-3-0-tiny-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 113.42,
+   "tokSPrefillMedian": 7088.87,
+   "ttftMsMedian": 72.2,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "deepseek-ai-deepseek-v4-flash-0731",
+   "bits": 2,
+   "n": 2,
+   "tokSOutMedian": 60.56,
+   "tokSPrefillMedian": 195.66,
+   "ttftMsMedian": 2008.58,
+   "peakVramGbMedian": 25.2,
+   "maxContextTested": 8192,
+   "engines": [
+    "lucebox"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "deepseek-ai-deepseek-v4-flash-0731",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 50.45,
+   "tokSPrefillMedian": 332.3,
+   "ttftMsMedian": 6062.58,
+   "peakVramGbMedian": 28.05,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
    "modelSlug": "google-gemma-4-31b-it",
    "bits": 4,
    "n": 1,
@@ -5883,12 +6962,12 @@
    "rigKey": "radeon-ai-pro-r9700-32gb",
    "modelSlug": "meta-models-muse-glimmer-30b-gguf",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 30.4,
-   "tokSPrefillMedian": 339.3,
-   "ttftMsMedian": 226.91,
-   "peakVramGbMedian": null,
-   "maxContextTested": 2048,
+   "n": 2,
+   "tokSOutMedian": 82.48,
+   "tokSPrefillMedian": 359.96,
+   "ttftMsMedian": 258.82,
+   "peakVramGbMedian": 23.65,
+   "maxContextTested": 32768,
    "engines": [
     "llama.cpp"
    ]
@@ -5966,6 +7045,34 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 5,
+   "tokSOutMedian": 285.48,
+   "tokSPrefillMedian": 434.4,
+   "ttftMsMedian": 115.22,
+   "peakVramGbMedian": 22.46,
+   "maxContextTested": 98304,
+   "engines": [
+    "hipfire"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-gemma-4-12b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 58.17,
+   "tokSPrefillMedian": 2350.81,
+   "ttftMsMedian": 217.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
    "modelSlug": "unsloth-gemma-4-26b-a4b-it",
    "bits": 4,
    "n": 1,
@@ -5994,12 +7101,124 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-gemma-4-31b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 25.42,
+   "tokSPrefillMedian": 923.12,
+   "ttftMsMedian": 554.6,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-glm-4-7-flash-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 82.05,
+   "tokSPrefillMedian": 2046.41,
+   "ttftMsMedian": 250.2,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-glm-4-7-flash-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 75.76,
+   "tokSPrefillMedian": 2609.23,
+   "ttftMsMedian": 196.2,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-glm-5-3-flash-gguf",
+   "bits": 1,
+   "n": 1,
+   "tokSOutMedian": 17.37,
+   "tokSPrefillMedian": 39.59,
+   "ttftMsMedian": 732.14,
+   "peakVramGbMedian": 92.18,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-glm-5-3-flash-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 16.61,
+   "tokSPrefillMedian": 36.57,
+   "ttftMsMedian": 785.73,
+   "peakVramGbMedian": 101.92,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 33.21,
+   "tokSPrefillMedian": 1108.9,
+   "ttftMsMedian": 478.3,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 5,
+   "n": 2,
+   "tokSOutMedian": 25.77,
+   "tokSPrefillMedian": 921.09,
+   "ttftMsMedian": 558.75,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
    "modelSlug": "unsloth-qwen3-5-27b",
    "bits": 4,
    "n": 5,
    "tokSOutMedian": 29.1,
    "tokSPrefillMedian": 456.6,
    "ttftMsMedian": 74.47,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-5-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 26.73,
+   "tokSPrefillMedian": 1099.5,
+   "ttftMsMedian": 465.7,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -6036,6 +7255,20 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 78.64,
+   "tokSPrefillMedian": 2883.32,
+   "ttftMsMedian": 177.6,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
    "bits": 4,
    "n": 1,
@@ -6044,6 +7277,63 @@
    "ttftMsMedian": 0.2,
    "peakVramGbMedian": 24.54,
    "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 1,
+   "n": 3,
+   "tokSOutMedian": 41.2,
+   "tokSPrefillMedian": 1126.48,
+   "ttftMsMedian": 454.5,
+   "peakVramGbMedian": 7.3,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 10,
+   "tokSOutMedian": 39.52,
+   "tokSPrefillMedian": 708.16,
+   "ttftMsMedian": 614.7,
+   "peakVramGbMedian": 21.64,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp",
+    "lucebox"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 4,
+   "tokSOutMedian": 21.57,
+   "tokSPrefillMedian": 798.63,
+   "ttftMsMedian": 641.1,
+   "peakVramGbMedian": 25.6,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb",
+   "modelSlug": "unsloth-qwen3-8-flash-next-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 25.64,
+   "tokSPrefillMedian": 537.39,
+   "ttftMsMedian": 4747.23,
+   "peakVramGbMedian": 32.91,
+   "maxContextTested": 32768,
    "engines": [
     "llama.cpp"
    ]
@@ -6058,6 +7348,20 @@
    "ttftMsMedian": 375.26,
    "peakVramGbMedian": null,
    "maxContextTested": 794,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x2",
+   "modelSlug": "google-gemma-4-26b-a4b-it",
+   "bits": 8,
+   "n": 4,
+   "tokSOutMedian": 99.26,
+   "tokSPrefillMedian": 1968.11,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
    ]
@@ -6106,6 +7410,20 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x2",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 46.78,
+   "tokSPrefillMedian": 1190.93,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x2",
    "modelSlug": "qwen-qwen3-coder-next",
    "bits": 4,
    "n": 1,
@@ -6134,48 +7452,6 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "1337hero-qwen3-coder-30b-a3b-codemonkey",
-   "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 126.82,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 201.29,
-   "peakVramGbMedian": null,
-   "maxContextTested": 786,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "1337hero-qwen3-coder-30b-a3b-codemonkey",
-   "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 85.18,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 124.73,
-   "peakVramGbMedian": null,
-   "maxContextTested": 794,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "1337hero-qwen3-coder-30b-a3b-codemonkey",
-   "bits": 16,
-   "n": 2,
-   "tokSOutMedian": 20.48,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 146.41,
-   "peakVramGbMedian": null,
-   "maxContextTested": 786,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "byroneverson-glm-4-9b-chat-abliterated",
    "bits": 4,
    "n": 1,
@@ -6198,48 +7474,6 @@
    "ttftMsMedian": 4211.91,
    "peakVramGbMedian": null,
    "maxContextTested": 921,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "cerebras-minimax-m2-reap-172b-a10b",
-   "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 29.37,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 52.99,
-   "peakVramGbMedian": null,
-   "maxContextTested": 797,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 73.95,
-   "tokSPrefillMedian": 1457.8,
-   "ttftMsMedian": 365.91,
-   "peakVramGbMedian": 42.91,
-   "maxContextTested": 787,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 16,
-   "n": 6,
-   "tokSOutMedian": 25.66,
-   "tokSPrefillMedian": 1346.68,
-   "ttftMsMedian": 394.46,
-   "peakVramGbMedian": 25.8,
-   "maxContextTested": 787,
    "engines": [
     "llama.cpp"
    ]
@@ -6318,10 +7552,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "google-gemma-4-31b-it",
    "bits": 8,
-   "n": 3,
-   "tokSOutMedian": 13.99,
-   "tokSPrefillMedian": 458.91,
-   "ttftMsMedian": 1172.34,
+   "n": 4,
+   "tokSOutMedian": 14.24,
+   "tokSPrefillMedian": 496.94,
+   "ttftMsMedian": 1088.99,
    "peakVramGbMedian": 45.74,
    "maxContextTested": 794,
    "engines": [
@@ -6346,10 +7580,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "ibm-granite-granite-4-1-30b",
    "bits": 8,
-   "n": 4,
-   "tokSOutMedian": 16.43,
+   "n": 1,
+   "tokSOutMedian": 17.28,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 148.26,
+   "ttftMsMedian": 273.12,
    "peakVramGbMedian": null,
    "maxContextTested": 65536,
    "engines": [
@@ -6400,34 +7634,6 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "meta-llama-llama-2-7b",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 110.15,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 171.09,
-   "peakVramGbMedian": null,
-   "maxContextTested": 867,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "meta-llama-llama-3-2-3b-instruct",
-   "bits": 16,
-   "n": 1,
-   "tokSOutMedian": 79.89,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 183.56,
-   "peakVramGbMedian": null,
-   "maxContextTested": 812,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "meta-models-muse-glimmer-30b",
    "bits": 4,
    "n": 2,
@@ -6444,10 +7650,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "meta-models-muse-glimmer-30b",
    "bits": 8,
-   "n": 7,
-   "tokSOutMedian": 15.99,
-   "tokSPrefillMedian": 683.69,
-   "ttftMsMedian": 875.66,
+   "n": 8,
+   "tokSOutMedian": 21.34,
+   "tokSPrefillMedian": 735.57,
+   "ttftMsMedian": 874.57,
    "peakVramGbMedian": null,
    "maxContextTested": 1923,
    "engines": [
@@ -6458,10 +7664,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "minimaxai-minimax-m2-7",
    "bits": 4,
-   "n": 4,
-   "tokSOutMedian": 28.5,
+   "n": 3,
+   "tokSOutMedian": 25.22,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 413.29,
+   "ttftMsMedian": 770.51,
    "peakVramGbMedian": null,
    "maxContextTested": 32768,
    "engines": [
@@ -6470,26 +7676,12 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "minimaxai-minimax-m2-7",
-   "bits": 16,
-   "n": 1,
-   "tokSOutMedian": 30.71,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 57.09,
-   "peakVramGbMedian": null,
-   "maxContextTested": 797,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "mistralai-devstral-small-2-24b-instruct-2512",
    "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 23.71,
+   "n": 1,
+   "tokSOutMedian": 23.87,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 228.89,
+   "ttftMsMedian": 244.21,
    "peakVramGbMedian": null,
    "maxContextTested": 24576,
    "engines": [
@@ -6500,10 +7692,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "mistralai-mistral-medium-3-5-128b",
    "bits": 4,
-   "n": 12,
-   "tokSOutMedian": 6.5,
+   "n": 9,
+   "tokSOutMedian": 6.39,
    "tokSPrefillMedian": 305.88,
-   "ttftMsMedian": 2327.23,
+   "ttftMsMedian": 2885.09,
    "peakVramGbMedian": null,
    "maxContextTested": 16384,
    "engines": [
@@ -6512,42 +7704,14 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "mistralai-mistral-medium-3-5-128b",
-   "bits": 16,
-   "n": 1,
-   "tokSOutMedian": 6.46,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 1955.6,
-   "peakVramGbMedian": null,
-   "maxContextTested": 1142,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "moonshotai-kimi-dev-72b",
    "bits": 4,
-   "n": 6,
-   "tokSOutMedian": 11.42,
+   "n": 1,
+   "tokSOutMedian": 11.35,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 254.12,
+   "ttftMsMedian": 258.58,
    "peakVramGbMedian": null,
-   "maxContextTested": 131072,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "nvidia-nemotron-3-nano-omni-30b-a3b-reasoning-bf16",
-   "bits": 8,
-   "n": 4,
-   "tokSOutMedian": 93.21,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 215.13,
-   "peakVramGbMedian": null,
-   "maxContextTested": 794,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -6556,10 +7720,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "nvidia-nemotron-cascade-2-30b-a3b",
    "bits": 8,
-   "n": 4,
-   "tokSOutMedian": 90.5,
+   "n": 1,
+   "tokSOutMedian": 89.78,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 275.53,
+   "ttftMsMedian": 9971.23,
    "peakVramGbMedian": null,
    "maxContextTested": 31620,
    "engines": [
@@ -6570,12 +7734,12 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "openai-gpt-oss-120b",
    "bits": 16,
-   "n": 11,
-   "tokSOutMedian": 67.55,
+   "n": 4,
+   "tokSOutMedian": 69.86,
    "tokSPrefillMedian": 851.96,
-   "ttftMsMedian": 236.4,
+   "ttftMsMedian": 691.35,
    "peakVramGbMedian": 68.47,
-   "maxContextTested": 1589,
+   "maxContextTested": 845,
    "engines": [
     "llama.cpp"
    ]
@@ -6584,10 +7748,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "openai-gpt-oss-20b",
    "bits": 8,
-   "n": 6,
-   "tokSOutMedian": 153.96,
+   "n": 5,
+   "tokSOutMedian": 152.92,
    "tokSPrefillMedian": 2397.4,
-   "ttftMsMedian": 244.7,
+   "ttftMsMedian": 245.63,
    "peakVramGbMedian": 16.95,
    "maxContextTested": 131072,
    "engines": [
@@ -6596,14 +7760,42 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "openai-gpt-oss-20b",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 73.95,
+   "tokSPrefillMedian": 1457.8,
+   "ttftMsMedian": 365.91,
+   "peakVramGbMedian": 42.91,
+   "maxContextTested": 787,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 16,
+   "n": 6,
+   "tokSOutMedian": 25.66,
+   "tokSPrefillMedian": 1346.68,
+   "ttftMsMedian": 394.46,
+   "peakVramGbMedian": 25.8,
+   "maxContextTested": 787,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
+   "modelSlug": "ornith-ai-ornith-1-5-35b-a3b",
    "bits": 16,
    "n": 1,
-   "tokSOutMedian": 93.27,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 56.87,
+   "tokSOutMedian": 35.43,
+   "tokSPrefillMedian": 1454.19,
+   "ttftMsMedian": null,
    "peakVramGbMedian": null,
-   "maxContextTested": 812,
+   "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
    ]
@@ -6654,54 +7846,12 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "qwen-qwen3-5-122b-a10b",
    "bits": 4,
-   "n": 8,
-   "tokSOutMedian": 26.72,
+   "n": 6,
+   "tokSOutMedian": 26.51,
    "tokSPrefillMedian": 411.57,
-   "ttftMsMedian": 1119.41,
+   "ttftMsMedian": 1295.97,
    "peakVramGbMedian": 77.14,
    "maxContextTested": 65536,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-5-122b-a10b",
-   "bits": 16,
-   "n": 1,
-   "tokSOutMedian": 25.43,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 102.65,
-   "peakVramGbMedian": null,
-   "maxContextTested": 797,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-5-35b-a3b",
-   "bits": 3,
-   "n": 1,
-   "tokSOutMedian": 108.42,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 207.65,
-   "peakVramGbMedian": null,
-   "maxContextTested": 787,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-5-4b",
-   "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 84.86,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 197.61,
-   "peakVramGbMedian": null,
-   "maxContextTested": 787,
    "engines": [
     "llama.cpp"
    ]
@@ -6724,7 +7874,7 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "qwen-qwen3-6-27b",
    "bits": 8,
-   "n": 23,
+   "n": 19,
    "tokSOutMedian": 17.82,
    "tokSPrefillMedian": 686.46,
    "ttftMsMedian": 768.26,
@@ -6753,10 +7903,10 @@
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
    "modelSlug": "qwen-qwen3-6-35b-a3b",
    "bits": 8,
-   "n": 9,
-   "tokSOutMedian": 75.22,
+   "n": 5,
+   "tokSOutMedian": 79.23,
    "tokSPrefillMedian": 1550.16,
-   "ttftMsMedian": 308.33,
+   "ttftMsMedian": 342.55,
    "peakVramGbMedian": 44.8,
    "maxContextTested": 787,
    "engines": [
@@ -6765,28 +7915,57 @@
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-coder-30b-a3b-instruct",
-   "bits": 8,
-   "n": 8,
-   "tokSOutMedian": 84.35,
-   "tokSPrefillMedian": 2610.62,
-   "ttftMsMedian": 195.03,
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 28.43,
+   "tokSPrefillMedian": 623.55,
+   "ttftMsMedian": 918.92,
    "peakVramGbMedian": null,
-   "maxContextTested": 686,
+   "maxContextTested": 829,
    "engines": [
     "llama.cpp"
    ]
   },
   {
    "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-coder-next",
-   "bits": 4,
-   "n": 3,
-   "tokSOutMedian": 68,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 59.11,
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 8,
+   "n": 13,
+   "tokSOutMedian": 45.71,
+   "tokSPrefillMedian": 711.6,
+   "ttftMsMedian": 903.44,
+   "peakVramGbMedian": 35,
+   "maxContextTested": 10952,
+   "engines": [
+    "llama.cpp",
+    "lucebox"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
+   "modelSlug": "qwen-qwen3-8-flash-next",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 28.13,
+   "tokSPrefillMedian": 474.37,
+   "ttftMsMedian": 1207.92,
    "peakVramGbMedian": null,
-   "maxContextTested": 717,
+   "maxContextTested": 829,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
+   "modelSlug": "qwen-qwen3-coder-30b-a3b-instruct",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 78.97,
+   "tokSPrefillMedian": 2610.62,
+   "ttftMsMedian": 203.75,
+   "peakVramGbMedian": null,
+   "maxContextTested": 686,
    "engines": [
     "llama.cpp"
    ]
@@ -6800,20 +7979,6 @@
    "tokSPrefillMedian": 1237.78,
    "ttftMsMedian": 431.86,
    "peakVramGbMedian": 69.98,
-   "maxContextTested": 786,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "qwen-qwen3-vl-8b-instruct",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 95.91,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 178.85,
-   "peakVramGbMedian": null,
    "maxContextTested": 786,
    "engines": [
     "llama.cpp"
@@ -6857,34 +8022,6 @@
    "ttftMsMedian": 252.7,
    "peakVramGbMedian": 21.6,
    "maxContextTested": 783,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "zai-org-glm-4-7-flash",
-   "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 93.28,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 104.8,
-   "peakVramGbMedian": null,
-   "maxContextTested": 783,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "radeon-ai-pro-r9700-32gb-x3",
-   "modelSlug": "zai-org-swe-dev-32b",
-   "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 16.24,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 698.63,
-   "peakVramGbMedian": null,
-   "maxContextTested": 807,
    "engines": [
     "llama.cpp"
    ]
@@ -7114,20 +8251,6 @@
    ]
   },
   {
-   "rigKey": "radeon-rx-6800-16gb",
-   "modelSlug": "unsloth-qwen3-6-35b-a3b",
-   "bits": 3,
-   "n": 1,
-   "tokSOutMedian": 89.15,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": null,
-   "peakVramGbMedian": null,
-   "maxContextTested": 262144,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
    "rigKey": "radeon-rx-6950-xt-16gb",
    "modelSlug": "qwen-qwen3-5-9b",
    "bits": 4,
@@ -7229,12 +8352,26 @@
    "rigKey": "radeon-rx-7900-xtx-24gb",
    "modelSlug": "qwen-qwen3-6-27b",
    "bits": 4,
-   "n": 6,
-   "tokSOutMedian": 28.36,
-   "tokSPrefillMedian": 335.1,
-   "ttftMsMedian": 494,
+   "n": 5,
+   "tokSOutMedian": 28.37,
+   "tokSPrefillMedian": 39.8,
+   "ttftMsMedian": 490.3,
    "peakVramGbMedian": null,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-rx-7900-xtx-24gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 94.3,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 15.25,
+   "maxContextTested": 640,
    "engines": [
     "llama.cpp"
    ]
@@ -7262,6 +8399,20 @@
    "tokSPrefillMedian": null,
    "ttftMsMedian": null,
    "peakVramGbMedian": 14.76,
+   "maxContextTested": 640,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-rx-7900-xtx-24gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 104.53,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 15.68,
    "maxContextTested": 640,
    "engines": [
     "llama.cpp"
@@ -7704,6 +8855,34 @@
   },
   {
    "rigKey": "rtx-3060-12gb",
+   "modelSlug": "empero-ai-qwen3-8-9b-distill-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 76.4,
+   "tokSPrefillMedian": 560.7,
+   "ttftMsMedian": 58.85,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "empero-ai-qwythos-9b-v2-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 51.06,
+   "tokSPrefillMedian": 1446.65,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 5.76,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
    "modelSlug": "facebook-mobilellm-125m",
    "bits": 8,
    "n": 1,
@@ -7915,6 +9094,34 @@
   },
   {
    "rigKey": "rtx-3060-12gb",
+   "modelSlug": "ibm-granite-granite-4-2-8b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 55.31,
+   "tokSPrefillMedian": 1732.5,
+   "ttftMsMedian": 314.5,
+   "peakVramGbMedian": 6.36,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "ibm-granite-granite-4-2-8b-gguf",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 52.53,
+   "tokSPrefillMedian": 1708,
+   "ttftMsMedian": 318,
+   "peakVramGbMedian": 6.6,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
    "modelSlug": "inclusionai-ling-3-0-tiny",
    "bits": 4,
    "n": 2,
@@ -8043,12 +9250,26 @@
    "rigKey": "rtx-3060-12gb",
    "modelSlug": "liquidai-lfm2-5-8b-a1b",
    "bits": 4,
-   "n": 4,
-   "tokSOutMedian": 84.92,
-   "tokSPrefillMedian": 3140.39,
-   "ttftMsMedian": 1,
-   "peakVramGbMedian": null,
+   "n": 20,
+   "tokSOutMedian": 194.35,
+   "tokSPrefillMedian": 4756.37,
+   "ttftMsMedian": 323,
+   "peakVramGbMedian": 6.94,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "liquidai-lfm2-5-8b-a1b",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 128.5,
+   "tokSPrefillMedian": 833.8,
+   "ttftMsMedian": 37.18,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
    "engines": [
     "llama.cpp"
    ]
@@ -8063,6 +9284,20 @@
    "ttftMsMedian": 512.7,
    "peakVramGbMedian": null,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "lmstudio-community-nvidia-nemotron-3-nano-4b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 89.68,
+   "tokSPrefillMedian": 2339.97,
+   "ttftMsMedian": 219,
+   "peakVramGbMedian": 4.67,
+   "maxContextTested": 4096,
    "engines": [
     "llama.cpp"
    ]
@@ -8167,6 +9402,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb",
+   "modelSlug": "mradermacher-huihui-qwythos-9b-claude-mythos-5-1m-abliterated-i1-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 90.2,
+   "tokSPrefillMedian": 611.2,
+   "ttftMsMedian": 53.99,
+   "peakVramGbMedian": null,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
    "modelSlug": "nousresearch-nouscoder-14b",
    "bits": 4,
    "n": 1,
@@ -8197,10 +9446,10 @@
    "rigKey": "rtx-3060-12gb",
    "modelSlug": "nvidia-nvidia-nemotron-3-nano-4b-bf16",
    "bits": 4,
-   "n": 9,
-   "tokSOutMedian": 49.49,
-   "tokSPrefillMedian": 1601.35,
-   "ttftMsMedian": 1,
+   "n": 27,
+   "tokSOutMedian": 93.16,
+   "tokSPrefillMedian": 2415.61,
+   "ttftMsMedian": 1079.5,
    "peakVramGbMedian": null,
    "maxContextTested": 131072,
    "engines": [
@@ -8231,6 +9480,34 @@
    "ttftMsMedian": 325.1,
    "peakVramGbMedian": null,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 52.47,
+   "tokSPrefillMedian": 1457.6,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 5.66,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-9b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 65,
+   "tokSPrefillMedian": 3114.4,
+   "ttftMsMedian": 60.36,
+   "peakVramGbMedian": null,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -8272,6 +9549,20 @@
    "tokSPrefillMedian": null,
    "ttftMsMedian": null,
    "peakVramGbMedian": 9,
+   "maxContextTested": 2048,
+   "engines": [
+    "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "qwen-qwen2-5-coder-7b-instruct",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 119,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.7,
    "maxContextTested": 2048,
    "engines": [
     "ollama"
@@ -8343,6 +9634,21 @@
    "ttftMsMedian": 2553.3,
    "peakVramGbMedian": 8.7,
    "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp",
+    "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "qwen-qwen3-30b-a3b",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 107,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 12,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp",
     "ollama"
@@ -8504,13 +9810,55 @@
   },
   {
    "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-gemma-4-12b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 36.96,
+   "tokSPrefillMedian": 892.67,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 7.59,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-gemma-4-12b-it-qat-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 79.03,
+   "tokSPrefillMedian": 419.98,
+   "ttftMsMedian": 1245.29,
+   "peakVramGbMedian": 9.48,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-gemma-4-e2b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 113.4,
+   "tokSPrefillMedian": 3555.41,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 1.87,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
    "modelSlug": "unsloth-gemma-4-e4b-it-gguf",
    "bits": 4,
-   "n": 9,
-   "tokSOutMedian": 68.84,
-   "tokSPrefillMedian": 2439.86,
+   "n": 10,
+   "tokSOutMedian": 69.88,
+   "tokSPrefillMedian": 2263.67,
    "ttftMsMedian": 1065.8,
-   "peakVramGbMedian": null,
+   "peakVramGbMedian": 3.5,
    "maxContextTested": 131072,
    "engines": [
     "llama.cpp"
@@ -8560,14 +9908,42 @@
   },
   {
    "rigKey": "rtx-3060-12gb",
-   "modelSlug": "unsloth-qwen3-5-9b-gguf",
+   "modelSlug": "unsloth-qwen3-5-4b-gguf",
    "bits": 4,
    "n": 1,
-   "tokSOutMedian": 52.52,
-   "tokSPrefillMedian": 1656.25,
+   "tokSOutMedian": 78.63,
+   "tokSPrefillMedian": 2111.87,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 3.5,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-qwen3-5-9b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 52.2,
+   "tokSPrefillMedian": 1557.08,
    "ttftMsMedian": 2492.11,
-   "peakVramGbMedian": 7.31,
-   "maxContextTested": 4608,
+   "peakVramGbMedian": 6.51,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "bits": 2,
+   "n": 2,
+   "tokSOutMedian": 75.28,
+   "tokSPrefillMedian": 3396.8,
+   "ttftMsMedian": 63,
+   "peakVramGbMedian": null,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -8590,12 +9966,26 @@
    "rigKey": "rtx-3060-12gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 15.79,
-   "tokSPrefillMedian": 170.15,
+   "n": 2,
+   "tokSOutMedian": 24.61,
+   "tokSPrefillMedian": 210.96,
    "ttftMsMedian": 3009.2,
    "peakVramGbMedian": null,
-   "maxContextTested": 2048,
+   "maxContextTested": 8320,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 5,
+   "tokSOutMedian": 18.31,
+   "tokSPrefillMedian": 498.7,
+   "ttftMsMedian": 150.38,
+   "peakVramGbMedian": null,
+   "maxContextTested": 32768,
    "engines": [
     "llama.cpp"
    ]
@@ -8714,6 +10104,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "bartowski-mistralai-mistral-small-3-2-24b-instruct-2506-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 21.75,
+   "tokSPrefillMedian": 586.5,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 17.4,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "bartowski-nvidia-nemotron-cascade-8b-gguf",
    "bits": 4,
    "n": 8,
@@ -8766,20 +10170,6 @@
    "maxContextTested": 131072,
    "engines": [
     "vllm"
-   ]
-  },
-  {
-   "rigKey": "rtx-3060-12gb-x2",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
-   "bits": 4,
-   "n": 7,
-   "tokSOutMedian": 85.94,
-   "tokSPrefillMedian": 1934.12,
-   "ttftMsMedian": 3079.2,
-   "peakVramGbMedian": 21.1,
-   "maxContextTested": 65536,
-   "engines": [
-    "llama.cpp"
    ]
   },
   {
@@ -9246,6 +10636,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 7,
+   "tokSOutMedian": 85.94,
+   "tokSPrefillMedian": 1934.12,
+   "ttftMsMedian": 3079.2,
+   "peakVramGbMedian": 21.1,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "prism-ml-bonsai-27b-gguf",
    "bits": 4,
    "n": 18,
@@ -9360,9 +10764,9 @@
    "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
    "bits": 4,
-   "n": 13,
-   "tokSOutMedian": 68.55,
-   "tokSPrefillMedian": 2618.74,
+   "n": 14,
+   "tokSOutMedian": 68.22,
+   "tokSPrefillMedian": 2601.54,
    "ttftMsMedian": 2495.4,
    "peakVramGbMedian": 18.6,
    "maxContextTested": 131072,
@@ -9388,10 +10792,10 @@
    "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-gemma-4-31b-it-gguf",
    "bits": 4,
-   "n": 15,
-   "tokSOutMedian": 15.2,
-   "tokSPrefillMedian": 761.24,
-   "ttftMsMedian": 11069.15,
+   "n": 16,
+   "tokSOutMedian": 15.22,
+   "tokSPrefillMedian": 734.88,
+   "ttftMsMedian": 10911.4,
    "peakVramGbMedian": 21.5,
    "maxContextTested": 98304,
    "engines": [
@@ -9408,6 +10812,20 @@
    "ttftMsMedian": 5184.6,
    "peakVramGbMedian": 5.3,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-gpt-oss-20b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 93.44,
+   "tokSPrefillMedian": 895.4,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 12.2,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -9442,6 +10860,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 37.82,
+   "tokSPrefillMedian": 777.69,
+   "ttftMsMedian": 1387.9,
+   "peakVramGbMedian": 17.25,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-nemotron-3-nano-30b-a3b-gguf",
    "bits": 4,
    "n": 1,
@@ -9450,6 +10882,20 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": 22.5,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-phi-4-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 34.2,
+   "tokSPrefillMedian": 889.5,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 9.8,
+   "maxContextTested": 16384,
    "engines": [
     "llama.cpp"
    ]
@@ -9498,6 +10944,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-qwen3-30b-a3b-thinking-2507-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 94.29,
+   "tokSPrefillMedian": 1073.4,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 20.1,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-qwen3-5-9b-gguf",
    "bits": 4,
    "n": 9,
@@ -9526,6 +10986,20 @@
   },
   {
    "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-qwen3-6-27b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 18.43,
+   "tokSPrefillMedian": 323.07,
+   "ttftMsMedian": 490.4,
+   "peakVramGbMedian": null,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-qwen3-6-27b-mtp-gguf",
    "bits": 4,
    "n": 10,
@@ -9542,12 +11016,12 @@
    "rigKey": "rtx-3060-12gb-x2",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
    "bits": 4,
-   "n": 6,
-   "tokSOutMedian": 79.03,
-   "tokSPrefillMedian": 2056.25,
-   "ttftMsMedian": null,
+   "n": 9,
+   "tokSOutMedian": 78.23,
+   "tokSPrefillMedian": 1980.49,
+   "ttftMsMedian": 223.95,
    "peakVramGbMedian": 21.6,
-   "maxContextTested": 32768,
+   "maxContextTested": 98304,
    "engines": [
     "llama.cpp"
    ]
@@ -9562,6 +11036,34 @@
    "ttftMsMedian": 86.49,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 15.49,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3060-12gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 18.31,
+   "tokSPrefillMedian": 411.29,
+   "ttftMsMedian": 1505.72,
+   "peakVramGbMedian": 19.36,
+   "maxContextTested": 131072,
    "engines": [
     "llama.cpp"
    ]
@@ -9724,10 +11226,10 @@
    "rigKey": "rtx-3060-ti-8gb",
    "modelSlug": "nvidia-nvidia-nemotron-3-nano-4b-bf16",
    "bits": 4,
-   "n": 9,
-   "tokSOutMedian": 60.28,
-   "tokSPrefillMedian": 1959.04,
-   "ttftMsMedian": 1,
+   "n": 27,
+   "tokSOutMedian": 112.45,
+   "tokSPrefillMedian": 2846.19,
+   "ttftMsMedian": 1809.4,
    "peakVramGbMedian": 3.9,
    "maxContextTested": 131072,
    "engines": [
@@ -9876,6 +11378,20 @@
   },
   {
    "rigKey": "rtx-3080-12gb",
+   "modelSlug": "ggml-org-gpt-oss-20b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 57.09,
+   "tokSPrefillMedian": 1463,
+   "ttftMsMedian": 1558.2,
+   "peakVramGbMedian": 9.26,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
    "modelSlug": "google-gemma-3-12b-it",
    "bits": 4,
    "n": 4,
@@ -9904,6 +11420,20 @@
   },
   {
    "rigKey": "rtx-3080-12gb",
+   "modelSlug": "google-gemma-4-12b-it-qat-q4-0-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 71.21,
+   "tokSPrefillMedian": 2684.96,
+   "ttftMsMedian": 968.3,
+   "peakVramGbMedian": 8.56,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
    "modelSlug": "google-gemma-4-e4b-it",
    "bits": 4,
    "n": 3,
@@ -9918,6 +11448,34 @@
   },
   {
    "rigKey": "rtx-3080-12gb",
+   "modelSlug": "liquidai-lfm2-5-8b-a1b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 328.42,
+   "tokSPrefillMedian": 10731.79,
+   "ttftMsMedian": 260.5,
+   "peakVramGbMedian": 6.39,
+   "maxContextTested": 128000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "liquidai-lfm2-5-8b-a1b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 277.81,
+   "tokSPrefillMedian": 9840.68,
+   "ttftMsMedian": 286.4,
+   "peakVramGbMedian": 8.07,
+   "maxContextTested": 128000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
    "modelSlug": "meta-llama-llama-3-1-8b-instruct",
    "bits": 4,
    "n": 2,
@@ -9928,6 +11486,20 @@
    "maxContextTested": 2048,
    "engines": [
     "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "meta-models-muse-glimmer-30b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 5.97,
+   "tokSPrefillMedian": 672.36,
+   "ttftMsMedian": 3839.5,
+   "peakVramGbMedian": 8.8,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -9970,6 +11542,76 @@
    "maxContextTested": 2048,
    "engines": [
     "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "orcarouter-qwen3-8-27b-uncensored-gguf",
+   "bits": 2,
+   "n": 2,
+   "tokSOutMedian": 60.69,
+   "tokSPrefillMedian": 1181.74,
+   "ttftMsMedian": 2291.7,
+   "peakVramGbMedian": 9.07,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 60.79,
+   "tokSPrefillMedian": 633.9,
+   "ttftMsMedian": 4184.35,
+   "peakVramGbMedian": 9.57,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-9b-gguf",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 91.96,
+   "tokSPrefillMedian": 3572.47,
+   "ttftMsMedian": 761.9,
+   "peakVramGbMedian": 9.46,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-9b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 82.8,
+   "tokSPrefillMedian": 3397.36,
+   "ttftMsMedian": 799.9,
+   "peakVramGbMedian": 8.46,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "prism-ml-bonsai-27b-gguf",
+   "bits": 1,
+   "n": 1,
+   "tokSOutMedian": 72.93,
+   "tokSPrefillMedian": 1319.81,
+   "ttftMsMedian": 2053.9,
+   "peakVramGbMedian": 5.13,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -10054,6 +11696,34 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": 9.5,
    "maxContextTested": 196608,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 13.78,
+   "tokSPrefillMedian": 891.31,
+   "ttftMsMedian": 2810.9,
+   "peakVramGbMedian": 9.41,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3080-12gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 3,
+   "tokSOutMedian": 44.41,
+   "tokSPrefillMedian": 1075.73,
+   "ttftMsMedian": 2525.5,
+   "peakVramGbMedian": 9.65,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -10166,6 +11836,20 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "bartowski-nvidia-nemotron-cascade-2-30b-a3b-gguf",
+   "bits": 4,
+   "n": 10,
+   "tokSOutMedian": 190.27,
+   "tokSPrefillMedian": 3209.42,
+   "ttftMsMedian": 1768.65,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
    "engines": [
     "llama.cpp"
    ]
@@ -10678,6 +12362,20 @@
   },
   {
    "rigKey": "rtx-3090-24gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 124.12,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 94.42,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
    "modelSlug": "poolside-laguna-xs-2-1",
    "bits": 4,
    "n": 1,
@@ -10768,6 +12466,34 @@
    "tokSOutMedian": 11.02,
    "tokSPrefillMedian": 55.97,
    "ttftMsMedian": 646.6,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 113.24,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 90.9,
+   "peakVramGbMedian": 22.35,
+   "maxContextTested": 65536,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 53,
+   "tokSPrefillMedian": 355.8,
+   "ttftMsMedian": 207.97,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -10916,6 +12642,20 @@
   },
   {
    "rigKey": "rtx-3090-24gb",
+   "modelSlug": "unsloth-qwen3-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 124.4,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
    "modelSlug": "unsloth-qwen3-6-27b-gguf",
    "bits": 4,
    "n": 1,
@@ -10946,12 +12686,26 @@
    "rigKey": "rtx-3090-24gb",
    "modelSlug": "unsloth-qwen3-6-27b-mtp-gguf",
    "bits": 4,
-   "n": 16,
-   "tokSOutMedian": 49.89,
-   "tokSPrefillMedian": 1339.63,
-   "ttftMsMedian": 465.2,
+   "n": 91,
+   "tokSOutMedian": 101.5,
+   "tokSPrefillMedian": 4514.21,
+   "ttftMsMedian": 760.6,
    "peakVramGbMedian": 20.16,
    "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 91.82,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 115,
+   "peakVramGbMedian": 21.9,
+   "maxContextTested": 32768,
    "engines": [
     "llama.cpp"
    ]
@@ -10980,6 +12734,34 @@
    "ttftMsMedian": 87,
    "peakVramGbMedian": 23.2,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 40.8,
+   "tokSPrefillMedian": 325,
+   "ttftMsMedian": 67.7,
+   "peakVramGbMedian": 17.56,
+   "maxContextTested": 32768,
+   "engines": [
+    "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 51.5,
+   "tokSPrefillMedian": 359.9,
+   "ttftMsMedian": 205.61,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -11042,6 +12824,20 @@
   },
   {
    "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "anonimousa-qwen3-8-flash-next-reap-256-duo-gguf",
+   "bits": 3,
+   "n": 2,
+   "tokSOutMedian": 53.55,
+   "tokSPrefillMedian": 948.63,
+   "ttftMsMedian": 2948.5,
+   "peakVramGbMedian": 33.9,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
    "modelSlug": "bottlecapai-thinkingcap-qwen3-6-27b",
    "bits": 8,
    "n": 6,
@@ -11052,6 +12848,20 @@
    "maxContextTested": 131072,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "btbtyler09-qwen3-8-27b-gptq-4bit",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 96.6,
+   "tokSPrefillMedian": 1311.1,
+   "ttftMsMedian": 796.3,
+   "peakVramGbMedian": 45.28,
+   "maxContextTested": 8192,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -11070,16 +12880,17 @@
   },
   {
    "rigKey": "rtx-3090-24gb-x2",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
+   "modelSlug": "dbirks-qwen3-8-27b-w4a16-autoround",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 136.5,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 86.39,
-   "peakVramGbMedian": null,
+   "n": 3,
+   "tokSOutMedian": 182.4,
+   "tokSPrefillMedian": 1343.8,
+   "ttftMsMedian": 825.27,
+   "peakVramGbMedian": 44.36,
    "maxContextTested": 262144,
    "engines": [
-    "llama.cpp"
+    "sglang",
+    "vllm"
    ]
   },
   {
@@ -11252,6 +13063,20 @@
   },
   {
    "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 197,
+   "tokSPrefillMedian": 7559.5,
+   "ttftMsMedian": 8037,
+   "peakVramGbMedian": 19.5,
+   "maxContextTested": 131072,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
    "modelSlug": "nvidia-qwen3-6-35b-a3b-nvfp4",
    "bits": 4,
    "n": 11,
@@ -11262,6 +13087,20 @@
    "maxContextTested": 262144,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 136.5,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 86.39,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -11372,6 +13211,20 @@
    "ttftMsMedian": 148.56,
    "peakVramGbMedian": 22.15,
    "maxContextTested": 32768,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 72.8,
+   "tokSPrefillMedian": 219.6,
+   "ttftMsMedian": 949,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
    "engines": [
     "vllm"
    ]
@@ -11616,6 +13469,48 @@
    ]
   },
   {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 73,
+   "tokSPrefillMedian": 888.2,
+   "ttftMsMedian": 1175.41,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "bunn-llama"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 5,
+   "tokSOutMedian": 51.6,
+   "tokSPrefillMedian": 944.7,
+   "ttftMsMedian": 229.66,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x2",
+   "modelSlug": "unsloth-qwen3-8-flash-next-gguf",
+   "bits": 3,
+   "n": 2,
+   "tokSOutMedian": 41.61,
+   "tokSPrefillMedian": 462.27,
+   "ttftMsMedian": 6504.6,
+   "peakVramGbMedian": 43.6,
+   "maxContextTested": 217088,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
    "rigKey": "rtx-3090-24gb-x3",
    "modelSlug": "nvidia-qwen3-6-35b-a3b-nvfp4",
    "bits": 4,
@@ -11801,11 +13696,11 @@
    "rigKey": "rtx-3090-24gb-x8",
    "modelSlug": "deepseek-ai-deepseek-v4-flash-0731",
    "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 95.52,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 114.16,
-   "peakVramGbMedian": null,
+   "n": 2,
+   "tokSOutMedian": 93.34,
+   "tokSPrefillMedian": 1344.17,
+   "ttftMsMedian": 190.63,
+   "peakVramGbMedian": 184.35,
    "maxContextTested": 327680,
    "engines": [
     "vllm"
@@ -11851,6 +13746,34 @@
    "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x8",
+   "modelSlug": "unsloth-glm-5-3-flash-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 35.02,
+   "tokSPrefillMedian": 171.57,
+   "ttftMsMedian": 2167.05,
+   "peakVramGbMedian": 166.75,
+   "maxContextTested": 204800,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb-x8",
+   "modelSlug": "wtdcode-glm-5-3-flash-awq-w4a16",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 75.2,
+   "tokSPrefillMedian": 1020,
+   "ttftMsMedian": 357.8,
+   "peakVramGbMedian": 183.43,
+   "maxContextTested": 204800,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -11938,20 +13861,6 @@
    ]
   },
   {
-   "rigKey": "rtx-3090-ti-24gb-x2",
-   "modelSlug": "qwen-qwen3-6-35b-a3b",
-   "bits": 6,
-   "n": 1,
-   "tokSOutMedian": 131.58,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 212.55,
-   "peakVramGbMedian": 17,
-   "maxContextTested": 65536,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
    "rigKey": "rtx-4060-ti-16gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b",
    "bits": 3,
@@ -11961,6 +13870,34 @@
    "ttftMsMedian": 4000,
    "peakVramGbMedian": null,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4060-ti-16gb-x2",
+   "modelSlug": "unsloth-muse-glimmer-30b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 44,
+   "tokSPrefillMedian": 841.23,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 125000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4060-ti-16gb-x2",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 53.64,
+   "tokSPrefillMedian": 971.79,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -11989,6 +13926,48 @@
    "ttftMsMedian": 43726,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4070-12gb",
+   "modelSlug": "mradermacher-ornith-1-5-35b-a3b-mtp-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 60.5,
+   "tokSPrefillMedian": 585.56,
+   "ttftMsMedian": 874.4,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4070-12gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 43.15,
+   "tokSPrefillMedian": 149073.2,
+   "ttftMsMedian": 392.92,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-4070-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 33.46,
+   "tokSPrefillMedian": 381.37,
+   "ttftMsMedian": 650,
+   "peakVramGbMedian": 10.2,
+   "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
    ]
@@ -12037,6 +14016,20 @@
   },
   {
    "rigKey": "rtx-4070-12gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 57.35,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 68,
+   "peakVramGbMedian": 11.6,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4070-12gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
    "bits": 4,
    "n": 1,
@@ -12047,6 +14040,20 @@
    "maxContextTested": 2048,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-4070-12gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 65.73,
+   "tokSPrefillMedian": 48.51,
+   "ttftMsMedian": 226.75,
+   "peakVramGbMedian": 9.34,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -12163,6 +14170,20 @@
   },
   {
    "rigKey": "rtx-4090-24gb",
+   "modelSlug": "unsloth-qwen3-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 157.4,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4090-24gb",
    "modelSlug": "unsloth-qwen3-6-27b",
    "bits": 3,
    "n": 1,
@@ -12193,12 +14214,26 @@
    "rigKey": "rtx-4090-24gb",
    "modelSlug": "unsloth-qwen3-6-27b-mtp-gguf",
    "bits": 4,
-   "n": 3,
-   "tokSOutMedian": 87.19,
-   "tokSPrefillMedian": 2258,
-   "ttftMsMedian": 12246,
+   "n": 2,
+   "tokSOutMedian": 94.1,
+   "tokSPrefillMedian": 1228.97,
+   "ttftMsMedian": null,
    "peakVramGbMedian": 23.9,
-   "maxContextTested": 131072,
+   "maxContextTested": 76000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4090-24gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 165.06,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 23691,
+   "maxContextTested": 64000,
    "engines": [
     "llama.cpp"
    ]
@@ -12213,6 +14248,20 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-4090-48gb",
+   "modelSlug": "huihui-ai-huihui-gemma-4-31b-it-abliterated-v2",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 58,
+   "tokSPrefillMedian": 1715,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 31.5,
+   "maxContextTested": 65535,
    "engines": [
     "llama.cpp"
    ]
@@ -12569,6 +14618,21 @@
   },
   {
    "rigKey": "rtx-5060-ti-16gb-x2",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 63.2,
+   "tokSPrefillMedian": 395.5,
+   "ttftMsMedian": 189.62,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp",
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5060-ti-16gb-x2",
    "modelSlug": "unsloth-qwen3-6-27b-gguf",
    "bits": 4,
    "n": 1,
@@ -12638,7 +14702,35 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
+   "modelSlug": "apodex-apodex-1-1-mini",
+   "bits": 1,
+   "n": 2,
+   "tokSOutMedian": 182.31,
+   "tokSPrefillMedian": 1730.93,
+   "ttftMsMedian": 295.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5070-12gb",
+   "modelSlug": "atomicchat-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 2,
+   "tokSOutMedian": 45.99,
+   "tokSPrefillMedian": 1031.71,
+   "ttftMsMedian": 543.58,
+   "peakVramGbMedian": 10.08,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "ggml-org-gemma-4-12b-it-gguf",
    "bits": 4,
    "n": 1,
@@ -12652,7 +14744,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "jetbrains-mellum2-12b-a2-5b-instruct-gguf-q4-k-m",
    "bits": 4,
    "n": 1,
@@ -12666,7 +14758,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "jetbrains-mellum2-12b-a2-5b-thinking-gguf-q4-k-m",
    "bits": 4,
    "n": 1,
@@ -12680,7 +14772,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "kai-os-grug-12b-gguf",
    "bits": 4,
    "n": 1,
@@ -12694,7 +14786,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "mia-ailab-gemmable-4-12b-mtp-gguf",
    "bits": 4,
    "n": 1,
@@ -12708,7 +14800,35 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
+   "modelSlug": "nvidia-nvidia-nemotron-3-nano-4b-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 182.2,
+   "tokSPrefillMedian": 5614.9,
+   "ttftMsMedian": 123.5,
+   "peakVramGbMedian": 4.6,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5070-12gb",
+   "modelSlug": "ornith-ai-ornith-1-5-9b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 102.04,
+   "tokSPrefillMedian": 4046.67,
+   "ttftMsMedian": 46.72,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "unsloth-gemma-4-12b-it-gguf",
    "bits": 5,
    "n": 1,
@@ -12722,7 +14842,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "unsloth-gemma-4-12b-it-gguf",
    "bits": 6,
    "n": 1,
@@ -12736,7 +14856,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "unsloth-qwen3-14b-gguf",
    "bits": 4,
    "n": 1,
@@ -12750,7 +14870,7 @@
    ]
   },
   {
-   "rigKey": "rtx-5070-11-9gb",
+   "rigKey": "rtx-5070-12gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
    "bits": 4,
    "n": 1,
@@ -12759,6 +14879,20 @@
    "ttftMsMedian": 228,
    "peakVramGbMedian": null,
    "maxContextTested": 64000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5070-12gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 4,
+   "tokSOutMedian": 46.31,
+   "tokSPrefillMedian": 936.59,
+   "ttftMsMedian": 581.99,
+   "peakVramGbMedian": 10.11,
+   "maxContextTested": 16384,
    "engines": [
     "llama.cpp"
    ]
@@ -12961,6 +15095,34 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "ar4ikov-kat-coder-v2-5-dev-awq-w4a16-asym",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 201.2,
+   "tokSPrefillMedian": 26.9,
+   "ttftMsMedian": 1189.95,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "atomicchat-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 98.72,
+   "tokSPrefillMedian": 2109.3,
+   "ttftMsMedian": 279.3,
+   "peakVramGbMedian": 29.35,
+   "maxContextTested": 131000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "coherelabs-north-mini-code-1-0",
    "bits": 6,
    "n": 1,
@@ -13003,6 +15165,34 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "essentialai-rnj-1-instruct-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 123.2,
+   "tokSPrefillMedian": 1673.1,
+   "ttftMsMedian": 31.08,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "ggml-org-models-moved",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 4360.94,
+   "tokSPrefillMedian": 471381.77,
+   "ttftMsMedian": 1.1,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "google-gemma-4-12b-it",
    "bits": 8,
    "n": 1,
@@ -13013,6 +15203,20 @@
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "google-gemma-4-12b-it-qat-q4-0-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 130.8,
+   "tokSPrefillMedian": 368.7,
+   "ttftMsMedian": 100.34,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
    ]
   },
   {
@@ -13033,13 +15237,14 @@
    "rigKey": "rtx-5090-32gb",
    "modelSlug": "google-gemma-4-26b-a4b-it-qat-q4-0-gguf",
    "bits": 4,
-   "n": 2,
+   "n": 3,
    "tokSOutMedian": 230.5,
    "tokSPrefillMedian": 3210.7,
    "ttftMsMedian": 11.5,
    "peakVramGbMedian": null,
    "maxContextTested": 131072,
    "engines": [
+    "lmstudio",
     "ollama"
    ]
   },
@@ -13101,6 +15306,272 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "liquidai-lfm2-24b-a2b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 393.2,
+   "tokSPrefillMedian": 1718.2,
+   "ttftMsMedian": 18.62,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-deepseek-r1-0528-qwen3-8b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 141.5,
+   "tokSPrefillMedian": 513.7,
+   "ttftMsMedian": 48.67,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-deepseek-r1-distill-qwen-7b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 213.3,
+   "tokSPrefillMedian": 803.7,
+   "ttftMsMedian": 31.11,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-gemma-3n-e4b-it-text-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 135.4,
+   "tokSPrefillMedian": 545.5,
+   "ttftMsMedian": 55,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-gemma-4-12b-it-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 88.3,
+   "tokSPrefillMedian": 334.8,
+   "ttftMsMedian": 110.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-gemma-4-26b-a4b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 209.8,
+   "tokSPrefillMedian": 458.4,
+   "ttftMsMedian": 78.53,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-gemma-4-e2b-it-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 232.6,
+   "tokSPrefillMedian": 634.2,
+   "ttftMsMedian": 58.34,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-gemma-4-e4b-it-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 161.5,
+   "tokSPrefillMedian": 577.3,
+   "ttftMsMedian": 64.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-glm-4-6v-flash-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 132.7,
+   "tokSPrefillMedian": 707.8,
+   "ttftMsMedian": 39.56,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-glm-4-7-flash-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 182.5,
+   "tokSPrefillMedian": 699.6,
+   "ttftMsMedian": 38.59,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-nemotron-3-nano-omni-30b-a3b-reasoning-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 274.4,
+   "tokSPrefillMedian": 1208.8,
+   "ttftMsMedian": 32.26,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-nvidia-nemotron-3-nano-30b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 286.8,
+   "tokSPrefillMedian": 1114.5,
+   "ttftMsMedian": 34.99,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-phi-4-reasoning-plus-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 92.3,
+   "tokSPrefillMedian": 7981.6,
+   "ttftMsMedian": 32.57,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-qwen3-30b-a3b-instruct-2507-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 312.9,
+   "tokSPrefillMedian": 1108.1,
+   "ttftMsMedian": 27.07,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-qwen3-4b-thinking-2507-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 219.7,
+   "tokSPrefillMedian": 1053.7,
+   "ttftMsMedian": 30.37,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-qwen3-5-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 209.3,
+   "tokSPrefillMedian": 569.6,
+   "ttftMsMedian": 56.18,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-qwen3-6-35b-a3b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 243.1,
+   "tokSPrefillMedian": 625.2,
+   "ttftMsMedian": 51.18,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "lmstudio-community-qwen3-coder-30b-a3b-instruct-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 263,
+   "tokSPrefillMedian": 1217.8,
+   "ttftMsMedian": 24.64,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "mistralai-ministral-3-14b-reasoning-2512-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 89.4,
+   "tokSPrefillMedian": 3183.6,
+   "ttftMsMedian": 46.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4",
    "bits": 4,
    "n": 1,
@@ -13144,6 +15615,20 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "nvidia-nvidia-nemotron-3-nano-4b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 237.8,
+   "tokSPrefillMedian": 1173.5,
+   "ttftMsMedian": 34.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "nvidia-qwen3-6-27b-nvfp4",
    "bits": 4,
    "n": 3,
@@ -13154,6 +15639,48 @@
    "maxContextTested": 148000,
    "engines": [
     "llama.cpp",
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "openai-gpt-oss-20b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 307.2,
+   "tokSPrefillMedian": 1059.1,
+   "ttftMsMedian": 83.09,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 252.6,
+   "tokSPrefillMedian": 1,
+   "ttftMsMedian": 1,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "ollama"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "ornith-ai-ornith-1-5-35b-a3b-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 258.8,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
     "vllm"
    ]
   },
@@ -13173,9 +15700,37 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "pearsonkyle-qwen3-8-27b-gptq-w4a16",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 132.7,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "philbert440-qwen3-8-27b-w4a16-awq",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 102.95,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "poolside-laguna-xs-2-1-int4",
    "bits": 4,
-   "n": 1,
+   "n": 2,
    "tokSOutMedian": 206.2,
    "tokSPrefillMedian": 2122,
    "ttftMsMedian": 29.69,
@@ -13189,7 +15744,7 @@
    "rigKey": "rtx-5090-32gb",
    "modelSlug": "poolside-laguna-xs-2-1-nvfp4",
    "bits": 4,
-   "n": 1,
+   "n": 2,
    "tokSOutMedian": 216.7,
    "tokSPrefillMedian": 2415.3,
    "ttftMsMedian": 26.08,
@@ -13211,6 +15766,20 @@
    "maxContextTested": 8192,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "prism-ml-bonsai-27b-gguf",
+   "bits": 1,
+   "n": 1,
+   "tokSOutMedian": 136.7,
+   "tokSPrefillMedian": 389.4,
+   "ttftMsMedian": 82.18,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
    ]
   },
   {
@@ -13316,6 +15885,35 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 157.37,
+   "tokSPrefillMedian": 850.65,
+   "ttftMsMedian": 279.78,
+   "peakVramGbMedian": 23.95,
+   "maxContextTested": 170000,
+   "engines": [
+    "llama.cpp",
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "qwen-qwen3-8-27b-fp8",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 16.78,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 143.87,
+   "peakVramGbMedian": 30.94,
+   "maxContextTested": 8192,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "qwen-qwen3-8b",
    "bits": 4,
    "n": 1,
@@ -13324,6 +15922,34 @@
    "ttftMsMedian": 18.26,
    "peakVramGbMedian": 5.6,
    "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "rabbit-hole-ai-deepseek-v4-flash-0731-mxfp4-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 26.43,
+   "tokSPrefillMedian": 174.5,
+   "ttftMsMedian": 3054.9,
+   "peakVramGbMedian": 28.31,
+   "maxContextTested": 196608,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "rabbit-hole-ai-qwen3-8-27b-5090-goldilocks-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 93.47,
+   "tokSPrefillMedian": 2038.8,
+   "ttftMsMedian": 279.2,
+   "peakVramGbMedian": 29.81,
+   "maxContextTested": 131000,
    "engines": [
     "llama.cpp"
    ]
@@ -13386,6 +16012,20 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "sakamakismile-huihui-qwen3-8-27b-abliterated-nvfp4",
+   "bits": 4,
+   "n": 16,
+   "tokSOutMedian": 135.57,
+   "tokSPrefillMedian": 7495,
+   "ttftMsMedian": 931,
+   "peakVramGbMedian": null,
+   "maxContextTested": 172800,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "sakamakismile-qwen3-6-27b-text-nvfp4-mtp",
    "bits": 4,
    "n": 2,
@@ -13396,6 +16036,62 @@
    "maxContextTested": 131072,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "sakamakismile-qwen3-8-27b-mtp-nvfp4",
+   "bits": 4,
+   "n": 7,
+   "tokSOutMedian": 117.69,
+   "tokSPrefillMedian": 7466.16,
+   "ttftMsMedian": 814.81,
+   "peakVramGbMedian": null,
+   "maxContextTested": 172800,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-deepseek-v4-flash-0731-gguf",
+   "bits": 1,
+   "n": 2,
+   "tokSOutMedian": 17.75,
+   "tokSPrefillMedian": 100.3,
+   "ttftMsMedian": 250.46,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-deepseek-v4-flash-0731-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 10.4,
+   "tokSPrefillMedian": 18.4,
+   "ttftMsMedian": 271.17,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 255.67,
+   "tokSPrefillMedian": 12653.88,
+   "ttftMsMedian": 40.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -13428,14 +16124,70 @@
   },
   {
    "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen2-5-vl-7b-instruct-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 222.4,
+   "tokSPrefillMedian": 2215.4,
+   "ttftMsMedian": 18.51,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-6-27b-gguf",
+   "bits": 3,
+   "n": 3,
+   "tokSOutMedian": 73.12,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 465.64,
+   "peakVramGbMedian": 18.4,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
    "modelSlug": "unsloth-qwen3-6-27b-gguf",
    "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 89,
+   "n": 6,
+   "tokSOutMedian": 66.82,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": 459,
-   "peakVramGbMedian": null,
+   "ttftMsMedian": 455.53,
+   "peakVramGbMedian": 19.54,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-6-27b-gguf",
+   "bits": 5,
+   "n": 4,
+   "tokSOutMedian": 60.42,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 476.02,
+   "peakVramGbMedian": 21.65,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-6-27b-gguf",
+   "bits": 6,
+   "n": 3,
+   "tokSOutMedian": 50.89,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 523.19,
+   "peakVramGbMedian": 24.64,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -13480,6 +16232,148 @@
    "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 265.43,
+   "tokSPrefillMedian": 9029.64,
+   "ttftMsMedian": 56.7,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 88.1,
+   "tokSPrefillMedian": 904.7,
+   "ttftMsMedian": 81.79,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 3,
+   "n": 3,
+   "tokSOutMedian": 79.38,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 381.61,
+   "peakVramGbMedian": 17.33,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 12,
+   "tokSOutMedian": 91.25,
+   "tokSPrefillMedian": 1095.5,
+   "ttftMsMedian": 108.34,
+   "peakVramGbMedian": 23.31,
+   "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp",
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 5,
+   "n": 3,
+   "tokSOutMedian": 60.22,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 424.41,
+   "peakVramGbMedian": 23.22,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 5,
+   "tokSOutMedian": 60.17,
+   "tokSPrefillMedian": 2032.1,
+   "ttftMsMedian": 279.2,
+   "peakVramGbMedian": 28.31,
+   "maxContextTested": 131000,
+   "engines": [
+    "llama.cpp",
+    "lmstudio"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-qwen3-8-27b-nvfp4",
+   "bits": 4,
+   "n": 5,
+   "tokSOutMedian": 87.1,
+   "tokSPrefillMedian": 6608.21,
+   "ttftMsMedian": 135,
+   "peakVramGbMedian": 30.02,
+   "maxContextTested": 153664,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-smollm2-135m-instruct-gguf",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 1102.14,
+   "tokSPrefillMedian": 75749.04,
+   "ttftMsMedian": 6.8,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "unsloth-smollm2-135m-instruct-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 1003.09,
+   "tokSPrefillMedian": 68228.98,
+   "ttftMsMedian": 7.5,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb",
+   "modelSlug": "yuxinlu1-gemma-4-12b-coder-fable5-composer2-5-v1-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 85.3,
+   "tokSPrefillMedian": 330.7,
+   "ttftMsMedian": 111.89,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "lmstudio"
    ]
   },
   {
@@ -13536,6 +16430,20 @@
    "maxContextTested": 262144,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-5090-32gb-x2",
+   "modelSlug": "radixark-qwen3-8-27b-nvfp4-bf16-lmhead",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 189.6,
+   "tokSPrefillMedian": 16295.7,
+   "ttftMsMedian": 35.64,
+   "peakVramGbMedian": 57.35,
+   "maxContextTested": 262144,
+   "engines": [
+    "sglang"
    ]
   },
   {
@@ -13780,12 +16688,12 @@
    "rigKey": "rtx-pro-6000-blackwell-96gb",
    "modelSlug": "deepseek-ai-deepseek-v4-flash",
    "bits": 3,
-   "n": 2,
-   "tokSOutMedian": 63.9,
-   "tokSPrefillMedian": 1956.5,
-   "ttftMsMedian": 5699,
-   "peakVramGbMedian": 93.9,
-   "maxContextTested": 524288,
+   "n": 1,
+   "tokSOutMedian": 80.8,
+   "tokSPrefillMedian": 1688,
+   "ttftMsMedian": 9240,
+   "peakVramGbMedian": 94.5,
+   "maxContextTested": 262144,
    "engines": [
     "llama.cpp"
    ]
@@ -13921,12 +16829,12 @@
    "rigKey": "rtx-pro-6000-blackwell-96gb",
    "modelSlug": "moonshotai-kimi-linear-48b-a3b-instruct",
    "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 233.05,
-   "tokSPrefillMedian": 749.26,
-   "ttftMsMedian": 192.19,
+   "n": 4,
+   "tokSOutMedian": 119,
+   "tokSPrefillMedian": 851.71,
+   "ttftMsMedian": 416255.98,
    "peakVramGbMedian": null,
-   "maxContextTested": 262144,
+   "maxContextTested": 1000000,
    "engines": [
     "llama.cpp"
    ]
@@ -14118,8 +17026,8 @@
    "rigKey": "rtx-pro-6000-blackwell-96gb",
    "modelSlug": "qwen-qwen3-6-27b-fp8",
    "bits": 8,
-   "n": 2,
-   "tokSOutMedian": 83.62,
+   "n": 3,
+   "tokSOutMedian": 92.63,
    "tokSPrefillMedian": null,
    "ttftMsMedian": 222,
    "peakVramGbMedian": 96,
@@ -14158,6 +17066,34 @@
   },
   {
    "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 16,
+   "n": 1,
+   "tokSOutMedian": 64.73,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 92.18,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "qwen-qwen3-8-27b-fp8",
+   "bits": 8,
+   "n": 2,
+   "tokSOutMedian": 100.38,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 68.41,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
    "modelSlug": "qwen-qwen3-coder-30b-a3b-instruct-fp8",
    "bits": 8,
    "n": 1,
@@ -14180,6 +17116,48 @@
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 32768,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "radixark-qwen3-8-27b-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 97.4,
+   "tokSPrefillMedian": 1828.6,
+   "ttftMsMedian": 40.47,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "sglang"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "radixark-qwen3-8-27b-nvfp4-bf16-lmhead",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 296,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 46.66,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
+   "engines": [
+    "sglang"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "radixark-qwen3-8-flash-next-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 161.2,
+   "tokSPrefillMedian": 1091.3,
+   "ttftMsMedian": 68.72,
+   "peakVramGbMedian": null,
+   "maxContextTested": 262144,
    "engines": [
     "vllm"
    ]
@@ -14222,6 +17200,20 @@
    "ttftMsMedian": 75.4,
    "peakVramGbMedian": null,
    "maxContextTested": 262144,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "sakamakismile-qwen3-8-27b-mtp-nvfp4",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 112.1,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "vllm"
    ]
@@ -14280,6 +17272,104 @@
    "maxContextTested": 2048,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 2,
+   "n": 3,
+   "tokSOutMedian": 100.73,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 3,
+   "n": 4,
+   "tokSOutMedian": 88.92,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 7,
+   "tokSOutMedian": 79.27,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 5,
+   "n": 3,
+   "tokSOutMedian": 67.8,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 2,
+   "tokSOutMedian": 57.49,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 3,
+   "tokSOutMedian": 50.24,
+   "tokSPrefillMedian": 2311.45,
+   "ttftMsMedian": 42652.06,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 16,
+   "n": 3,
+   "tokSOutMedian": 60.98,
+   "tokSPrefillMedian": 2417.58,
+   "ttftMsMedian": 40786.32,
+   "peakVramGbMedian": null,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -14451,6 +17541,20 @@
    ]
   },
   {
+   "rigKey": "rtx-pro-6000-blackwell-96gb-x2",
+   "modelSlug": "zai-org-glm-5-3-flash",
+   "bits": 3,
+   "n": 2,
+   "tokSOutMedian": 171.92,
+   "tokSPrefillMedian": 7967.63,
+   "ttftMsMedian": 177.15,
+   "peakVramGbMedian": 180.52,
+   "maxContextTested": 352512,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
    "rigKey": "rtx-pro-6000-blackwell-96gb-x4",
    "modelSlug": "0xsero-glm-5-2-504b-nvidia",
    "bits": 4,
@@ -14496,10 +17600,10 @@
    "rigKey": "rtx-pro-6000-blackwell-96gb-x4",
    "modelSlug": "deepseek-ai-deepseek-v4-flash-0731",
    "bits": 8,
-   "n": 3,
-   "tokSOutMedian": 225.11,
-   "tokSPrefillMedian": 618.8,
-   "ttftMsMedian": 85.07,
+   "n": 5,
+   "tokSOutMedian": 296.68,
+   "tokSPrefillMedian": 8720.57,
+   "ttftMsMedian": 90.17,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -14770,6 +17874,20 @@
    "maxContextTested": 131072,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rtx-pro-6000-blackwell-96gb-x4",
+   "modelSlug": "zai-org-glm-5-3-flash",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 146.79,
+   "tokSPrefillMedian": 7059.96,
+   "ttftMsMedian": 90.28,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
    ]
   },
   {
@@ -15097,20 +18215,6 @@
   },
   {
    "rigKey": "rx-570-4gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 4,
-   "n": 4,
-   "tokSOutMedian": 5.3,
-   "tokSPrefillMedian": 80.35,
-   "ttftMsMedian": 410.72,
-   "peakVramGbMedian": null,
-   "maxContextTested": 2048,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "rx-570-4gb",
    "modelSlug": "deepreinforce-ai-ornith-1-0-9b-gguf",
    "bits": 4,
    "n": 9,
@@ -15264,13 +18368,13 @@
    ]
   },
   {
-   "rigKey": "rx-570-4gb-x2",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
+   "rigKey": "rx-570-4gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
    "bits": 4,
-   "n": 26,
-   "tokSOutMedian": 23.8,
-   "tokSPrefillMedian": 212.75,
-   "ttftMsMedian": 157.48,
+   "n": 4,
+   "tokSOutMedian": 5.3,
+   "tokSPrefillMedian": 80.35,
+   "ttftMsMedian": 410.72,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -15629,6 +18733,20 @@
   },
   {
    "rigKey": "rx-570-4gb-x2",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 4,
+   "n": 26,
+   "tokSOutMedian": 23.8,
+   "tokSPrefillMedian": 212.75,
+   "ttftMsMedian": 157.48,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-570-4gb-x2",
    "modelSlug": "poolside-laguna-xs-2-1-gguf",
    "bits": 4,
    "n": 2,
@@ -15727,20 +18845,6 @@
   },
   {
    "rigKey": "rx-5700-4gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 27.4,
-   "tokSPrefillMedian": 261.7,
-   "ttftMsMedian": 122.3,
-   "peakVramGbMedian": null,
-   "maxContextTested": 2048,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "rx-5700-4gb",
    "modelSlug": "deepreinforce-ai-ornith-1-0-9b-gguf",
    "bits": 4,
    "n": 1,
@@ -15754,13 +18858,13 @@
    ]
   },
   {
-   "rigKey": "rx-5700-8gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b-gguf",
+   "rigKey": "rx-5700-4gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
    "bits": 4,
    "n": 1,
    "tokSOutMedian": 27.4,
-   "tokSPrefillMedian": 251.2,
-   "ttftMsMedian": 127.4,
+   "tokSPrefillMedian": 261.7,
+   "ttftMsMedian": 122.3,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -15803,6 +18907,20 @@
    "tokSOutMedian": 221.6,
    "tokSPrefillMedian": 2164.4,
    "ttftMsMedian": 15.71,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-5700-8gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 27.4,
+   "tokSPrefillMedian": 251.2,
+   "ttftMsMedian": 127.4,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -15951,20 +19069,6 @@
   },
   {
    "rigKey": "rx-6700-xt-12gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 8,
-   "n": 4,
-   "tokSOutMedian": 37.15,
-   "tokSPrefillMedian": 915.64,
-   "ttftMsMedian": null,
-   "peakVramGbMedian": null,
-   "maxContextTested": 4736,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "rx-6700-xt-12gb",
    "modelSlug": "google-gemma-4-12b-it",
    "bits": 4,
    "n": 4,
@@ -15998,6 +19102,20 @@
    "n": 4,
    "tokSOutMedian": 22.43,
    "tokSPrefillMedian": 607.54,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4736,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-6700-xt-12gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 8,
+   "n": 4,
+   "tokSOutMedian": 37.15,
+   "tokSPrefillMedian": 915.64,
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 4736,
@@ -16055,20 +19173,6 @@
    "tokSOutMedian": 13.7,
    "tokSPrefillMedian": 246.3,
    "ttftMsMedian": 255.8,
-   "peakVramGbMedian": null,
-   "maxContextTested": 2048,
-   "engines": [
-    "vllm"
-   ]
-  },
-  {
-   "rigKey": "rx-7700-xt-12gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-9b",
-   "bits": 5,
-   "n": 1,
-   "tokSOutMedian": 30.6,
-   "tokSPrefillMedian": 369.4,
-   "ttftMsMedian": 86.63,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -16161,6 +19265,20 @@
   },
   {
    "rigKey": "rx-7700-xt-12gb",
+   "modelSlug": "ornith-ai-ornith-1-0-9b",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 30.6,
+   "tokSPrefillMedian": 369.4,
+   "ttftMsMedian": 86.63,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "vllm"
+   ]
+  },
+  {
+   "rigKey": "rx-7700-xt-12gb",
    "modelSlug": "prism-ml-bonsai-27b-gguf",
    "bits": 1,
    "n": 1,
@@ -16213,6 +19331,34 @@
    "maxContextTested": 2048,
    "engines": [
     "vllm"
+   ]
+  },
+  {
+   "rigKey": "rx-7800-xt-16gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 28,
+   "tokSPrefillMedian": 500,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-7800-xt-16gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 42,
+   "tokSPrefillMedian": 500,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 121000,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -16373,11 +19519,11 @@
    "rigKey": "rx-7900-xtx-24gb",
    "modelSlug": "qwen-qwen3-5-35b-a3b",
    "bits": 4,
-   "n": 2,
-   "tokSOutMedian": 147.61,
+   "n": 3,
+   "tokSOutMedian": 140.59,
    "tokSPrefillMedian": null,
-   "ttftMsMedian": null,
-   "peakVramGbMedian": null,
+   "ttftMsMedian": 75.4,
+   "peakVramGbMedian": 22.13,
    "maxContextTested": 4096,
    "engines": [
     "hipfire"
@@ -16424,6 +19570,21 @@
    "maxContextTested": 4096,
    "engines": [
     "hipfire"
+   ]
+  },
+  {
+   "rigKey": "rx-7900-xtx-24gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 122.46,
+   "tokSPrefillMedian": 188.9,
+   "ttftMsMedian": 434.34,
+   "peakVramGbMedian": 17.3,
+   "maxContextTested": 32768,
+   "engines": [
+    "hipfire",
+    "llama.cpp"
    ]
   },
   {
@@ -16478,6 +19639,49 @@
    "ttftMsMedian": 1359.25,
    "peakVramGbMedian": 21.9,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-7900-xtx-24gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 7,
+   "tokSOutMedian": 41.7,
+   "tokSPrefillMedian": 430.1,
+   "ttftMsMedian": 384.27,
+   "peakVramGbMedian": null,
+   "maxContextTested": 180224,
+   "engines": [
+    "hipfire",
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-7900-xtx-24gb-x2",
+   "modelSlug": "teichai-qwen3-8-27b-fable-distill-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 41.2,
+   "tokSPrefillMedian": 2899.2,
+   "ttftMsMedian": 176.6,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "rx-7900-xtx-24gb-x2",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 109.5,
+   "tokSPrefillMedian": 175.3,
+   "ttftMsMedian": 182.59,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
    ]
@@ -16778,20 +19982,6 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "0xsero-qwen3-5-122b-a10b-reap-20-gguf",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 26.25,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 1641.51,
-   "peakVramGbMedian": 57,
-   "maxContextTested": 16384,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "davidau-qwen3-6-40b-claude-4-6-opus-deckard-heretic-uncensored-thinking-neo-code-di-imatrix-max-gguf",
    "bits": 4,
    "n": 1,
@@ -16800,20 +19990,6 @@
    "ttftMsMedian": 641.7,
    "peakVramGbMedian": 25.52,
    "maxContextTested": 4096,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 54.11,
-   "tokSPrefillMedian": 426.71,
-   "ttftMsMedian": 1244.41,
-   "peakVramGbMedian": null,
-   "maxContextTested": 787,
    "engines": [
     "llama.cpp"
    ]
@@ -17017,20 +20193,6 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "hesamation-qwen3-6-35b-a3b-claude-4-6-opus-reasoning-distilled-gguf",
-   "bits": 6,
-   "n": 1,
-   "tokSOutMedian": 55.65,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 607.86,
-   "peakVramGbMedian": 27,
-   "maxContextTested": 32768,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "inclusionai-ling-3-0-flash",
    "bits": 4,
    "n": 1,
@@ -17143,6 +20305,76 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "jcbtc-qwen3-6-27b-rocmfp4-ciru-chaos-speed",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 132.3,
+   "tokSPrefillMedian": 5084,
+   "ttftMsMedian": 105.04,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "jcbtc-qwen3-6-27b-rocmfp4-ciru-chaos-speed",
+   "bits": 16,
+   "n": 1,
+   "tokSOutMedian": 52.2,
+   "tokSPrefillMedian": 1577,
+   "ttftMsMedian": 338.62,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "jcbtc-qwen3-8-27b-iu4-kairic-edge",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 66.94,
+   "tokSPrefillMedian": 168.52,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 32768,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "jiunsong-supergemma4-26b-uncensored-gguf-v2",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 66.07,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 22.26,
+   "maxContextTested": 16384,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "kingjones777-qwen3-8-27b-rocmfp4-strix-mtp-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 23.88,
+   "tokSPrefillMedian": 300.03,
+   "ttftMsMedian": 27469.34,
+   "peakVramGbMedian": null,
+   "maxContextTested": 65536,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "kwaipilot-kat-coder-v2-5-dev",
    "bits": 4,
    "n": 2,
@@ -17157,16 +20389,44 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "lmcoleman-qwen3-8-27b-rocmfpx-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 41,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "lucebox-deepseek-v4-flash-rocmfpx",
    "bits": 2,
-   "n": 1,
-   "tokSOutMedian": 32,
-   "tokSPrefillMedian": 245,
+   "n": 2,
+   "tokSOutMedian": 30.1,
+   "tokSPrefillMedian": 132.4,
    "ttftMsMedian": null,
    "peakVramGbMedian": null,
    "maxContextTested": 8192,
    "engines": [
     "lucebox"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "mia-ailab-qwable-3-6-35b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 54.07,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 230.7,
+   "peakVramGbMedian": 21.01,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -17207,6 +20467,34 @@
    "ttftMsMedian": 1718.48,
    "peakVramGbMedian": null,
    "maxContextTested": 845,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 54.11,
+   "tokSPrefillMedian": 426.71,
+   "ttftMsMedian": 1244.41,
+   "peakVramGbMedian": null,
+   "maxContextTested": 787,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 43.02,
+   "tokSPrefillMedian": 159.72,
+   "ttftMsMedian": 26648.99,
+   "peakVramGbMedian": 20.94,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -17307,6 +20595,49 @@
    "maxContextTested": 2048,
    "engines": [
     "hipfire"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "qwen-qwen3-6-27b",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 16.68,
+   "tokSPrefillMedian": 275.75,
+   "ttftMsMedian": 1925.66,
+   "peakVramGbMedian": null,
+   "maxContextTested": 787,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 48.4,
+   "tokSPrefillMedian": 240.35,
+   "ttftMsMedian": 4732.94,
+   "peakVramGbMedian": 17.57,
+   "maxContextTested": 4096,
+   "engines": [
+    "hipfire",
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 8,
+   "n": 3,
+   "tokSOutMedian": 14.18,
+   "tokSPrefillMedian": 274.21,
+   "ttftMsMedian": 2089.64,
+   "peakVramGbMedian": null,
+   "maxContextTested": 829,
+   "engines": [
+    "llama.cpp"
    ]
   },
   {
@@ -17437,14 +20768,14 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "unsloth-minimax-m2-7-gguf",
-   "bits": 3,
-   "n": 1,
-   "tokSOutMedian": 13.95,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 4020.15,
-   "peakVramGbMedian": 95,
-   "maxContextTested": 16384,
+   "modelSlug": "unsloth-qwen-agentworld-35b-a3b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 34.89,
+   "tokSPrefillMedian": 114.12,
+   "ttftMsMedian": 37266.69,
+   "peakVramGbMedian": 21.81,
+   "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
    ]
@@ -17469,68 +20800,12 @@
    "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "unsloth-qwen3-6-27b",
    "bits": 8,
-   "n": 5,
-   "tokSOutMedian": 6.13,
+   "n": 7,
+   "tokSOutMedian": 6.44,
    "tokSPrefillMedian": null,
    "ttftMsMedian": null,
    "peakVramGbMedian": 39.25,
    "maxContextTested": 32768,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "unsloth-qwen3-6-27b-gguf",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 11.46,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 1926.66,
-   "peakVramGbMedian": 17,
-   "maxContextTested": 32768,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "unsloth-qwen3-6-27b-gguf",
-   "bits": 6,
-   "n": 1,
-   "tokSOutMedian": 7.81,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 2479.67,
-   "peakVramGbMedian": 24,
-   "maxContextTested": 32768,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "unsloth-qwen3-6-27b-gguf",
-   "bits": 8,
-   "n": 1,
-   "tokSOutMedian": 6.07,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 2548.87,
-   "peakVramGbMedian": 33,
-   "maxContextTested": 32768,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-128gb",
-   "modelSlug": "unsloth-qwen3-6-27b-gguf",
-   "bits": 16,
-   "n": 1,
-   "tokSOutMedian": 3.81,
-   "tokSPrefillMedian": null,
-   "ttftMsMedian": 5803.91,
-   "peakVramGbMedian": 51,
-   "maxContextTested": 16384,
    "engines": [
     "llama.cpp"
    ]
@@ -17551,14 +20826,113 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 4,
+   "n": 5,
+   "tokSOutMedian": 57.53,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 27.93,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b",
+   "bits": 8,
+   "n": 3,
+   "tokSOutMedian": 52.81,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 40.4,
+   "maxContextTested": 128000,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 14.1,
-   "tokSPrefillMedian": 107.72,
-   "ttftMsMedian": 611269.22,
-   "peakVramGbMedian": null,
+   "n": 8,
+   "tokSOutMedian": 54.47,
+   "tokSPrefillMedian": 471.12,
+   "ttftMsMedian": 32830,
+   "peakVramGbMedian": 24.36,
    "maxContextTested": 262144,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 5,
+   "tokSOutMedian": 26.66,
+   "tokSPrefillMedian": 224.12,
+   "ttftMsMedian": 603.1,
+   "peakVramGbMedian": 23.86,
+   "maxContextTested": 131072,
+   "engines": [
+    "llama.cpp",
+    "lucebox"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 5,
+   "n": 1,
+   "tokSOutMedian": 13.42,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 641.95,
+   "peakVramGbMedian": 23.08,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 6,
+   "n": 1,
+   "tokSOutMedian": 13.33,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 729.67,
+   "peakVramGbMedian": 25.68,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 11.18,
+   "tokSPrefillMedian": null,
+   "ttftMsMedian": 745.7,
+   "peakVramGbMedian": 31.11,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-128gb",
+   "modelSlug": "unsloth-qwen3-8-flash-next-gguf",
+   "bits": 4,
+   "n": 4,
+   "tokSOutMedian": 73.98,
+   "tokSPrefillMedian": 403.2,
+   "ttftMsMedian": 2311.5,
+   "peakVramGbMedian": 67.36,
+   "maxContextTested": 32768,
    "engines": [
     "llama.cpp"
    ]
@@ -17581,11 +20955,11 @@
    "rigKey": "ryzen-ai-max-395-128gb",
    "modelSlug": "unsloth-qwen3-coder-30b-a3b-instruct-gguf",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 17.43,
+   "n": 3,
+   "tokSOutMedian": 70.31,
    "tokSPrefillMedian": 142.35,
-   "ttftMsMedian": 59395.73,
-   "peakVramGbMedian": null,
+   "ttftMsMedian": 190.9,
+   "peakVramGbMedian": 18.83,
    "maxContextTested": 65536,
    "engines": [
     "llama.cpp"
@@ -17656,20 +21030,6 @@
    "tokSPrefillMedian": 610.75,
    "ttftMsMedian": 1919.02,
    "peakVramGbMedian": 9.95,
-   "maxContextTested": 8192,
-   "engines": [
-    "llama.cpp"
-   ]
-  },
-  {
-   "rigKey": "ryzen-ai-max-395-64gb",
-   "modelSlug": "deepreinforce-ai-ornith-1-0-35b",
-   "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 60.6,
-   "tokSPrefillMedian": 745.4,
-   "ttftMsMedian": 1589.68,
-   "peakVramGbMedian": 21.4,
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
@@ -17761,14 +21121,42 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 60.6,
+   "tokSPrefillMedian": 1221.6,
+   "ttftMsMedian": 970.04,
+   "peakVramGbMedian": 21.4,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "ornith-ai-ornith-1-0-35b-gguf",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 60.55,
+   "tokSPrefillMedian": 748.8,
+   "ttftMsMedian": 1582.52,
+   "peakVramGbMedian": 21.45,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
    "modelSlug": "poolside-laguna-s-2-1",
    "bits": 2,
-   "n": 2,
-   "tokSOutMedian": 58.3,
-   "tokSPrefillMedian": 290.7,
-   "ttftMsMedian": 1745.98,
-   "peakVramGbMedian": null,
-   "maxContextTested": 4096,
+   "n": 8,
+   "tokSOutMedian": 43.7,
+   "tokSPrefillMedian": 452.3,
+   "ttftMsMedian": 2639.8,
+   "peakVramGbMedian": 35.9,
+   "maxContextTested": 10240,
    "engines": [
     "llama.cpp"
    ]
@@ -17777,11 +21165,11 @@
    "rigKey": "ryzen-ai-max-395-64gb",
    "modelSlug": "poolside-laguna-s-2-1",
    "bits": 3,
-   "n": 1,
-   "tokSOutMedian": 30.6,
-   "tokSPrefillMedian": 606.1,
-   "ttftMsMedian": 9597.04,
-   "peakVramGbMedian": null,
+   "n": 7,
+   "tokSOutMedian": 32.8,
+   "tokSPrefillMedian": 541.5,
+   "ttftMsMedian": 2822.9,
+   "peakVramGbMedian": 52,
    "maxContextTested": 10240,
    "engines": [
     "llama.cpp"
@@ -17817,6 +21205,20 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "qwen-qwen3-6-27b",
+   "bits": 8,
+   "n": 1,
+   "tokSOutMedian": 7.7,
+   "tokSPrefillMedian": 291.9,
+   "ttftMsMedian": 4058.98,
+   "peakVramGbMedian": 27.8,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
    "modelSlug": "qwen-qwen3-6-35b-a3b",
    "bits": 4,
    "n": 11,
@@ -17824,6 +21226,34 @@
    "tokSPrefillMedian": 748.8,
    "ttftMsMedian": 1019.9,
    "peakVramGbMedian": 21.5,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 18.45,
+   "tokSPrefillMedian": 280.25,
+   "ttftMsMedian": 4379.07,
+   "peakVramGbMedian": 17.35,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 6,
+   "n": 5,
+   "tokSOutMedian": 17.3,
+   "tokSPrefillMedian": 257.1,
+   "ttftMsMedian": 4772.43,
+   "peakVramGbMedian": 25.7,
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
@@ -17852,6 +21282,48 @@
    "tokSPrefillMedian": 996.3,
    "ttftMsMedian": 1272.33,
    "peakVramGbMedian": 20.35,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "stepfun-ai-step-3-7-flash",
+   "bits": 1,
+   "n": 5,
+   "tokSOutMedian": 30.8,
+   "tokSPrefillMedian": 356.7,
+   "ttftMsMedian": 3333.7,
+   "peakVramGbMedian": 53.8,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "stepfun-ai-step-3-7-flash-gguf",
+   "bits": 1,
+   "n": 5,
+   "tokSOutMedian": 30.8,
+   "tokSPrefillMedian": 356.7,
+   "ttftMsMedian": 3333.7,
+   "peakVramGbMedian": 53.8,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 49.2,
+   "tokSPrefillMedian": 1204.7,
+   "ttftMsMedian": 1004.4,
+   "peakVramGbMedian": 17.75,
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
@@ -17915,6 +21387,34 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-qwen-agentworld-35b-a3b-gguf",
+   "bits": 4,
+   "n": 6,
+   "tokSOutMedian": 60.45,
+   "tokSPrefillMedian": 751.7,
+   "ttftMsMedian": 1576.4,
+   "peakVramGbMedian": 21.45,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-qwen3-30b-a3b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 89,
+   "tokSPrefillMedian": 1433.45,
+   "ttftMsMedian": 821.2,
+   "peakVramGbMedian": 17.75,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
    "modelSlug": "unsloth-qwen3-5-9b",
    "bits": 4,
    "n": 2,
@@ -17943,13 +21443,41 @@
   },
   {
    "rigKey": "ryzen-ai-max-395-64gb",
-   "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-gguf",
    "bits": 4,
    "n": 1,
-   "tokSOutMedian": 79.6,
-   "tokSPrefillMedian": 1155.5,
-   "ttftMsMedian": 1025.5,
-   "peakVramGbMedian": 22.5,
+   "tokSOutMedian": 60.5,
+   "tokSPrefillMedian": 1230.9,
+   "ttftMsMedian": 962.68,
+   "peakVramGbMedian": 21.5,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 60.5,
+   "tokSPrefillMedian": 752.5,
+   "ttftMsMedian": 1574.79,
+   "peakVramGbMedian": 21.5,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-qwen3-8-27b-gguf",
+   "bits": 4,
+   "n": 8,
+   "tokSOutMedian": 24.1,
+   "tokSPrefillMedian": 283.25,
+   "ttftMsMedian": 4332.24,
+   "peakVramGbMedian": 17.95,
    "maxContextTested": 8192,
    "engines": [
     "llama.cpp"
@@ -17970,6 +21498,34 @@
    ]
   },
   {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "unsloth-qwen3-coder-30b-a3b-instruct-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 88.9,
+   "tokSPrefillMedian": 1488.4,
+   "ttftMsMedian": 790.79,
+   "peakVramGbMedian": 18.3,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "ryzen-ai-max-395-64gb",
+   "modelSlug": "zai-org-glm-4-5-air",
+   "bits": 3,
+   "n": 1,
+   "tokSOutMedian": 29.6,
+   "tokSPrefillMedian": 313.2,
+   "ttftMsMedian": 3741.81,
+   "peakVramGbMedian": 49.9,
+   "maxContextTested": 8192,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
    "rigKey": "t4-16gb",
    "modelSlug": "hauhaucs-qwen3-6-35b-a3b-uncensored-hauhaucs-aggressive",
    "bits": 2,
@@ -17977,6 +21533,20 @@
    "tokSOutMedian": 59.28,
    "tokSPrefillMedian": 720.26,
    "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "t4-16gb",
+   "modelSlug": "peculiar-ragdoll-unsloth-ornith-1-5-35b-a3b",
+   "bits": 2,
+   "n": 1,
+   "tokSOutMedian": 53.29,
+   "tokSPrefillMedian": 674.11,
+   "ttftMsMedian": 759.5,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -18057,10 +21627,10 @@
    "rigKey": "tesla-p100-32gb-x2",
    "modelSlug": "qwen-qwen3-6-27b",
    "bits": 4,
-   "n": 1,
-   "tokSOutMedian": 45.2,
-   "tokSPrefillMedian": 150.9,
-   "ttftMsMedian": 212.12,
+   "n": 3,
+   "tokSOutMedian": 47.4,
+   "tokSPrefillMedian": 181.7,
+   "ttftMsMedian": 176.11,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
    "engines": [
@@ -18261,6 +21831,20 @@
    "maxContextTested": 2048,
    "engines": [
     "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "tesla-v100-16gb-x4",
+   "modelSlug": "qwen-qwen3-8-27b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 391,
+   "tokSPrefillMedian": 1185,
+   "ttftMsMedian": 349,
+   "peakVramGbMedian": 61,
+   "maxContextTested": 32768,
+   "engines": [
+    "vllm"
    ]
   },
   {

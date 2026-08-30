@@ -1,15 +1,6 @@
 {
- "snapshotAt": "2026-08-13T02:55:58.697626+00:00",
+ "snapshotAt": "2026-08-30T04:43:50.758Z",
  "rigs": [
-  {
-   "key": "rtx-3060-12gb-x2",
-   "label": "RTX 3060 12GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 24,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 543
-  },
   {
    "key": "rtx-3090-24gb",
    "label": "RTX 3090 24GB",
@@ -17,7 +8,16 @@
    "memGb": 24,
    "gpuCount": 1,
    "bandwidthGBs": 936.2,
-   "runCount": 537
+   "runCount": 629
+  },
+  {
+   "key": "rtx-3060-12gb-x2",
+   "label": "RTX 3060 12GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 24,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 561
   },
   {
    "key": "rtx-3060-12gb",
@@ -26,7 +26,7 @@
    "memGb": 12,
    "gpuCount": 1,
    "bandwidthGBs": 360,
-   "runCount": 478
+   "runCount": 541
   },
   {
    "key": "arc-pro-b70-32gb",
@@ -35,43 +35,7 @@
    "memGb": 32,
    "gpuCount": 1,
    "bandwidthGBs": null,
-   "runCount": 278
-  },
-  {
-   "key": "radeon-ai-pro-r9700-32gb-x3",
-   "label": "Radeon AI Pro R9700 32GB \u00d73",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 96,
-   "gpuCount": 3,
-   "bandwidthGBs": null,
-   "runCount": 255
-  },
-  {
-   "key": "ryzen-ai-max-395-128gb",
-   "label": "Ryzen AI Max 395 128GB",
-   "hwClass": "UNIFIED",
-   "memGb": 128,
-   "gpuCount": 1,
-   "bandwidthGBs": 256,
-   "runCount": 239
-  },
-  {
-   "key": "arc-pro-b70-32gb-x4",
-   "label": "Arc Pro B70 32GB \u00d74",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 128,
-   "gpuCount": 4,
-   "bandwidthGBs": null,
-   "runCount": 174
-  },
-  {
-   "key": "rx-570-4gb-x2",
-   "label": "RX 570 4GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 8,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 174
+   "runCount": 328
   },
   {
    "key": "rtx-5090-32gb",
@@ -80,25 +44,25 @@
    "memGb": 32,
    "gpuCount": 1,
    "bandwidthGBs": 1792,
-   "runCount": 165
+   "runCount": 303
   },
   {
-   "key": "rtx-3060-ti-8gb",
-   "label": "RTX 3060 Ti 8GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 8,
-   "gpuCount": 1,
-   "bandwidthGBs": 448,
-   "runCount": 145
-  },
-  {
-   "key": "gb10-grace-blackwell-128gb",
-   "label": "GB10 Grace Blackwell 128GB",
+   "key": "ryzen-ai-max-395-128gb",
+   "label": "Ryzen AI Max 395 128GB",
    "hwClass": "UNIFIED",
    "memGb": 128,
    "gpuCount": 1,
-   "bandwidthGBs": 273,
-   "runCount": 142
+   "bandwidthGBs": 256,
+   "runCount": 295
+  },
+  {
+   "key": "radeon-ai-pro-r9700-32gb-x3",
+   "label": "Radeon AI Pro R9700 32GB ×3",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 96,
+   "gpuCount": 3,
+   "bandwidthGBs": null,
+   "runCount": 275
   },
   {
    "key": "rtx-4070-12gb",
@@ -107,16 +71,70 @@
    "memGb": 12,
    "gpuCount": 1,
    "bandwidthGBs": 504,
-   "runCount": 141
+   "runCount": 221
+  },
+  {
+   "key": "arc-pro-b70-32gb-x4",
+   "label": "Arc Pro B70 32GB ×4",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 128,
+   "gpuCount": 4,
+   "bandwidthGBs": null,
+   "runCount": 175
+  },
+  {
+   "key": "rx-570-4gb-x2",
+   "label": "RX 570 4GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 8,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 174
+  },
+  {
+   "key": "gb10-grace-blackwell-128gb",
+   "label": "GB10 Grace Blackwell 128GB",
+   "hwClass": "UNIFIED",
+   "memGb": 128,
+   "gpuCount": 1,
+   "bandwidthGBs": 273,
+   "runCount": 169
+  },
+  {
+   "key": "rtx-3060-ti-8gb",
+   "label": "RTX 3060 Ti 8GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 8,
+   "gpuCount": 1,
+   "bandwidthGBs": 448,
+   "runCount": 163
+  },
+  {
+   "key": "ryzen-ai-max-395-64gb",
+   "label": "Ryzen AI Max 395 64GB",
+   "hwClass": "UNIFIED",
+   "memGb": 64,
+   "gpuCount": 1,
+   "bandwidthGBs": 256,
+   "runCount": 143
+  },
+  {
+   "key": "rtx-pro-6000-blackwell-96gb",
+   "label": "RTX PRO 6000 Blackwell 96GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 96,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 122
   },
   {
    "key": "rtx-3090-24gb-x2",
-   "label": "RTX 3090 24GB \u00d72",
+   "label": "RTX 3090 24GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 48,
    "gpuCount": 2,
    "bandwidthGBs": null,
-   "runCount": 97
+   "runCount": 116
   },
   {
    "key": "rx-7900-xtx-24gb",
@@ -125,7 +143,25 @@
    "memGb": 24,
    "gpuCount": 1,
    "bandwidthGBs": 960,
-   "runCount": 93
+   "runCount": 103
+  },
+  {
+   "key": "cmp-170hx-64gb",
+   "label": "CMP 170HX 64GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 64,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 94
+  },
+  {
+   "key": "radeon-ai-pro-r9700-32gb",
+   "label": "Radeon AI Pro R9700 32GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 32,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 94
   },
   {
    "key": "cpu-amd-ryzen-7-7840hs",
@@ -137,31 +173,13 @@
    "runCount": 87
   },
   {
-   "key": "rtx-pro-6000-blackwell-96gb",
-   "label": "RTX PRO 6000 Blackwell 96GB",
+   "key": "rtx-3080-12gb",
+   "label": "RTX 3080 12GB",
    "hwClass": "DISCRETE_GPU",
-   "memGb": 96,
+   "memGb": 12,
    "gpuCount": 1,
    "bandwidthGBs": null,
-   "runCount": 85
-  },
-  {
-   "key": "ryzen-ai-max-395-64gb",
-   "label": "Ryzen AI Max 395 64GB",
-   "hwClass": "UNIFIED",
-   "memGb": 64,
-   "gpuCount": 1,
-   "bandwidthGBs": 256,
-   "runCount": 76
-  },
-  {
-   "key": "radeon-ai-pro-r9700-32gb",
-   "label": "Radeon AI Pro R9700 32GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 32,
-   "gpuCount": 1,
-   "bandwidthGBs": null,
-   "runCount": 53
+   "runCount": 54
   },
   {
    "key": "rx-570-4gb",
@@ -179,25 +197,52 @@
    "memGb": 128,
    "gpuCount": 1,
    "bandwidthGBs": null,
-   "runCount": 39
-  },
-  {
-   "key": "rtx-3080-12gb",
-   "label": "RTX 3080 12GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 12,
-   "gpuCount": 1,
-   "bandwidthGBs": null,
-   "runCount": 37
+   "runCount": 40
   },
   {
    "key": "rtx-pro-6000-blackwell-96gb-x4",
-   "label": "RTX PRO 6000 Blackwell 96GB \u00d74",
+   "label": "RTX PRO 6000 Blackwell 96GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 384,
    "gpuCount": 4,
    "bandwidthGBs": null,
+   "runCount": 38
+  },
+  {
+   "key": "arc-pro-b70-32gb-x2",
+   "label": "Arc Pro B70 32GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 64,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
    "runCount": 35
+  },
+  {
+   "key": "m3-ultra-512gb",
+   "label": "M3 Ultra 512GB",
+   "hwClass": "UNIFIED",
+   "memGb": 512,
+   "gpuCount": 1,
+   "bandwidthGBs": 800,
+   "runCount": 35
+  },
+  {
+   "key": "arc-pro-b60-24gb",
+   "label": "Arc Pro B60 24GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 24,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 33
+  },
+  {
+   "key": "gb10-grace-blackwell-256gb",
+   "label": "GB10 Grace Blackwell 256GB",
+   "hwClass": "UNIFIED",
+   "memGb": 256,
+   "gpuCount": 1,
+   "bandwidthGBs": 273,
+   "runCount": 31
   },
   {
    "key": "tesla-v100-32gb",
@@ -210,7 +255,7 @@
   },
   {
    "key": "arc-pro-b60-24gb-x2",
-   "label": "Arc Pro B60 24GB \u00d72",
+   "label": "Arc Pro B60 24GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 48,
    "gpuCount": 2,
@@ -227,8 +272,17 @@
    "runCount": 27
   },
   {
+   "key": "m1-max-64gb",
+   "label": "M1 Max 64GB",
+   "hwClass": "UNIFIED",
+   "memGb": 64,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 25
+  },
+  {
    "key": "multi-gpu-72gb-x3",
-   "label": "Multi-GPU 72GB \u00d73",
+   "label": "Multi-GPU 72GB ×3",
    "hwClass": "DISCRETE_GPU",
    "memGb": 216,
    "gpuCount": 3,
@@ -254,42 +308,6 @@
    "runCount": 25
   },
   {
-   "key": "arc-pro-b60-24gb",
-   "label": "Arc Pro B60 24GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 24,
-   "gpuCount": 1,
-   "bandwidthGBs": null,
-   "runCount": 24
-  },
-  {
-   "key": "arc-pro-b70-32gb-x2",
-   "label": "Arc Pro B70 32GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 64,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 24
-  },
-  {
-   "key": "m1-max-64gb",
-   "label": "M1 Max 64GB",
-   "hwClass": "UNIFIED",
-   "memGb": 64,
-   "gpuCount": 1,
-   "bandwidthGBs": null,
-   "runCount": 24
-  },
-  {
-   "key": "m3-ultra-512gb",
-   "label": "M3 Ultra 512GB",
-   "hwClass": "UNIFIED",
-   "memGb": 512,
-   "gpuCount": 1,
-   "bandwidthGBs": 800,
-   "runCount": 23
-  },
-  {
    "key": "m5-pro-24gb",
    "label": "M5 Pro 24GB",
    "hwClass": "UNIFIED",
@@ -299,13 +317,49 @@
    "runCount": 23
   },
   {
+   "key": "tesla-p100-32gb-x2",
+   "label": "Tesla P100 32GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 64,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 23
+  },
+  {
    "key": "arc-pro-b70-32gb-x3",
-   "label": "Arc Pro B70 32GB \u00d73",
+   "label": "Arc Pro B70 32GB ×3",
    "hwClass": "DISCRETE_GPU",
    "memGb": 96,
    "gpuCount": 3,
    "bandwidthGBs": null,
    "runCount": 22
+  },
+  {
+   "key": "rtx-3090-24gb-x8",
+   "label": "RTX 3090 24GB ×8",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 192,
+   "gpuCount": 8,
+   "bandwidthGBs": null,
+   "runCount": 22
+  },
+  {
+   "key": "rtx-4090-24gb",
+   "label": "RTX 4090 24GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 24,
+   "gpuCount": 1,
+   "bandwidthGBs": 1008,
+   "runCount": 22
+  },
+  {
+   "key": "rtx-5070-12gb",
+   "label": "RTX 5070 12GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 12,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 21
   },
   {
    "key": "ryzen-ai-max-385-24gb",
@@ -317,13 +371,22 @@
    "runCount": 21
   },
   {
-   "key": "tesla-p100-32gb-x2",
-   "label": "Tesla P100 32GB \u00d72",
+   "key": "radeon-ai-pro-r9700-32gb-x2",
+   "label": "Radeon AI Pro R9700 32GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 64,
    "gpuCount": 2,
    "bandwidthGBs": null,
-   "runCount": 21
+   "runCount": 20
+  },
+  {
+   "key": "rtx-pro-6000-blackwell-96gb-x2",
+   "label": "RTX PRO 6000 Blackwell 96GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 192,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 20
   },
   {
    "key": "rx-6700-xt-12gb",
@@ -335,6 +398,15 @@
    "runCount": 20
   },
   {
+   "key": "rtx-2080-8gb",
+   "label": "RTX 2080 8GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 8,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 19
+  },
+  {
    "key": "radeon-890m-32gb",
    "label": "Radeon 890M 32GB",
    "hwClass": "UNIFIED",
@@ -344,30 +416,12 @@
    "runCount": 18
   },
   {
-   "key": "rtx-3090-24gb-x8",
-   "label": "RTX 3090 24GB \u00d78",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 192,
-   "gpuCount": 8,
-   "bandwidthGBs": null,
-   "runCount": 18
-  },
-  {
-   "key": "rtx-4090-24gb",
-   "label": "RTX 4090 24GB",
+   "key": "radeon-rx-7900-xtx-24gb",
+   "label": "Radeon RX 7900 XTX 24GB",
    "hwClass": "DISCRETE_GPU",
    "memGb": 24,
    "gpuCount": 1,
-   "bandwidthGBs": 1008,
-   "runCount": 18
-  },
-  {
-   "key": "rtx-pro-6000-blackwell-96gb-x2",
-   "label": "RTX PRO 6000 Blackwell 96GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 192,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
+   "bandwidthGBs": 960,
    "runCount": 18
   },
   {
@@ -380,15 +434,6 @@
    "runCount": 18
   },
   {
-   "key": "radeon-rx-7900-xtx-24gb",
-   "label": "Radeon RX 7900 XTX 24GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 24,
-   "gpuCount": 1,
-   "bandwidthGBs": 960,
-   "runCount": 16
-  },
-  {
    "key": "rtx-a5000-24gb",
    "label": "RTX A5000 24GB",
    "hwClass": "DISCRETE_GPU",
@@ -396,15 +441,6 @@
    "gpuCount": 1,
    "bandwidthGBs": null,
    "runCount": 16
-  },
-  {
-   "key": "rtx-2080-8gb",
-   "label": "RTX 2080 8GB",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 8,
-   "gpuCount": 1,
-   "bandwidthGBs": null,
-   "runCount": 15
   },
   {
    "key": "rx-7700-xt-12gb",
@@ -425,19 +461,10 @@
    "runCount": 15
   },
   {
-   "key": "gb10-grace-blackwell-256gb",
-   "label": "GB10 Grace Blackwell 256GB",
-   "hwClass": "UNIFIED",
-   "memGb": 256,
-   "gpuCount": 1,
-   "bandwidthGBs": 273,
-   "runCount": 14
-  },
-  {
-   "key": "radeon-ai-pro-r9700-32gb-x2",
-   "label": "Radeon AI Pro R9700 32GB \u00d72",
+   "key": "rtx-5060-ti-16gb-x2",
+   "label": "RTX 5060 Ti 16GB ×2",
    "hwClass": "DISCRETE_GPU",
-   "memGb": 64,
+   "memGb": 32,
    "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 14
@@ -462,7 +489,7 @@
   },
   {
    "key": "rtx-3090-24gb-x4",
-   "label": "RTX 3090 24GB \u00d74",
+   "label": "RTX 3090 24GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 96,
    "gpuCount": 4,
@@ -506,15 +533,6 @@
    "runCount": 12
   },
   {
-   "key": "rtx-5060-ti-16gb-x2",
-   "label": "RTX 5060 Ti 16GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 32,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 11
-  },
-  {
    "key": "m4-pro-48gb",
    "label": "M4 Pro 48GB",
    "hwClass": "UNIFIED",
@@ -551,11 +569,11 @@
    "runCount": 9
   },
   {
-   "key": "rtx-5070-11-9gb",
-   "label": "RTX 5070 11.9GB",
+   "key": "rtx-5090-32gb-x2",
+   "label": "RTX 5090 32GB ×2",
    "hwClass": "DISCRETE_GPU",
-   "memGb": 11.9,
-   "gpuCount": 1,
+   "memGb": 64,
+   "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 9
   },
@@ -570,7 +588,7 @@
   },
   {
    "key": "radeon-ai-pro-r9700-32gb-x4",
-   "label": "Radeon AI Pro R9700 32GB \u00d74",
+   "label": "Radeon AI Pro R9700 32GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 128,
    "gpuCount": 4,
@@ -587,8 +605,17 @@
    "runCount": 8
   },
   {
+   "key": "gb10-grace-blackwell-121gb",
+   "label": "GB10 Grace Blackwell 121GB",
+   "hwClass": "UNIFIED",
+   "memGb": 121,
+   "gpuCount": 1,
+   "bandwidthGBs": 273,
+   "runCount": 7
+  },
+  {
    "key": "h200-sxm-564gb-x4",
-   "label": "H200 SXM 564GB \u00d74",
+   "label": "H200 SXM 564GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 2256,
    "gpuCount": 4,
@@ -614,17 +641,8 @@
    "runCount": 7
   },
   {
-   "key": "rtx-5090-32gb-x2",
-   "label": "RTX 5090 32GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 64,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 7
-  },
-  {
    "key": "multi-gpu-28gb-x2",
-   "label": "Multi-GPU 28GB \u00d72",
+   "label": "Multi-GPU 28GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 56,
    "gpuCount": 2,
@@ -641,6 +659,15 @@
    "runCount": 6
   },
   {
+   "key": "rtx-4060-ti-16gb-x2",
+   "label": "RTX 4060 Ti 16GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 32,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 6
+  },
+  {
    "key": "rx-6700-10gb",
    "label": "RX 6700 10GB",
    "hwClass": "DISCRETE_GPU",
@@ -651,9 +678,18 @@
   },
   {
    "key": "tesla-p100-pcie-16gb-16gb-x2",
-   "label": "Tesla P100-PCIE-16GB 16GB \u00d72",
+   "label": "Tesla P100-PCIE-16GB 16GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 32,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 6
+  },
+  {
+   "key": "tesla-v100-32gb-x2",
+   "label": "Tesla V100 32GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 64,
    "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 6
@@ -665,15 +701,6 @@
    "memGb": 24,
    "gpuCount": 1,
    "bandwidthGBs": null,
-   "runCount": 5
-  },
-  {
-   "key": "gb10-grace-blackwell-121gb",
-   "label": "GB10 Grace Blackwell 121GB",
-   "hwClass": "UNIFIED",
-   "memGb": 121,
-   "gpuCount": 1,
-   "bandwidthGBs": 273,
    "runCount": 5
   },
   {
@@ -695,11 +722,29 @@
    "runCount": 5
   },
   {
+   "key": "cpu-amd-ryzen-7-9800x3d",
+   "label": "AMD Ryzen 7 9800X3D",
+   "hwClass": "CPU_ONLY",
+   "memGb": 62,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 4
+  },
+  {
    "key": "cpu-intel-r-core-tm-ultra-7-155h",
    "label": "Intel(R) Core(TM) Ultra 7 155H",
    "hwClass": "CPU_ONLY",
    "memGb": 32,
    "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 4
+  },
+  {
+   "key": "multi-gpu-48gb-x2",
+   "label": "Multi-GPU 48GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 96,
+   "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 4
   },
@@ -731,6 +776,15 @@
    "runCount": 4
   },
   {
+   "key": "rx-7900-xtx-24gb-x2",
+   "label": "RX 7900 XTX 24GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 48,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 4
+  },
+  {
    "key": "tecno-pova-7-ultra-5g-mali-g615-mc6-11-23gb",
    "label": "TECNO POVA 7 Ultra 5G / Mali-G615 MC6 11.23GB",
    "hwClass": "UNIFIED",
@@ -749,15 +803,6 @@
    "runCount": 4
   },
   {
-   "key": "tesla-v100-32gb-x2",
-   "label": "Tesla V100 32GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 64,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 4
-  },
-  {
    "key": "ultra-7-155h-32gb",
    "label": "Ultra 7 155H 32GB",
    "hwClass": "UNIFIED",
@@ -768,7 +813,7 @@
   },
   {
    "key": "gtx-1060-3gb-x2",
-   "label": "GTX 1060 3GB \u00d72",
+   "label": "GTX 1060 3GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 6,
    "gpuCount": 2,
@@ -803,15 +848,6 @@
    "runCount": 3
   },
   {
-   "key": "multi-gpu-48gb-x2",
-   "label": "Multi-GPU 48GB \u00d72",
-   "hwClass": "DISCRETE_GPU",
-   "memGb": 96,
-   "gpuCount": 2,
-   "bandwidthGBs": null,
-   "runCount": 3
-  },
-  {
    "key": "radeon-8060s-graphics-103gb",
    "label": "Radeon 8060S Graphics 103GB",
    "hwClass": "UNIFIED",
@@ -840,7 +876,7 @@
   },
   {
    "key": "rtx-5090-32gb-x4",
-   "label": "RTX 5090 32GB \u00d74",
+   "label": "RTX 5090 32GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 128,
    "gpuCount": 4,
@@ -849,12 +885,30 @@
   },
   {
    "key": "rx-7900-xt-20gb-x2",
-   "label": "RX 7900 XT 20GB \u00d72",
+   "label": "RX 7900 XT 20GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 40,
    "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 3
+  },
+  {
+   "key": "t4-16gb",
+   "label": "T4 16GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 16,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 3
+  },
+  {
+   "key": "a100-40gb",
+   "label": "A100 40GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 40,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 2
   },
   {
    "key": "cpu-amd-ryzen-5-7640u",
@@ -866,8 +920,17 @@
    "runCount": 2
   },
   {
+   "key": "cpu-intel-r-xeon-r-cpu-e5-2699-v4-2-20ghz",
+   "label": "Intel(R) Xeon(R) CPU E5-2699 v4 @ 2.20GHz",
+   "hwClass": "CPU_ONLY",
+   "memGb": 512,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 2
+  },
+  {
    "key": "h200-nvl-141gb-x2",
-   "label": "H200 NVL 141GB \u00d72",
+   "label": "H200 NVL 141GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 282,
    "gpuCount": 2,
@@ -876,11 +939,29 @@
   },
   {
    "key": "h200-nvl-242gb-x2",
-   "label": "H200 NVL 242GB \u00d72",
+   "label": "H200 NVL 242GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 484,
    "gpuCount": 2,
    "bandwidthGBs": null,
+   "runCount": 2
+  },
+  {
+   "key": "m1-pro-32gb",
+   "label": "M1 Pro 32GB",
+   "hwClass": "UNIFIED",
+   "memGb": 32,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 2
+  },
+  {
+   "key": "m3-ultra-96gb",
+   "label": "M3 Ultra 96GB",
+   "hwClass": "UNIFIED",
+   "memGb": 96,
+   "gpuCount": 1,
+   "bandwidthGBs": 800,
    "runCount": 2
   },
   {
@@ -902,6 +983,15 @@
    "runCount": 2
   },
   {
+   "key": "multi-gpu-24gb-x2",
+   "label": "Multi-GPU 24GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 48,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 2
+  },
+  {
    "key": "orin-nano-super-developer-kit-8gb",
    "label": "Orin Nano Super Developer Kit 8GB",
    "hwClass": "UNIFIED",
@@ -912,7 +1002,7 @@
   },
   {
    "key": "rtx-2080-ti-11gb-x2",
-   "label": "RTX 2080 Ti 11GB \u00d72",
+   "label": "RTX 2080 Ti 11GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 22,
    "gpuCount": 2,
@@ -921,7 +1011,7 @@
   },
   {
    "key": "rtx-3090-24gb-x7",
-   "label": "RTX 3090 24GB \u00d77",
+   "label": "RTX 3090 24GB ×7",
    "hwClass": "DISCRETE_GPU",
    "memGb": 168,
    "gpuCount": 7,
@@ -930,7 +1020,7 @@
   },
   {
    "key": "rtx-3090-ti-24gb-x2",
-   "label": "RTX 3090 Ti 24GB \u00d72",
+   "label": "RTX 3090 Ti 24GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 48,
    "gpuCount": 2,
@@ -939,7 +1029,7 @@
   },
   {
    "key": "rtx-a6000-48gb-x2",
-   "label": "RTX A6000 48GB \u00d72",
+   "label": "RTX A6000 48GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 96,
    "gpuCount": 2,
@@ -948,7 +1038,7 @@
   },
   {
    "key": "rtx-a6000-96gb-x2",
-   "label": "RTX A6000 96GB \u00d72",
+   "label": "RTX A6000 96GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 192,
    "gpuCount": 2,
@@ -957,7 +1047,7 @@
   },
   {
    "key": "rtx-pro-6000-blackwell-96gb-x8",
-   "label": "RTX PRO 6000 Blackwell 96GB \u00d78",
+   "label": "RTX PRO 6000 Blackwell 96GB ×8",
    "hwClass": "DISCRETE_GPU",
    "memGb": 768,
    "gpuCount": 8,
@@ -974,8 +1064,8 @@
    "runCount": 2
   },
   {
-   "key": "t4-16gb",
-   "label": "T4 16GB",
+   "key": "rx-7800-xt-16gb",
+   "label": "RX 7800 XT 16GB",
    "hwClass": "DISCRETE_GPU",
    "memGb": 16,
    "gpuCount": 1,
@@ -987,6 +1077,15 @@
    "label": "5060 Ti 16GB",
    "hwClass": "DISCRETE_GPU",
    "memGb": 16,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 1
+  },
+  {
+   "key": "cpu-amd-ryzen-threadripper-9960x-24-cores",
+   "label": "AMD Ryzen Threadripper 9960X 24-Cores",
+   "hwClass": "CPU_ONLY",
+   "memGb": 64,
    "gpuCount": 1,
    "bandwidthGBs": null,
    "runCount": 1
@@ -1037,6 +1136,24 @@
    "runCount": 1
   },
   {
+   "key": "h100-nvl-94gb-x2",
+   "label": "H100 NVL 94GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 188,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 1
+  },
+  {
+   "key": "instinct-mi100-32gb-x4",
+   "label": "Instinct MI100 32GB ×4",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 128,
+   "gpuCount": 4,
+   "bandwidthGBs": null,
+   "runCount": 1
+  },
+  {
    "key": "m2-pro-16gb",
    "label": "M2 Pro 16GB",
    "hwClass": "UNIFIED",
@@ -1065,7 +1182,7 @@
   },
   {
    "key": "multi-gpu-112gb-x4",
-   "label": "Multi-GPU 112GB \u00d74",
+   "label": "Multi-GPU 112GB ×4",
    "hwClass": "DISCRETE_GPU",
    "memGb": 448,
    "gpuCount": 4,
@@ -1074,9 +1191,18 @@
   },
   {
    "key": "multi-gpu-32gb-x2",
-   "label": "Multi-GPU 32GB \u00d72",
+   "label": "Multi-GPU 32GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 64,
+   "gpuCount": 2,
+   "bandwidthGBs": null,
+   "runCount": 1
+  },
+  {
+   "key": "multi-gpu-56gb-x2",
+   "label": "Multi-GPU 56GB ×2",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 112,
    "gpuCount": 2,
    "bandwidthGBs": null,
    "runCount": 1
@@ -1182,7 +1308,7 @@
   },
   {
    "key": "rtx-3090-24gb-x10",
-   "label": "RTX 3090 24GB \u00d710",
+   "label": "RTX 3090 24GB ×10",
    "hwClass": "DISCRETE_GPU",
    "memGb": 240,
    "gpuCount": 10,
@@ -1191,7 +1317,7 @@
   },
   {
    "key": "rtx-3090-24gb-x3",
-   "label": "RTX 3090 24GB \u00d73",
+   "label": "RTX 3090 24GB ×3",
    "hwClass": "DISCRETE_GPU",
    "memGb": 72,
    "gpuCount": 3,
@@ -1200,7 +1326,7 @@
   },
   {
    "key": "rtx-3090-24gb-x6",
-   "label": "RTX 3090 24GB \u00d76",
+   "label": "RTX 3090 24GB ×6",
    "hwClass": "DISCRETE_GPU",
    "memGb": 144,
    "gpuCount": 6,
@@ -1235,6 +1361,15 @@
    "runCount": 1
   },
   {
+   "key": "rtx-4090-48gb",
+   "label": "RTX 4090 48GB",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 48,
+   "gpuCount": 1,
+   "bandwidthGBs": 1008,
+   "runCount": 1
+  },
+  {
    "key": "rtx-5060-ti-32gb",
    "label": "RTX 5060 Ti 32GB",
    "hwClass": "DISCRETE_GPU",
@@ -1245,7 +1380,7 @@
   },
   {
    "key": "rtx-5070-ti-16gb-x2",
-   "label": "RTX 5070 Ti 16GB \u00d72",
+   "label": "RTX 5070 Ti 16GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 32,
    "gpuCount": 2,
@@ -1254,7 +1389,7 @@
   },
   {
    "key": "rtx-pro-6000-98gb-x2",
-   "label": "RTX PRO 6000 98GB \u00d72",
+   "label": "RTX PRO 6000 98GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 196,
    "gpuCount": 2,
@@ -1281,7 +1416,7 @@
   },
   {
    "key": "rx-6600-4gb-x2",
-   "label": "RX 6600 4GB \u00d72",
+   "label": "RX 6600 4GB ×2",
    "hwClass": "DISCRETE_GPU",
    "memGb": 8,
    "gpuCount": 2,
@@ -1308,10 +1443,19 @@
   },
   {
    "key": "tesla-p100-48gb-x3",
-   "label": "Tesla P100 48GB \u00d73",
+   "label": "Tesla P100 48GB ×3",
    "hwClass": "DISCRETE_GPU",
    "memGb": 144,
    "gpuCount": 3,
+   "bandwidthGBs": null,
+   "runCount": 1
+  },
+  {
+   "key": "tesla-v100-16gb-x4",
+   "label": "Tesla V100 16GB ×4",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 64,
+   "gpuCount": 4,
    "bandwidthGBs": null,
    "runCount": 1
   },

@@ -107,3 +107,13 @@ test("purity: same inputs, same outputs", () => {
   const b = JSON.stringify(topPicks(rig3090, [model7b, modelMeasured], cells, rigs, 5));
   assert.equal(a, b);
 });
+
+// S24: source-class badges — the honesty UI maps the product's run taxonomy.
+test("S24 sourceText: taxonomy + honest unknown (engine, DOM-free)", async () => {
+  const { sourceText } = await import("../site/assets/engine.mjs");
+  assert.equal(sourceText("community_reported"), "community-reported");
+  assert.equal(sourceText("measured_signed"), "measured · signed");
+  assert.equal(sourceText("mock"), "mock");
+  assert.equal(sourceText(undefined), "unknown source");
+  assert.equal(sourceText("exotic"), "unknown source");
+});

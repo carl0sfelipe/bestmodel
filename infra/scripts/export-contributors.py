@@ -24,9 +24,12 @@ def main() -> int:
         return 1
     sys.path.insert(0, str(REPO / "apps" / "public-api" / "src" / "dependencies"))
     sys.path.insert(0, str(REPO / "apps" / "public-api" / "src"))
+    import psycopg
+    from psycopg.rows import dict_row
+
     from database_session_provider import PostgresSession
 
-    session = PostgresSession(dsn)
+    session = PostgresSession(psycopg.connect(dsn, row_factory=dict_row))
     try:
         rows = session.fetch_contributor_points()
     except Exception as exc:  # noqa: BLE001 — fail loud com motivo

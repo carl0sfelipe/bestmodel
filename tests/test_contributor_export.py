@@ -91,13 +91,15 @@ def test_postgres_contributor_points():
     dsn = os.environ.get("DATABASE_URL")
     if not dsn:
         pytest.skip("DATABASE_URL not set — Postgres leg runs inside make gate")
+    import psycopg
+
     from src.dependencies.database_session_provider import PostgresSession
 
-    session = PostgresSession(dsn)
     try:
-        session._fetchall("SELECT 1", ())
-    except Exception as exc:  # noqa: BLE001
+        conn = psycopg.connect(dsn, row_factory=dict_row)
+    except psycopg.OperationalError as exc:
         pytest.skip(f"DATABASE_URL unreachable ({exc})")
+    session = PostgresSession(conn)
     rows = session.fetch_contributor_points()
     for r in rows:
         assert set(r.keys()) == {"handle", "points", "validated_runs"}

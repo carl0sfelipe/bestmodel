@@ -92,6 +92,7 @@ def test_postgres_contributor_points():
     if not dsn:
         pytest.skip("DATABASE_URL not set — Postgres leg runs inside make gate")
     import psycopg
+    from psycopg.rows import dict_row
 
     from src.dependencies.database_session_provider import PostgresSession
 

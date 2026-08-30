@@ -299,6 +299,34 @@ class DatabaseSession(ABC):
     def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
         """Return run_claims newest-first, optionally filtered by status."""
 
+    # ── S28: run reports (denúncia de run irreal / mecânica fake pego) ──
+
+    @abstractmethod
+    def insert_run_report(self, record: dict[str, Any]) -> None:
+        """Insert a run_report row."""
+
+    @abstractmethod
+    def find_open_run_report(
+        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    ) -> dict[str, Any] | None:
+        """The reporter's open report for this target, or None."""
+
+    @abstractmethod
+    def count_run_reports_since(self, reporter_user_id: str, hours: int) -> int:
+        """Reports the user filed within the sliding window (S20 pattern)."""
+
+    @abstractmethod
+    def find_run_report_by_id(self, report_id: str) -> dict[str, Any] | None:
+        """Return the run_report row or None."""
+
+    @abstractmethod
+    def set_run_report_status(self, report_id: str, status: str, awarded_at: str | None) -> int:
+        """Transition report status; awarded_at set only on confirm. 0/1 rows."""
+
+    @abstractmethod
+    def list_run_reports(self, status: str | None, limit: int) -> list[dict[str, Any]]:
+        """Return run_reports newest-first, optionally filtered by status."""
+
     @abstractmethod
     def upsert_claim_vote(self, record: dict[str, Any]) -> None:
         """Insert or replace the voter's verdict on a claim."""
@@ -635,17 +663,31 @@ class PostgresSession(DatabaseSession):
         )
 
     def fetch_contributor_points(self) -> list[dict[str, Any]]:
-        """S27: validated signed runs per contributor (points = runs x 2)."""
+        """S27/S28: validated signed runs x 2 + confirmed fake-caught reports x 5."""
         rows = self._fetchall(
-            "SELECT u.handle AS handle, "
-            "COUNT(r.id) AS validated_runs, "
-            "COUNT(r.id) * 2 AS points "
-            "FROM app_user u "
-            "JOIN signing_key k ON k.app_user_id = u.id "
-            "JOIN benchmark_run r ON r.signature_key_id = k.id "
-            "WHERE r.status = %(status)s "
-            "GROUP BY u.handle "
-            "ORDER BY points DESC, u.handle",
+            "WITH runs AS ("
+            " SELECT u.handle AS handle, COUNT(r.id) AS validated_runs"
+            " FROM app_user u"
+            " JOIN signing_key k ON k.app_user_id = u.id"
+            " JOIN benchmark_run r ON r.signature_key_id = k.id"
+            " WHERE r.status = %(status)s"
+            " GROUP BY u.handle"
+            "), reports AS ("
+            " SELECT u.handle AS handle, COUNT(rr.id) * 5 AS report_points"
+            " FROM run_report rr"
+            " JOIN app_user u ON u.id = rr.reporter_user_id"
+            " WHERE rr.status = 'confirmed' AND rr.awarded_at IS NOT NULL"
+            " GROUP BY u.handle"
+            "), handles AS ("
+            " SELECT handle FROM runs UNION SELECT handle FROM reports"
+            ") "
+            "SELECT h.handle AS handle, "
+            "COALESCE(r.validated_runs, 0) AS validated_runs, "
+            "COALESCE(r.validated_runs, 0) * 2 + COALESCE(p.report_points, 0) AS points "
+            "FROM handles h "
+            "LEFT JOIN runs r ON r.handle = h.handle "
+            "LEFT JOIN reports p ON p.handle = h.handle "
+            "ORDER BY points DESC, h.handle",
             {"status": "validated"},
         )
         return [
@@ -872,16 +914,18 @@ class PostgresSession(DatabaseSession):
         record.setdefault("claimant_id", None)
         record.setdefault("source", None)
         record.setdefault("external_ref", None)
+        provenance = record.get("provenance")
+        record["provenance"] = Json(provenance) if provenance is not None else None
         self._connection.execute(
             "INSERT INTO run_claim (id, claimant_id, rig_id, model_release_id, "
             "quantization_profile_id, inference_runtime_id, gpu_model_id, context_tokens, "
             "claimed_metrics, note, status, prior_snapshot, source, external_ref, "
-            "created_at, updated_at) "
+            "provenance, created_at, updated_at) "
             "VALUES (%(id)s, %(claimant_id)s, %(rig_id)s, %(model_release_id)s, "
             "%(quantization_profile_id)s, %(inference_runtime_id)s, %(gpu_model_id)s, "
             "%(context_tokens)s, %(claimed_metrics)s, %(note)s, %(status)s, "
             "%(prior_snapshot)s, %(source)s, %(external_ref)s, "
-            "%(created_at)s, %(updated_at)s)",
+            "%(provenance)s, %(created_at)s, %(updated_at)s)",
             record,
         )
 
@@ -896,6 +940,62 @@ class PostgresSession(DatabaseSession):
                 (status, claim_id),
             )
             return cursor.rowcount
+
+    # ── S28: run reports ──
+
+    def insert_run_report(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO run_report (id, target_kind, run_claim_id, benchmark_run_id, "
+            "reporter_user_id, reason_category, reason_detail, status, awarded_at, "
+            "created_at, updated_at) "
+            "VALUES (%(id)s, %(target_kind)s, %(run_claim_id)s, %(benchmark_run_id)s, "
+            "%(reporter_user_id)s, %(reason_category)s, %(reason_detail)s, %(status)s, "
+            "%(awarded_at)s, %(created_at)s, %(updated_at)s)",
+            record,
+        )
+
+    def find_open_run_report(
+        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    ) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM run_report "
+            "WHERE COALESCE(reporter_user_id::text, 'anon') = COALESCE(%s::text, 'anon') "
+            "AND target_kind = %s "
+            "AND COALESCE(run_claim_id::text, benchmark_run_id::text) = %s "
+            "AND status = 'open' LIMIT 1",
+            (reporter_user_id, target_kind, target_id),
+        )
+
+    def count_run_reports_since(self, reporter_user_id: str, hours: int) -> int:
+        row = self._fetchone(
+            "SELECT COUNT(*) AS n FROM run_report "
+            "WHERE reporter_user_id = %s "
+            "AND created_at > now() - make_interval(hours => %s)",
+            (reporter_user_id, hours),
+        )
+        return int(row["n"]) if row else 0
+
+    def find_run_report_by_id(self, report_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM run_report WHERE id = %s", (report_id,))
+
+    def set_run_report_status(self, report_id: str, status: str, awarded_at: str | None) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE run_report SET status = %s, awarded_at = %s, updated_at = now() "
+                "WHERE id = %s",
+                (status, awarded_at, report_id),
+            )
+            return cursor.rowcount
+
+    def list_run_reports(self, status: str | None, limit: int) -> list[dict[str, Any]]:
+        if status is not None:
+            return self._fetchall(
+                "SELECT * FROM run_report WHERE status = %s ORDER BY created_at DESC LIMIT %s",
+                (status, limit),
+            )
+        return self._fetchall(
+            "SELECT * FROM run_report ORDER BY created_at DESC LIMIT %s", (limit,)
+        )
 
     def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
         base_sql = (

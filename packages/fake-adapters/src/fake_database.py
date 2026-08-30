@@ -66,6 +66,7 @@ class FakeDatabase(DatabaseSession):
         self._artifacts = []
         self._contributors = []
         self._reported_submission_log = []
+        self._reports: list[dict[str, Any]] = []
         self._users: list[dict[str, Any]] = []
         self._reputations: list[dict[str, Any]] = []
         self._credentials: list[dict[str, Any]] = []
@@ -327,7 +328,7 @@ class FakeDatabase(DatabaseSession):
     # S23: same validation contract as Postgres — the fake rejects what the
     # real backend rejects (S25a single-source discipline).
     def fetch_contributor_points(self) -> list[dict[str, Any]]:
-        """S27: derived from inserted rows (S26 precedent — never hand-maintained)."""
+        """S27/S28: derived from inserted rows — runs x 2 + confirmed reports x 5."""
         user_handle = {u["id"]: u["handle"] for u in self._users}
         counts: dict[str, int] = {}
         for run in self._runs:
@@ -339,9 +340,21 @@ class FakeDatabase(DatabaseSession):
             handle = user_handle.get(key["app_user_id"])
             if handle:
                 counts[handle] = counts.get(handle, 0) + 1
+        report_points: dict[str, int] = {}
+        for report in self._reports:
+            if report.get("status") != "confirmed" or not report.get("awarded_at"):
+                continue
+            handle = user_handle.get(report.get("reporter_user_id"))
+            if handle:
+                report_points[handle] = report_points.get(handle, 0) + 5
+        handles = set(counts) | set(report_points)
         rows = [
-            {"handle": h, "points": n * 2, "validated_runs": n}
-            for h, n in counts.items()
+            {
+                "handle": h,
+                "points": counts.get(h, 0) * 2 + report_points.get(h, 0),
+                "validated_runs": counts.get(h, 0),
+            }
+            for h in handles
         ]
         rows.sort(key=lambda r: (-r["points"], r["handle"]))
         return rows
@@ -582,6 +595,54 @@ class FakeDatabase(DatabaseSession):
                 row["status"] = status
                 affected += 1
         return affected
+
+    # ── S28: run reports ──
+
+    def insert_run_report(self, record: dict[str, Any]) -> None:
+        self._reports.append(dict(record))
+
+    def find_open_run_report(
+        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    ) -> dict[str, Any] | None:
+        for row in self._reports:
+            if row["status"] != "open":
+                continue
+            if (row.get("reporter_user_id") or None) != (reporter_user_id or None):
+                continue
+            if row["target_kind"] != target_kind:
+                continue
+            target = row.get("run_claim_id") if target_kind == "run_claim" else row.get("benchmark_run_id")
+            if target == target_id:
+                return row
+        return None
+
+    def count_run_reports_since(self, reporter_user_id: str, hours: int) -> int:
+        from datetime import datetime, timedelta, timezone
+
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+        return sum(
+            1
+            for row in self._reports
+            if row.get("reporter_user_id") == reporter_user_id
+            and (row.get("created_at") or "") > cutoff
+        )
+
+    def find_run_report_by_id(self, report_id: str) -> dict[str, Any] | None:
+        return next((row for row in self._reports if row["id"] == report_id), None)
+
+    def set_run_report_status(self, report_id: str, status: str, awarded_at: str | None) -> int:
+        affected = 0
+        for row in self._reports:
+            if row["id"] == report_id:
+                row["status"] = status
+                row["awarded_at"] = awarded_at
+                affected += 1
+        return affected
+
+    def list_run_reports(self, status: str | None, limit: int) -> list[dict[str, Any]]:
+        rows = [row for row in self._reports if status is None or row["status"] == status]
+        rows.sort(key=lambda row: row.get("created_at") or "", reverse=True)
+        return rows[:limit]
 
     def list_run_claims(self, status: str | None, limit: int, offset: int) -> list[dict[str, Any]]:
         handles = {u["id"]: u["handle"] for u in self._users}

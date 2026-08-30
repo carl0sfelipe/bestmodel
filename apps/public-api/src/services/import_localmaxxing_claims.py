@@ -199,7 +199,9 @@ def import_cells(
     *,
     dry_run: bool = True,
     limit: int | None = None,
+    provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Import pool cells; ``provenance`` (S28) lands in run_claim.provenance."""
     """Import pool cells; returns stats. ``dry_run`` never writes."""
     index = CatalogIndex(session)
     stats: dict[str, Any] = {reason: 0 for reason in SKIP_REASONS}
@@ -225,6 +227,8 @@ def import_cells(
             continue
 
         record["prior_snapshot"] = _frozen_prior(session, record, cell)
+        if provenance is not None:
+            record["provenance"] = provenance
         if not dry_run:
             session.insert_run_claim(record)
         stats["imported"] += 1

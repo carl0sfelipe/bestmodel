@@ -40,6 +40,11 @@ def main() -> int:
     mode.add_argument("--apply", action="store_true", help="insert missing claims")
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--limit", type=int, default=None)
+    # S28: proveniência estruturada gravada em run_claim.provenance.
+    parser.add_argument("--source-url", default="https://localmaxxing.com",
+                        help="URL pública da fonte do pool")
+    parser.add_argument("--snapshot-at", default=None,
+                        help="timestamp ISO do snapshot do pool (ex.: 2026-08-13T02:55:58Z)")
     args = parser.parse_args()
 
     if not args.source.exists():
@@ -56,7 +61,18 @@ def main() -> int:
     connection = psycopg.connect(dsn, row_factory=dict_row)
     session = PostgresSession(connection)
     try:
-        stats = import_cells(session, cells, dry_run=args.dry_run, limit=args.limit)
+        import hashlib
+
+        provenance = {
+            "source_url": args.source_url,
+            "snapshot_at": args.snapshot_at,
+            "pool_sha256": hashlib.sha256(args.source.read_bytes()).hexdigest(),
+            "importer": "infra/scripts/import_localmaxxing.py",
+        }
+        stats = import_cells(
+            session, cells, dry_run=args.dry_run, limit=args.limit,
+            provenance=provenance,
+        )
     finally:
         session.close()
 

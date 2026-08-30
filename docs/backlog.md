@@ -167,3 +167,16 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
 - Imagem do prod-api REFEITA (S23/S27/S28 dentro) e smokeada: rotas de
   denúncia vivas com 401 sem auth. Teste autenticado ponta-a-ponta
   (denunciar como carl0sfelipe) depende de passkey do dono — pendente.
+
+## E6 (Fable, 2026-08-31) — veredito executado e dials pendentes
+
+- Veredito completo: llms.surf docs/go-live/DECISIONS-E6-FABLE-FECHAMENTO.md.
+  E5 OK em todos os blocos; RAT-1 (feed = /v1/models do provider),
+  RAT-2 (allowlist dial) e RAT-3 (MODERATOR_HANDLES; gatilho de migração
+  para tabela de roles = existência do 2º moderador, NÃO data) ratificados.
+- **S28 MELHORAR executada** (0015, acd779a): reporter NOT NULL + trava
+  de re-denúncia pós-dismiss do próprio reporter. Aplicada no prod.
+- **Canário 4.2 (dono, antes de anunciar a perna free-key)**: criar chave
+  free OpenRouter → `opencode auth login` → 1 dispatch tier:cheap pela
+  cadeia → conferir no ledger provider_efetivo=openrouter +
+  allowlist_status=ok e custo 0 no painel.

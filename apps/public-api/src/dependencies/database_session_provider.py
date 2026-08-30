@@ -64,6 +64,27 @@ class DatabaseSession(ABC):
     def fetch_gpu_by_id(self, gpu_model_id: str) -> dict[str, Any] | None:
         """Return the gpu_model row for the given id or None."""
 
+    # ── S23: per-user signing keys (attribution of submitted runs) ──────────
+    # LOAD-BEARING: every method here must exist on BOTH backends — the S25a
+    # introspection test (tests/test_session_contract.py) fails naming the
+    # first missing one. A new method is: this ABC + PostgresSession +
+    # FakeDatabase in the same commit.
+    @abstractmethod
+    def insert_signing_key(self, record: dict[str, Any]) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def fetch_signing_key_by_id(self, key_id: str) -> dict[str, Any] | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def fetch_signing_keys_by_user(self, app_user_id: str) -> list[dict[str, Any]]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
+        raise NotImplementedError
+
     @abstractmethod
     def find_contributor_by_email(self, email: str) -> dict[str, Any] | None:
         """Return the contributor_account row for the given email or None."""
@@ -540,13 +561,13 @@ class PostgresSession(DatabaseSession):
             "INSERT INTO benchmark_run "
             "(id, hardware_submission_id, model_release_id, quantization_profile_id, "
             "inference_runtime_id, benchmark_scenario_id, status, client_version, "
-            "signature, payload_digest, recipe_id, source_class, seconds_per_clip, "
-            "it_per_s, frames_per_s, source_url) "
+            "signature, payload_digest, signature_key_id, recipe_id, source_class, "
+            "seconds_per_clip, it_per_s, frames_per_s, source_url) "
             "VALUES (%(id)s, %(hardware_submission_id)s, %(model_release_id)s, "
             "%(quantization_profile_id)s, %(inference_runtime_id)s, %(benchmark_scenario_id)s, "
             "%(status)s, %(client_version)s, %(signature)s, %(payload_digest)s, "
-            "%(recipe_id)s, %(source_class)s, %(seconds_per_clip)s, %(it_per_s)s, "
-            "%(frames_per_s)s, %(source_url)s)",
+            "%(signature_key_id)s, %(recipe_id)s, %(source_class)s, %(seconds_per_clip)s, "
+            "%(it_per_s)s, %(frames_per_s)s, %(source_url)s)",
             record,
         )
 
@@ -581,6 +602,33 @@ class PostgresSession(DatabaseSession):
         self._connection.execute(
             "INSERT INTO user_reputation (app_user_id) VALUES (%(app_user_id)s)",
             {"app_user_id": record["id"]},
+        )
+
+    def insert_signing_key(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO signing_key "
+            "(id, app_user_id, label, public_key_pem, algorithm, created_at, revoked_at) "
+            "VALUES (%(id)s, %(app_user_id)s, %(label)s, %(public_key_pem)s, "
+            "%(algorithm)s, %(created_at)s, %(revoked_at)s)",
+            record,
+        )
+
+    def fetch_signing_key_by_id(self, key_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM signing_key WHERE id = %s", (key_id,))
+
+    def fetch_signing_keys_by_user(self, app_user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT k.*, "
+            "(SELECT count(*) FROM benchmark_run r "
+            " WHERE r.signature_key_id = k.id) AS run_count "
+            "FROM signing_key k WHERE k.app_user_id = %s ORDER BY k.created_at",
+            (app_user_id,),
+        )
+
+    def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
+        self._connection.execute(
+            "UPDATE signing_key SET revoked_at = %(revoked_at)s WHERE id = %(key_id)s",
+            {"key_id": key_id, "revoked_at": revoked_at},
         )
 
     def insert_auth_challenge(self, record: dict[str, Any]) -> None:

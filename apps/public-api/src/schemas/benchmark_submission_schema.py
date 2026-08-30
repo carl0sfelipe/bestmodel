@@ -21,6 +21,9 @@ class SubmissionForm(BaseModel):
     inference_runtime_id: str | None = None
     settle_claim_id: str | None = None
     recipe_id: str | None = None
+    # S23: verify against the caller's own registered signing key and
+    # attribute the run to it; absent keeps the legacy global-key path.
+    signature_key_id: str | None = None
 
 
 class SubmissionAccepted(BaseModel):

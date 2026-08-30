@@ -60,6 +60,9 @@ class BenchmarkRunRecord(BaseModel):
     client_version: str
     signature: str
     payload_digest: str
+    # S23: attribution — which registered per-user key signed this run.
+    # Opt-in (migration 0013): NULL keeps the legacy global-key path valid.
+    signature_key_id: str | None
     # Video/report columns (migration 0011): NULL on plain LLM runs except
     # source_class, which every run must carry (leaderboard drops empties).
     recipe_id: str | None
@@ -68,3 +71,17 @@ class BenchmarkRunRecord(BaseModel):
     it_per_s: float | None
     frames_per_s: float | None
     source_url: str | None
+
+
+class SigningKeyRecord(BaseModel):
+    """signing_key row as written through ``insert_signing_key`` (S23)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    app_user_id: str
+    label: str
+    public_key_pem: str
+    algorithm: str
+    created_at: str
+    revoked_at: str | None

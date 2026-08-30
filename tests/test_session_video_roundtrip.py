@@ -79,6 +79,7 @@ def _video_records() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
         "client_version": "s25-roundtrip",
         "signature": "sig-s25",
         "payload_digest": "sha256:" + "0" * 64,
+        "signature_key_id": None,
         "recipe_id": RECIPE_ID,
         "source_class": "measured_signed",
         "seconds_per_clip": SECONDS_PER_CLIP,

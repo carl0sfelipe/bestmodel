@@ -93,13 +93,17 @@ says `SIM`. Failed trials (OOM in the stub) appear in index.jsonl as
    `Err(())`; through `run_lab` it lands in index.jsonl as null and is
    excluded from `best`.
 3. **Intelligent beats brute (the owner's constraint, measured)**: on the
-   stub, TPE with seed 42 reaches the quality bar in <= 60 trials;
-   a uniform-random baseline with the same budget and seed stays below
-   it. The bar is `2x` the measured TPE result at 60 trials, recorded
-   here after measurement — never tuned to let a cut pass.
+   stub, TPE with seed 42 at 60 trials reaches a best tok/s strictly
+   above the uniform-random baseline's best at the same budget and seed.
+   The quality bar pinned in the test is the MEASURED midpoint between
+   the two at freeze time, with the measured values recorded here —
+   never tuned to let a cut pass.
 4. **No repeats**: across a full `run_lab`, no evaluated params vector
-   repeats (argos-opt never re-answers a known question); the random
-   baseline DOES repeat (that contrast is part of test 3's assertion).
+    repeats (argos-opt never re-answers a known question). AJUSTE
+    registrado 2026-08-30, pré-verde: a afirmação original de que o
+    baseline aleatório "DOES repeat" foi retirada — em espaço 5D misto
+    com inteiros de amplitude 32k, duplicata exata de vetor completo é
+    evento raro; exigir duplicata no random seria exigir ruído.
 5. **Recorder**: interrupted run (simulate: create recorder, append 10,
    drop) → file exists, 10 lines, valid JSONL; `--out` directory is
    created fresh per label `<UTC-timestamp>-stub`.

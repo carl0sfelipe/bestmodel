@@ -69,6 +69,7 @@ def create_run_claim(
         "context_tokens": payload.get("context_tokens"),
         "claimed_metrics": metrics,
         "note": payload.get("note"),
+        "source_url": payload.get("source_url"),
         "status": "open",
         "prior_snapshot": prior,
         "created_at": now,

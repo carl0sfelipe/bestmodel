@@ -945,15 +945,16 @@ class PostgresSession(DatabaseSession):
         record.setdefault("external_ref", None)
         provenance = record.get("provenance")
         record["provenance"] = Json(provenance) if provenance is not None else None
+        record.setdefault("source_url", None)
         self._connection.execute(
             "INSERT INTO run_claim (id, claimant_id, rig_id, model_release_id, "
             "quantization_profile_id, inference_runtime_id, gpu_model_id, context_tokens, "
-            "claimed_metrics, note, status, prior_snapshot, source, external_ref, "
-            "provenance, created_at, updated_at) "
+            "claimed_metrics, note, source_url, status, prior_snapshot, source, "
+            "external_ref, provenance, created_at, updated_at) "
             "VALUES (%(id)s, %(claimant_id)s, %(rig_id)s, %(model_release_id)s, "
             "%(quantization_profile_id)s, %(inference_runtime_id)s, %(gpu_model_id)s, "
-            "%(context_tokens)s, %(claimed_metrics)s, %(note)s, %(status)s, "
-            "%(prior_snapshot)s, %(source)s, %(external_ref)s, "
+            "%(context_tokens)s, %(claimed_metrics)s, %(note)s, %(source_url)s, "
+            "%(status)s, %(prior_snapshot)s, %(source)s, %(external_ref)s, "
             "%(provenance)s, %(created_at)s, %(updated_at)s)",
             record,
         )

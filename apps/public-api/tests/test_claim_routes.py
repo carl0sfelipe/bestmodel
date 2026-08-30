@@ -284,3 +284,35 @@ def test_status_filter_on_listing(client, database, monkeypatch):
 def test_invalid_sort_and_status_rejected(client):
     assert client.get("/v1/claims?sort=hotness").status_code == 400
     assert client.get("/v1/claims?status=vibes").status_code == 400
+
+
+# --- S29: source_url (rede de captura) ---------------------------------------
+
+
+def test_create_claim_persists_source_url(client, database, monkeypatch):
+    token = _session_token(client, database, monkeypatch, HANDLE_A)
+    reddit = "https://www.reddit.com/r/LocalLLaMA/comments/abc/my_3090_run/"
+    created = client.post(
+        "/v1/claims",
+        json=_claim_payload(source_url=reddit),
+        headers=_auth(token),
+    ).json()
+    assert created["source_url"] == reddit
+    fetched = client.get(f"/v1/claims/{created['id']}").json()
+    assert fetched["source_url"] == reddit
+
+
+def test_create_claim_source_url_null_when_absent(client, database, monkeypatch):
+    token = _session_token(client, database, monkeypatch, HANDLE_A)
+    created = client.post("/v1/claims", json=_claim_payload(), headers=_auth(token)).json()
+    assert created["source_url"] is None
+
+
+def test_create_claim_rejects_non_http_source_url(client, database, monkeypatch):
+    token = _session_token(client, database, monkeypatch, HANDLE_A)
+    response = client.post(
+        "/v1/claims",
+        json=_claim_payload(source_url="olha o print anexo"),
+        headers=_auth(token),
+    )
+    assert response.status_code == 422

@@ -22,6 +22,7 @@ def claim_view(record: dict, votes: list[dict]) -> dict[str, Any]:
         "context_tokens": record.get("context_tokens"),
         "claimed_metrics": record["claimed_metrics"],
         "note": record.get("note"),
+        "source_url": record.get("source_url"),
         "status": record["status"],
         "benchmark_run_id": record.get("benchmark_run_id"),
         "prior_snapshot": record["prior_snapshot"],

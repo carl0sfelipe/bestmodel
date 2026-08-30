@@ -14,6 +14,11 @@ class CreateRunClaimRequest(BaseModel):
     gpu_model_id: str | None = Field(default=None, max_length=64)
     context_tokens: int | None = Field(default=None, gt=0, le=10_000_000)
     note: str | None = Field(default=None, max_length=2000)
+    # S29 (rede de captura): o post original (reddit/twitter/github/blog)
+    # onde o run foi achado. Null = run presenciado pelo próprio contribuidor.
+    source_url: str | None = Field(
+        default=None, max_length=500, pattern=r"^https?://\S+$"
+    )
 
 
 class ClaimVoteRequest(BaseModel):

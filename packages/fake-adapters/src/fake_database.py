@@ -326,6 +326,26 @@ class FakeDatabase(DatabaseSession):
 
     # S23: same validation contract as Postgres — the fake rejects what the
     # real backend rejects (S25a single-source discipline).
+    def fetch_contributor_points(self) -> list[dict[str, Any]]:
+        """S27: derived from inserted rows (S26 precedent — never hand-maintained)."""
+        user_handle = {u["id"]: u["handle"] for u in self._users}
+        counts: dict[str, int] = {}
+        for run in self._runs:
+            if run.get("status") != "validated" or not run.get("signature_key_id"):
+                continue
+            key = self.fetch_signing_key_by_id(run["signature_key_id"])
+            if not key:
+                continue
+            handle = user_handle.get(key["app_user_id"])
+            if handle:
+                counts[handle] = counts.get(handle, 0) + 1
+        rows = [
+            {"handle": h, "points": n * 2, "validated_runs": n}
+            for h, n in counts.items()
+        ]
+        rows.sort(key=lambda r: (-r["points"], r["handle"]))
+        return rows
+
     def insert_signing_key(self, record: dict[str, Any]) -> None:
         SigningKeyRecord.model_validate(record)
         self._signing_keys.append(dict(record))

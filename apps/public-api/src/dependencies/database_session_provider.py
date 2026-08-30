@@ -86,6 +86,11 @@ class DatabaseSession(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def fetch_contributor_points(self) -> list[dict[str, Any]]:
+        """S27: per-contributor validated signed runs, for the Lineup export."""
+        raise NotImplementedError
+
+    @abstractmethod
     def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
         raise NotImplementedError
 
@@ -628,6 +633,25 @@ class PostgresSession(DatabaseSession):
             "FROM signing_key k WHERE k.app_user_id = %s ORDER BY k.created_at",
             (app_user_id,),
         )
+
+    def fetch_contributor_points(self) -> list[dict[str, Any]]:
+        """S27: validated signed runs per contributor (points = runs x 2)."""
+        rows = self._fetchall(
+            "SELECT u.handle AS handle, "
+            "COUNT(r.id) AS validated_runs, "
+            "COUNT(r.id) * 2 AS points "
+            "FROM app_user u "
+            "JOIN signing_key k ON k.app_user_id = u.id "
+            "JOIN benchmark_run r ON r.signature_key_id = k.id "
+            "WHERE r.status = %(status)s "
+            "GROUP BY u.handle "
+            "ORDER BY points DESC, u.handle",
+            {"status": "validated"},
+        )
+        return [
+            {"handle": str(r["handle"]), "points": int(r["points"]), "validated_runs": int(r["validated_runs"])}
+            for r in rows
+        ]
 
     def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
         self._connection.execute(

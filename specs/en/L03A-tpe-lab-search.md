@@ -60,8 +60,13 @@ pub fn run_lab(
 
 pub fn stub_objective(params: &[Value]) -> Result<f64, ()> {
     // DETERMINISTIC simulation, documented as fake:
-    // VRAM budget 24 GiB: weights 16 GiB * ngl/999 + ctx * kv_bytes(kv_cache)
-    //   over budget -> Err(()) (the OOM path; Failed trial)
+    // Rig: ~30B q4 model — weights 18 GiB * ngl/999 + ctx * kv_bytes
+    //   (f16 256 / q8_0 128 / q4_0 64 KiB per token) over a 22 GiB
+    //   budget (24 GiB card minus compute headroom) -> Err(()) = OOM
+    //   (the Failed-trial path). AJUSTE 2026-08-30, pre-green: the first
+    //   cut (16 GiB weights / 24 budget / 64 KiB f16 KV) made the OOM
+    //   corner so narrow the constraint never bound — a SIM whose
+    //   frontier no one has to navigate teaches nothing.
     // tok/s = shaped interior optimum over all 5 dims + seeded noise < 2%
     // deterministic: same params -> same tok/s, always
 }
@@ -83,7 +88,11 @@ benchmark-probe lab --stub [--trials 60] [--seed 42] [--out experiments/] [--jso
 Behavior: exit 0 prints the best server command + tok/s + trial count;
 `--json` prints the best.json content; every stdout line containing tok/s
 says `SIM`. Failed trials (OOM in the stub) appear in index.jsonl as
-`"value": null` and never win `best`.
+`"value": null` and never win `best`. SIGN CONTRACT (load-bearing):
+the objective returns tok/s (higher is better); `run_lab` feeds
+loss = -tok/s to argos-opt, which MINIMIZES — inverting this makes the
+search converge to the WORST corner (measured 2026-08-30: TPE happily
+optimized the minimum before this was caught).
 
 ## Mandatory behaviors (each with a test)
 
@@ -97,7 +106,8 @@ says `SIM`. Failed trials (OOM in the stub) appear in index.jsonl as
    above the uniform-random baseline's best at the same budget and seed.
    The quality bar pinned in the test is the MEASURED midpoint between
    the two at freeze time, with the measured values recorded here —
-   never tuned to let a cut pass.
+   never tuned to let a cut pass. MEDIDO 2026-08-30, seed 42, 60 trials:
+   TPE 406.8 tok/s, random 329.4 tok/s, barra = 355.0.
 4. **No repeats**: across a full `run_lab`, no evaluated params vector
     repeats (argos-opt never re-answers a known question). AJUSTE
     registrado 2026-08-30, pré-verde: a afirmação original de que o

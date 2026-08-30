@@ -121,3 +121,17 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   (proposta: dual MIT/Apache-2.0, como o argmin).
 - **A2 (aquisição) DECIDIDA — OS DOIS caminhos**: Ollama automático E
   llama.cpp manual (híbrido).
+
+## Decisões do dono — 2026-08-30 (noite)
+
+- **Primeiro objetivo real do otimizador: flags de llama.cpp na 3090** —
+  e NUNCA brute force/grid como estratégia primária: busca inteligente
+  (TPE); grid/random só como baseline de medição. Implementado como L03A
+  (specs/en/L03A-tpe-lab-search.md) com objetivo stub determinístico — o
+  bench real entra no "sobe" sem mudar o loop.
+- **Licença do argos-opt DECIDIDA: dual MIT/Apache-2.0** (termos do
+  argmin). `publish = false` até o nome final ser escolhido (argonaut
+  ocupado; livres: argos-opt, optik-rs, surfopt, goodhist, argminim).
+- **Open question 1 do cluster L01 RESPONDIDA por consequência**: o
+  otimizador não é "embedded TPE vs argmin BO" — é o argos-opt, crate
+  nosso (~/Work/argos-opt), consumido por path até publicar.

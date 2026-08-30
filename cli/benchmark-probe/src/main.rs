@@ -48,6 +48,12 @@ struct CliArgs {
 
 fn main() {
     let raw_args: Vec<String> = std::env::args().skip(1).collect();
+    // L03A: `lab` is the first subcommand; everything else keeps the
+    // legacy flag parser untouched.
+    if raw_args.first().map(|s| s.as_str()) == Some("lab") {
+        cmd_lab(&raw_args[1..]);
+        return;
+    }
     match parse_args(&raw_args) {
         Ok(None) => {
             print_usage();
@@ -892,4 +898,112 @@ mod tests {
             .expect("shell-quoted token");
         body.replace("'\\''", "'")
     }
+}
+
+// ── L03A: `lab` — TPE search over llama.cpp serving flags (stub proof) ──
+
+fn lab_usage() {
+    println!(
+        "usage: benchmark-probe lab --stub [--trials N] [--seed N] [--out DIR] [--json]\n\n\
+         Runs the intelligent (TPE) search over the llama.cpp serving space.\n\
+         --stub   required in L03A: deterministic SIMULATED measurements\n\
+         --trials search budget (default 60)\n\
+         --seed   RNG seed (default 42)\n\
+         --out    labs root directory (default experiments/)\n\
+         --json   machine-readable best.json on stdout"
+    );
+}
+
+fn cmd_lab(args: &[String]) {
+    let mut stub = false;
+    let mut trials: usize = 60;
+    let mut seed: u64 = 42;
+    let mut out_root = PathBuf::from("experiments");
+    let mut json = false;
+    let mut i = 0;
+    while i < args.len() {
+        match args[i].as_str() {
+            "--stub" => stub = true,
+            "--trials" => {
+                i += 1;
+                trials = args.get(i).and_then(|v| v.parse().ok()).unwrap_or_else(|| {
+                    eprintln!("lab: --trials needs a number");
+                    exit(2);
+                });
+            }
+            "--seed" => {
+                i += 1;
+                seed = args.get(i).and_then(|v| v.parse().ok()).unwrap_or_else(|| {
+                    eprintln!("lab: --seed needs a number");
+                    exit(2);
+                });
+            }
+            "--out" => {
+                i += 1;
+                out_root = args.get(i).map(PathBuf::from).unwrap_or_else(|| {
+                    eprintln!("lab: --out needs a directory");
+                    exit(2);
+                });
+            }
+            "--json" => json = true,
+            "--help" | "-h" => {
+                lab_usage();
+                exit(0);
+            }
+            other => {
+                eprintln!("lab: unknown flag {other}");
+                lab_usage();
+                exit(2);
+            }
+        }
+        i += 1;
+    }
+    if !stub {
+        eprintln!("lab: only --stub is available in L03A — the real objective lands when the owner brings the 3090 up (SIM)");
+        exit(2);
+    }
+
+    let space = match benchmark_probe::tuning_search::LabSpace::new() {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("lab: {e}");
+            exit(2);
+        }
+    };
+    // millis: two labs in the same second must not collide (labs are
+    // immutable once recorded)
+    let label = format!(
+        "{}-stub",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_millis())
+            .unwrap_or(0)
+    );
+    let mut objective = |p: &Vec<argos_opt::Value>| {
+        benchmark_probe::tuning_search::stub_objective(p)
+    };
+    let outcome = match benchmark_probe::tuning_search::run_lab(
+        &space, trials, seed, &mut objective, &out_root, &label,
+    ) {
+        Ok(o) => o,
+        Err(e) => {
+            eprintln!("lab: {e}");
+            exit(1);
+        }
+    };
+    let command = space.to_server_command(&outcome.best_params, "MODEL.gguf");
+    if json {
+        let best_path = outcome.lab_dir.join("best.json");
+        let text = std::fs::read_to_string(&best_path).unwrap_or_else(|e| {
+            eprintln!("lab: read {}: {e}", best_path.display());
+            exit(1);
+        });
+        print!("{text}");
+        return;
+    }
+    println!("SIM — SIMULATED measurements (stub); not a benchmark claim");
+    println!("trials:          {}", outcome.trials);
+    println!("best tok/s:      {:.1}", outcome.best_value);
+    println!("server command:  {command}");
+    println!("lab dir:         {}", outcome.lab_dir.display());
 }

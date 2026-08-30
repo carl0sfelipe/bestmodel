@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence
 
-from run_record import BenchmarkRunRecord, BenchmarkScenarioRecord
+from run_record import BenchmarkRunRecord, BenchmarkScenarioRecord, SigningKeyRecord
 from src.dependencies.database_session_provider import DatabaseSession
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -59,6 +59,7 @@ class FakeDatabase(DatabaseSession):
             }
         ]
         self._runs = []
+        self._signing_keys = []
         self._hardware_submissions = []
         self._scenarios = []
         self._metrics = []
@@ -250,6 +251,37 @@ class FakeDatabase(DatabaseSession):
             raise ValueError(f"duplicate handle: {record['handle']}")
         self._users.append(dict(record))
         self._reputations.append({"app_user_id": record["id"], "points": 0, "tier": "L0"})
+
+    # S23: same validation contract as Postgres — the fake rejects what the
+    # real backend rejects (S25a single-source discipline).
+    def insert_signing_key(self, record: dict[str, Any]) -> None:
+        SigningKeyRecord.model_validate(record)
+        self._signing_keys.append(dict(record))
+
+    def fetch_signing_key_by_id(self, key_id: str) -> dict[str, Any] | None:
+        key = next((row for row in self._signing_keys if row["id"] == key_id), None)
+        if key is None:
+            return None
+        out = dict(key)
+        out["run_count"] = sum(1 for r in self._runs if r.get("signature_key_id") == key_id)
+        return out
+
+    def fetch_signing_keys_by_user(self, app_user_id: str) -> list[dict[str, Any]]:
+        out = []
+        for row in self._signing_keys:
+            if row["app_user_id"] != app_user_id:
+                continue
+            key = dict(row)
+            key["run_count"] = sum(
+                1 for r in self._runs if r.get("signature_key_id") == row["id"]
+            )
+            out.append(key)
+        return out
+
+    def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
+        for row in self._signing_keys:
+            if row["id"] == key_id:
+                row["revoked_at"] = revoked_at
 
     def insert_auth_challenge(self, record: dict[str, Any]) -> None:
         stored = dict(record)

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
 from src.dependencies.auth_provider import (
@@ -34,6 +35,12 @@ from src.services.manage_auth_tokens import (
 from src.services.register_passkey import (
     passkey_registration_options,
     verify_passkey_registration,
+)
+from src.services.register_signing_key import (
+    SigningKeyError,
+    list_signing_keys,
+    register_signing_key,
+    revoke_signing_key,
 )
 
 router = APIRouter(prefix="/v1/auth", tags=["auth"])
@@ -120,3 +127,44 @@ def revoke_token(
     except AuthError as exc:
         return _error_response(exc)
     return {"revoked": True}
+
+
+class SigningKeyCreateRequest(BaseModel):
+    label: str
+    public_key_pem: str
+
+
+def _signing_key_error_response(exc: SigningKeyError) -> JSONResponse:
+    return JSONResponse(status_code=exc.status_code, content={"detail": str(exc)})
+
+
+@router.post("/signing-keys")
+def create_signing_key(
+    payload: SigningKeyCreateRequest,
+    caller: AuthenticatedCaller = Depends(get_current_user),
+    session: DatabaseSession = Depends(get_database_session),
+) -> Any:
+    try:
+        return register_signing_key(session, caller, payload.label, payload.public_key_pem)
+    except SigningKeyError as exc:
+        return _signing_key_error_response(exc)
+
+
+@router.get("/signing-keys")
+def get_signing_keys(
+    caller: AuthenticatedCaller = Depends(get_current_user),
+    session: DatabaseSession = Depends(get_database_session),
+) -> Any:
+    return list_signing_keys(session, caller)
+
+
+@router.delete("/signing-keys/{key_id}")
+def delete_signing_key(
+    key_id: str,
+    caller: AuthenticatedCaller = Depends(get_current_user),
+    session: DatabaseSession = Depends(get_database_session),
+) -> Any:
+    try:
+        return revoke_signing_key(session, caller, key_id)
+    except SigningKeyError as exc:
+        return _signing_key_error_response(exc)

@@ -173,6 +173,9 @@ def submit_reported_run(
             "client_version": CLIENT_VERSION_REPORTED,
             "signature": SIGNATURE_REPORTED,
             "payload_digest": _body_digest(body),
+            # Reported path is low-trust by design: no per-user signing key
+            # (S23 attribution is the signed path); the column stays NULL.
+            "signature_key_id": None,
             "recipe_id": body.recipe_id,
             "source_class": SOURCE_CLASS_REPORTED,
             "seconds_per_clip": body.metrics.seconds_per_clip,

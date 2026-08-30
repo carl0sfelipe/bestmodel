@@ -11,6 +11,7 @@ re-edited — the next change is the next number).
 | `0004–0010` | trust, social identity, auth, rigs, claims/votes, follows, imported claims |
 | `0011` | recipe table + video columns on run/scenario (recipe_id, source_class, seconds_per_clip, it_per_s, frames_per_s, source_url; scenario width/height/frames/steps/cfg/shift/seed) — seeds the wan22 recipe row |
 | `0012` | contributor + reported submission log |
+| `0013` | signing_key (per-user ed25519 registration) + nullable benchmark_run.signature_key_id (S23 attribution; opt-in — legacy global-key runs stay NULL) |
 
 ## Change checklist
 

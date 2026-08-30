@@ -70,7 +70,9 @@ def submit_benchmark_run(
     report_dict = _parse_report_json(form.report)
     report = _validate_report(report_dict)
     _verify_payload_digest(report_dict, form.payload_digest)
-    _verify_signature(form.payload_digest, form.signature)
+    signature_key_id = _verify_signature(
+        session, form.payload_digest, form.signature, form.signature_key_id, caller_user
+    )
     artifact_records = _verify_and_store_artifacts(vault, report, artifact_files)
     hardware_submission_id = _hardware_submission_id(report)
     model_release_id = _resolve_model_release_id(session, form)
@@ -99,6 +101,7 @@ def submit_benchmark_run(
         form,
         report,
         recipe_id,
+        signature_key_id,
     )
     _insert_metrics(session, run_id, report)
     _insert_artifacts(session, run_id, report, artifact_records)
@@ -160,12 +163,52 @@ def _verify_payload_digest(report_dict: dict[str, Any], payload_digest: str) -> 
         raise SubmissionRejected(400, "payload_digest does not match the canonicalized report")
 
 
-def _verify_signature(payload_digest: str, signature: str) -> None:
-    public_key = _load_trusted_public_key()
+def _verify_signature(
+    session: DatabaseSession,
+    payload_digest: str,
+    signature: str,
+    signature_key_id: str | None,
+    caller_user: dict[str, Any] | None,
+) -> str | None:
+    """Verify the submission signature; return the key id that vouched for it.
+
+    S23 two paths: with ``signature_key_id`` the signature is verified
+    against the CALLER'S OWN registered ed25519 key (key of another user →
+    403; revoked or missing key → 400) and the run is attributed to it.
+    Without it, the legacy global trusted key path runs unchanged and the
+    run stays unattributed (signature_key_id NULL).
+    """
+    if not signature_key_id:
+        public_key = _load_trusted_public_key()
+        try:
+            public_key.verify(bytes.fromhex(signature), payload_digest.encode("utf-8"))
+        except (InvalidSignature, ValueError) as exc:
+            raise SubmissionRejected(400, "signature verification failed") from exc
+        return None
+
+    key_record = session.fetch_signing_key_by_id(signature_key_id)
+    if key_record is None:
+        raise SubmissionRejected(400, "signing key not found")
+    if caller_user is None or key_record["app_user_id"] != caller_user["id"]:
+        raise SubmissionRejected(403, "signing key belongs to another user")
+    if key_record.get("revoked_at") is not None:
+        raise SubmissionRejected(400, "signing key has been revoked")
+    public_key = _load_pem_ed25519(key_record["public_key_pem"])
     try:
         public_key.verify(bytes.fromhex(signature), payload_digest.encode("utf-8"))
     except (InvalidSignature, ValueError) as exc:
         raise SubmissionRejected(400, "signature verification failed") from exc
+    return signature_key_id
+
+
+def _load_pem_ed25519(public_key_pem: str) -> Ed25519PublicKey:
+    try:
+        key = serialization.load_pem_public_key(public_key_pem.encode("utf-8"))
+    except (ValueError, TypeError) as exc:
+        raise SubmissionRejected(400, "registered public key is unreadable") from exc
+    if not isinstance(key, Ed25519PublicKey):
+        raise SubmissionRejected(400, "registered public key is not ed25519")
+    return key
 
 
 def _load_trusted_public_key() -> Ed25519PublicKey:
@@ -357,6 +400,7 @@ def _insert_run(
     form: SubmissionForm,
     report: BenchmarkReport,
     recipe_id: str | None,
+    signature_key_id: str | None,
 ) -> str:
     run_id = str(uuid.uuid4())
     session.insert_benchmark_run(
@@ -371,6 +415,7 @@ def _insert_run(
             "client_version": form.client_version,
             "signature": form.signature,
             "payload_digest": form.payload_digest,
+            "signature_key_id": signature_key_id,
             "recipe_id": recipe_id,
             "source_class": "measured_signed",
             "seconds_per_clip": report.metrics.seconds_per_clip,

@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence
 
+from run_record import BenchmarkRunRecord, BenchmarkScenarioRecord
 from src.dependencies.database_session_provider import DatabaseSession
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -213,11 +214,23 @@ class FakeDatabase(DatabaseSession):
         if not self.find_hardware_submission(record["id"]):
             self._hardware_submissions.append(dict(record))
 
+    def find_run_by_id(self, run_id: str) -> dict[str, Any] | None:
+        return next((dict(run) for run in self._runs if run["id"] == run_id), None)
+
+    def find_scenario_by_id(self, scenario_id: str) -> dict[str, Any] | None:
+        return next(
+            (dict(row) for row in self._scenarios if row["id"] == scenario_id), None
+        )
+
     def insert_scenario(self, record: dict[str, Any]) -> None:
+        # S25a: the record shape is validated against the domain-schema single
+        # source so the fake rejects what Postgres rejects (missing/typo key).
+        BenchmarkScenarioRecord.model_validate(record)
         if not any(scenario["id"] == record["id"] for scenario in self._scenarios):
             self._scenarios.append(dict(record))
 
     def insert_benchmark_run(self, record: dict[str, Any]) -> None:
+        BenchmarkRunRecord.model_validate(record)
         self._runs.append(dict(record))
 
     def insert_benchmark_metric(self, record: dict[str, Any]) -> None:

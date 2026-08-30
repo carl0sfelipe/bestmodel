@@ -66,7 +66,6 @@ class FakeDatabase(DatabaseSession):
         self._artifacts = []
         self._contributors = []
         self._reported_submission_log = []
-        self._leaderboard_entries = []
         self._users: list[dict[str, Any]] = []
         self._reputations: list[dict[str, Any]] = []
         self._credentials: list[dict[str, Any]] = []
@@ -180,11 +179,77 @@ class FakeDatabase(DatabaseSession):
         validated.sort(key=lambda run: run["submitted_at"], reverse=True)
         return validated[offset : offset + limit]
 
-    def add_leaderboard_entry(self, entry: dict[str, Any]) -> None:
-        self._leaderboard_entries.append(dict(entry))
-
+    # ── S26: the leaderboard DERIVES from inserted rows ──────────────────────
+    # The canned-entry list was the last fake==fake read (direction v2, D3):
+    # tests seeded the answer they later asserted. fetch now mirrors the
+    # Postgres SELECT: INNER JOIN scenario/quant/runtime, LEFT JOIN
+    # hardware/gpu/metrics, WHERE status='validated' ORDER BY submitted_at
+    # DESC. Seeding tests must write runs through the session API.
     def fetch_leaderboard_entries(self) -> list[dict[str, Any]]:
-        return [dict(entry) for entry in self._leaderboard_entries]
+        scenario_by_id = {s["id"]: s for s in self._scenarios}
+        quant_by_id = {q["id"]: q for q in self._quants}
+        runtime_by_id = {r["id"]: r for r in self._runtimes}
+        hardware_by_id = {h["id"]: h for h in self._hardware_submissions}
+        gpu_by_id = {g["id"]: g for g in self._gpus}
+        metrics_by_run: dict[str, dict[str, Any]] = {}
+        for metric in self._metrics:
+            metrics_by_run.setdefault(metric["benchmark_run_id"], {})[
+                metric["kind"]
+            ] = metric.get("p50_value")
+        entries = []
+        for run in self._runs:
+            if run.get("status") != "validated":
+                continue
+            scenario = scenario_by_id.get(run["benchmark_scenario_id"])
+            quant = quant_by_id.get(run["quantization_profile_id"])
+            runtime = runtime_by_id.get(run["inference_runtime_id"])
+            if scenario is None or quant is None or runtime is None:
+                continue  # INNER JOIN semantics: incomplete chain never renders
+            hardware = hardware_by_id.get(run["hardware_submission_id"])
+            gpu = gpu_by_id.get(hardware["gpu_model_id"]) if hardware else None
+            metrics = metrics_by_run.get(run["id"], {})
+            entries.append(
+                {
+                    "run_id": run["id"],
+                    "gpu_model_id": hardware.get("gpu_model_id") if hardware else None,
+                    "model_release_id": run["model_release_id"],
+                    "quantization_profile_id": run["quantization_profile_id"],
+                    "quant_format": quant.get("weight_format"),
+                    "quality_retention_estimate": quant.get("expected_quality_retention"),
+                    "runtime_engine": runtime.get("engine"),
+                    "context_tokens": scenario.get("context_tokens"),
+                    "batch_size": scenario.get("batch_size"),
+                    "trust_score": run.get("trust_score"),
+                    "submitted_at": run.get("submitted_at"),
+                    "vram_capacity_mib": gpu.get("vram_mib") if gpu else None,
+                    "recipe_id": run.get("recipe_id"),
+                    "source_class": run.get("source_class"),
+                    "seconds_per_clip": run.get("seconds_per_clip"),
+                    "it_per_s": run.get("it_per_s"),
+                    "frames_per_s": run.get("frames_per_s"),
+                    "decode_tok_s": metrics.get("decode_tok_s"),
+                    "prefill_tok_s": metrics.get("prefill_tok_s"),
+                    "ttft_ms": metrics.get("ttft_ms"),
+                    "peak_vram_mib": metrics.get("peak_vram_mib"),
+                    "power_watt_avg": metrics.get("power_watt_avg"),
+                }
+            )
+        entries.sort(key=lambda e: e.get("submitted_at") or "", reverse=True)
+        return entries
+
+    # Fake-only test sugar (replaces the removed canned-entry seeder): the
+    # DB-default columns above are not part of the INSERT contract, so tests
+    # that need specific values (ordering dates, trust) patch them here,
+    # explicitly, on a run they inserted through the session API.
+    def set_run_submitted_at(self, run_id: str, iso: str) -> None:
+        for run in self._runs:
+            if run["id"] == run_id:
+                run["submitted_at"] = iso
+
+    def set_run_trust_score(self, run_id: str, trust: float) -> None:
+        for run in self._runs:
+            if run["id"] == run_id:
+                run["trust_score"] = trust
 
     def find_run_by_lookup(
         self,
@@ -232,7 +297,14 @@ class FakeDatabase(DatabaseSession):
 
     def insert_benchmark_run(self, record: dict[str, Any]) -> None:
         BenchmarkRunRecord.model_validate(record)
-        self._runs.append(dict(record))
+        # DB-default columns the INSERT contract does not carry are applied
+        # here exactly like Postgres does (migration 0003: submitted_at
+        # DEFAULT now()), so derived reads (leaderboard) see the same row
+        # shape both backends would store.
+        stored = dict(record)
+        stored.setdefault("submitted_at", datetime.now(timezone.utc).isoformat())
+        stored.setdefault("trust_score", None)
+        self._runs.append(stored)
 
     def insert_benchmark_metric(self, record: dict[str, Any]) -> None:
         self._metrics.append(dict(record))

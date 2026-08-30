@@ -65,57 +65,153 @@ def make_leaderboard_entry(**overrides) -> dict:
     return entry
 
 
+# S26: leaderboard fixtures seed RUNS through the session API — the fake's
+# leaderboard DERIVES from inserted rows (no canned entries anymore).
+# Fictional fixture gpus map onto real seed rows with the same capacity the
+# old canned entries claimed: gpu-a -> RTX 3090 (24576), gpu-b -> A6000 (49152).
+_GPU_MAP = {"gpu-a": "gpu-rtx-3090", "gpu-b": "gpu-a6000"}
+_RUNTIME_ID_BY_ENGINE = {
+    "llama_cpp": "llama-cpp",
+    "vllm": "vllm",
+    "ollama": "ollama",
+    "comfyui": "comfyui",
+    "exllamav2": "exllamav2",
+}
+
+
+def seed_leaderboard_run(database, **overrides) -> str:
+    """Insert the full run chain a derived leaderboard row needs; return run_id."""
+    import uuid as _uuid
+
+    entry = make_leaderboard_entry(**overrides)
+    run_id = entry["run_id"]
+    hardware_id = str(_uuid.uuid4())
+    database.insert_hardware_submission(
+        {
+            "id": hardware_id,
+            "owner_account_id": "00000000-0000-0000-0000-000000000001",
+            "gpu_model_id": _GPU_MAP.get(entry["gpu_model_id"], entry["gpu_model_id"]),
+            "cpu_model_id": None,
+            "gpu_count": 1,
+            "ram_gib": 32,
+            "os_name": "seed",
+            "os_version": "0",
+            "environment_snapshot": {"hardware_fingerprint": "sha256:" + "0" * 64},
+        }
+    )
+    scenario_id = str(_uuid.uuid4())
+    database.insert_scenario(
+        {
+            "id": scenario_id,
+            "scenario_kind": "prompt",
+            "tensor_parallel": 1,
+            "prompt_tokens": 512,
+            "generated_tokens": 128,
+            "context_tokens": entry["context_tokens"],
+            "batch_size": entry["batch_size"],
+            "width": None,
+            "height": None,
+            "frames": None,
+            "steps": None,
+            "cfg": None,
+            "shift": None,
+            "seed": None,
+        }
+    )
+    database.insert_benchmark_run(
+        {
+            "id": run_id,
+            "hardware_submission_id": hardware_id,
+            "model_release_id": entry["model_release_id"],
+            "quantization_profile_id": entry["quantization_profile_id"],
+            "inference_runtime_id": _RUNTIME_ID_BY_ENGINE[entry["runtime_engine"]],
+            "benchmark_scenario_id": scenario_id,
+            "status": "validated",
+            "client_version": "seed",
+            "signature": "ff",
+            "payload_digest": "sha256:" + "0" * 64,
+            "signature_key_id": None,
+            "recipe_id": entry["recipe_id"],
+            "source_class": entry["source_class"],
+            "seconds_per_clip": entry["seconds_per_clip"],
+            "it_per_s": entry["it_per_s"],
+            "frames_per_s": entry["frames_per_s"],
+            "source_url": None,
+        }
+    )
+    metric_units = {
+        "decode_tok_s": "tok/s",
+        "prefill_tok_s": "tok/s",
+        "ttft_ms": "ms",
+        "peak_vram_mib": "MiB",
+        "power_watt_avg": "W",
+    }
+    for kind, unit in metric_units.items():
+        value = entry[kind]
+        if value is not None:
+            database.insert_benchmark_metric(
+                {
+                    "benchmark_run_id": run_id,
+                    "kind": kind,
+                    "p50_value": float(value),
+                    "unit": unit,
+                }
+            )
+    if entry["submitted_at"]:
+        database.set_run_submitted_at(run_id, entry["submitted_at"])
+    if entry["trust_score"] is not None:
+        database.set_run_trust_score(run_id, entry["trust_score"])
+    return run_id
+
+
 def seed_leaderboard_fixtures(database: FakeDatabase) -> FakeDatabase:
-    database.add_leaderboard_entry(make_leaderboard_entry())
-    database.add_leaderboard_entry(
-        make_leaderboard_entry(
-            run_id="run-lb-2",
-            quantization_profile_id="q-fp16",
-            quant_format="fp16",
-            runtime_engine="vllm",
-            context_tokens=16384,
-            decode_tok_s=30.0,
-            prefill_tok_s=1500.0,
-            peak_vram_mib=23000.0,
-            power_watt_avg=350.0,
-            quality_retention_estimate=1.0,
-            trust_score=0.7,
-            submitted_at="2026-08-02T00:00:00Z",
-        )
+    seed_leaderboard_run(database)
+    seed_leaderboard_run(
+        database,
+        run_id="run-lb-2",
+        quantization_profile_id="q-fp16",
+        quant_format="fp16",
+        runtime_engine="vllm",
+        context_tokens=16384,
+        decode_tok_s=30.0,
+        prefill_tok_s=1500.0,
+        peak_vram_mib=23000.0,
+        power_watt_avg=350.0,
+        quality_retention_estimate=1.0,
+        trust_score=0.7,
+        submitted_at="2026-08-02T00:00:00Z",
     )
-    database.add_leaderboard_entry(
-        make_leaderboard_entry(
-            run_id="run-lb-3",
-            gpu_model_id="gpu-b",
-            model_release_id="model-beta",
-            context_tokens=32768,
-            decode_tok_s=90.0,
-            prefill_tok_s=3000.0,
-            peak_vram_mib=40000.0,
-            power_watt_avg=400.0,
-            trust_score=0.9,
-            vram_capacity_mib=49152,
-            submitted_at="2026-08-03T00:00:00Z",
-        )
+    seed_leaderboard_run(
+        database,
+        run_id="run-lb-3",
+        gpu_model_id="gpu-b",
+        model_release_id="model-beta",
+        context_tokens=32768,
+        decode_tok_s=90.0,
+        prefill_tok_s=3000.0,
+        peak_vram_mib=40000.0,
+        power_watt_avg=400.0,
+        trust_score=0.9,
+        vram_capacity_mib=49152,
+        submitted_at="2026-08-03T00:00:00Z",
     )
-    database.add_leaderboard_entry(
-        make_leaderboard_entry(
-            run_id="run-lb-4-infeasible",
-            gpu_model_id="gpu-b",
-            model_release_id="model-beta",
-            quantization_profile_id="q-awq-int4",
-            quant_format="awq",
-            runtime_engine="ollama",
-            context_tokens=4096,
-            decode_tok_s=70.0,
-            prefill_tok_s=2000.0,
-            peak_vram_mib=60000.0,
-            power_watt_avg=0.0,
-            quality_retention_estimate=0.9775,
-            trust_score=0.6,
-            vram_capacity_mib=49152,
-            submitted_at="2026-08-04T00:00:00Z",
-        )
+    seed_leaderboard_run(
+        database,
+        run_id="run-lb-4-infeasible",
+        gpu_model_id="gpu-b",
+        model_release_id="model-beta",
+        quantization_profile_id="q-awq-int4",
+        quant_format="awq",
+        runtime_engine="ollama",
+        context_tokens=4096,
+        decode_tok_s=70.0,
+        prefill_tok_s=2000.0,
+        peak_vram_mib=60000.0,
+        power_watt_avg=0.0,
+        quality_retention_estimate=0.9775,
+        trust_score=0.6,
+        vram_capacity_mib=49152,
+        submitted_at="2026-08-04T00:00:00Z",
     )
     return database
 

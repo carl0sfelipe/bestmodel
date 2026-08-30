@@ -206,28 +206,75 @@ def test_worker_validates_the_accepted_run(intake_stack, trusted_key):
 
 def test_validated_run_appears_on_leaderboard(intake_stack):
     database, _vault, _queue = intake_stack
-    database.add_leaderboard_entry(
+    # S26: the fake leaderboard derives from inserted rows — seed the run
+    # chain (the values below are exactly the old canned entry's).
+    import uuid as _uuid
+
+    _hw = str(_uuid.uuid4())
+    _sc = str(_uuid.uuid4())
+    database.insert_hardware_submission(
         {
-            "run_id": "e2e-gate-run-0001",
+            "id": _hw,
+            "owner_account_id": "00000000-0000-0000-0000-000000000001",
             "gpu_model_id": "gpu-rtx-3090",
-            "model_release_id": "model-qwq-32b",
-            "quantization_profile_id": "q-gguf-q4-k-m",
-            "quant_format": "gguf_q4",
-            "runtime_engine": "llama_cpp",
-            "context_tokens": 8192,
-            "batch_size": 1,
-            "decode_tok_s": 18.7,
-            "prefill_tok_s": 5000.0,
-            "ttft_ms": 819.2,
-            "peak_vram_mib": 21811.0,
-            "power_watt_avg": 0.0,
-            "quality_retention_estimate": 0.96,
-            "source_class": "measured_signed",
-            "trust_score": 0.8,
-            "vram_capacity_mib": 24576,
-            "submitted_at": "2026-08-04T00:00:00Z",
+            "cpu_model_id": None,
+            "gpu_count": 1,
+            "ram_gib": 32,
+            "os_name": "seed",
+            "os_version": "0",
+            "environment_snapshot": {"hardware_fingerprint": "sha256:" + "0" * 64},
         }
     )
+    database.insert_scenario(
+        {
+            "id": _sc,
+            "scenario_kind": "prompt",
+            "tensor_parallel": 1,
+            "prompt_tokens": 512,
+            "generated_tokens": 128,
+            "context_tokens": 8192,
+            "batch_size": 1,
+            "width": None,
+            "height": None,
+            "frames": None,
+            "steps": None,
+            "cfg": None,
+            "shift": None,
+            "seed": None,
+        }
+    )
+    database.insert_benchmark_run(
+        {
+            "id": "e2e-gate-run-0001",
+            "hardware_submission_id": _hw,
+            "model_release_id": "model-qwq-32b",
+            "quantization_profile_id": "q-gguf-q4-k-m",
+            "inference_runtime_id": "llama-cpp",
+            "benchmark_scenario_id": _sc,
+            "status": "validated",
+            "client_version": "seed",
+            "signature": "ff",
+            "payload_digest": "sha256:" + "0" * 64,
+            "signature_key_id": None,
+            "recipe_id": None,
+            "source_class": "measured_signed",
+            "seconds_per_clip": None,
+            "it_per_s": None,
+            "frames_per_s": None,
+            "source_url": None,
+        }
+    )
+    for _kind, _value, _unit in (
+        ("decode_tok_s", 18.7, "tok/s"),
+        ("prefill_tok_s", 5000.0, "tok/s"),
+        ("ttft_ms", 819.2, "ms"),
+        ("peak_vram_mib", 21811.0, "MiB"),
+    ):
+        database.insert_benchmark_metric(
+            {"benchmark_run_id": "e2e-gate-run-0001", "kind": _kind, "p50_value": _value, "unit": _unit}
+        )
+    database.set_run_submitted_at("e2e-gate-run-0001", "2026-08-04T00:00:00Z")
+    database.set_run_trust_score("e2e-gate-run-0001", 0.8)
     outcome = query_leaderboard(database, {}, None, None, None)
     assert [run["run_id"] for run in outcome["runs"]] == ["e2e-gate-run-0001"]
     assert outcome["runs"][0]["rank_score"] >= 0.0

@@ -19,17 +19,17 @@ def test_filter_by_model_release_id(leaderboard_client):
 
 
 def test_filter_by_gpu_model_id(leaderboard_client):
-    response = leaderboard_client.get("/v1/leaderboard", params={"gpu_model_id": "gpu-b"})
+    response = leaderboard_client.get("/v1/leaderboard", params={"gpu_model_id": "gpu-a6000"})
     assert run_ids(response) == {"run-lb-3"}
 
 
 def test_combined_gpu_and_runtime_filter(leaderboard_client):
     response = leaderboard_client.get(
-        "/v1/leaderboard", params={"gpu_model_id": "gpu-b", "runtime_engine": "llama_cpp"}
+        "/v1/leaderboard", params={"gpu_model_id": "gpu-a6000", "runtime_engine": "llama_cpp"}
     )
     assert run_ids(response) == {"run-lb-3"}
     response = leaderboard_client.get(
-        "/v1/leaderboard", params={"gpu_model_id": "gpu-b", "runtime_engine": "vllm"}
+        "/v1/leaderboard", params={"gpu_model_id": "gpu-a6000", "runtime_engine": "vllm"}
     )
     assert run_ids(response) == set()
 

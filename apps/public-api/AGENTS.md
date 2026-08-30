@@ -38,3 +38,20 @@ from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PAT
 Tests: `tests/` use fake-adapters via `conftest.py` (`client`, `leaderboard_client`
 fixtures). Known limits: gpu-bound filtering needs bound hardware rows; community
 submissions create anonymous hardware rows (S09 design note; Phase 1 accounts fix).
+
+## Change checklist
+
+- Coluna nova em `benchmark_run`/`benchmark_scenario`: migration append-only +
+  `PostgresSession` (INSERT e o SELECT de leitura) + `run_record.py` no
+  domain-schema + round-trip `tests/test_session_video_roundtrip.py` — mesma
+  commit, `make test` verde antes.
+- `fetch_leaderboard_entries` (SELECT) e `query_leaderboard` (filtros +
+  `_NUMERIC_FIELDS`) andam JUNTOS: campo novo precisa estar no SELECT e na
+  coerção Decimal→float, senão o filtro silenciosamente derruba a linha
+  (mode de falha observado: "filter silently drops everything").
+- `METRIC_UNITS` em `submit_benchmark_run.py`: chave de métrica sem unidade é
+  descartada do insert — chave nova de métrica = unidade nova aqui.
+- `source_class` vazio nunca renderiza na leaderboard (`query_leaderboard`);
+  todo caminho de insert de run precisa preenchê-lo.
+- `find_run_by_id`/`find_scenario_by_id` são a leitura de round-trip do S25a —
+  mudança de coluna sem atualizá-los quebra a suíte de paridade, não "o gate".

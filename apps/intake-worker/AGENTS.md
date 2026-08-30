@@ -20,3 +20,16 @@ Async validation worker consuming Redis stream `benchmark_runs` (group
 Ops: flat imports need `PYTHONPATH=src`; `__init__.py` bootstraps domain/root
 paths. Kill stale workers before debugging (`pkill -f "src.worker"` — incident I3).
 Roofline checks SKIP when hardware is unbound (community rows) — documented.
+
+## Change checklist
+
+- Campo novo de run/scenario ⇒ `fetch_run_payload`/`_assemble_payload` aqui é
+  a hidratação: se não ler a coluna, o worker nunca vê o valor — teste
+  unitário com fake NÃO pega isso (finding F8); rode `make gate`.
+- CLI passa a emitir métrica/campo novo ⇒ evidence keys
+  (`EVIDENCE_METRIC_KEYS`/`VIDEO_METRIC_KEYS` em `extract_runtime_evidence.py`)
+  e a checagem de duração em `validate_submission_payload.py` na mesma commit.
+- Dimensão de dedupe (`_group_where` + `DimensionGroup`) ⇄ índice único da API
+  (5-dim) ⇄ §12.4 (6-dim): os dois níveis de dedupe precisam seguir juntos.
+- Status machine é `submitted → validated | quarantined | rejected`; nunca
+  UPDATE de status fora do worker em caminho de prod.

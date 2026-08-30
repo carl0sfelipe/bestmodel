@@ -34,3 +34,16 @@ token from `POST /v1/auth/tokens`); anonymous uploads never settle. The API
 responds with `linked_claim_id`; settlement completes server-side only after
 the intake worker validates the run.
 
+
+## Change checklist
+
+- `build_video_report`/`build_video_evidence` (main.rs) re-declaram o shape de
+  cenário/métricas de vídeo: campo novo no contrato ⇒ `domain-schema`
+  (benchmark_report/scenario/metrics) + main.rs + evidence keys do worker na
+  mesma commit — o NDJSON precisa das linhas `metric <chave> <valor>` que o
+  worker exige, senão a run morre em `missing_evidence`.
+- Canonical JSON / digest / assinatura: o serviço verifica sha256 do JSON
+  canonizado (sort_keys, separators) + Ed25519 sobre o digest STRING — mexer
+  aqui quebra a verificação no API; o formato §9.3 é pinado por testes.
+- PEM PKCS8 v1 é hand-encoded por decisão D6 — não "modernize" com default de
+  crate.

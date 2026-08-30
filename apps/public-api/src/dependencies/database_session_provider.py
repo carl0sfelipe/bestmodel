@@ -109,6 +109,19 @@ class DatabaseSession(ABC):
         """Return an existing run matching the dedupe dimensions or None."""
 
     @abstractmethod
+    def find_run_by_id(self, run_id: str) -> dict[str, Any] | None:
+        """Return the full benchmark_run row for ``run_id`` or None.
+
+        Round-trip read for the S25a parity suite; lockstep: the run-record
+        shape (domain-schema ``run_record``), fake and postgres stay in the
+        same commit.
+        """
+
+    @abstractmethod
+    def find_scenario_by_id(self, scenario_id: str) -> dict[str, Any] | None:
+        """Return the full benchmark_scenario row for ``scenario_id`` or None."""
+
+    @abstractmethod
     def find_hardware_submission(self, hardware_submission_id: str) -> dict[str, Any] | None:
         """Return the hardware_submission row for the given id or None."""
 
@@ -485,6 +498,12 @@ class PostgresSession(DatabaseSession):
                 benchmark_scenario_id,
             ),
         )
+
+    def find_run_by_id(self, run_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM benchmark_run WHERE id = %s", (run_id,))
+
+    def find_scenario_by_id(self, scenario_id: str) -> dict[str, Any] | None:
+        return self._fetchone("SELECT * FROM benchmark_scenario WHERE id = %s", (scenario_id,))
 
     def find_hardware_submission(self, hardware_submission_id: str) -> dict[str, Any] | None:
         return self._fetchone(

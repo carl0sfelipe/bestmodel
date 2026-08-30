@@ -16,3 +16,19 @@ Tests pin: the §9.3 example report parses verbatim; constraint violations raise
 enum values exact; exported schema matches `model_json_schema()`.
 Contract evolution: 0.9.1 additive blocks (`statistics`/`tuning`/`spec_decode`/
 `peak_ram_mib`) — spec `specs/en/L01-cli-v2-local-lab.md` §contract.
+
+## Change checklist
+
+- Mexeu num campo do shape de run/scenario? A fonte única é `src/run_record.py`
+  (`BenchmarkRunRecord`/`BenchmarkScenarioRecord`). Na mesma commit: a migration
+  nova (append-only, `infra/migrations/`), os INSERTs/SELECTs do
+  `PostgresSession`, o `FakeDatabase` (valida contra o modelo) e o round-trip
+  `tests/test_session_video_roundtrip.py`. `make test` precisa passar antes do
+  commit; `make gate` (perna de vídeo) se a coluna entra na leaderboard.
+- Novo kind de métrica: `MetricKind` aqui + `METRIC_UNITS` no
+  `submit_benchmark_run.py` + evidence keys no worker — chave sem unidade é
+  silenciosamente descartada no insert.
+- Vídeo é run scalar, nunca `benchmark_metric` row (AD-1) — não "conserte"
+  movendo `seconds_per_clip` para métricas.
+- Contract 0.9.0 (`benchmark_report.py`) é congelado; evolução = bloco aditivo
+  0.9.x + spec, nunca edição silenciosa (spec L06/S26).

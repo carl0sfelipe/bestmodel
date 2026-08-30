@@ -135,3 +135,16 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
 - **Open question 1 do cluster L01 RESPONDIDA por consequência**: o
   otimizador não é "embedded TPE vs argmin BO" — é o argos-opt, crate
   nosso (~/Work/argos-opt), consumido por path até publicar.
+
+## Decisão do dono — 2026-08-30 (noite, revogação parcial do "sobe")
+
+- **Vast SUSPENSO pelo dono: nada sobe por enquanto.** O "sobe" da tarde
+  foi revogado antes de criar instância (zero gasto — só busca de ofertas).
+  O bench real do L02A fica BLOQUEADO nesta decisão; o L03A segue no stub
+  SIM determinístico (nunca apresentado como número real).
+- **Cloud, na superfície pública, SÓ como whitelist gamificada** — sem
+  opções/planos/preços de cloud em nenhum produto. Auditado 2026-08-30:
+  llms.surf site (whitelist: "No price until it's measured. No date until
+  it's real"; email só com endpoint real) e bestmodel.run (zero menção a
+  cloud/pricing) já estão em conformidade. Qualquer copy futura de cloud
+  passa por esta decisão.

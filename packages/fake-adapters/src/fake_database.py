@@ -599,15 +599,42 @@ class FakeDatabase(DatabaseSession):
     # ── S28: run reports ──
 
     def insert_run_report(self, record: dict[str, Any]) -> None:
+        # mesmo contrato da 0015 no Postgres: reporter obrigatório (DB=API) e
+        # nada de 2ª denúncia do mesmo reporter sobre o mesmo alvo enquanto
+        # a anterior estiver open/dismissed.
+        if not record.get("reporter_user_id"):
+            raise ValueError(
+                "run_report.reporter_user_id is required (E6: anonymous reports do not exist)"
+            )
+        target_id = (
+            record.get("run_claim_id")
+            if record["target_kind"] == "run_claim"
+            else record.get("benchmark_run_id")
+        )
+        for row in self._reports:
+            row_target = (
+                row.get("run_claim_id")
+                if row["target_kind"] == "run_claim"
+                else row.get("benchmark_run_id")
+            )
+            if (
+                row["reporter_user_id"] == record["reporter_user_id"]
+                and row["target_kind"] == record["target_kind"]
+                and row_target == target_id
+                and row["status"] in ("open", "dismissed")
+            ):
+                raise ValueError(
+                    f"duplicate {row['status']} report by this reporter for this target"
+                )
         self._reports.append(dict(record))
 
-    def find_open_run_report(
-        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    def find_existing_run_report(
+        self, reporter_user_id: str, target_kind: str, target_id: str
     ) -> dict[str, Any] | None:
         for row in self._reports:
-            if row["status"] != "open":
+            if row["status"] not in ("open", "dismissed"):
                 continue
-            if (row.get("reporter_user_id") or None) != (reporter_user_id or None):
+            if row["reporter_user_id"] != reporter_user_id:
                 continue
             if row["target_kind"] != target_kind:
                 continue

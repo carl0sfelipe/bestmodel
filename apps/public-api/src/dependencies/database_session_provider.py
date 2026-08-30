@@ -306,10 +306,11 @@ class DatabaseSession(ABC):
         """Insert a run_report row."""
 
     @abstractmethod
-    def find_open_run_report(
-        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    def find_existing_run_report(
+        self, reporter_user_id: str, target_kind: str, target_id: str
     ) -> dict[str, Any] | None:
-        """The reporter's open report for this target, or None."""
+        """The reporter's open OR dismissed report for this target (E6:
+        re-report após o próprio dismiss não existe — DB e API recusam)."""
 
     @abstractmethod
     def count_run_reports_since(self, reporter_user_id: str, hours: int) -> int:
@@ -954,15 +955,17 @@ class PostgresSession(DatabaseSession):
             record,
         )
 
-    def find_open_run_report(
-        self, reporter_user_id: str | None, target_kind: str, target_id: str
+    def find_existing_run_report(
+        self, reporter_user_id: str, target_kind: str, target_id: str
     ) -> dict[str, Any] | None:
+        # espelha o índice único da 0015 (status IN open, dismissed)
         return self._fetchone(
             "SELECT * FROM run_report "
-            "WHERE COALESCE(reporter_user_id::text, 'anon') = COALESCE(%s::text, 'anon') "
+            "WHERE reporter_user_id = %s "
             "AND target_kind = %s "
             "AND COALESCE(run_claim_id::text, benchmark_run_id::text) = %s "
-            "AND status = 'open' LIMIT 1",
+            "AND status IN ('open', 'dismissed') "
+            "ORDER BY created_at DESC LIMIT 1",
             (reporter_user_id, target_kind, target_id),
         )
 

@@ -70,8 +70,11 @@ def create_run_report(
     if session.count_run_reports_since(reporter_id, 24) >= REPORTS_PER_DAY:
         raise AuthError(429, f"report rate limit reached ({REPORTS_PER_DAY}/day)")
 
-    if session.find_open_run_report(reporter_id, target_kind, target_id) is not None:
-        raise AuthError(409, "you already have an open report for this target")
+    prior = session.find_existing_run_report(reporter_id, target_kind, target_id)
+    if prior is not None:
+        if prior["status"] == "open":
+            raise AuthError(409, "you already have an open report for this target")
+        raise AuthError(409, "your previous report for this target was dismissed — dismissed targets are not re-reportable by the same reporter")
 
     now = utcnow_iso()
     record = {

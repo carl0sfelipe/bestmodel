@@ -172,7 +172,7 @@ def test_fake_report_points_lockstep_with_runs():
         moderator = _add_user(db, "m")
         from src.services.create_run_report import confirm_report
 
-        report_id = db.find_open_run_report(reporter["id"], "run_claim", claim["id"])["id"]
+        report_id = db.find_existing_run_report(reporter["id"], "run_claim", claim["id"])["id"]
         confirm_report(db, moderator, report_id)
     finally:
         os.environ.pop("MODERATOR_HANDLES", None)
@@ -207,4 +207,87 @@ def test_postgres_run_reports():
     assert cols, "migration 0014 (run_claim.provenance) não aplicada"
     reports = session.list_run_reports(None, 5)
     assert isinstance(reports, list)
+    conn.close()
+
+
+def test_fake_report_reporter_required_and_no_re_report_after_dismiss():
+    """E6/S28 MELHORAR: contrato DB=API — anônimo não existe; o próprio
+    reporter não re-denuncia alvo que ele viu dismissado."""
+    db = FakeDatabase()
+    reporter = _add_user(db, "rep2")
+    moderator = _add_user(db, "mod2")
+    claim = _add_claim(db)
+    create = _service()
+
+    # anônimo não existe no banco (0015: reporter_user_id NOT NULL)
+    anonymous = {
+        "id": str(uuid.uuid4()),
+        "target_kind": "run_claim",
+        "run_claim_id": claim["id"],
+        "benchmark_run_id": None,
+        "reporter_user_id": None,
+        "reason_category": "other",
+        "reason_detail": None,
+        "status": "open",
+        "awarded_at": None,
+        "created_at": "2026-08-30T00:00:00+00:00",
+        "updated_at": "2026-08-30T00:00:00+00:00",
+    }
+    with pytest.raises(ValueError):
+        db.insert_run_report(anonymous)
+
+    v = create(db, reporter, "run_claim", claim["id"], _report_payload())
+    os.environ["MODERATOR_HANDLES"] = "mod2"
+    try:
+        from src.services.create_run_report import dismiss_report
+
+        dismiss_report(db, moderator, v["id"])
+        # re-denúncia do MESMO reporter após o próprio dismiss reprova:
+        # na API vira 409 limpo (pré-checagem do serviço)...
+        from src.services.auth_common import AuthError
+
+        with pytest.raises(AuthError) as exc:
+            create(db, reporter, "run_claim", claim["id"], _report_payload())
+        assert exc.value.status_code == 409
+        # ...e direto no banco vira ValueError (índice único da 0015)
+        raw = dict(anonymous)
+        raw.update(
+            reporter_user_id=reporter["id"],
+            reason_category="numbers_unreal",
+            id=str(uuid.uuid4()),
+            status="open",
+        )
+        with pytest.raises(ValueError):
+            db.insert_run_report(raw)
+        # o find_existing ainda acha a dismissed (é o que gera o 409 na API)
+        prior = db.find_existing_run_report(reporter["id"], "run_claim", claim["id"])
+        assert prior is not None and prior["status"] == "dismissed"
+    finally:
+        os.environ.pop("MODERATOR_HANDLES", None)
+
+
+def test_postgres_run_report_constraints():
+    """0015 no banco alvo: NOT NULL + índice de re-denúncia existem."""
+    dsn = os.environ.get("DATABASE_URL")
+    if not dsn:
+        pytest.skip("DATABASE_URL not set — Postgres leg runs inside make gate")
+    import psycopg
+    from psycopg.rows import dict_row
+
+    try:
+        conn = psycopg.connect(dsn, row_factory=dict_row)
+    except psycopg.OperationalError as exc:
+        pytest.skip(f"DATABASE_URL unreachable ({exc})")
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT is_nullable FROM information_schema.columns "
+        "WHERE table_name = 'run_report' AND column_name = 'reporter_user_id'"
+    )
+    row = cur.fetchone()
+    assert row is not None and row["is_nullable"] == "NO", "0015 não aplicada"
+    cur.execute(
+        "SELECT indexname FROM pg_indexes "
+        "WHERE tablename = 'run_report' AND indexname = 'run_report_reporter_target_idx'"
+    )
+    assert cur.fetchone() is not None, "índice run_report_reporter_target_idx ausente"
     conn.close()

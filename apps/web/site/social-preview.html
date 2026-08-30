@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>the wall — S29 preview (SAMPLE)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+/* S29 preview only — layout sketch of the Wall in the site's tokens.
+   Everything SAMPLE-badged; the real page is born from the round-2 prompt. */
+body{background:var(--bg);color:var(--ink);font-family:var(--display);margin:0}
+.wrap{max-width:880px;margin:0 auto;padding:32px 16px 96px}
+.preview-tag{position:fixed;top:12px;right:12px;z-index:9;background:var(--amber);color:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:6px 10px;border-radius:999px;text-transform:uppercase}
+.k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+h1{font-family:var(--display);font-size:clamp(28px,5vw,44px);line-height:1.05;margin:10px 0 6px}
+.lede{color:var(--muted);font-size:15px;max-width:56ch;margin:0 0 22px}
+.cta{display:inline-block;background:var(--amber);color:var(--bg);font-family:var(--mono);font-size:12px;padding:10px 16px;border-radius:999px;text-decoration:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.chip{font-family:var(--mono);font-size:11px;padding:6px 12px;border:1px solid var(--hair);border-radius:999px;color:var(--muted)}
+.chip.on{color:var(--ink);border-color:var(--amber);background:var(--amber-soft)}
+.row{border:1px solid var(--hair);border-radius:14px;background:var(--surface);padding:16px;margin:0 0 12px}
+.row-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.handle{font-family:var(--mono);font-size:13px}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.badge.open{color:var(--amber);border:1px solid var(--amber)}
+.badge.sample{color:var(--muted);border:1px dashed var(--hair-strong)}
+.badge.verified{color:var(--green);border:1px solid var(--green)}
+.num{font-family:var(--mono);font-size:26px;margin:8px 0 2px}
+.num small{font-size:12px;color:var(--muted)}
+.meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.src{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;border:1px solid var(--hair);padding:5px 10px;border-radius:999px}
+.bar{height:6px;border-radius:999px;background:var(--surface-3);margin-top:12px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .up{background:var(--green)}
+.bar .down{background:var(--red)}
+.bar-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:5px}
+.report{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);background:none;border:1px solid var(--hair);border-radius:999px;padding:5px 10px}
+.empty{border:1px dashed var(--hair-strong);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px}
+.sep{margin:44px 0 18px;display:flex;align-items:center;gap:12px}
+.sep::after{content:"";flex:1;height:1px;background:var(--hair)}
+</style>
+</head>
+<body>
+<span class="preview-tag">S29 preview · sample data</span>
+<div class="wrap">
+  <p class="k">bestmodel.run — the wall</p>
+  <h1>Every number gets a home<br>— and a source.</h1>
+  <p class="lede">Benchmarks live scattered across Reddit, Twitter, GitHub. Captured here, each one carries its origin, the community's verdict, and a path to cryptographic proof. <span style="color:var(--dim)">This page is a design preview — all rows below are SAMPLE.</span></p>
+  <a class="cta" href="#capture">found a run in the wild? capture it</a>
+
+  <div class="sep"><span class="k">filters</span></div>
+  <div class="chips">
+    <span class="chip on">all</span>
+    <span class="chip">open</span>
+    <span class="chip">verified</span>
+    <span class="chip">refuted</span>
+    <span class="chip">· sort: recent ▾</span>
+  </div>
+
+  <!-- SAMPLE row 1: captured from the wild -->
+  <article class="row">
+    <div class="row-head">
+      <span class="handle">@rigname</span>
+      <span class="badge sample">sample</span>
+      <span class="badge open">open</span>
+      <button class="report">⚑ report</button>
+    </div>
+    <div class="num">61.4 <small>tok/s decode · Q4_K_M · 8192 ctx</small></div>
+    <div class="meta">llama.cpp · RTX 3090 · claimed 2026-08-29</div>
+    <a class="src" href="#">↗ found on reddit.com — r/LocalLLaMA</a>
+    <div class="bar"><i class="up" style="width:66%"></i><i class="down" style="width:34%"></i></div>
+    <div class="bar-lbl"><span>▲ 2 plausible</span><span>engine says: measured 58.9 tok/s median (4 runs)</span><span>▼ 1 impossible</span></div>
+  </article>
+
+  <!-- SAMPLE row 2: self-reported -->
+  <article class="row">
+    <div class="row-head">
+      <span class="handle">@another</span>
+      <span class="badge sample">sample</span>
+      <span class="badge verified">verified · signed run</span>
+      <button class="report">⚑ report</button>
+    </div>
+    <div class="num">47.9 <small>tok/s decode · Q4_K_M · 4096 ctx</small></div>
+    <div class="meta">llama.cpp · RTX 4070 · settled by Ed25519-signed run</div>
+    <div class="bar"><i class="up" style="width:100%"></i></div>
+    <div class="bar-lbl"><span>▲ 5 plausible · 0 impossible</span><span>run e3a2…44f</span></div>
+  </article>
+
+  <!-- SAMPLE row 3: refuted -->
+  <article class="row" style="opacity:.75">
+    <div class="row-head">
+      <span class="handle">@suspicious</span>
+      <span class="badge sample">sample</span>
+      <span class="badge open" style="color:var(--red);border-color:var(--red)">refuted</span>
+      <button class="report">⚑ report</button>
+    </div>
+    <div class="num">9,999 <small>tok/s decode · Q2_K · 131k ctx</small></div>
+    <div class="meta">claim refuted — fake caught by the community · reporter credited +5</div>
+  </article>
+
+  <div class="sep"><span class="k">production today (real, no sample)</span></div>
+  <div class="empty">the wall is empty — be the first to capture a run.<br><span style="color:var(--dim)">551 community cells are already in the pool with verified provenance; the wall fills as claims and signed runs land.</span></div>
+
+  <div class="sep"><span class="k">capture</span></div>
+  <p class="lede" id="capture">The funnel (submit page): a toggle "I found it online" (requires the source link) vs "I ran it myself" — each dimension its own control, never merged. Then: model, tok/s, hardware. The claim is born <b>reported</b>, votes decide, a signed run settles it.</p>
+  <p class="lede" style="color:var(--dim)">Prévia estática pra alinhar direção antes do round 2 do Claude Design — os dados reais virão de <span style="font-family:var(--mono)">/v1/claims</span> (contrato congelado no prompt).</p>
+</div>
+</body>
+</html>

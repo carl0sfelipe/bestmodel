@@ -113,5 +113,11 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
 - **Whitelists: DUAS LISTAS** (bestmodel e llms.surf separadas) — cada
   produto mede o próprio sinal de demanda; o rank de pontos de contribuição
   atravessa os dois (alimenta o giveaway do llms-surf).
-- A1 (otimizador) e A2 (aquisição de modelo): pendentes — re-explicadas ao
-  dono em linguagem clara; aguardando resposta.
+- **A1 (otimizador) DECIDIDA — repo PRÓPRIO, open source**: inspirado no
+  argmin, melhorado, refeito em Rust, desenhado para a era agêntica
+  (objetivo fala exit code, trial é evento durável/resumível, budget é
+  cidadão de primeira classe, determinístico sob seed). Repo separado;
+  L01 consome como crate. Nome de trabalho e licença: pendentes do dono
+  (proposta: dual MIT/Apache-2.0, como o argmin).
+- **A2 (aquisição) DECIDIDA — OS DOIS caminhos**: Ollama automático E
+  llama.cpp manual (híbrido).

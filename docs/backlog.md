@@ -100,3 +100,18 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   organic traction.
 - Anti-fraud worker already provides the plausibility priors reused by B3;
   no separate ML needed for launch.
+
+## Decisões do dono — 2026-08-30 (tarde)
+
+- **A3 (consentimento) DECIDIDA — opt-out transparente com gamificação:**
+  checkbox VISÍVEL e pré-marcado na primeira execução, explicando que o
+  sucesso da predição depende da comunidade ("compartilhar melhora as
+  predições pra todo mundo"); desmarcar é livre e respeitado. Contribuições
+  geram PONTOS num ranking próprio que vira GIVEAWAY de free tokens do
+  llms-surf no lançamento — a ponte cruzada: dado de benchmark ⇄ crédito
+  de dispatch.
+- **Whitelists: DUAS LISTAS** (bestmodel e llms.surf separadas) — cada
+  produto mede o próprio sinal de demanda; o rank de pontos de contribuição
+  atravessa os dois (alimenta o giveaway do llms-surf).
+- A1 (otimizador) e A2 (aquisição de modelo): pendentes — re-explicadas ao
+  dono em linguagem clara; aguardando resposta.

@@ -51,6 +51,9 @@ services:
       AUTH_RP_NAME: bestmodel
       AUTH_EXPECTED_ORIGIN: ${AUTH_EXPECTED_ORIGIN:-https://bestmodel.run}
       CORS_ORIGINS: ${CORS_ORIGINS:-https://bestmodel.run,http://localhost:3000}
+      # S28: quem modera denúncias (fake pego). Dial do dono — sobrescreva
+      # em deploy/.env (vírgula-lista de handles). Vazio = ninguém modera.
+      MODERATOR_HANDLES: ${MODERATOR_HANDLES:-carl0sfelipe}
     volumes:
       - artifacts:/artifacts
       - ./secrets:/secrets:ro

@@ -148,3 +148,22 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   it's real"; email só com endpoint real) e bestmodel.run (zero menção a
   cloud/pricing) já estão em conformidade. Qualquer copy futura de cloud
   passa por esta decisão.
+
+## S28 as-built (2026-08-31): denúncia de run irreal + proveniência
+
+- Migration 0014 aplicada no PROD (run_report + run_claim.provenance).
+  As 551 claims localmaxxing ganharam proveniência estruturada com
+  verificação: 550/550 métricas idênticas ao snapshot 2026-08-13 do pool
+  (CanIRunIt, localmaxxing.com public API) — evidência, não presumição.
+- Dry-run do pool completo no prod: 551 existing (idempotente), 0 novas,
+  411 nomodel (backlog de catálogo), 348 multigpu-v1 (fora do escopo v1).
+- Mecânica fake pego: denúncia confirmada = +5 pontos ao denunciante
+  (fetch_contributor_points nos 3 backends) + claim -> refuted. Denúncia
+  NUNCA altera o alvo por si só.
+- **DIAL DO DONO — MODERATOR_HANDLES**: quem confirma/dismissa denúncias.
+  Default no compose: carl0sfelipe (hoje o único usuário do prod).
+  Sobrescreva em deploy/.env. Vazio = ninguém modera (denúncias ficam
+  abertas, nada é removido).
+- Imagem do prod-api REFEITA (S23/S27/S28 dentro) e smokeada: rotas de
+  denúncia vivas com 401 sem auth. Teste autenticado ponta-a-ponta
+  (denunciar como carl0sfelipe) depende de passkey do dono — pendente.

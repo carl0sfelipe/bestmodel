@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-journey="human">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Track record — bestmodel.run</title>
+<meta name="description" content="A track record states which part of the verification chain a contributor has performed. Each level is granted by a verified act — never self-declared.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/theme.css">
+<style>
+/* ============================================================
+   TRACK RECORD — the trust ladder (S30). Copy frozen from the
+   approved round (E6). Live-vs-proposal is labelled honestly:
+   signed run ×2 and fake caught ×5 are LIVE in the points API;
+   reproduction rewards land with the reproduce flow.
+   ============================================================ */
+
+select{font:inherit;color:inherit;background:none;border:0;outline:0}
+
+.tr-hero{padding:72px 0 10px}
+.tr-hero .k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.tr-hero h1{font-family:var(--display);font-size:clamp(30px,5.4vw,52px);line-height:1.03;margin:12px 0 10px}
+.tr-hero p{color:var(--muted);max-width:62ch;font-size:15px;line-height:1.55}
+.tr-hero .law{color:var(--ink)}
+.tr-hero .cta{display:inline-block;margin-top:18px;background:var(--amber);color:var(--bg);font-family:var(--mono);font-size:12px;padding:10px 16px;border-radius:999px;text-decoration:none}
+
+.tr-grid{display:grid;gap:12px;margin:34px 0 8px}
+@media(min-width:760px){.tr-grid{grid-template-columns:repeat(3,1fr)}}
+.tr-card{border:1px solid var(--hair);border-radius:14px;background:var(--surface);padding:18px}
+.tr-card .lv{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.08em}
+.tr-card h2{font-family:var(--display);font-size:19px;margin:6px 0 8px}
+.tr-card p{color:var(--muted);font-size:13.5px;line-height:1.55;margin:0 0 10px}
+.tr-card .granted{font-family:var(--mono);font-size:11px;color:var(--green)}
+.tr-card .prop{font-family:var(--mono);font-size:10px;color:var(--muted);border:1px dashed var(--hair-strong);border-radius:999px;padding:2px 8px;display:inline-block;margin-top:8px}
+
+.tr-points{border:1px solid var(--hair);border-radius:14px;background:var(--surface);padding:18px;margin:22px 0}
+.tr-points h2{font-family:var(--display);font-size:17px;margin:0 0 10px}
+.tr-points table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+.tr-points td{padding:7px 0;border-top:1px solid var(--hair);color:var(--muted)}
+.tr-points td:last-child{text-align:right;color:var(--ink)}
+.tr-points .live{color:var(--green)}
+.tr-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px}
+
+.tr-foot{color:var(--muted);font-size:13px;line-height:1.55;max-width:62ch;margin:26px 0 40px}
+</style>
+</head>
+<body>
+<main class="container">
+  <section class="tr-hero">
+    <p class="k">bestmodel.run — track record</p>
+    <h1>Trust is a ladder,<br>climbed by verified acts.</h1>
+    <p>A track record states which part of the verification chain a contributor has performed. <span class="law">Each level is granted by a verified act — never self-declared, and it does not decay.</span> Every act is attributable to an Ed25519 key.</p>
+    <a class="cta" href="./console/">start contributing →</a>
+  </section>
+
+  <section class="tr-grid">
+    <article class="tr-card">
+      <p class="lv">level 01</p>
+      <h2>Contributor</h2>
+      <p>You run benchmarks on your own hardware and submit signed results. One machine, one voice — but a real one, on the record.</p>
+      <p class="granted">granted by: a validated signed run</p>
+    </article>
+    <article class="tr-card">
+      <p class="lv">level 02</p>
+      <h2>Replicator</h2>
+      <p>You independently reproduce other contributors' runs — confirming or contradicting the reported numbers. A claim is one machine and one voice; a replication is the same numbers surviving different hands.</p>
+      <p class="granted">granted by: validated reproductions</p>
+      <span class="prop">threshold: proposal — dial pending owner</span>
+    </article>
+    <article class="tr-card">
+      <p class="lv">level 03</p>
+      <h2>Auditor</h2>
+      <p>You defend the pool: replicate high-impact cells and report unreal runs through moderation. A confirmed fake credits the reporter — the pool polices itself.</p>
+      <p class="granted">granted by: a confirmed fake caught + reproductions</p>
+      <span class="prop">threshold: proposal — dial pending owner</span>
+    </article>
+  </section>
+
+  <section class="tr-points">
+    <h2>Scoring (from the contributor export)</h2>
+    <table>
+      <tr><td>validated signed run</td><td class="live">×2 · live</td></tr>
+      <tr><td>confirmed fake caught</td><td class="live">×5 · live</td></tr>
+      <tr><td>reproduction of another contributor's run</td><td>×3 · lands with the reproduce flow</td></tr>
+    </table>
+    <p class="tr-note">Levels assume the one before them: a contributor who never reproduces another party's run stays a contributor. Points derive from signed activity only — nothing is handed out.</p>
+  </section>
+
+  <p class="tr-foot">Why does replication outrank claiming? Because a claim is one machine and one voice; a replication is the same numbers surviving different hands. The community measures, the CLI signs, anyone can replicate — and every level below is computed from that signed record, nothing else.</p>
+</main>
+</body>
+</html>

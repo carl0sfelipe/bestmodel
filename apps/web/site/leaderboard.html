@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-journey="human">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The wall — bestmodel.run</title>
+<meta name="description" content="Every community benchmark cell with its provenance: measured or reported, always labelled. Ranking is provisional until a signed run settles it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/theme.css">
+<style>
+/* ============================================================
+   THE WALL — "what does the community actually measure?" (S30)
+   Skin = theme.css (S4 kit, source of truth: the site's own
+   prototypes). This block keeps only wall-specific styles.
+   All numbers are real pool data via wall-page.mjs + loadDerived()
+   — no mock, no sample (CONTRATO §7.2).
+   ============================================================ */
+
+select{font:inherit;color:inherit;background:none;border:0;outline:0}
+
+.wall-hero{padding:72px 0 8px}
+.wall-hero .k{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.wall-hero h1{font-family:var(--display);font-size:clamp(30px,5.4vw,52px);line-height:1.03;margin:12px 0 10px}
+.wall-hero p{color:var(--muted);max-width:62ch;font-size:15px;line-height:1.55}
+.wall-hero .cta{display:inline-block;margin-top:18px;background:var(--amber);color:var(--bg);font-family:var(--mono);font-size:12px;padding:10px 16px;border-radius:999px;text-decoration:none}
+
+.wall-filters{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 14px}
+.wall-sel{font-family:var(--mono);font-size:12px;color:var(--ink);border:1px solid var(--hair);border-radius:999px;padding:8px 14px;background:var(--surface)}
+.wall-summary{font-family:var(--mono);font-size:11px;color:var(--muted);margin:0 0 14px}
+
+.wall-row{border:1px solid var(--hair);border-radius:14px;background:var(--surface);padding:14px 16px;margin:0 0 10px}
+.wall-row-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.wall-rank{font-family:var(--mono);font-size:12px;color:var(--dim);min-width:3ch}
+.wall-model{font-family:var(--display);font-size:15px;font-weight:600}
+.wall-num{font-family:var(--mono);font-size:24px;margin:8px 0 2px}
+.wall-num small{font-size:11px;color:var(--muted)}
+.wall-meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.wall-actions{margin-top:8px}
+.wall-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none}
+
+.wall-foot{color:var(--muted);font-size:13px;line-height:1.55;max-width:62ch;margin:28px 0 0}
+</style>
+</head>
+<body>
+<main class="container">
+  <section class="wall-hero">
+    <p class="k">bestmodel.run — the wall</p>
+    <h1>What the community<br>actually measures.</h1>
+    <p>Every row is a real cell from the community pool — medians of self-reported runs on named hardware. Nothing here is invented: cells carry their run count and their basis, and ranking is <strong>provisional</strong> — a signed run always outranks a claim.</p>
+    <a class="cta" href="./console/">capture or correct a number →</a>
+  </section>
+
+  <section id="wall-mount" aria-live="polite">
+    <p class="wall-summary">reading the pool…</p>
+  </section>
+</main>
+
+<script type="module">
+  import { mountWall } from "./assets/wall-page.mjs";
+  const mount = document.getElementById("wall-mount");
+  mountWall(mount).catch((err) => {
+    mount.innerHTML = "";
+    const p = document.createElement("p");
+    p.className = "wall-summary";
+    p.textContent = `could not load the pool: ${err.message}`;
+    mount.append(p);
+  });
+</script>
+</body>
+</html>

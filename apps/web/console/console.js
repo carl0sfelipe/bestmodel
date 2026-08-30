@@ -195,7 +195,10 @@ function renderRunRow(run) {
   return li;
 }
 
+let CURRENT_CLAIM_ID = null;
+
 async function openDetail(claimId) {
+  CURRENT_CLAIM_ID = claimId;
   const claim = await api(`/v1/claims/${claimId}`);
   const prior = claim.prior_snapshot?.pool?.p50_decode_tok_s
     ? `measured ${fmt(claim.prior_snapshot.pool.p50_decode_tok_s)} tok/s median`
@@ -207,6 +210,8 @@ async function openDetail(claimId) {
     <p><strong>${fmt(claim.claimed_metrics.decode_tok_s)} tok/s</strong> claimed — engine says: ${escapeHtml(prior)}</p>
     <p class="muted">${claim.tally.plausible_count} up / ${claim.tally.impossible_count} down · margin ${fmt(claim.tally.margin)} · ${claim.status}</p>`;
   $("#vote-row").hidden = !token() || claim.status !== "open";
+  $("#report-row").hidden = !token();
+  $("#form-report").hidden = true;
   $("#settle-box").hidden = !(token() && claim.status === "open");
   $("#settle-command").textContent =
     `benchmark-probe upload --settle-claim ${claim.id}`;
@@ -254,6 +259,29 @@ async function submitClaim(event) {
     await loadFeed();
   } catch (error) {
     status.textContent = `error: ${error.message}`;
+    status.hidden = false;
+  }
+}
+
+async function submitReport(event) {
+  event.preventDefault();
+  const claimId = CURRENT_CLAIM_ID;
+  if (!claimId) return;
+  const form = new FormData(event.target);
+  const payload = { reason_category: form.get("reason_category") };
+  if (form.get("reason_detail")) payload.reason_detail = form.get("reason_detail");
+  const status = $("#claim-status");
+  try {
+    const view = await api(`/v1/claims/${claimId}/reports`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    $("#form-report").hidden = true;
+    status.textContent = `report filed (${view.reason_category}) — a moderator will review it. If confirmed: fake caught, 5 points.`;
+    status.hidden = false;
+  } catch (error) {
+    status.textContent = `report error: ${error.message}`;
     status.hidden = false;
   }
 }
@@ -309,6 +337,13 @@ $("#form-login").addEventListener("submit", async (event) => {
 });
 
 $("#form-claim").addEventListener("submit", submitClaim);
+$("#btn-report-toggle").addEventListener("click", () => {
+  $("#form-report").hidden = !$("#form-report").hidden;
+});
+$("#btn-report-cancel").addEventListener("click", () => {
+  $("#form-report").hidden = true;
+});
+$("#form-report").addEventListener("submit", submitReport);
 for (const button of document.querySelectorAll("#vote-row [data-verdict]")) {
   button.addEventListener("click", () => vote(button.dataset.verdict));
 }

@@ -65,6 +65,27 @@
       <button class="up" data-verdict="plausible">▲ plausible</button>
       <button class="down" data-verdict="impossible">▼ impossible</button>
     </div>
+    <div class="vote-row" id="report-row" hidden>
+      <button class="down" id="btn-report-toggle">⚑ report unreal</button>
+    </div>
+    <form id="form-report" hidden>
+      <h2>Report an unreal run</h2>
+      <p class="muted">A report never changes the claim by itself — a moderator reviews it. A confirmed report is worth 5 points (fake caught).</p>
+      <label>reason
+        <select name="reason_category">
+          <option value="numbers_unreal">numbers look unreal</option>
+          <option value="wrong_hardware">hardware doesn't match</option>
+          <option value="wrong_model">model doesn't match</option>
+          <option value="duplicate">duplicate</option>
+          <option value="other">other</option>
+        </select>
+      </label>
+      <label>detail (optional)
+        <textarea name="reason_detail" rows="2" maxlength="1000" placeholder="what looks wrong?"></textarea>
+      </label>
+      <button type="submit">file report</button>
+      <button type="button" class="linkish" id="btn-report-cancel">cancel</button>
+    </form>
     <div id="settle-box" hidden>
       <h2>Prove it</h2>
       <p class="muted">Run the probe with your account token, then upload with:</p>

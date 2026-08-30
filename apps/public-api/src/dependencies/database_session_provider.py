@@ -91,6 +91,13 @@ class DatabaseSession(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def fetch_contributor_timeline(self) -> list[dict[str, Any]]:
+        """E6-4.5: account_created_at + first_signed_run_at per contributor
+        (referral-conversion window). ADDITIVE to the frozen S27 export —
+        travels as a separate top-level 'timeline' key, never inside the
+        frozen contributors rows."""
+
+    @abstractmethod
     def revoke_signing_key(self, key_id: str, revoked_at: str) -> None:
         raise NotImplementedError
 
@@ -693,6 +700,27 @@ class PostgresSession(DatabaseSession):
         )
         return [
             {"handle": str(r["handle"]), "points": int(r["points"]), "validated_runs": int(r["validated_runs"])}
+            for r in rows
+        ]
+
+    def fetch_contributor_timeline(self) -> list[dict[str, Any]]:
+        rows = self._fetchall(
+            "SELECT u.handle AS handle, "
+            "MIN(u.created_at) AS account_created_at, "
+            "MIN(r.submitted_at) AS first_signed_run_at "
+            "FROM app_user u "
+            "LEFT JOIN signing_key k ON k.app_user_id = u.id "
+            "LEFT JOIN benchmark_run r ON r.signature_key_id = k.id "
+            "AND r.status = %(status)s "
+            "GROUP BY u.handle ORDER BY u.handle",
+            {"status": "validated"},
+        )
+        return [
+            {
+                "handle": str(r["handle"]),
+                "account_created_at": r["account_created_at"].isoformat() if r["account_created_at"] else None,
+                "first_signed_run_at": r["first_signed_run_at"].isoformat() if r["first_signed_run_at"] else None,
+            }
             for r in rows
         ]
 

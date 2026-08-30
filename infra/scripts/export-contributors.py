@@ -36,10 +36,16 @@ def main() -> int:
         print(f"export-contributors: fetch falhou: {exc}", file=sys.stderr)
         return 1
 
+    # E6-4.5: timeline ADDITIVE (bloco separado; as linhas de contributors
+    # mantêm o contrato congelado da S27). Consumida pelo dial
+    # referral_conversion do The Lineup.
+    timeline = session.fetch_contributor_timeline()
+
     doc = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source": "S27 fetch_contributor_points (validated signed runs x 2)",
         "contributors": rows,
+        "timeline": timeline,
     }
     out = REPO / "data" / "contributor-export.json"
     out.parent.mkdir(parents=True, exist_ok=True)

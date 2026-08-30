@@ -356,6 +356,32 @@ class FakeDatabase(DatabaseSession):
             }
             for h in handles
         ]
+        return sorted(rows, key=lambda r: (-r["points"], r["handle"]))
+
+    def fetch_contributor_timeline(self) -> list[dict[str, Any]]:
+        """E6-4.5: derivado das linhas inseridas (nunca lista na mão)."""
+        out: dict[str, dict[str, Any]] = {}
+        for u in self._users:
+            out[u["handle"]] = {
+                "handle": u["handle"],
+                "account_created_at": u.get("created_at"),
+                "first_signed_run_at": None,
+            }
+        user_handle = {u["id"]: u["handle"] for u in self._users}
+        for run in self._runs:
+            if run.get("status") != "validated" or not run.get("signature_key_id"):
+                continue
+            key = self.fetch_signing_key_by_id(run["signature_key_id"])
+            if not key:
+                continue
+            handle = user_handle.get(key["app_user_id"])
+            entry = out.get(handle)
+            if entry is None:
+                continue
+            ra = run.get("submitted_at")
+            if ra and (entry["first_signed_run_at"] is None or ra < entry["first_signed_run_at"]):
+                entry["first_signed_run_at"] = ra
+        return [out[h] for h in sorted(out)]
         rows.sort(key=lambda r: (-r["points"], r["handle"]))
         return rows
 

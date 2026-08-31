@@ -6,12 +6,14 @@ import { Banner } from "../../components/claim-parts";
 import {
   CONSOLE_HREF,
   createClaim,
-  fetchClaimCatalog,
+  fetchCatalog,
   FIELD_MAX,
   getToken,
   isHttpUrl,
   type Claim,
   type CreateClaimBody,
+  type ModelRelease,
+  type QuantizationProfile,
 } from "../../lib/social";
 
 export type ModelLabel = { slug: string; name: string; category: string };
@@ -39,7 +41,11 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
   const [signedIn, setSignedIn] = useState(false);
   const [journey, setJourney] = useState<Journey | null>(null);
 
-  const [catalog, setCatalog] = useState<{ models: string[]; quants: string[] } | null>(null);
+  const [catalog, setCatalog] = useState<
+    | { source: "api"; models: ModelRelease[]; quants: QuantizationProfile[] }
+    | { source: "feed"; models: string[]; quants: string[] }
+    | null
+  >(null);
   const [catalogFailed, setCatalogFailed] = useState(false);
 
   const [modelId, setModelId] = useState("");
@@ -58,8 +64,11 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
   useEffect(() => setSignedIn(getToken() != null), []);
 
   useEffect(() => {
-    fetchClaimCatalog()
+    fetchCatalog()
       .then((result) => {
+        // Falling back to the feed is degradation, not failure. An EMPTY list
+        // is failure either way: the form cannot be completed without a model,
+        // so it stays disabled and says so instead of looking usable.
         if (!result.models.length) setCatalogFailed(true);
         setCatalog(result);
       })
@@ -68,8 +77,9 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
 
   const grouped = useMemo(() => {
     const byCategory = new Map<string, Option[]>();
-    for (const id of catalog?.models ?? []) {
-      const option = decorate(id, labels);
+    for (const model of catalog?.models ?? []) {
+      const option = typeof model === "string" ? decorate(model, labels) : decorate(model.id, labels);
+      if (typeof model !== "string") option.label = model.release_name;
       const list = byCategory.get(option.category) ?? [];
       list.push(option);
       byCategory.set(option.category, list);
@@ -251,6 +261,7 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
             journey={journey}
             grouped={grouped}
             quants={catalog?.quants ?? []}
+            catalogSource={catalog?.source ?? null}
             values={{ modelId, decode, sourceUrl, quant, gpu, context, note }}
             errors={signedIn ? { modelError, decodeError, sourceError, contextError } : {}}
             setters={
@@ -309,6 +320,7 @@ function CaptureForm({
   journey,
   grouped,
   quants,
+  catalogSource,
   values,
   errors,
   setters,
@@ -320,7 +332,8 @@ function CaptureForm({
 }: {
   journey: Journey;
   grouped: [string, Option[]][];
-  quants: string[];
+  quants: string[] | QuantizationProfile[];
+  catalogSource: "api" | "feed" | null;
   values: Values;
   errors: Errors;
   setters: Setters;
@@ -363,7 +376,9 @@ function CaptureForm({
         </select>
         <span id="cap-model-help" className={errors.modelError ? "help err" : "help"}>
           {errors.modelError ??
-            "Grouped by modality. The API has no catalog endpoint, so this lists the model ids the wall has seen."}
+            (catalogSource === "api"
+              ? "Grouped by modality. This is the complete API catalog."
+              : "Grouped by modality. The catalog route did not respond, so this lists what the wall has already shown.")}
         </span>
       </div>
 
@@ -428,11 +443,15 @@ function CaptureForm({
             onChange={(event) => setters.setQuant?.(event.target.value)}
           >
             <option value="">not stated</option>
-            {quants.map((id) => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
+            {quants.map((quant) => {
+              const id = typeof quant === "string" ? quant : quant.id;
+              const label = typeof quant === "string" ? quant : quant.display_name;
+              return (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              );
+            })}
           </select>
           <span className="help">Server profile ids — free text would be rejected.</span>
         </div>

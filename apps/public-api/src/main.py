@@ -22,6 +22,7 @@ from src.routes import (
     badge_route,
     card_route,
     benchmark_submission_route,
+    catalog_route,
     claim_route,
     contributor_route,
     hardware_match_route,
@@ -75,6 +76,7 @@ def create_app() -> FastAPI:
     app.include_router(transparency_route.router)
     app.include_router(auth_route.router)
     app.include_router(rig_route.router)
+    app.include_router(catalog_route.router)
     app.include_router(claim_route.router)
     app.include_router(badge_route.router)
     app.include_router(report_route.router)

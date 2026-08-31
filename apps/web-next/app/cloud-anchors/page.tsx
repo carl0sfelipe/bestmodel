@@ -29,7 +29,7 @@ export default function CloudAnchorsPage() {
                 <div className="wall-head">
                   <strong className="wall-model">{model!.displayName ?? model!.slug}</strong>
                   <span className="badge">{model!.category}</span>
-                  <span className="badge basis-measured">{basisOf(cell)}</span>
+                  <span className={`badge basis-${basisOf(cell)}`}>{basisOf(cell)}</span>
                 </div>
                 <div className="wall-speed">
                   {metric ? `${metric.value} ${metric.unit}` : `${cell.tokSOutMedian} tok/s`}

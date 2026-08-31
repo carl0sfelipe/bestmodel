@@ -114,10 +114,13 @@ export default function HomeClient({
 
   const answers = useMemo(() => {
     if (!category || !rig) return [];
+    // Multimodal cells carry no bits — they land under the 0 key and skip the
+    // context floor, which is a text-only question.
+    if (multimodal) return index[`${rig}|${category}|0`] ?? [];
     const rows = index[`${rig}|${category}|${bits}`] ?? [];
     if (!context) return rows;
     return rows.filter((row) => row.maxContext != null && row.maxContext >= context);
-  }, [index, rig, category, bits, context]);
+  }, [index, rig, category, bits, context, multimodal]);
 
   const best = answers[0] ?? null;
   const rigLabel = rigs.find((item) => item.key === rig)?.label ?? rig;
@@ -182,7 +185,7 @@ export default function HomeClient({
             <span className="opt-note">Ordered by how much the community has tested it.</span>
           </div>
 
-          <div className="mad-group">
+          {!multimodal && <div className="mad-group">
             <span className="mad-label" id="lbl-quant">
               <b>03</b> quantization
             </span>
@@ -204,7 +207,7 @@ export default function HomeClient({
                 );
               })}
             </div>
-          </div>
+          </div>}
 
           {!multimodal && <div className="mad-group">
             <span className="mad-label" id="lbl-ctx">
@@ -240,10 +243,14 @@ export default function HomeClient({
             <>
               <p className="verdict-none">No data yet for this combination.</p>
               <p className="verdict-meta">
-                Nobody has submitted a {bits}-bit {intent} run on {rigLabel}
-                {context ? ` tested to ${context.toLocaleString("en-US")} tokens` : ""}. That is an
-                absence, not a zero — <Link href="/submit">capture one</Link> and it stops being
-                empty.
+                {multimodal
+                  ? `Nobody has submitted a ${intent} run on ${rigLabel}`
+                  : `Nobody has submitted a ${bits}-bit ${intent} run on ${rigLabel}`}
+                {!multimodal && context
+                  ? ` tested to ${context.toLocaleString("en-US")} tokens`
+                  : ""}
+                . That is an absence, not a zero — <Link href="/submit">capture one</Link> and it
+                stops being empty.
               </p>
             </>
           ) : (
@@ -254,10 +261,14 @@ export default function HomeClient({
               </p>
               <p className="verdict-meta">
                 <span className={`badge basis-${best.basis}`}>{best.basis}</span> · n={best.n} ·{" "}
-                {bits}-bit on {rigLabel}
+                {multimodal
+                  ? `${best.metric?.label ?? intent} on ${rigLabel}`
+                  : `${bits}-bit on ${rigLabel}`}
                 {best.maxContext
                   ? ` · community-tested up to ${best.maxContext.toLocaleString("en-US")} tokens`
-                  : " · context untested"}
+                  : multimodal
+                    ? ""
+                    : " · context untested"}
               </p>
 
               {answers.length > 1 && (

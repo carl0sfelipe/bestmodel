@@ -25,7 +25,7 @@ export default function HomePage() {
     if (!model) continue;
     const metric = metricOf(cell);
     if (cell.tokSOutMedian == null && metric == null) continue;
-    const key = `${cell.rigKey}|${model.category}|${cell.bits}`;
+    const key = `${cell.rigKey}|${model.category}|${cell.bits ?? 0}`;
     (index[key] ??= []).push({
       name: model.displayName ?? model.slug,
       slug: model.slug,

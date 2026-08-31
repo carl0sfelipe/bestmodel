@@ -280,9 +280,8 @@ export function reportClaim(
 /**
  * The ids create accepts are opaque server ids (`model-qwen3-6-35b-a3b`,
  * `q-gguf-q4-k-m`) and create_run_claim 404s on anything it cannot resolve.
- * There is no public catalog endpoint — fetch_quantization_profiles exists in
- * the DB layer but is not published over HTTP — so the only ids we can offer
- * with confidence are the ones the feed has actually shown us.
+ * This is the compatibility path for API deployments without the public
+ * catalog endpoints, so the form can still offer ids shown by the feed.
  */
 export async function fetchClaimCatalog(): Promise<{ models: string[]; quants: string[] }> {
   const result = await listClaims({ status: "", sort: "recent", limit: 100, offset: 0 });

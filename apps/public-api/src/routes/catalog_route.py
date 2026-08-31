@@ -30,7 +30,7 @@ def list_model_releases(
             "parameter_count_billion": _as_float(row["parameter_count_billion"]),
             "max_context_tokens": row["max_context_tokens"],
         }
-        for row in sorted(session.fetch_all_model_releases(), key=lambda item: item["id"])
+        for row in sorted(session.fetch_all_models(), key=lambda item: item["id"])
     ]
     return {"items": items, "count": len(items)}
 

@@ -574,9 +574,6 @@ class FakeDatabase(DatabaseSession):
     def fetch_all_models(self) -> list[dict[str, Any]]:
         return [dict(row) for row in self._models]
 
-    def fetch_all_model_releases(self) -> list[dict[str, Any]]:
-        return [dict(row) for row in self._models]
-
     def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:
         return next(
             (c for c in self._claims if c.get("external_ref") == external_ref), None

@@ -66,6 +66,10 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
   useEffect(() => {
     fetchCatalog()
       .then((result) => {
+        // Falling back to the feed is degradation, not failure. An EMPTY list
+        // is failure either way: the form cannot be completed without a model,
+        // so it stays disabled and says so instead of looking usable.
+        if (!result.models.length) setCatalogFailed(true);
         setCatalog(result);
       })
       .catch(() => setCatalogFailed(true));
@@ -252,7 +256,7 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
           )}
 
           <CaptureForm
-            disabled={!signedIn || !catalog}
+            disabled={!signedIn || !catalog || catalogFailed}
             loading={!catalog && !catalogFailed}
             journey={journey}
             grouped={grouped}

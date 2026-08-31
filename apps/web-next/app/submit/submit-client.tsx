@@ -6,6 +6,7 @@ import { Banner } from "../../components/claim-parts";
 import {
   CONSOLE_HREF,
   createClaim,
+  FIELD_MAX,
   getToken,
   isHttpUrl,
   type Claim,
@@ -335,6 +336,7 @@ function CaptureForm({
           inputMode="url"
           value={values.sourceUrl}
           disabled={disabled}
+          maxLength={FIELD_MAX.source_url}
           placeholder="https://reddit.com/r/LocalLLaMA/…"
           aria-invalid={errors.sourceError ? "true" : undefined}
           aria-describedby="cap-source-help"
@@ -381,6 +383,7 @@ function CaptureForm({
             id="cap-quant"
             value={values.quant}
             disabled={disabled}
+            maxLength={FIELD_MAX.quantization_profile_id}
             placeholder="Q4_K_M"
             onChange={(event) => setters.setQuant?.(event.target.value)}
           />
@@ -395,6 +398,7 @@ function CaptureForm({
             id="cap-gpu"
             value={values.gpu}
             disabled={disabled}
+            maxLength={FIELD_MAX.gpu_model_id}
             placeholder="RTX 3090 24GB"
             onChange={(event) => setters.setGpu?.(event.target.value)}
           />
@@ -411,6 +415,7 @@ function CaptureForm({
             inputMode="numeric"
             min="1"
             step="1"
+            max={FIELD_MAX.context_tokens}
             value={values.context}
             disabled={disabled}
             placeholder="32768"
@@ -433,6 +438,7 @@ function CaptureForm({
           id="cap-note"
           value={values.note}
           disabled={disabled}
+          maxLength={FIELD_MAX.note}
           placeholder={
             journey === "found"
               ? "What the poster said around the number."

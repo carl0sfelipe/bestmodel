@@ -14,6 +14,20 @@ export const TOKEN_KEY = "bm_token";
 export const CONSOLE_HREF = "/console";
 export const MAX_REASON_DETAIL = 1000;
 
+/**
+ * Field caps copied from the server's own request model
+ * (apps/public-api/src/schemas/claim_schemas.py). Enforced in the form so a
+ * long value fails visibly at the field instead of returning a 422.
+ */
+export const FIELD_MAX = {
+  model_release_id: 128,
+  quantization_profile_id: 64,
+  gpu_model_id: 64,
+  note: 2000,
+  source_url: 500,
+  context_tokens: 10_000_000,
+} as const;
+
 // ------------------------------------------------------------------ types
 
 export type ClaimStatus = "open" | "settled_verified" | "refuted" | "retracted";
@@ -225,14 +239,19 @@ export function voteOnClaim(id: string, verdict: Verdict): Promise<ApiResult<unk
   });
 }
 
+/**
+ * Reports do NOT live under /v1/claims. The API mounts them at
+ * /v1/run-claims/{claim_id}/reports (apps/public-api/src/routes/report_route.py),
+ * which is the path used here — verified against the route, not the brief.
+ */
 export function reportClaim(
   id: string,
   reason_category: ReasonCategory,
   reason_detail: string,
 ): Promise<ApiResult<unknown>> {
-  return request(`/v1/claims/${encodeURIComponent(id)}/reports`, {
+  return request(`/v1/run-claims/${encodeURIComponent(id)}/reports`, {
     method: "POST",
-    body: { reason_category, reason_detail },
+    body: { reason_category, reason_detail: reason_detail || null },
     auth: true,
   });
 }

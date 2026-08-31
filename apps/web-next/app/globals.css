@@ -300,3 +300,24 @@ dialog.modal::backdrop{background:rgba(6,7,8,.76);backdrop-filter:blur(4px)}
 .rung .granted{margin-top:auto;padding-top:12px;border-top:1px solid var(--hair);font:11px/1.6 var(--mono)}
 .rung[data-state="held"] .granted{color:var(--green)}
 .rung[data-state="not-yet"] .granted{color:var(--dim)}
+
+/* ---- touch targets in the chrome ----
+   Measured audit: nav links rendered 17px tall, well under the 44px floor,
+   and this build adds two more of them. The links get a real target, and on
+   mobile the row scrolls in its own container instead of stacking into a
+   130px sticky nav that would eat the viewport. */
+.site-nav nav a{display:inline-flex;align-items:center;min-height:44px}
+@media (max-width:760px){
+  .site-nav nav{
+    flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    width:100%;gap:18px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    /* the fade reads as "there is more", so a clipped label is an
+       affordance rather than a bug */
+    mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+    -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+  }
+  .site-nav nav::-webkit-scrollbar{display:none}
+}
+/* pre-existing: the mural's rig buttons sat 2px under the floor */
+.rig-option,.intent-card{min-height:44px}
+.site-nav .brand{display:inline-flex;align-items:center;min-height:44px}

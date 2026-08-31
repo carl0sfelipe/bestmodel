@@ -321,3 +321,64 @@ dialog.modal::backdrop{background:rgba(6,7,8,.76);backdrop-filter:blur(4px)}
 /* pre-existing: the mural's rig buttons sat 2px under the floor */
 .rig-option,.intent-card{min-height:44px}
 .site-nav .brand{display:inline-flex;align-items:center;min-height:44px}
+
+/* ============================================================================
+   RESPONSIVE CORRECTIONS — cascade order matters here
+   The two-column rules for .journeys / .intent-grid are declared LATER in this
+   file than the @media(max-width:760px) block that tries to collapse them, so
+   at equal specificity the desktop rule won and they stayed 2-up at 360px
+   (measured: .journeys 157px+157px, .intent-grid 53.5px+53.5px, with card text
+   spilling outside its own border). This block sits at the end of the file so
+   the collapse actually applies. General fix — not scoped to one route.
+   ========================================================================= */
+
+@media (max-width:760px){
+  .journeys,.intent-grid,.stats-grid,.card-grid,.hardware-grid,.steps,.ladder,.figs{
+    grid-template-columns:1fr;
+  }
+  .journey-heading{flex-wrap:wrap}
+  .rig-option{flex-wrap:wrap;gap:4px 10px}
+  .rig-option small{white-space:normal}
+}
+
+/* Nothing inside a card may print outside it: a flex/grid child defaults to
+   min-width:auto, which is what let the intent text escape its border. */
+.card,.step,.journey-door,.intent-card,.rig-option,.mural-row,.hardware-card,
+.claim-card,.panel,.rung,.door,.verdict{min-width:0}
+.intent-card > *,.rig-option > *,.mural-row > *,.journey-door > *{min-width:0}
+.intent-card strong,.intent-card small,.intent-card em,
+.rig-option span,.rig-option small,
+.mural-row .num,.mural-row .num small,.mural-row p,.source-line{
+  overflow-wrap:anywhere;
+}
+/* the disabled note read as three stacked slivers in a narrow card */
+.intent-card em{white-space:nowrap}
+
+/* The SAMPLE marker was position:fixed at top:76px — tuned for a 64px desktop
+   nav. At 360px the nav is 137px tall, so the marker landed inside the header
+   and read as a dark glitched rectangle over the wordmark. It now sits in the
+   content flow, where it cannot collide with anything. */
+.sample-tag{position:static;display:inline-block;margin-bottom:8px}
+.sample-tag-inline{
+  display:inline-block;margin-top:16px;padding:6px 11px;border-radius:999px;
+  background:var(--amber);color:var(--bg);
+  font:10px var(--mono);letter-spacing:.09em;
+}
+
+/* the home now opens on the selector, so the first scene carries hero air */
+.scene.lead{padding-top:clamp(48px,10vw,96px)}
+
+/* The base reset sets font and color on button but never background, so the
+   UA's light default showed through every <button class="btn"> — .btn only
+   paints a background in its .primary variant. Anchors were unaffected, which
+   is why it read as random white boxes. */
+button{background:transparent}
+
+/* .ctl-group's flex basis was written for the row layout; in the stacked
+   column it applied to HEIGHT and flex-grow stretched each control to ~190px,
+   leaving big dead gaps between the filters. */
+.ctl-bar{align-items:stretch}
+.ctl-group{flex:0 0 auto}
+@media (min-width:48rem){.ctl-group{flex:1 1 190px}}
+/* the meta inherited the 26px headline size and wrapped as a second big line */
+.mural-row .num small{display:block;margin-top:6px;font-size:12px;color:var(--muted)}

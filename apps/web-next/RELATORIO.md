@@ -1,6 +1,6 @@
 # RELATÓRIO — rede social de captura em React/Next
 
-Branch `social/react-next`, em `apps/web-next`. Nove commits pequenos.
+Branch `social/react-next`, em `apps/web-next`. Onze commits pequenos.
 Build verde: **639 páginas** (626 SSG de modelo intactas + 13 rotas).
 
 ---
@@ -83,18 +83,32 @@ código: **todos conferem** (create/browse/detail de claims, verdict
 `plausible|impossible`, `CLAIM_SORTS`, as 5 `REPORT_CATEGORIES`, cap de 1000 em
 `reason_detail`, `FAKE_CAUGHT_POINTS = 5` — a copy "+5 points" está correta).
 
-**D2 — não existe rewrite same-origin `/v1/*` neste repo.** `deploy/Caddyfile` só
-proxia `api.bestmodel.run → api:8000`. Implementei base `""` como mandado, mas
-sobrescrevível por `NEXT_PUBLIC_API_BASE` sem mudar código. **Confirme antes de
-subir**, senão toda chamada social bate em 404 no próprio host.
+**D2 — RESOLVIDO: não havia rewrite same-origin `/v1/*`.** Era exatamente isso o
+`HTTP 404` que o dono viu no wall. A API estava de pé o tempo todo
+(`bestmodel-prod-api-1`, proxy em `127.0.0.1:8010`); o que faltava era rota:
+`/v1/*` batia no próprio Next. Criei `next.config.ts` com o rewrite que o brief
+supunha existir no deploy. `API_ORIGIN` sobrescreve o default local — **no
+deploy aponte para `http://api:8000`**, já que o `Caddyfile` só publica
+`api.bestmodel.run`.
+
+**D4 — RESOLVIDO: `model_release_id` não é o `hfId`.** O payload real usa ids
+opacos do servidor (`model-qwen3-6-35b-a3b`, `q-gguf-q4-k-m`) e
+`create_run_claim` responde **404 "unknown model_release_id"** para qualquer id
+que não resolva. O form mandava `hfId` e texto livre — **toda captura teria
+falhado**. Como não existe endpoint de catálogo (`fetch_quantization_profiles`
+existe na camada de DB mas não é publicado), os selects são montados com os ids
+que o feed comprovadamente já mostrou (25 modelos, 5 perfis). O índice derivado
+entra só para pôr um nome legível num id opaco — nunca para inventar um.
+
+**D9 — `claimant_handle` não é o teste de "é uma pessoa".** Imports trazem
+`claimant_handle: "localmaxxing pool"` com `claimant_id: null`. O wall linkava
+toda linha importada para um perfil que não pode existir. Agora só vira link
+quando há `claimant_id`.
 
 **D3 — colisão de nome "The wall".** A rota `/wall` já existente se chamava "The
 wall" e mostra células do pool. Renomeei só o **rótulo do nav** para "Pool" (o
 que ela sempre foi) e "The wall" agora aponta pra `/claims`. Rota, conteúdo e
 metadata de `/wall` intactos. É uma palavra pra reverter se você discordar.
-
-**D4 — `model_release_id`: mando o `hfId`.** É o identificador canônico e cabe no
-cap de 128. Se a API espera o `slug`, é uma linha em `app/submit/page.tsx`.
 
 **D5 — shape de `badges` é opaco no contrato.** A escada casa por substring do
 nome do degrau em qualquer string do badge. Conservador: na dúvida marca
@@ -167,6 +181,12 @@ Nenhum token existente redefinido — só nomes novos (motion, focus, field heig
 
 ## Para subir
 
-1. Confirmar o roteamento de `/v1/*` (D2) ou setar `NEXT_PUBLIC_API_BASE`.
-2. Confirmar se `model_release_id` é `hfId` ou `slug` (D4).
-3. Decidir se o rótulo "Pool" para `/wall` fica (D3).
+1. Setar `API_ORIGIN=http://api:8000` no deploy (o default é local).
+2. Decidir se o rótulo "Pool" para `/wall` fica (D3).
+
+## Limitação conhecida
+
+Sem endpoint de catálogo, o form de captura só oferece os ids que o feed já
+mostrou. Um `GET /v1/model-releases` e um `GET /v1/quantization-profiles`
+(a camada de DB já tem `fetch_quantization_profiles`) resolveriam — é trabalho
+de backend, fora do escopo deste branch.

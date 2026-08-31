@@ -123,38 +123,14 @@ export default function HomeClient({
   return (
     <main>
       {/* ---------------------------------------------------------- scene 01 */}
-      <section className={`hero scene-reveal${hero.on ? " on" : ""}`} ref={hero.ref}>
+      <section className={`scene lead scene-reveal${picker.on ? " on" : ""}`} ref={picker.ref}>
         <p className="overline">01 — the question</p>
         <h1 className="scene-head">
-          <Words text="Your machine already" />
+          <Words text="What do you" />
           <em>
-            <Words text=" has an answer." />
+            <Words text=" want to run?" />
           </em>
         </h1>
-        <p className="scene-sub">
-          Not a guess, not a spec-sheet estimate. {totals.runs.toLocaleString("en-US")} community
-          runs across {totals.rigs} reference rigs already say what your hardware does with a given
-          model — and every number below tells you whether it was measured or merely reported.
-        </p>
-        <div className="actions">
-          <Link className="btn primary" href="/claims">
-            See the wall
-          </Link>
-          <Link className="btn" href="/hardware">
-            Start from hardware
-          </Link>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------- scene 02 */}
-      <section className={`scene scene-reveal${picker.on ? " on" : ""}`} ref={picker.ref}>
-        <p className="overline">02 — the envelope</p>
-        <h2 className="scene-head">
-          <Words text="Four questions." />
-          <em>
-            <Words text=" One honest answer." />
-          </em>
-        </h2>
         <p className="scene-sub">
           Intent, machine, quantization and context are four separate decisions, so they get four
           separate controls. Nothing is fused, and nothing is estimated — if the pool has never
@@ -298,6 +274,30 @@ export default function HomeClient({
               )}
             </>
           )}
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------- scene 02 */}
+      <section className={`scene scene-reveal${hero.on ? " on" : ""}`} ref={hero.ref}>
+        <p className="overline">02 — the answer</p>
+        <h2 className="scene-head">
+          <Words text="Your machine already" />
+          <em>
+            <Words text=" has an answer." />
+          </em>
+        </h2>
+        <p className="scene-sub">
+          You just asked it. What came back is not a spec-sheet estimate — it is what{" "}
+          {totals.runs.toLocaleString("en-US")} community runs on real hardware actually recorded,
+          with the basis printed beside every number.
+        </p>
+        <div className="actions">
+          <Link className="btn primary" href="/claims">
+            See the wall
+          </Link>
+          <Link className="btn" href="/hardware">
+            Start from hardware
+          </Link>
         </div>
       </section>
 

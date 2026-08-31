@@ -24,3 +24,7 @@ deploy/secrets/
 volumes/
 backups/
 experiments/
+
+# env backups carry TUNNEL_TOKEN — never committable
+.env.bak*
+deploy/.env.bak*

@@ -14,3 +14,289 @@ footer{border-top:1px solid var(--hair);padding:28px max(16px,5vw);display:flex;
 .toolbar label{min-width:0;flex:1 1 150px}.toolbar .select{width:100%}
 .journeys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0 30px}.journey-door{background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:20px}.journey-heading{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}.journey-heading h2{font:600 25px var(--display);letter-spacing:-.02em}.journey-heading p{font-size:12px;color:var(--muted);margin-top:5px}.journey-number{font:11px var(--mono);color:var(--amber);padding-top:5px}.intent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.intent-card,.rig-option{width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--hair);border-radius:9px;padding:12px;display:flex;gap:10px;align-items:flex-start}.intent-card:hover:not(:disabled),.rig-option:hover{border-color:var(--amber)}.intent-card.selected,.rig-option.selected{border-color:var(--amber);background:var(--amber-soft)}.intent-card:disabled{cursor:not-allowed;opacity:.58}.intent-icon{font:18px var(--mono);color:var(--amber);width:22px}.intent-card strong,.intent-card small,.intent-card em{display:block}.intent-card strong{font:14px var(--display)}.intent-card small,.intent-card em,.rig-option small{font:10px var(--mono);color:var(--muted);margin-top:3px}.intent-card em{font-style:normal;color:var(--amber);margin-top:7px}.rig-list{display:grid;gap:8px}.rig-option{align-items:center;justify-content:space-between;font:13px var(--display)}.rig-option small{margin:0;white-space:nowrap}
 .source-line{font:11px var(--mono);color:var(--muted);margin-top:8px}.form-status{font:12px var(--mono);color:var(--green);margin-top:16px}.report-scrim{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(6,7,8,.76);backdrop-filter:blur(4px)}.report-panel{width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:1px solid var(--hair-strong);border-radius:14px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.6)}.report-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:20px}.report-head h2{font:600 22px var(--display)}.close-button{width:36px;height:36px;border:1px solid var(--hair);border-radius:8px;background:transparent;color:var(--muted)}.field{display:flex;flex-direction:column;gap:7px;margin-top:16px}.field label{font:11px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.field select,.field input,.field textarea{width:100%;padding:12px;background:var(--surface-2);border:1px solid var(--hair);border-radius:8px;font:13px var(--mono)}.field textarea{min-height:92px;resize:vertical}.hint,.report-note{font:11px var(--mono);color:var(--muted)}.report-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.report-note{border-top:1px solid var(--hair);padding-top:16px;margin-top:20px}
+
+/* ============================================================================
+   Hallmark · macrostructure: Scene Narrative (ported from the approved prod
+   design) · theme: locked system (bestmodel tokens, app/globals.css :root)
+   · genre: atmospheric · nav: N1b · footer: existing · enrichment: none
+   · pre-emit critique: P5 H5 E4 S5 R5 V4
+   · diversification: SUSPENDED — system-managed project, pages share the
+     system by design. The owner approved this look; rotation would regress it.
+
+   APPEND-ONLY. Everything below consumes the tokens declared at the top of
+   this file. No token above is redefined. New tokens are new names only.
+   Mobile-first: base = 360px, every query is min-width.
+   ========================================================================= */
+
+/* ---- new tokens (motion + rhythm; none of these existed) ---- */
+:root{
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
+  --dur-fast:140ms;
+  --dur-base:240ms;
+  --dur-slow:560ms;
+  --focus:var(--amber);
+  --focus-on-accent:var(--bg);
+  --field-h:44px;
+}
+
+/* ---- base corrections (additive; no existing rule removed) ---- */
+/* gate 34: clip, never hidden, and on both elements */
+html,body{overflow-x:clip}
+
+/* the project shipped no focus styling at all — keyboard users had only the
+   UA default. Never animated, always visible. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--focus);
+  outline-offset:2px;
+  border-radius:8px;
+}
+.btn.primary:focus-visible{outline-color:var(--focus-on-accent)}
+
+/* affordances never wrap to two lines (gate 49) */
+.btn,.site-nav nav a,.brand{white-space:nowrap}
+
+/* long model ids and handles must not push the page sideways (gate 51) */
+h1,h2,h3{overflow-wrap:anywhere;min-width:0}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+}
+
+/* ============================================================================
+   HOME — scene narrative + goal-first selector
+   ========================================================================= */
+
+.scene{padding:clamp(56px,10vw,104px) 0;border-top:1px solid var(--hair)}
+.scene:first-of-type{border-top:0}
+.scene-reveal{opacity:0;transform:translateY(12px);transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
+.scene-reveal.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.scene-reveal{opacity:1;transform:none}}
+
+.overline{font:10px/1.6 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:20px}
+
+/* the hero headline reveals word by word, as the prod page does */
+.scene-head{font:600 clamp(34px,8.5vw,78px)/1.02 var(--display);letter-spacing:-.035em;max-width:16ch}
+.scene-head .w{display:inline-block;opacity:0;transform:translateY(14px);transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
+.on .scene-head .w{opacity:1;transform:none}
+.scene-head .w:nth-child(1){transition-delay:40ms}
+.scene-head .w:nth-child(2){transition-delay:90ms}
+.scene-head .w:nth-child(3){transition-delay:140ms}
+.scene-head .w:nth-child(4){transition-delay:190ms}
+.scene-head .w:nth-child(5){transition-delay:240ms}
+.scene-head .w:nth-child(6){transition-delay:290ms}
+.scene-head .w:nth-child(7){transition-delay:340ms}
+.scene-head .w:nth-child(8){transition-delay:390ms}
+.scene-head em{font-style:normal;color:var(--amber)}
+.scene-sub{color:var(--muted);font-size:clamp(14px,3.6vw,17px);line-height:1.65;max-width:62ch;margin-top:22px}
+
+/* the mad-lib: one labelled control per dimension, never fused */
+.mad{display:grid;grid-template-columns:1fr;gap:18px;margin-top:34px;padding:20px;background:var(--surface);border:1px solid var(--hair);border-radius:14px}
+@media (min-width:60rem){.mad{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;padding:26px}}
+.mad-group{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mad-label{font:10px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.mad-label b{color:var(--amber);font-weight:500;margin-right:8px}
+.opt-row{display:flex;flex-wrap:wrap;gap:8px}
+.opt{
+  display:inline-flex;align-items:center;gap:8px;min-height:var(--field-h);
+  padding:9px 14px;border-radius:999px;background:var(--surface-2);
+  border:1px solid var(--hair);font:12px var(--mono);color:var(--muted);
+  transition:background var(--dur-base) var(--ease-out),color var(--dur-base) var(--ease-out),border-color var(--dur-base) var(--ease-out);
+}
+@media (hover:hover){.opt:hover:not(:disabled){color:var(--ink);border-color:var(--hair-strong)}}
+.opt[aria-pressed="true"]{background:var(--amber-soft);border-color:var(--amber);color:var(--amber)}
+.opt:active:not(:disabled){transform:translateY(1px)}
+.opt:disabled{opacity:.45;cursor:not-allowed}
+.opt .why{font-size:10px;color:var(--dim)}
+.opt-note{font:10px/1.5 var(--mono);color:var(--dim)}
+
+/* the answer the selector produces */
+.verdict{margin-top:26px;padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--hair)}
+.verdict-num{font:500 clamp(30px,8vw,46px)/1 var(--mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.verdict-num small{font-size:14px;color:var(--muted);margin-left:10px;letter-spacing:0}
+.verdict-none{font:15px var(--display);color:var(--dim)}
+.verdict-meta{font:11px/1.8 var(--mono);color:var(--muted);margin-top:12px;overflow-wrap:anywhere}
+.verdict-list{display:grid;gap:9px;margin-top:18px}
+.verdict-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;padding:12px 0;border-top:1px solid var(--hair);font:12px var(--mono)}
+.verdict-row .name{font:600 14px var(--display);flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.verdict-row .v{font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* terminal cadence block from the prod narrative */
+.term{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:18px;font:12px/1.9 var(--mono);color:var(--muted);overflow-x:auto}
+.term .p{color:var(--dim)}
+.term .ok{color:var(--green)}
+.term .am{color:var(--amber)}
+
+/* ============================================================================
+   SOCIAL — shared surfaces
+   ========================================================================= */
+
+/* controls: one group per dimension (intent, machine, quant, context, status,
+   sort). They stack on mobile and never merge into a single dropdown. */
+.ctl-bar{display:flex;flex-direction:column;gap:18px;padding:18px;margin:18px 0 26px;background:var(--surface);border:1px solid var(--hair);border-radius:14px}
+@media (min-width:48rem){.ctl-bar{flex-direction:row;flex-wrap:wrap;gap:24px;padding:20px 22px}}
+.ctl-group{display:flex;flex-direction:column;gap:9px;min-width:0;flex:1 1 190px}
+.ctl-label{font:10px/1.4 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+
+.claim-list{display:grid;gap:12px}
+.claim-card{position:relative;padding:18px;border-radius:14px;background:var(--surface);border:1px solid var(--hair);transition:border-color var(--dur-base) var(--ease-out),background var(--dur-base) var(--ease-out)}
+@media (hover:hover){.claim-card:hover{border-color:var(--hair-strong);background:var(--surface-2)}}
+@media (min-width:48rem){.claim-card{padding:22px}}
+.claim-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:13px}
+.claim-who{font:12px var(--mono);color:var(--ink);overflow-wrap:anywhere;position:relative;z-index:1}
+.claim-who.imported{color:var(--muted)}
+a.claim-who{text-decoration:none;border-bottom:1px solid var(--hair-strong)}
+@media (hover:hover){a.claim-who:hover{color:var(--amber);border-bottom-color:var(--amber)}}
+.claim-age{font:11px var(--mono);color:var(--dim);margin-left:auto}
+
+/* card link is stretched, not wrapping — the source chip stays clickable */
+.claim-model{display:block;font:600 clamp(17px,4vw,20px)/1.25 var(--display);letter-spacing:-.02em;color:var(--ink);text-decoration:none;overflow-wrap:anywhere;margin-bottom:12px;transition:color var(--dur-base) var(--ease-out)}
+a.claim-model::after{content:"";position:absolute;inset:0;border-radius:14px}
+@media (hover:hover){a.claim-model:hover{color:var(--amber)}}
+
+.claim-num{font:500 clamp(26px,6.5vw,34px)/1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.claim-num small{font-size:13px;color:var(--muted);margin-left:9px;letter-spacing:0}
+.claim-num.absent{font-size:15px;color:var(--dim)}
+.claim-metrics{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font:11px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.claim-metrics .k{color:var(--dim)}
+.claim-meta{margin-top:12px;font:11px/1.8 var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.claim-note{margin-top:12px;font-size:13px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
+
+/* THE SOURCE CHIP — the hero of the wall. Provenance gets the accent. */
+.src{display:inline-flex;align-items:center;gap:8px;margin-top:14px;max-width:100%;padding:8px 13px;border-radius:999px;background:var(--amber-soft);border:1px solid rgba(224,164,88,.28);font:11px var(--mono);color:var(--amber);text-decoration:none;position:relative;z-index:1}
+a.src{min-height:var(--field-h)}
+@media (hover:hover){a.src:hover{border-color:var(--amber);background:rgba(224,164,88,.15)}}
+.src .host{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src .arw{flex-shrink:0;opacity:.75}
+.src.plain{background:transparent;border-color:var(--hair);color:var(--muted)}
+
+/* the engine's own reading, beside the claim — never averaged into it */
+.cross{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);font:11px/1.8 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.cross .lbl{color:var(--dim)}
+.cross b{color:var(--ink);font-weight:500}
+
+.status{font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.status[data-s="open"]{color:var(--amber)}
+.status[data-s="settled_verified"]{color:var(--green)}
+.status[data-s="refuted"]{color:var(--red)}
+.status[data-s="retracted"]{color:var(--dim)}
+
+.tally{margin-top:16px;position:relative;z-index:1}
+.tally-bar{height:5px;border-radius:999px;background:var(--surface-3);overflow:hidden;display:flex}
+.tally-bar i{display:block;transition:width var(--dur-slow) var(--ease-out)}
+.tally-bar .yes{background:var(--green)}
+.tally-bar .no{background:var(--red)}
+.tally-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:9px;font:11px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tally-legend .yes{color:var(--green)}
+.tally-legend .no{color:var(--red)}
+
+/* empty states: a mark, one line of why, one action out */
+.empty{padding:clamp(40px,10vw,64px) 22px;text-align:center;background:var(--surface);border:1px dashed var(--hair);border-radius:14px}
+.empty-mark{font:22px var(--mono);letter-spacing:.22em;color:var(--dim);margin-bottom:18px}
+.empty h2{font:600 clamp(19px,4.6vw,25px)/1.2 var(--display);letter-spacing:-.02em;margin-bottom:12px}
+.empty p{max-width:48ch;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.65}
+.empty .actions{justify-content:center;margin-top:24px}
+
+.banner{padding:15px 17px;border-radius:11px;margin:0 0 22px;font:12px/1.75 var(--mono);border:1px solid var(--hair);background:var(--surface);color:var(--muted)}
+.banner b{font-weight:500}
+.banner a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.banner[data-k="ok"]{border-color:rgba(155,196,169,.3);background:rgba(155,196,169,.06);color:var(--green)}
+.banner[data-k="bad"]{border-color:rgba(214,123,123,.3);background:rgba(214,123,123,.06);color:var(--red)}
+.banner[data-k="note"]{border-color:rgba(224,164,88,.28);background:var(--amber-soft);color:var(--amber)}
+
+/* skeletons — lists have a predictable shape, so no spinner */
+.skel{display:grid;gap:12px}
+.skel-row{height:132px;border-radius:14px;background:var(--surface);border:1px solid var(--hair);opacity:.6;animation:skel 1.4s var(--ease-in-out) infinite}
+@keyframes skel{0%,100%{opacity:.35}50%{opacity:.7}}
+
+/* ============================================================================
+   SOCIAL — capture funnel (two doors) + forms
+   ========================================================================= */
+
+.doors{display:grid;grid-template-columns:1fr;gap:14px;margin:20px 0 30px}
+@media (min-width:52rem){.doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+.door{display:flex;flex-direction:column;gap:9px;text-align:left;padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--hair);transition:border-color var(--dur-base) var(--ease-out),background var(--dur-base) var(--ease-out)}
+@media (hover:hover){.door:hover{border-color:var(--hair-strong);background:var(--surface-2)}}
+.door[aria-pressed="true"]{border-color:var(--amber);background:var(--amber-soft)}
+.door-n{font:10px var(--mono);letter-spacing:.16em;color:var(--dim)}
+.door[aria-pressed="true"] .door-n{color:var(--amber)}
+.door h2{font:600 19px/1.25 var(--display);letter-spacing:-.02em}
+.door p{color:var(--muted);font-size:13px;line-height:1.6}
+.door .req{font:10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+
+.form{display:grid;gap:20px;padding:20px;border-radius:14px;background:var(--surface);border:1px solid var(--hair)}
+@media (min-width:48rem){.form{padding:24px}}
+.form-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media (min-width:48rem){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.f{display:flex;flex-direction:column;gap:7px;min-width:0}
+.f label{font:12px var(--mono);color:var(--ink)}
+.f label .o{color:var(--dim);margin-left:6px}
+.f label .r{color:var(--amber);margin-left:6px}
+/* border-width never changes across states; the outline slot is pre-reserved */
+.f input,.f select,.f textarea{
+  width:100%;min-height:var(--field-h);padding:11px 12px;border-radius:9px;
+  background:var(--surface-2);border:1px solid var(--hair);
+  outline:2px solid transparent;outline-offset:1px;
+  font:13px var(--mono);color:var(--ink);
+  transition:background var(--dur-base) var(--ease-out),border-color var(--dur-base) var(--ease-out);
+}
+.f textarea{min-height:6rem;resize:vertical;line-height:1.6}
+@media (hover:hover){.f input:hover:not(:disabled),.f select:hover:not(:disabled),.f textarea:hover:not(:disabled){background:var(--surface-3)}}
+.f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline-color:var(--focus);border-color:var(--hair-strong)}
+.f input::placeholder,.f textarea::placeholder{color:var(--dim)}
+.f input:disabled,.f select:disabled,.f textarea:disabled{opacity:.55;cursor:not-allowed}
+.f [aria-invalid="true"]{border-color:var(--red)}
+/* helper keeps a line reserved so an error never pushes the page down */
+.f .help{min-height:1lh;font:11px/1.5 var(--mono);color:var(--dim)}
+.f .help.err{color:var(--red);overflow-wrap:anywhere}
+
+.btn.ghost{background:transparent}
+.btn.bad{color:var(--red);border-color:rgba(214,123,123,.32)}
+.btn:disabled,.btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed}
+.btn.on{border-color:var(--amber);color:var(--amber);background:var(--amber-soft)}
+@media (hover:hover){.btn:hover:not(:disabled){border-color:var(--hair-strong)}}
+
+/* native <dialog>: focus trap, escape and ::backdrop for free */
+dialog.modal{width:min(520px,100%);max-height:min(86dvh,44rem);margin:auto;padding:0;border:0;background:transparent;overflow:visible}
+dialog.modal::backdrop{background:rgba(6,7,8,.76);backdrop-filter:blur(4px)}
+.modal-body{max-height:min(86dvh,44rem);overflow-y:auto;background:var(--surface);border:1px solid var(--hair-strong);border-radius:16px;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px))}
+@media (min-width:48rem){.modal-body{padding:26px}}
+.modal-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.modal-top h2{font:600 20px/1.25 var(--display);letter-spacing:-.02em}
+.modal-x{margin-left:auto;flex-shrink:0;width:var(--field-h);height:var(--field-h);border:1px solid var(--hair);border-radius:9px;color:var(--muted);background:transparent}
+@media (hover:hover){.modal-x:hover{color:var(--ink);border-color:var(--hair-strong)}}
+
+/* ============================================================================
+   SOCIAL — claim detail + profile
+   ========================================================================= */
+
+.panel{padding:20px;border-radius:14px;margin-bottom:14px;background:var(--surface);border:1px solid var(--hair)}
+@media (min-width:48rem){.panel{padding:24px}}
+.panel-t{font:10px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.figs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 16px}
+@media (min-width:48rem){.figs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fig{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fig .v{font:500 clamp(20px,5vw,27px)/1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fig .v.none{font-size:14px;color:var(--dim)}
+.fig .k{font:10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.defs{display:grid;gap:12px}
+.defs div{display:flex;flex-wrap:wrap;gap:4px 14px;font:12px/1.6 var(--mono)}
+.defs dt{color:var(--dim);min-width:118px}
+.defs dd{color:var(--ink);overflow-wrap:anywhere;flex:1 1 160px}
+.cmd{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 15px;border-radius:9px;background:var(--surface-2);border:1px solid var(--hair);font:12px var(--mono);overflow-wrap:anywhere}
+.cmd code{color:var(--ink);flex:1 1 220px;min-width:0}
+.cmd .p{color:var(--dim)}
+
+.ladder{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:52rem){.ladder{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.rung{display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--hair)}
+.rung[data-state="held"]{border-color:rgba(155,196,169,.32)}
+.rung h3{font:600 19px/1.25 var(--display);letter-spacing:-.02em}
+.rung[data-state="not-yet"] h3{color:var(--muted)}
+.rung p{color:var(--muted);font-size:13px;line-height:1.6}
+.rung .granted{margin-top:auto;padding-top:12px;border-top:1px solid var(--hair);font:11px/1.6 var(--mono)}
+.rung[data-state="held"] .granted{color:var(--green)}
+.rung[data-state="not-yet"] .granted{color:var(--dim)}

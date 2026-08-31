@@ -1,5 +1,5 @@
 import { loadDerived } from "../../lib/engine";
-import SubmitClient, { type ModelOption } from "./submit-client";
+import SubmitClient, { type ModelLabel } from "./submit-client";
 
 export const metadata = {
   title: "Capture",
@@ -8,16 +8,14 @@ export const metadata = {
 };
 
 export default function SubmitPage() {
-  // Built on the server so the 212 KB model index never reaches the browser —
-  // only the fields the select actually renders travel.
-  const options: ModelOption[] = loadDerived()
-    .models.map((model) => ({
-      id: model.hfId,
-      label: model.displayName ?? model.slug,
-      category: model.category,
-      runCount: model.runCount ?? 0,
-    }))
-    .sort((a, b) => b.runCount - a.runCount || a.label.localeCompare(b.label));
+  // Labels only. The VALUES the form submits come from the API's own catalog —
+  // the derived index is used solely to put a readable name on an opaque id,
+  // and never to invent one.
+  const labels: ModelLabel[] = loadDerived().models.map((model) => ({
+    slug: model.slug,
+    name: model.displayName ?? model.slug,
+    category: model.category,
+  }));
 
-  return <SubmitClient options={options} />;
+  return <SubmitClient labels={labels} />;
 }

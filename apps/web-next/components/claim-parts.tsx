@@ -69,11 +69,15 @@ export function SourceChip({ claim }: { claim: Claim }) {
 }
 
 export function Claimant({ claim }: { claim: Claim }) {
-  if (!claim.claimant_handle) {
-    return <span className="claim-who imported">pool import</span>;
+  // Only a claim with a claimant_id has an account behind it. Imports carry a
+  // descriptive handle instead, which is rendered as the label it is.
+  if (!claim.claimant_id) {
+    return (
+      <span className="claim-who imported">{claim.claimant_handle ?? "pool import"}</span>
+    );
   }
   return (
-    <Link className="claim-who" href={`/profile/${encodeURIComponent(claim.claimant_handle)}`}>
+    <Link className="claim-who" href={`/profile/${encodeURIComponent(claim.claimant_handle ?? "")}`}>
       @{claim.claimant_handle}
     </Link>
   );

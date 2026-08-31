@@ -6,6 +6,7 @@ import { Banner } from "../../components/claim-parts";
 import {
   CONSOLE_HREF,
   createClaim,
+  fetchClaimCatalog,
   FIELD_MAX,
   getToken,
   isHttpUrl,
@@ -13,14 +14,33 @@ import {
   type CreateClaimBody,
 } from "../../lib/social";
 
-export type ModelOption = { id: string; label: string; category: string; runCount: number };
+export type ModelLabel = { slug: string; name: string; category: string };
 
 /** The two doors. Which one you walk through changes what the form requires. */
 type Journey = "found" | "ran";
 
-export default function SubmitClient({ options }: { options: ModelOption[] }) {
+type Option = { id: string; label: string; category: string };
+
+/**
+ * Put a readable name on an opaque server id without ever changing the id.
+ * `model-qwen3-6-35b-a3b` is matched against the derived slug
+ * `qwen-qwen3-6-35b-a3b`; on no confident match the raw id is the label.
+ */
+function decorate(id: string, labels: ModelLabel[]): Option {
+  const stem = id.replace(/^model-/, "");
+  const hit =
+    labels.find((l) => l.slug === stem) ??
+    labels.find((l) => l.slug.endsWith(`-${stem}`)) ??
+    labels.find((l) => l.slug.endsWith(stem));
+  return { id, label: hit?.name ?? id, category: hit?.category ?? "other" };
+}
+
+export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
   const [signedIn, setSignedIn] = useState(false);
   const [journey, setJourney] = useState<Journey | null>(null);
+
+  const [catalog, setCatalog] = useState<{ models: string[]; quants: string[] } | null>(null);
+  const [catalogFailed, setCatalogFailed] = useState(false);
 
   const [modelId, setModelId] = useState("");
   const [decode, setDecode] = useState("");
@@ -37,15 +57,26 @@ export default function SubmitClient({ options }: { options: ModelOption[] }) {
 
   useEffect(() => setSignedIn(getToken() != null), []);
 
+  useEffect(() => {
+    fetchClaimCatalog()
+      .then((result) => {
+        if (!result.models.length) setCatalogFailed(true);
+        setCatalog(result);
+      })
+      .catch(() => setCatalogFailed(true));
+  }, []);
+
   const grouped = useMemo(() => {
-    const byCategory = new Map<string, ModelOption[]>();
-    for (const option of options) {
+    const byCategory = new Map<string, Option[]>();
+    for (const id of catalog?.models ?? []) {
+      const option = decorate(id, labels);
       const list = byCategory.get(option.category) ?? [];
       list.push(option);
       byCategory.set(option.category, list);
     }
+    for (const list of byCategory.values()) list.sort((a, b) => a.label.localeCompare(b.label));
     return [...byCategory.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-  }, [options]);
+  }, [catalog, labels]);
 
   const sourceRequired = journey === "found";
   const decodeValue = Number(decode);
@@ -88,7 +119,7 @@ export default function SubmitClient({ options }: { options: ModelOption[] }) {
       claimed_metrics: { decode_tok_s: decodeValue },
     };
     if (sourceUrl.trim()) body.source_url = sourceUrl.trim();
-    if (quant.trim()) body.quantization_profile_id = quant.trim();
+    if (quant) body.quantization_profile_id = quant;
     if (gpu.trim()) body.gpu_model_id = gpu.trim();
     if (context.trim()) body.context_tokens = Number(context);
     if (note.trim()) body.note = note.trim();
@@ -184,54 +215,61 @@ export default function SubmitClient({ options }: { options: ModelOption[] }) {
 
       {journey === null ? (
         <p className="note">Pick a door to open the capture form.</p>
-      ) : !signedIn ? (
-        <>
-          <Banner kind="note">
-            <b>sign in required</b> — the console issues your session token. The form below stays
-            disabled until you have one, because a claim without an attributable author is exactly
-            the problem this wall exists to fix.
-          </Banner>
-          <div className="actions">
-            <Link className="btn primary" href={CONSOLE_HREF}>
-              Sign in to capture
-            </Link>
-          </div>
-          <CaptureForm
-            disabled
-            journey={journey}
-            grouped={grouped}
-            values={{ modelId, decode, sourceUrl, quant, gpu, context, note }}
-            errors={{}}
-            setters={{}}
-            onSubmit={() => {}}
-            sending={false}
-          />
-        </>
       ) : (
         <>
-          {apiError && (
+          {!signedIn && (
+            <>
+              <Banner kind="note">
+                <b>sign in required</b> — the console issues your session token. The form below stays
+                disabled until you have one, because a claim without an attributable author is
+                exactly the problem this wall exists to fix.
+              </Banner>
+              <div className="actions">
+                <Link className="btn primary" href={CONSOLE_HREF}>
+                  Sign in to capture
+                </Link>
+              </div>
+            </>
+          )}
+
+          {signedIn && apiError && (
             <Banner kind="bad">
               <b>the claim was not created</b> — {apiError}
             </Banner>
           )}
+
+          {catalogFailed && (
+            <Banner kind="bad">
+              <b>the model catalog could not be read</b> — the capture form needs the API&apos;s own
+              model ids and cannot guess them, so it stays disabled.
+            </Banner>
+          )}
+
           <CaptureForm
+            disabled={!signedIn || !catalog || catalogFailed}
+            loading={!catalog && !catalogFailed}
             journey={journey}
             grouped={grouped}
+            quants={catalog?.quants ?? []}
             values={{ modelId, decode, sourceUrl, quant, gpu, context, note }}
-            errors={{ modelError, decodeError, sourceError, contextError }}
-            setters={{
-              setModelId,
-              setDecode,
-              setSourceUrl,
-              setQuant,
-              setGpu,
-              setContext,
-              setNote,
-              setTouched,
-            }}
-            onSubmit={submit}
+            errors={signedIn ? { modelError, decodeError, sourceError, contextError } : {}}
+            setters={
+              signedIn
+                ? {
+                    setModelId,
+                    setDecode,
+                    setSourceUrl,
+                    setQuant,
+                    setGpu,
+                    setContext,
+                    setNote,
+                    setTouched,
+                  }
+                : {}
+            }
+            onSubmit={signedIn ? submit : () => {}}
             sending={sending}
-            blocked={touched && blocked}
+            blocked={signedIn && touched && blocked}
           />
         </>
       )}
@@ -270,22 +308,26 @@ type Setters = {
 function CaptureForm({
   journey,
   grouped,
+  quants,
   values,
   errors,
   setters,
   onSubmit,
   sending,
   disabled = false,
+  loading = false,
   blocked = false,
 }: {
   journey: Journey;
-  grouped: [string, ModelOption[]][];
+  grouped: [string, Option[]][];
+  quants: string[];
   values: Values;
   errors: Errors;
   setters: Setters;
   onSubmit: (event: React.FormEvent) => void;
   sending: boolean;
   disabled?: boolean;
+  loading?: boolean;
   blocked?: boolean;
 }) {
   const touch = () => setters.setTouched?.(true);
@@ -308,20 +350,20 @@ function CaptureForm({
           onBlur={touch}
           onChange={(event) => setters.setModelId?.(event.target.value)}
         >
-          <option value="">Select a model…</option>
+          <option value="">{loading ? "reading the catalog…" : "Select a model…"}</option>
           {grouped.map(([category, list]) => (
             <optgroup key={category} label={category}>
               {list.map((option) => (
                 <option key={option.id} value={option.id}>
                   {option.label}
-                  {option.runCount ? ` · ${option.runCount} runs` : ""}
                 </option>
               ))}
             </optgroup>
           ))}
         </select>
         <span id="cap-model-help" className={errors.modelError ? "help err" : "help"}>
-          {errors.modelError ?? "Grouped by modality. Only text models have pool data today."}
+          {errors.modelError ??
+            "Grouped by modality. The API has no catalog endpoint, so this lists the model ids the wall has seen."}
         </span>
       </div>
 
@@ -379,15 +421,20 @@ function CaptureForm({
           <label htmlFor="cap-quant">
             Quantization<span className="o">optional</span>
           </label>
-          <input
+          <select
             id="cap-quant"
             value={values.quant}
             disabled={disabled}
-            maxLength={FIELD_MAX.quantization_profile_id}
-            placeholder="Q4_K_M"
             onChange={(event) => setters.setQuant?.(event.target.value)}
-          />
-          <span className="help">The quant profile as the source stated it.</span>
+          >
+            <option value="">not stated</option>
+            {quants.map((id) => (
+              <option key={id} value={id}>
+                {id}
+              </option>
+            ))}
+          </select>
+          <span className="help">Server profile ids — free text would be rejected.</span>
         </div>
 
         <div className="f">

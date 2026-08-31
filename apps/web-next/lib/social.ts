@@ -71,7 +71,13 @@ export type Tally = {
 
 export type Claim = {
   id: string;
-  /** null means the row was imported from the pool rather than claimed by a person. */
+  /**
+   * null means no person stands behind this row — it was imported from the
+   * pool. This, NOT claimant_handle, is the test for a real contributor:
+   * imports still carry a handle ("localmaxxing pool") that is a label, not
+   * an account, and linking it would lead to a profile that cannot exist.
+   */
+  claimant_id: string | null;
   claimant_handle: string | null;
   source: string | null;
   external_ref: string | null;
@@ -254,6 +260,25 @@ export function reportClaim(
     body: { reason_category, reason_detail: reason_detail || null },
     auth: true,
   });
+}
+
+/**
+ * The ids create accepts are opaque server ids (`model-qwen3-6-35b-a3b`,
+ * `q-gguf-q4-k-m`) and create_run_claim 404s on anything it cannot resolve.
+ * There is no public catalog endpoint — fetch_quantization_profiles exists in
+ * the DB layer but is not published over HTTP — so the only ids we can offer
+ * with confidence are the ones the feed has actually shown us.
+ */
+export async function fetchClaimCatalog(): Promise<{ models: string[]; quants: string[] }> {
+  const result = await listClaims({ status: "", sort: "recent", limit: 100, offset: 0 });
+  const rows = Array.isArray(result.data) ? result.data : [];
+  const models = new Set<string>();
+  const quants = new Set<string>();
+  for (const row of rows) {
+    if (row.model_release_id) models.add(row.model_release_id);
+    if (row.quantization_profile_id) quants.add(row.quantization_profile_id);
+  }
+  return { models: [...models].sort(), quants: [...quants].sort() };
 }
 
 export function getUser(handle: string): Promise<ApiResult<UserProfile>> {

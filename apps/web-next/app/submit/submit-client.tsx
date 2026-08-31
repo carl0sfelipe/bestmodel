@@ -66,7 +66,6 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
   useEffect(() => {
     fetchCatalog()
       .then((result) => {
-        if (!result.models.length) setCatalogFailed(true);
         setCatalog(result);
       })
       .catch(() => setCatalogFailed(true));
@@ -253,7 +252,7 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
           )}
 
           <CaptureForm
-            disabled={!signedIn || !catalog || catalogFailed}
+            disabled={!signedIn || !catalog}
             loading={!catalog && !catalogFailed}
             journey={journey}
             grouped={grouped}

@@ -170,3 +170,10 @@ Nenhum token existente redefinido — só nomes novos (motion, focus, field heig
 1. Confirmar o roteamento de `/v1/*` (D2) ou setar `NEXT_PUBLIC_API_BASE`.
 2. Confirmar se `model_release_id` é `hfId` ou `slug` (D4).
 3. Decidir se o rótulo "Pool" para `/wall` fica (D3).
+
+## Overnight multimodal (2026-08-31, perna overnight-schema + sweep 3090)
+
+- Schema: metricOf (img/s, ×real, f/s) + categorias image/audio/video wired no picker; vision segue honesto.
+- Dados REAIS: 28 runs numa RTX 3090 (vast.ai, ~$0.30): sd-turbo 5.2 img/s (n=9), sdxl-turbo 2.8 (n=7), sd-1.5 0.52 (n=7), animatediff-lightning-4step 4.57 f/s (n=5, 12.6GB VRAM). Células no pool.json, basis measured (n>=3).
+- Piper TTS: 5 runs descartadas (durationS=0.0 — API nova do piper escreveu WAV vazio; regra 25: zero fabricado não entra). Whisper: 3 tentativas falhadas (datasets API, torchcodec, motivo desconhecido — logs se perderam com instância). STT/TTS ficam pra próxima janela de GPU.
+- Fixes mecânicos pós-Luna: metricOf assinatura estrutural; submit hfId??slug; dedupe de células do ingest duplo.

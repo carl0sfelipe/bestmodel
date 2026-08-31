@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-08-31T07:24:33.000Z",
  "models": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
@@ -12356,6 +12356,38 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "sd-turbo",
+   "displayName": "sd-turbo",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 9
+  },
+  {
+   "slug": "sdxl-turbo",
+   "displayName": "sdxl-turbo",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 7
+  },
+  {
+   "slug": "stable-diffusion-v1-5",
+   "displayName": "stable-diffusion-v1-5",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 7
+  },
+  {
+   "slug": "animatediff-lightning-4step",
+   "displayName": "animatediff-lightning-4step",
+   "category": "video",
+   "sourceClass": "owner_measured",
+   "family": "video",
+   "runCount": 5
   }
  ]
 }

@@ -12,7 +12,7 @@ export default function SubmitPage() {
   // only the fields the select actually renders travel.
   const options: ModelOption[] = loadDerived()
     .models.map((model) => ({
-      id: model.hfId,
+      id: model.hfId ?? model.slug,
       label: model.displayName ?? model.slug,
       category: model.category,
       runCount: model.runCount ?? 0,

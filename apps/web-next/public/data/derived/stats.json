@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-08-31T07:24:33.000Z",
  "totals": {
   "runs": 5830,
   "models": 626,
@@ -98,5 +98,14 @@
    "displayName": "MiniMax-M2.7-int4-AutoRound",
    "runCount": 60
   }
- ]
+ ],
+ "multimodal": {
+  "cells": 4,
+  "runs": 28,
+  "hw": "RTX 3090 24GB (vast.ai, overnight 2026-08-31)",
+  "categories": [
+   "image",
+   "video"
+  ]
+ }
 }

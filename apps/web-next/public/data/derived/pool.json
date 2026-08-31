@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-08-31T07:24:33.000Z",
  "cells": [
   {
    "rigKey": "5060-ti-16gb",
@@ -21958,6 +21958,63 @@
    "engines": [
     "llama.cpp"
    ]
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "sd-turbo",
+   "category": "image",
+   "pipeline": "sd-turbo",
+   "precision": "fp16",
+   "imagesPerSec": 5.21,
+   "peakVramGb": 3.25,
+   "n": 9,
+   "measuredAt": "2026-08-31T07:12:46Z",
+   "hw": "RTX 3090 24GB",
+   "steps": 1,
+   "resolution": "512x512"
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "sdxl-turbo",
+   "category": "image",
+   "pipeline": "sdxl-turbo",
+   "precision": "fp16",
+   "imagesPerSec": 2.8,
+   "peakVramGb": 8.24,
+   "n": 7,
+   "measuredAt": "2026-08-31T07:13:56Z",
+   "hw": "RTX 3090 24GB",
+   "steps": 1,
+   "resolution": "512x512"
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "stable-diffusion-v1-5",
+   "category": "image",
+   "pipeline": "stable-diffusion-v1-5",
+   "precision": "fp16",
+   "imagesPerSec": 0.52,
+   "peakVramGb": 2.81,
+   "n": 7,
+   "measuredAt": "2026-08-31T07:14:36Z",
+   "hw": "RTX 3090 24GB",
+   "steps": 25,
+   "resolution": "512x512"
+  },
+  {
+   "rigKey": "rtx-3090-24gb",
+   "modelSlug": "animatediff-lightning-4step",
+   "category": "video",
+   "pipeline": "animatediff-lightning-4step",
+   "precision": "fp16",
+   "videoFramesPerSec": 4.57,
+   "peakVramGb": 12.6,
+   "n": 5,
+   "measuredAt": "2026-08-31T06:52:04Z",
+   "hw": "RTX 3090 24GB",
+   "steps": 4,
+   "resolution": "512x512",
+   "durationS": 2.0
   }
  ]
 }

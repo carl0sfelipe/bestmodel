@@ -28,7 +28,7 @@ export function basisOf(cell: Pick<Cell, "n">) {
   return cell.n >= MIN_RUNS_MEASURED ? "measured" : "reported";
 }
 
-export function metricOf(cell: Cell & Partial<Pick<Cell, "category" | "imagesPerSec" | "audioXReal" | "videoFramesPerSec">>) {
+export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; videoFramesPerSec?: number | null; [k: string]: unknown }) {
   if (cell.category === "image" && cell.imagesPerSec != null) return { value: cell.imagesPerSec, unit: "img/s", label: "images" };
   if (cell.category === "audio" && cell.audioXReal != null) return { value: cell.audioXReal, unit: "×real", label: "realtime" };
   if (cell.category === "video" && cell.videoFramesPerSec != null) return { value: cell.videoFramesPerSec, unit: "f/s", label: "frames" };

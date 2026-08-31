@@ -44,3 +44,10 @@
 
 - Standings, contributor ledger e qualquer número do Claude Design.
 - Novo endpoint, POST real ou categorias inventadas.
+
+## Perna 3
+
+- A entrada da mural agora divide explicitamente as jornadas em duas portas independentes: `Choose your intent` e `Choose your hardware`.
+- Os seis intents do protótipo foram mantidos verbatim; Chat e Code são clicáveis, enquanto Image gen, Audio, Video e Vision permanecem visíveis e honestamente disabled por falta de dados.
+- A porta de hardware usa somente `topRigs` verificado, em ordem de `runCount`, com RTX 3090 24GB e `629 runs` no topo.
+- Cada escolha filtra as mesmas rows SAMPLE existentes por intent ou rig, sem criar rows ou números novos; o formulário e suas categorias reais permanecem intactos.

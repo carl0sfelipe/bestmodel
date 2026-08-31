@@ -1,0 +1,102 @@
+{
+ "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "totals": {
+  "runs": 5830,
+  "models": 626,
+  "rigs": 163
+ },
+ "topRigs": [
+  {
+   "key": "rtx-3090-24gb",
+   "label": "RTX 3090 24GB",
+   "runCount": 629
+  },
+  {
+   "key": "rtx-3060-12gb-x2",
+   "label": "RTX 3060 12GB ×2",
+   "runCount": 561
+  },
+  {
+   "key": "rtx-3060-12gb",
+   "label": "RTX 3060 12GB",
+   "runCount": 541
+  },
+  {
+   "key": "arc-pro-b70-32gb",
+   "label": "Arc Pro B70 32GB",
+   "runCount": 328
+  },
+  {
+   "key": "rtx-5090-32gb",
+   "label": "RTX 5090 32GB",
+   "runCount": 303
+  },
+  {
+   "key": "ryzen-ai-max-395-128gb",
+   "label": "Ryzen AI Max 395 128GB",
+   "runCount": 295
+  },
+  {
+   "key": "radeon-ai-pro-r9700-32gb-x3",
+   "label": "Radeon AI Pro R9700 32GB ×3",
+   "runCount": 275
+  },
+  {
+   "key": "rtx-4070-12gb",
+   "label": "RTX 4070 12GB",
+   "runCount": 221
+  }
+ ],
+ "topModels": [
+  {
+   "slug": "unsloth-qwen3-8-27b-gguf",
+   "displayName": "Qwen3.8-27B-GGUF",
+   "runCount": 201
+  },
+  {
+   "slug": "qwen-qwen3-6-35b-a3b",
+   "displayName": "Qwen3.6-35B-A3B",
+   "runCount": 198
+  },
+  {
+   "slug": "qwen-qwen3-6-27b",
+   "displayName": "Qwen3.6-27B",
+   "runCount": 179
+  },
+  {
+   "slug": "unsloth-qwen3-6-27b-mtp-gguf",
+   "displayName": "Qwen3.6-27B-MTP-GGUF",
+   "runCount": 172
+  },
+  {
+   "slug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "displayName": "Qwen3.6-35B-A3B-GGUF",
+   "runCount": 84
+  },
+  {
+   "slug": "unsloth-qwen3-6-27b-gguf",
+   "displayName": "Qwen3.6-27B-GGUF",
+   "runCount": 82
+  },
+  {
+   "slug": "unsloth-gemma-4-26b-a4b-it-gguf",
+   "displayName": "gemma-4-26B-A4B-it-GGUF",
+   "runCount": 76
+  },
+  {
+   "slug": "qwen-qwen3-8-27b",
+   "displayName": "Qwen3.8-27B",
+   "runCount": 68
+  },
+  {
+   "slug": "nvidia-nvidia-nemotron-3-nano-4b-bf16",
+   "displayName": "NVIDIA-Nemotron-3-Nano-4B-BF16",
+   "runCount": 64
+  },
+  {
+   "slug": "lasimeri-minimax-m2-7-int4-autoround",
+   "displayName": "MiniMax-M2.7-int4-AutoRound",
+   "runCount": 60
+  }
+ ]
+}

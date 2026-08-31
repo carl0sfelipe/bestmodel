@@ -24,6 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <Link href="/submit">Capture</Link>
             <Link href="/wall">Pool</Link>
             <Link href="/hardware">Hardware</Link>
+            <Link href="/cloud-anchors">Cloud anchors</Link>
             <Link href="/track-record">Track record</Link>
             <Link href="/mural">Mural</Link>
             <Link href="/console">Console</Link>

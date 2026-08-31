@@ -1,6 +1,6 @@
 # RELATÓRIO — rede social de captura em React/Next
 
-Branch `social/react-next`, em `apps/web-next`. Seis commits pequenos.
+Branch `social/react-next`, em `apps/web-next`. Nove commits pequenos.
 Build verde: **639 páginas** (626 SSG de modelo intactas + 13 rotas).
 
 ---
@@ -8,6 +8,12 @@ Build verde: **639 páginas** (626 SSG de modelo intactas + 13 rotas).
 ## O que foi feito
 
 ### MISSÃO A — homepage com a cara do prod
+
+**Ordem das cenas (redirect do dono).** A home abria com "Your machine already
+has an answer" — resposta a uma pergunta que ninguém tinha feito. O prod abre
+com o **seletor**. Invertido: o seletor é a cena 01 ("What do you want to run?")
+e carrega o tratamento de hero; "Your machine already has an answer" é a cena 02,
+onde chega depois do pick e a frase se sustenta. Overlines renumerados 01–04.
 
 `app/page.tsx` (servidor) + `app/home-client.tsx`. Porta a narrativa em cenas do
 index do CanIRunIt: overline numerado, hero com revelação palavra a palavra,
@@ -32,6 +38,33 @@ da home foi de 105 → 108 kB. Toda resposta é uma célula `measured` ou
 | `/claim/[id]` | Figuras grandes em mono, origem, cross-signal, votos, report de 5 categorias em `<dialog>` nativo, bloco settle com comando copiável. Banners para refuted/verified/retracted. 404 tratado. |
 | `/submit` | Duas portas separadas — "I found it online" (source_url obrigatória) e "I ran it myself" (opcional). Sem token o form renderiza desabilitado com CTA único pro console. Erro da API mostrado verbatim. |
 | `/profile/[handle]` | Reputação, follow, rigs só `is_public`, escada Contributor → Replicator → Auditor com a copy congelada. Degrau não concedido lê "not yet" — nunca some. 404 tratado. |
+
+### /mural — portas removidas e defeitos responsivos corrigidos
+
+Com a home abrindo no seletor, as duas portas da mural repetiam a pergunta de
+entrada. Removidas. A mural virou o feed de preview que sempre foi: abre direto
+nas rows, com filtros próprios (um controle por dimensão) e o form de report
+corrigido para as **5** categorias da API.
+
+**Quatro defeitos medidos, corrigidos de forma geral (valem pra todas as rotas):**
+
+1. **Bug de cascata.** `.journeys` e `.intent-grid` declaram o grid de 2 colunas
+   *depois* do `@media(max-width:760px)` que tentava colapsá-los. Mesma
+   especificidade → o desktop vencia. Medido a 360px: portas em 157px+157px,
+   cards de intent em **53,5px**, com texto imprimindo fora da borda do card.
+   O colapso agora fica no fim do arquivo, onde de fato se aplica.
+2. **`min-width:auto`** nos filhos de flex — foi o que deixou o texto escapar do
+   próprio card.
+3. **`.sample-tag` era `position:fixed; top:76px`**, calibrado para um nav
+   desktop de 64px. A 360px o nav tem 137px, então o marcador caía dentro do
+   header e lia como um retângulo escuro glitchado. Agora está no fluxo.
+4. **`button` sem `background` no reset.** O reset define `font` e `color` em
+   `button` mas nunca zera o fundo, então o padrão claro do browser vazava em
+   todo `<button class="btn">` — `.btn` só pinta fundo na variante `.primary`.
+   Âncoras não eram afetadas, por isso parecia caixa branca aleatória.
+
+Também: o `flex-basis` de `.ctl-group` foi escrito para a direção *row* e virava
+**altura** quando empilhado, deixando ~190px de vão morto entre os filtros.
 
 `lib/social.ts` carrega o contrato; `components/claim-parts.tsx` os componentes
 compartilhados. Um campo que a API não mandou **não renderiza** — a regra de
@@ -99,19 +132,26 @@ o wordmark 18px, ambos abaixo do piso de 44px; `.rig-option` da mural em 42px.
 
 ## Audit medido (Chromium headless via WebDriver, zero dep nova)
 
-Não é inspeção visual: cada rota foi carregada e medida em 360px e 1440px.
+Não é inspeção visual: cada rota foi carregada e medida em **360, 400, 474 e
+1440px** — 10 rotas × 4 larguras.
 
 | Verificação | Resultado |
 |---|---|
-| Scroll horizontal da página | **0 rotas** — `scrollWidth === clientWidth` em 20/20 |
-| `overflow-x` em html **e** body | `clip` / `clip` em todas |
-| Alvos de toque < 44px | **0** (após correção; achou nav 17px e wordmark 18px) |
-| Texto clicável quebrando em 2 linhas | **0** (medido por `getClientRects().length`) |
-| Regressão nas rotas existentes | **0** — `/wall`, `/hardware`, `/mural`, `/track-record`, `/m/[slug]` limpas |
+| Scroll horizontal da página | **0** — `scrollWidth === clientWidth` |
+| Texto imprimindo fora da própria caixa | **0** (`scrollWidth > width`) |
+| Grid 2-up que devia empilhar em ≤474px | **0** |
+| Overlay `fixed` colidindo com o header | **0** |
+| Alvos de toque < 44px | **0** |
+| `overflow-x` em html **e** body | `clip` / `clip` |
+| Regressão nas rotas existentes | **0** |
 | Build | verde, 639 páginas |
 
-**20/20 limpo.** Conteúdo largo (tabelas de `/track-record` e `/m/[slug]`, e o
+**40/40 limpo.** Conteúdo largo (tabelas de `/track-record` e `/m/[slug]`, e o
 nav no mobile) rola dentro do **próprio** container — a página não rola.
+
+**Uma lição:** o audit geométrico passou 20/20 enquanto o botão branco e os vãos
+de 190px estavam na tela. Medida de layout não vê cor nem hierarquia — as duas
+falhas só apareceram na captura. As duas coisas são necessárias.
 
 ### Disciplina aplicada
 

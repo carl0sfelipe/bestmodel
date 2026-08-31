@@ -7,6 +7,7 @@ export type Answer = {
   name: string;
   slug: string;
   tokS: number;
+  metric: { value: number; unit: string; label: string } | null;
   n: number;
   basis: "measured" | "reported";
   maxContext: number | null;
@@ -19,9 +20,9 @@ export type RigOption = { key: string; label: string; runCount: number };
 const INTENTS = [
   { id: "chat", name: "Chat", glyph: "▭", desc: "text generation · reasoning", category: "chat" },
   { id: "code", name: "Code", glyph: "<", desc: "completion · refactor", category: "code" },
-  { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: null },
-  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: null },
-  { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: null },
+  { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: "image" },
+  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: "audio" },
+  { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: "video" },
   { id: "vision", name: "Vision", glyph: "◉", desc: "image understanding", category: null },
 ] as const;
 
@@ -98,6 +99,7 @@ export default function HomeClient({
   const [context, setContext] = useState<number>(0);
 
   const category = INTENTS.find((item) => item.id === intent)?.category ?? null;
+  const multimodal = category === "image" || category === "audio" || category === "video";
 
   // Which quantizations this rig + intent actually has cells for. Unavailable
   // ones stay visible but disabled — the absence is information.
@@ -149,13 +151,13 @@ export default function HomeClient({
                   type="button"
                   className="opt"
                   aria-pressed={intent === item.id}
-                  disabled={item.category === null}
-                  title={item.category === null ? "no community data yet" : item.desc}
+                   disabled={item.id === "vision"}
+                   title={item.id === "vision" ? "no community data yet" : item.desc}
                   onClick={() => setIntent(item.id)}
                 >
                   <span aria-hidden="true">{item.glyph}</span>
                   {item.name}
-                  {item.category === null && <span className="why">no data</span>}
+                   {item.id === "vision" && <span className="why">no data</span>}
                 </button>
               ))}
             </div>
@@ -193,7 +195,7 @@ export default function HomeClient({
                     type="button"
                     className="opt"
                     aria-pressed={bits === bit}
-                    disabled={!has}
+                   disabled={!has}
                     title={has ? undefined : "no tested cell at this quantization"}
                     onClick={() => setBits(bit)}
                   >
@@ -204,7 +206,7 @@ export default function HomeClient({
             </div>
           </div>
 
-          <div className="mad-group">
+          {!multimodal && <div className="mad-group">
             <span className="mad-label" id="lbl-ctx">
               <b>04</b> context floor
             </span>
@@ -222,7 +224,7 @@ export default function HomeClient({
               ))}
             </div>
             <span className="opt-note">Filters to cells community-tested at least this far.</span>
-          </div>
+          </div>}
         </div>
 
         <div className="verdict" aria-live="polite">
@@ -247,8 +249,8 @@ export default function HomeClient({
           ) : (
             <>
               <p className="verdict-num">
-                {best.tokS.toLocaleString("en-US")}
-                <small>tok/s · {best.name}</small>
+                {(best.metric?.value ?? best.tokS).toLocaleString("en-US")}
+                <small>{best.metric?.unit ?? "tok/s"} · {best.name}</small>
               </p>
               <p className="verdict-meta">
                 <span className={`badge basis-${best.basis}`}>{best.basis}</span> · n={best.n} ·{" "}
@@ -265,7 +267,7 @@ export default function HomeClient({
                       <Link className="name" href={`/m/${row.slug}`}>
                         {row.name}
                       </Link>
-                      <span className="v">{row.tokS.toLocaleString("en-US")} tok/s</span>
+                      <span className="v">{(row.metric?.value ?? row.tokS).toLocaleString("en-US")} {row.metric?.unit ?? "tok/s"}</span>
                       <span className={`badge basis-${row.basis}`}>{row.basis}</span>
                       <span className="v">n={row.n}</span>
                     </div>

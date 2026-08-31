@@ -1,4 +1,4 @@
-import { basisOf, loadDerived, topRigs } from "../lib/engine";
+import { basisOf, loadDerived, metricOf, topRigs } from "../lib/engine";
 import HomeClient, { type AnswerIndex, type RigOption } from "./home-client";
 
 /** How many rigs the selector offers — the same cutoff the wall's rig filter uses. */
@@ -20,21 +20,24 @@ export default function HomePage() {
   // nothing here is estimated, and a combination with no cell simply has no key.
   const index: AnswerIndex = {};
   for (const cell of pool) {
-    if (!rigKeys.has(cell.rigKey) || cell.tokSOutMedian == null) continue;
+    if (!rigKeys.has(cell.rigKey)) continue;
     const model = byModel.get(cell.modelSlug);
     if (!model) continue;
+    const metric = metricOf(cell);
+    if (cell.tokSOutMedian == null && metric == null) continue;
     const key = `${cell.rigKey}|${model.category}|${cell.bits}`;
     (index[key] ??= []).push({
       name: model.displayName ?? model.slug,
       slug: model.slug,
-      tokS: Math.round(cell.tokSOutMedian * 10) / 10,
+      tokS: cell.tokSOutMedian == null ? 0 : Math.round(cell.tokSOutMedian * 10) / 10,
+      metric: metric ? { value: Math.round(metric.value * 10) / 10, unit: metric.unit, label: metric.label } : null,
       n: cell.n,
       basis: basisOf(cell),
       maxContext: cell.maxContextTested ?? null,
     });
   }
   for (const key of Object.keys(index)) {
-    index[key].sort((a, b) => b.tokS - a.tokS);
+    index[key].sort((a, b) => (b.metric?.value ?? b.tokS) - (a.metric?.value ?? a.tokS));
     index[key] = index[key].slice(0, ANSWER_LIMIT);
   }
 

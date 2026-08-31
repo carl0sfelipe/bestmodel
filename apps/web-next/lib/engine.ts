@@ -6,7 +6,17 @@ import statsData from "../public/data/derived/stats.json";
 export const MIN_RUNS_MEASURED = 3;
 
 export type Model = (typeof modelsData.models)[number];
-export type Cell = (typeof poolData.cells)[number];
+export type Cell = (typeof poolData.cells)[number] & {
+  category?: "image" | "audio" | "video";
+  imagesPerSec?: number;
+  audioXReal?: number;
+  videoFramesPerSec?: number;
+  steps?: number;
+  resolution?: string;
+  durationS?: number;
+  pipeline?: string;
+  precision?: string;
+};
 export type Rig = (typeof hardwareData.rigs)[number];
 export type Stats = typeof statsData;
 
@@ -16,6 +26,13 @@ export function loadDerived() {
 
 export function basisOf(cell: Pick<Cell, "n">) {
   return cell.n >= MIN_RUNS_MEASURED ? "measured" : "reported";
+}
+
+export function metricOf(cell: Cell & Partial<Pick<Cell, "category" | "imagesPerSec" | "audioXReal" | "videoFramesPerSec">>) {
+  if (cell.category === "image" && cell.imagesPerSec != null) return { value: cell.imagesPerSec, unit: "img/s", label: "images" };
+  if (cell.category === "audio" && cell.audioXReal != null) return { value: cell.audioXReal, unit: "×real", label: "realtime" };
+  if (cell.category === "video" && cell.videoFramesPerSec != null) return { value: cell.videoFramesPerSec, unit: "f/s", label: "frames" };
+  return null;
 }
 
 export function joinCells() {

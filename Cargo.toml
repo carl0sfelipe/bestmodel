@@ -1,3 +1,19 @@
 [workspace]
 resolver = "2"
-members = ["cli/benchmark-probe", "cli/canirunit"]
+members = ["cli/canirunit"]
+
+# benchmark-probe fica FORA do workspace de proposito.
+#
+# Ele depende de argos-opt por caminho para fora do repositorio
+# (cli/benchmark-probe/Cargo.toml), e o cargo carrega o manifesto de TODO
+# membro do workspace antes de escolher o pacote a compilar. Enquanto ele for
+# membro, nenhum comando cargo roda numa maquina sem argos-opt -- nem
+# `cargo test -p canirunit`, nem `cargo metadata`. Medido no CI: a falha era
+# "failed to load manifest for workspace member", nunca chegou a compilar.
+#
+# Excluido, o workspace carrega e os testes do canirunit rodam. benchmark-probe
+# continua compilando sozinho pelo proprio manifesto (verificado: cargo check
+# verde com argos-opt presente). O preco e um Cargo.lock proprio para ele.
+#
+# Voltar para members no dia em que argos-opt virar dependencia git/registry.
+exclude = ["cli/benchmark-probe"]

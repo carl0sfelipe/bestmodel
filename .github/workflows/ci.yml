@@ -35,4 +35,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      # benchmark-probe esta em [workspace] exclude (ver Cargo.toml): ele nao
+      # compila sem argos-opt, que mora fora do repositorio.
       - run: cargo test --workspace

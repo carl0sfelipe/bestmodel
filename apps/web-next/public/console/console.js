@@ -272,7 +272,7 @@ async function submitReport(event) {
   if (form.get("reason_detail")) payload.reason_detail = form.get("reason_detail");
   const status = $("#claim-status");
   try {
-    const view = await api(`/v1/claims/${claimId}/reports`, {
+    const view = await api(`/v1/run-claims/${claimId}/reports`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-31T07:24:33.000Z",
+ "snapshotAt": "2026-08-31T12:25:25.000Z",
  "totals": {
   "runs": 5830,
   "models": 626,
@@ -106,6 +106,17 @@
   "categories": [
    "image",
    "video"
+  ]
+ },
+ "cloudAnchors": {
+  "cells": 5,
+  "runs": 19,
+  "hw": "NVIDIA L4 / A10 24GB (modal.com, 2026-08-31)",
+  "categories": [
+   "audio",
+   "chat",
+   "code",
+   "image"
   ]
  }
 }

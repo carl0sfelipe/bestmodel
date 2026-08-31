@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export type Answer = {
   name: string;
   slug: string;
+  rigKey?: string;
+  rigLabel?: string;
   tokS: number;
   metric: { value: number; unit: string; label: string } | null;
   n: number;
@@ -79,11 +81,15 @@ function Words({ text }: { text: string }) {
 
 export default function HomeClient({
   index,
+  indexAny,
   rigs,
   totals,
   snapshotAt,
 }: {
   index: AnswerIndex;
+  /** Same join across EVERY rig — feeds the honest cross-rig pointer when the
+      selected rig has no cell, so cloud anchors stay visible on the home. */
+  indexAny?: AnswerIndex;
   rigs: RigOption[];
   totals: { runs: number; models: number; rigs: number };
   snapshotAt: string;
@@ -123,6 +129,23 @@ export default function HomeClient({
   }, [index, rig, category, bits, context, multimodal]);
 
   const best = answers[0] ?? null;
+
+  // Best cell anywhere in the pool for this exact intent (+ quantization when
+  // it applies), used only to point beyond the selected rig's absence.
+  const bestAnywhere = useMemo(() => {
+    if (!category || !indexAny) return null;
+    let top: Answer | null = null;
+    for (const key of Object.keys(indexAny)) {
+      const parts = key.split("|");
+      if (parts[1] !== category) continue;
+      if (!multimodal && parts[2] !== String(bits)) continue;
+      for (const row of indexAny[key]) {
+        if (!top || (row.metric?.value ?? row.tokS) > (top.metric?.value ?? top.tokS)) top = row;
+      }
+    }
+    return top;
+  }, [indexAny, category, bits, multimodal]);
+
   const rigLabel = rigs.find((item) => item.key === rig)?.label ?? rig;
 
   return (
@@ -252,6 +275,18 @@ export default function HomeClient({
                 . That is an absence, not a zero — <Link href="/submit">capture one</Link> and it
                 stops being empty.
               </p>
+              {bestAnywhere && bestAnywhere.rigLabel !== rigLabel && (
+                <p className="verdict-meta">
+                  Measured elsewhere in the pool:{" "}
+                  <strong>
+                    {(bestAnywhere.metric?.value ?? bestAnywhere.tokS).toLocaleString("en-US")}{" "}
+                    {bestAnywhere.metric?.unit ?? "tok/s"}
+                  </strong>{" "}
+                  · {bestAnywhere.name} on {bestAnywhere.rigLabel} ·{" "}
+                  <span className={`badge basis-${bestAnywhere.basis}`}>{bestAnywhere.basis}</span>{" "}
+                  n={bestAnywhere.n} · <Link href={`/m/${bestAnywhere.slug}`}>details</Link>
+                </p>
+              )}
             </>
           ) : (
             <>

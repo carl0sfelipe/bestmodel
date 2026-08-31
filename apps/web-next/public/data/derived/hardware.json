@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-08-31T12:25:25.000Z",
  "rigs": [
   {
    "key": "rtx-3090-24gb",
@@ -1467,6 +1467,24 @@
    "gpuCount": 1,
    "bandwidthGBs": null,
    "runCount": 1
+  },
+  {
+   "key": "l4-24gb",
+   "label": "L4 24GB (modal)",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 24,
+   "gpuCount": 1,
+   "bandwidthGBs": 300,
+   "runCount": 16
+  },
+  {
+   "key": "a10-24gb",
+   "label": "A10 24GB (modal)",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 24,
+   "gpuCount": 1,
+   "bandwidthGBs": 600,
+   "runCount": 3
   }
  ]
 }

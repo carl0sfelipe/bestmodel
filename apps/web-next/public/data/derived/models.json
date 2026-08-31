@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-31T07:24:33.000Z",
+ "snapshotAt": "2026-08-31T12:25:25.000Z",
  "models": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
@@ -12363,7 +12363,7 @@
    "category": "image",
    "sourceClass": "owner_measured",
    "family": "image",
-   "runCount": 9
+   "runCount": 14
   },
   {
    "slug": "sdxl-turbo",
@@ -12388,6 +12388,39 @@
    "sourceClass": "owner_measured",
    "family": "video",
    "runCount": 5
+  },
+  {
+   "slug": "whisper-large-v3",
+   "hfId": "openai/whisper-large-v3",
+   "displayName": "Whisper Large v3",
+   "family": "Whisper",
+   "paramsB": 1.54,
+   "category": "audio",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 5
+  },
+  {
+   "slug": "unsloth-llama-3-1-8b-instruct-gguf",
+   "hfId": "unsloth/Llama-3.1-8B-Instruct-GGUF",
+   "displayName": "Llama 3.1 8B Instruct GGUF",
+   "family": "Llama",
+   "paramsB": 8,
+   "category": "chat",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 6
+  },
+  {
+   "slug": "unsloth-qwen2-5-coder-7b-instruct-gguf",
+   "hfId": "unsloth/Qwen2.5-Coder-7B-Instruct-GGUF",
+   "displayName": "Qwen2.5 Coder 7B Instruct GGUF",
+   "family": "Qwen",
+   "paramsB": 7,
+   "category": "code",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 3
   }
  ]
 }

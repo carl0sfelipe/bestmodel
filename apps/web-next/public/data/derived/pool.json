@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-31T07:24:33.000Z",
+ "snapshotAt": "2026-08-31T12:25:25.000Z",
  "cells": [
   {
    "rigKey": "5060-ti-16gb",
@@ -22015,6 +22015,81 @@
    "steps": 4,
    "resolution": "512x512",
    "durationS": 2.0
+  },
+  {
+   "rigKey": "l4-24gb",
+   "modelSlug": "whisper-large-v3",
+   "category": "audio",
+   "pipeline": "whisper-large-v3",
+   "precision": "fp16",
+   "audioXReal": 4.82,
+   "peakVramGb": 4.1,
+   "n": 5,
+   "measuredAt": "2026-08-31T11:48:14Z",
+   "hw": "NVIDIA L4 24GB (modal.com)",
+   "durationS": 23.16
+  },
+  {
+   "rigKey": "l4-24gb",
+   "modelSlug": "sd-turbo",
+   "category": "image",
+   "pipeline": "sd-turbo",
+   "precision": "fp16",
+   "imagesPerSec": 6.09,
+   "peakVramGb": 3.02,
+   "n": 5,
+   "measuredAt": "2026-08-31T11:46:20Z",
+   "hw": "NVIDIA L4 24GB (modal.com)",
+   "steps": 1,
+   "resolution": "512x512"
+  },
+  {
+   "rigKey": "l4-24gb",
+   "modelSlug": "unsloth-llama-3-1-8b-instruct-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 44.76,
+   "tokSPrefillMedian": 507.29,
+   "ttftMsMedian": 617.01,
+   "peakVramGbMedian": 5.35,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ],
+   "measuredAt": "2026-08-31T12:18:54Z",
+   "hw": "NVIDIA L4 24GB (modal.com)"
+  },
+  {
+   "rigKey": "a10-24gb",
+   "modelSlug": "unsloth-llama-3-1-8b-instruct-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 75.83,
+   "tokSPrefillMedian": 810.16,
+   "ttftMsMedian": 386.34,
+   "peakVramGbMedian": 5.39,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ],
+   "measuredAt": "2026-08-31T12:21:27Z",
+   "hw": "NVIDIA A10 24GB (modal.com)"
+  },
+  {
+   "rigKey": "l4-24gb",
+   "modelSlug": "unsloth-qwen2-5-coder-7b-instruct-gguf",
+   "bits": 4,
+   "n": 3,
+   "tokSOutMedian": 47.24,
+   "tokSPrefillMedian": 545.27,
+   "ttftMsMedian": 572.2,
+   "peakVramGbMedian": 4.84,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ],
+   "measuredAt": "2026-08-31T12:22:35Z",
+   "hw": "NVIDIA L4 24GB (modal.com)"
   }
  ]
 }

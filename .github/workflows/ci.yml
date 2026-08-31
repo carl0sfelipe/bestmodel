@@ -36,5 +36,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       # benchmark-probe esta em [workspace] exclude (ver Cargo.toml): ele nao
-      # compila sem argos-opt, que mora fora do repositorio.
+      # compila sem argos-opt, que mora fora do repositorio. -p NAO resolvia:
+      # o cargo carrega o manifesto de todo membro antes de escolher o pacote.
       - run: cargo test --workspace

@@ -44,7 +44,11 @@ export default function HomePage() {
       });
     }
     for (const key of Object.keys(idx)) {
-      idx[key].sort((a, b) => (b.metric?.value ?? b.tokS) - (a.metric?.value ?? a.tokS));
+      // The home hero is an implicit endorsement, so the honesty ladder puts measured data first.
+      idx[key].sort((a, b) => {
+        const basisRank = (basis: string) => (basis === "measured" ? 0 : 1);
+        return basisRank(a.basis) - basisRank(b.basis) || (b.metric?.value ?? b.tokS) - (a.metric?.value ?? a.tokS);
+      });
       idx[key] = idx[key].slice(0, ANSWER_LIMIT);
     }
     return idx;

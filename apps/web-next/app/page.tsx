@@ -1,4 +1,55 @@
-import Link from "next/link";
-import { formatNumber, loadDerived } from "../lib/engine";
+import { basisOf, loadDerived, topRigs } from "../lib/engine";
+import HomeClient, { type AnswerIndex, type RigOption } from "./home-client";
 
-export default function HomePage() { const { stats } = loadDerived(); return <main><section className="hero"><p className="kicker">an open compatibility engine for local AI</p><h1>Turn a model idea into a machine that can <em>actually run it.</em></h1><p className="lede">bestmodel.run maps community measurements to named hardware. No invented tok/s. Every number says whether it is measured or reported.</p><div className="actions"><Link className="btn primary" href="/wall">see The wall -&gt;</Link><Link className="btn" href="/hardware">start with hardware</Link></div></section><section className="section"><p className="kicker">the universe answers</p><h2>{formatNumber(stats.totals.runs, 0)} runs.<br /><em>{formatNumber(stats.totals.models, 0)} models.</em></h2><p className="section-copy">The current derived snapshot spans {formatNumber(stats.totals.rigs, 0)} rigs. It is a frozen pool, not live throughput.</p><div className="stats-grid"><div className="card"><div className="stat-value">{formatNumber(stats.totals.models, 0)}</div><div className="stat-label">models indexed</div></div><div className="card"><div className="stat-value">{formatNumber(stats.totals.rigs, 0)}</div><div className="stat-label">reference rigs</div></div><div className="card"><div className="stat-value">3</div><div className="stat-label">runs for measured</div></div></div></section><section className="section"><p className="kicker">the journey</p><div className="steps"><article className="step"><small>01 / choose</small><h2>Find your envelope.</h2><p>Start from hardware or intent. Memory decides what fits; the pool says what has been tested.</p></article><article className="step"><small>02 / compare</small><h2>Read the basis.</h2><p>Measured cells need at least 3 runs. One or two runs stay visibly reported.</p></article><article className="step"><small>03 / contribute</small><h2>Make it stronger.</h2><p>Capture or correct a number through the static console surface.</p></article></div></section></main>; }
+/** How many rigs the selector offers — the same cutoff the wall's rig filter uses. */
+const RIG_LIMIT = 24;
+/** How many models a single answer shows. */
+const ANSWER_LIMIT = 6;
+
+export default function HomePage() {
+  const { models, pool, stats } = loadDerived();
+  const byModel = new Map(models.map((model) => [model.slug, model]));
+
+  const rigs = topRigs()
+    .filter((rig) => (rig.runCount ?? 0) > 0)
+    .slice(0, RIG_LIMIT);
+  const rigKeys = new Set(rigs.map((rig) => rig.key));
+
+  // The join runs on the server against the real pool, so the browser receives
+  // answers rather than a database. Every entry is a measured or reported cell —
+  // nothing here is estimated, and a combination with no cell simply has no key.
+  const index: AnswerIndex = {};
+  for (const cell of pool) {
+    if (!rigKeys.has(cell.rigKey) || cell.tokSOutMedian == null) continue;
+    const model = byModel.get(cell.modelSlug);
+    if (!model) continue;
+    const key = `${cell.rigKey}|${model.category}|${cell.bits}`;
+    (index[key] ??= []).push({
+      name: model.displayName ?? model.slug,
+      slug: model.slug,
+      tokS: Math.round(cell.tokSOutMedian * 10) / 10,
+      n: cell.n,
+      basis: basisOf(cell),
+      maxContext: cell.maxContextTested ?? null,
+    });
+  }
+  for (const key of Object.keys(index)) {
+    index[key].sort((a, b) => b.tokS - a.tokS);
+    index[key] = index[key].slice(0, ANSWER_LIMIT);
+  }
+
+  const rigOptions: RigOption[] = rigs.map((rig) => ({
+    key: rig.key,
+    label: rig.label,
+    runCount: rig.runCount ?? 0,
+  }));
+
+  return (
+    <HomeClient
+      index={index}
+      rigs={rigOptions}
+      totals={stats.totals}
+      snapshotAt={stats.snapshotAt}
+    />
+  );
+}

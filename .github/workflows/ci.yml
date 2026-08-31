@@ -35,4 +35,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test --workspace
+      # benchmark-probe depends on a local path dependency (argos-opt), whose name is pending.
+      # Return to --workspace when that dependency becomes a git/registry dependency.
+      - run: cargo test -p canirunit

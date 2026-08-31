@@ -7,6 +7,21 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    # The suite fakes Redis for unit tests, but the route tests exercise the
+    # real queue against DEFAULT_REDIS_URL (redis://localhost:6380/0,
+    # apps/public-api/src/main.py:39). They pass locally only because a Redis
+    # happens to listen on 6380 there. Publishing the service on that port
+    # makes CI match, without faking anything the test means to exercise.
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6380:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4

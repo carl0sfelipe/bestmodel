@@ -1,0 +1,7 @@
+[Unit]
+Description=Backup off-host do bestmodel (pg_dump + artifacts -> repo privado)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/beelink/Work/bestmodel/deploy/backup.sh

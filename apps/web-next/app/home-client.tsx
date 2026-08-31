@@ -6,7 +6,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export type Answer = {
   name: string;
   slug: string;
+  rigKey?: string;
+  rigLabel?: string;
   tokS: number;
+  metric: { value: number; unit: string; label: string } | null;
   n: number;
   basis: "measured" | "reported";
   maxContext: number | null;
@@ -19,9 +22,9 @@ export type RigOption = { key: string; label: string; runCount: number };
 const INTENTS = [
   { id: "chat", name: "Chat", glyph: "▭", desc: "text generation · reasoning", category: "chat" },
   { id: "code", name: "Code", glyph: "<", desc: "completion · refactor", category: "code" },
-  { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: null },
-  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: null },
-  { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: null },
+  { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: "image" },
+  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: "audio" },
+  { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: "video" },
   { id: "vision", name: "Vision", glyph: "◉", desc: "image understanding", category: null },
 ] as const;
 
@@ -78,11 +81,15 @@ function Words({ text }: { text: string }) {
 
 export default function HomeClient({
   index,
+  indexAny,
   rigs,
   totals,
   snapshotAt,
 }: {
   index: AnswerIndex;
+  /** Same join across EVERY rig — feeds the honest cross-rig pointer when the
+      selected rig has no cell, so cloud anchors stay visible on the home. */
+  indexAny?: AnswerIndex;
   rigs: RigOption[];
   totals: { runs: number; models: number; rigs: number };
   snapshotAt: string;
@@ -98,6 +105,7 @@ export default function HomeClient({
   const [context, setContext] = useState<number>(0);
 
   const category = INTENTS.find((item) => item.id === intent)?.category ?? null;
+  const multimodal = category === "image" || category === "audio" || category === "video";
 
   // Which quantizations this rig + intent actually has cells for. Unavailable
   // ones stay visible but disabled — the absence is information.
@@ -112,12 +120,32 @@ export default function HomeClient({
 
   const answers = useMemo(() => {
     if (!category || !rig) return [];
+    // Multimodal cells carry no bits — they land under the 0 key and skip the
+    // context floor, which is a text-only question.
+    if (multimodal) return index[`${rig}|${category}|0`] ?? [];
     const rows = index[`${rig}|${category}|${bits}`] ?? [];
     if (!context) return rows;
     return rows.filter((row) => row.maxContext != null && row.maxContext >= context);
-  }, [index, rig, category, bits, context]);
+  }, [index, rig, category, bits, context, multimodal]);
 
   const best = answers[0] ?? null;
+
+  // Best cell anywhere in the pool for this exact intent (+ quantization when
+  // it applies), used only to point beyond the selected rig's absence.
+  const bestAnywhere = useMemo(() => {
+    if (!category || !indexAny) return null;
+    let top: Answer | null = null;
+    for (const key of Object.keys(indexAny)) {
+      const parts = key.split("|");
+      if (parts[1] !== category) continue;
+      if (!multimodal && parts[2] !== String(bits)) continue;
+      for (const row of indexAny[key]) {
+        if (!top || (row.metric?.value ?? row.tokS) > (top.metric?.value ?? top.tokS)) top = row;
+      }
+    }
+    return top;
+  }, [indexAny, category, bits, multimodal]);
+
   const rigLabel = rigs.find((item) => item.key === rig)?.label ?? rig;
 
   return (
@@ -149,13 +177,13 @@ export default function HomeClient({
                   type="button"
                   className="opt"
                   aria-pressed={intent === item.id}
-                  disabled={item.category === null}
-                  title={item.category === null ? "no community data yet" : item.desc}
+                   disabled={item.id === "vision"}
+                   title={item.id === "vision" ? "no community data yet" : item.desc}
                   onClick={() => setIntent(item.id)}
                 >
                   <span aria-hidden="true">{item.glyph}</span>
                   {item.name}
-                  {item.category === null && <span className="why">no data</span>}
+                   {item.id === "vision" && <span className="why">no data</span>}
                 </button>
               ))}
             </div>
@@ -180,7 +208,7 @@ export default function HomeClient({
             <span className="opt-note">Ordered by how much the community has tested it.</span>
           </div>
 
-          <div className="mad-group">
+          {!multimodal && <div className="mad-group">
             <span className="mad-label" id="lbl-quant">
               <b>03</b> quantization
             </span>
@@ -193,7 +221,7 @@ export default function HomeClient({
                     type="button"
                     className="opt"
                     aria-pressed={bits === bit}
-                    disabled={!has}
+                   disabled={!has}
                     title={has ? undefined : "no tested cell at this quantization"}
                     onClick={() => setBits(bit)}
                   >
@@ -202,9 +230,9 @@ export default function HomeClient({
                 );
               })}
             </div>
-          </div>
+          </div>}
 
-          <div className="mad-group">
+          {!multimodal && <div className="mad-group">
             <span className="mad-label" id="lbl-ctx">
               <b>04</b> context floor
             </span>
@@ -222,7 +250,7 @@ export default function HomeClient({
               ))}
             </div>
             <span className="opt-note">Filters to cells community-tested at least this far.</span>
-          </div>
+          </div>}
         </div>
 
         <div className="verdict" aria-live="polite">
@@ -238,24 +266,44 @@ export default function HomeClient({
             <>
               <p className="verdict-none">No data yet for this combination.</p>
               <p className="verdict-meta">
-                Nobody has submitted a {bits}-bit {intent} run on {rigLabel}
-                {context ? ` tested to ${context.toLocaleString("en-US")} tokens` : ""}. That is an
-                absence, not a zero — <Link href="/submit">capture one</Link> and it stops being
-                empty.
+                {multimodal
+                  ? `Nobody has submitted a ${intent} run on ${rigLabel}`
+                  : `Nobody has submitted a ${bits}-bit ${intent} run on ${rigLabel}`}
+                {!multimodal && context
+                  ? ` tested to ${context.toLocaleString("en-US")} tokens`
+                  : ""}
+                . That is an absence, not a zero — <Link href="/submit">capture one</Link> and it
+                stops being empty.
               </p>
+              {bestAnywhere && bestAnywhere.rigLabel !== rigLabel && (
+                <p className="verdict-meta">
+                  Measured elsewhere in the pool:{" "}
+                  <strong>
+                    {(bestAnywhere.metric?.value ?? bestAnywhere.tokS).toLocaleString("en-US")}{" "}
+                    {bestAnywhere.metric?.unit ?? "tok/s"}
+                  </strong>{" "}
+                  · {bestAnywhere.name} on {bestAnywhere.rigLabel} ·{" "}
+                  <span className={`badge basis-${bestAnywhere.basis}`}>{bestAnywhere.basis}</span>{" "}
+                  n={bestAnywhere.n} · <Link href={`/m/${bestAnywhere.slug}`}>details</Link>
+                </p>
+              )}
             </>
           ) : (
             <>
               <p className="verdict-num">
-                {best.tokS.toLocaleString("en-US")}
-                <small>tok/s · {best.name}</small>
+                {(best.metric?.value ?? best.tokS).toLocaleString("en-US")}
+                <small>{best.metric?.unit ?? "tok/s"} · {best.name}</small>
               </p>
               <p className="verdict-meta">
                 <span className={`badge basis-${best.basis}`}>{best.basis}</span> · n={best.n} ·{" "}
-                {bits}-bit on {rigLabel}
+                {multimodal
+                  ? `${best.metric?.label ?? intent} on ${rigLabel}`
+                  : `${bits}-bit on ${rigLabel}`}
                 {best.maxContext
                   ? ` · community-tested up to ${best.maxContext.toLocaleString("en-US")} tokens`
-                  : " · context untested"}
+                  : multimodal
+                    ? ""
+                    : " · context untested"}
               </p>
 
               {answers.length > 1 && (
@@ -265,7 +313,7 @@ export default function HomeClient({
                       <Link className="name" href={`/m/${row.slug}`}>
                         {row.name}
                       </Link>
-                      <span className="v">{row.tokS.toLocaleString("en-US")} tok/s</span>
+                      <span className="v">{(row.metric?.value ?? row.tokS).toLocaleString("en-US")} {row.metric?.unit ?? "tok/s"}</span>
                       <span className={`badge basis-${row.basis}`}>{row.basis}</span>
                       <span className="v">n={row.n}</span>
                     </div>

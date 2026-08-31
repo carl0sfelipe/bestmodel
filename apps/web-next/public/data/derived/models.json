@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-08-31T12:25:25.000Z",
  "models": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
@@ -12356,6 +12356,71 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "sd-turbo",
+   "displayName": "sd-turbo",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 14
+  },
+  {
+   "slug": "sdxl-turbo",
+   "displayName": "sdxl-turbo",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 7
+  },
+  {
+   "slug": "stable-diffusion-v1-5",
+   "displayName": "stable-diffusion-v1-5",
+   "category": "image",
+   "sourceClass": "owner_measured",
+   "family": "image",
+   "runCount": 7
+  },
+  {
+   "slug": "animatediff-lightning-4step",
+   "displayName": "animatediff-lightning-4step",
+   "category": "video",
+   "sourceClass": "owner_measured",
+   "family": "video",
+   "runCount": 5
+  },
+  {
+   "slug": "whisper-large-v3",
+   "hfId": "openai/whisper-large-v3",
+   "displayName": "Whisper Large v3",
+   "family": "Whisper",
+   "paramsB": 1.54,
+   "category": "audio",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 5
+  },
+  {
+   "slug": "unsloth-llama-3-1-8b-instruct-gguf",
+   "hfId": "unsloth/Llama-3.1-8B-Instruct-GGUF",
+   "displayName": "Llama 3.1 8B Instruct GGUF",
+   "family": "Llama",
+   "paramsB": 8,
+   "category": "chat",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 6
+  },
+  {
+   "slug": "unsloth-qwen2-5-coder-7b-instruct-gguf",
+   "hfId": "unsloth/Qwen2.5-Coder-7B-Instruct-GGUF",
+   "displayName": "Qwen2.5 Coder 7B Instruct GGUF",
+   "family": "Qwen",
+   "paramsB": 7,
+   "category": "code",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 3
   }
  ]
 }

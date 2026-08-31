@@ -8,9 +8,11 @@ export const metadata = {
 };
 
 export default function SubmitPage() {
-  // Labels only. The VALUES the form submits come from the API's own catalog —
-  // the derived index is used solely to put a readable name on an opaque id,
-  // and never to invent one.
+  // Labels only. The VALUES the form submits come from the API's own catalog
+  // (see submit-client): create_run_claim 404s on any model_release_id it
+  // cannot resolve, and hfId is not one of them. The derived index is used
+  // solely to put a readable name on an opaque id, never to invent one — so
+  // multimodal rows without an hfId are carried here on slug alone.
   const labels: ModelLabel[] = loadDerived().models.map((model) => ({
     slug: model.slug,
     name: model.displayName ?? model.slug,

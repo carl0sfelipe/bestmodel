@@ -1,4 +1,4 @@
-import { basisOf, loadDerived, topRigs } from "../lib/engine";
+import { basisOf, loadDerived, metricOf, topRigs } from "../lib/engine";
 import HomeClient, { type AnswerIndex, type RigOption } from "./home-client";
 
 /** How many rigs the selector offers — the same cutoff the wall's rig filter uses. */
@@ -7,8 +7,9 @@ const RIG_LIMIT = 24;
 const ANSWER_LIMIT = 6;
 
 export default function HomePage() {
-  const { models, pool, stats } = loadDerived();
+  const { models, pool, hardware, stats } = loadDerived();
   const byModel = new Map(models.map((model) => [model.slug, model]));
+  const rigLabel = new Map(hardware.map((rig) => [rig.key, rig.label]));
 
   const rigs = topRigs()
     .filter((rig) => (rig.runCount ?? 0) > 0)
@@ -18,25 +19,38 @@ export default function HomePage() {
   // The join runs on the server against the real pool, so the browser receives
   // answers rather than a database. Every entry is a measured or reported cell —
   // nothing here is estimated, and a combination with no cell simply has no key.
-  const index: AnswerIndex = {};
-  for (const cell of pool) {
-    if (!rigKeys.has(cell.rigKey) || cell.tokSOutMedian == null) continue;
-    const model = byModel.get(cell.modelSlug);
-    if (!model) continue;
-    const key = `${cell.rigKey}|${model.category}|${cell.bits}`;
-    (index[key] ??= []).push({
-      name: model.displayName ?? model.slug,
-      slug: model.slug,
-      tokS: Math.round(cell.tokSOutMedian * 10) / 10,
-      n: cell.n,
-      basis: basisOf(cell),
-      maxContext: cell.maxContextTested ?? null,
-    });
-  }
-  for (const key of Object.keys(index)) {
-    index[key].sort((a, b) => b.tokS - a.tokS);
-    index[key] = index[key].slice(0, ANSWER_LIMIT);
-  }
+  // indexAny is the same join over EVERY rig: it feeds the honest "the pool
+  // does have data, just not on this rig" pointer, so cells measured on rigs
+  // outside the top-24 (cloud anchors) stay visible instead of hidden.
+  const build = (allowed: Set<string> | null): AnswerIndex => {
+    const idx: AnswerIndex = {};
+    for (const cell of pool) {
+      if (allowed && !allowed.has(cell.rigKey)) continue;
+      const model = byModel.get(cell.modelSlug);
+      if (!model) continue;
+      const metric = metricOf(cell);
+      if (cell.tokSOutMedian == null && metric == null) continue;
+      const key = `${cell.rigKey}|${model.category}|${cell.bits ?? 0}`;
+      (idx[key] ??= []).push({
+        name: model.displayName ?? model.slug,
+        slug: model.slug,
+        rigKey: cell.rigKey,
+        rigLabel: rigLabel.get(cell.rigKey) ?? cell.rigKey,
+        tokS: cell.tokSOutMedian == null ? 0 : Math.round(cell.tokSOutMedian * 10) / 10,
+        metric: metric ? { value: Math.round(metric.value * 10) / 10, unit: metric.unit, label: metric.label } : null,
+        n: cell.n,
+        basis: basisOf(cell),
+        maxContext: cell.maxContextTested ?? null,
+      });
+    }
+    for (const key of Object.keys(idx)) {
+      idx[key].sort((a, b) => (b.metric?.value ?? b.tokS) - (a.metric?.value ?? a.tokS));
+      idx[key] = idx[key].slice(0, ANSWER_LIMIT);
+    }
+    return idx;
+  };
+  const index = build(rigKeys);
+  const indexAny = build(null);
 
   const rigOptions: RigOption[] = rigs.map((rig) => ({
     key: rig.key,
@@ -47,6 +61,7 @@ export default function HomePage() {
   return (
     <HomeClient
       index={index}
+      indexAny={indexAny}
       rigs={rigOptions}
       totals={stats.totals}
       snapshotAt={stats.snapshotAt}

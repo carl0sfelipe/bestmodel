@@ -190,3 +190,15 @@ Sem endpoint de catálogo, o form de captura só oferece os ids que o feed já
 mostrou. Um `GET /v1/model-releases` e um `GET /v1/quantization-profiles`
 (a camada de DB já tem `fetch_quantization_profiles`) resolveriam — é trabalho
 de backend, fora do escopo deste branch.
+
+## Overnight multimodal (2026-08-31, perna overnight-schema + sweep 3090)
+
+- Schema: metricOf (img/s, ×real, f/s) + categorias image/audio/video wired no picker; vision segue honesto.
+- Dados REAIS: 28 runs numa RTX 3090 (vast.ai, ~$0.30): sd-turbo 5.2 img/s (n=9), sdxl-turbo 2.8 (n=7), sd-1.5 0.52 (n=7), animatediff-lightning-4step 4.57 f/s (n=5, 12.6GB VRAM). Células no pool.json, basis measured (n>=3).
+- Piper TTS: 5 runs descartadas (durationS=0.0 — API nova do piper escreveu WAV vazio; regra 25: zero fabricado não entra). Whisper: 3 tentativas falhadas (datasets API, torchcodec, motivo desconhecido — logs se perderam com instância). STT/TTS ficam pra próxima janela de GPU.
+- Fixes mecânicos pós-Luna: metricOf assinatura estrutural; submit hfId??slug; dedupe de células do ingest duplo.
+
+> Nota do merge (Opus, 08-31): o item "submit hfId??slug" acima foi
+> **superado**. `hfId` nunca foi um `model_release_id` válido — a API responde
+> 404 para ele, com ou sem o fallback de slug. O form passou a montar os
+> selects com os ids do próprio catálogo da API. Ver D4.

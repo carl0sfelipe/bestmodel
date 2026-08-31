@@ -281,6 +281,10 @@ class DatabaseSession(ABC):
         """Return every model_release row."""
 
     @abstractmethod
+    def fetch_all_model_releases(self) -> list[dict[str, Any]]:
+        """Return every model_release row."""
+
+    @abstractmethod
     def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:
         """Imported claim for this external reference (idempotency key)."""
 
@@ -894,6 +898,9 @@ class PostgresSession(DatabaseSession):
         )
 
     def fetch_all_models(self) -> list[dict[str, Any]]:
+        return self._fetchall("SELECT * FROM model_release ORDER BY id")
+
+    def fetch_all_model_releases(self) -> list[dict[str, Any]]:
         return self._fetchall("SELECT * FROM model_release ORDER BY id")
 
     def find_run_claim_by_external_ref(self, external_ref: str) -> dict[str, Any] | None:

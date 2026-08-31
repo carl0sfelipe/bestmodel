@@ -119,6 +119,21 @@ export type ApiResult<T> = {
   detail: string | null;
 };
 
+export type ModelRelease = {
+  id: string;
+  release_name: string;
+  family: string;
+  parameter_count_billion: number | null;
+  max_context_tokens: number;
+};
+
+export type QuantizationProfile = {
+  id: string;
+  display_name: string;
+  weight_format: string;
+  weight_bits: number | null;
+};
+
 // -------------------------------------------------------------------- auth
 
 export function getToken(): string | null {
@@ -279,6 +294,28 @@ export async function fetchClaimCatalog(): Promise<{ models: string[]; quants: s
     if (row.quantization_profile_id) quants.add(row.quantization_profile_id);
   }
   return { models: [...models].sort(), quants: [...quants].sort() };
+}
+
+export function fetchModelReleases(): Promise<ApiResult<{ items: ModelRelease[]; count: number }>> {
+  return request<{ items: ModelRelease[]; count: number }>("/v1/model-releases");
+}
+
+export function fetchQuantizationProfiles(): Promise<
+  ApiResult<{ items: QuantizationProfile[]; count: number }>
+> {
+  return request<{ items: QuantizationProfile[]; count: number }>("/v1/quantization-profiles");
+}
+
+export async function fetchCatalog(): Promise<
+  | { source: "api"; models: ModelRelease[]; quants: QuantizationProfile[] }
+  | { source: "feed"; models: string[]; quants: string[] }
+> {
+  const [models, quants] = await Promise.all([fetchModelReleases(), fetchQuantizationProfiles()]);
+  if (models.ok && quants.ok && models.data && quants.data) {
+    return { source: "api", models: models.data.items, quants: quants.data.items };
+  }
+  const fallback = await fetchClaimCatalog();
+  return { source: "feed", ...fallback };
 }
 
 export function getUser(handle: string): Promise<ApiResult<UserProfile>> {

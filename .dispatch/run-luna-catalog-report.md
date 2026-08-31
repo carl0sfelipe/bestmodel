@@ -26,6 +26,7 @@
 - The spec places the session contract test under `apps/public-api/tests`, but the repository contains it at `tests/test_session_contract.py`.
 - The stated expected Next version is 15; the installed project reports Next.js 15.5.2.
 - The supplied oracle invokes `/usr/bin/python3 -m pytest`, but this environment's system Python has no pytest module (`/usr/bin/python3: No module named pytest`). The repository's documented `uv` environment provides pytest, so verification uses `uv run pytest`.
+- The requested verification command could not run because `bin/check-oracle.py` does not exist on disk; no matching `check-oracle.py` file was found in the repository.
 
 ## Not Done
 

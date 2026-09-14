@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-09-14T00:49:27.000Z",
  "cells": [
   {
    "rigKey": "5060-ti-16gb",
@@ -2830,6 +2830,104 @@
    "ttftMsMedian": 617.3,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "google-gemma-4-e4b-it",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 6.0853,
+   "tokSPrefillMedian": 17.896,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "liquidai-lfm2-5-1-2b-instruct-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 26.9619,
+   "tokSPrefillMedian": 68.4325,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "openbmb-minicpm5-1b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 27.7488,
+   "tokSPrefillMedian": 98.3045,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "qwen-qwen3-5-9b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 3.2849,
+   "tokSPrefillMedian": 9.6691,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "qwen-qwen3-coder-30b-a3b-instruct",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 8.7835,
+   "tokSPrefillMedian": 20.2054,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-qat-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 7.3292,
+   "tokSPrefillMedian": 19.028,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "cpu-i7-9750h-32gb",
+   "modelSlug": "unsloth-lfm2-5-8b-a1b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 14.8295,
+   "tokSPrefillMedian": 35.8391,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": null,
+   "maxContextTested": 4096,
    "engines": [
     "llama.cpp"
    ]
@@ -8232,6 +8330,104 @@
    "ttftMsMedian": 1253.75,
    "peakVramGbMedian": null,
    "maxContextTested": 2048,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "google-gemma-4-e4b-it",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 17.9399,
+   "tokSPrefillMedian": 109.9697,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.0,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "liquidai-lfm2-5-1-2b-instruct-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 74.7524,
+   "tokSPrefillMedian": 422.5689,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 0.66,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "openbmb-minicpm5-1b-gguf",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 70.4385,
+   "tokSPrefillMedian": 568.0262,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 0.65,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "qwen-qwen3-5-9b",
+   "bits": 4,
+   "n": 1,
+   "tokSOutMedian": 5.601,
+   "tokSPrefillMedian": 51.2266,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.0,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "qwen-qwen3-coder-30b-a3b-instruct",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 12.53,
+   "tokSPrefillMedian": 45.8499,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.0,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "unsloth-gemma-4-26b-a4b-it-qat-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 12.26,
+   "tokSPrefillMedian": 59.4686,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.0,
+   "maxContextTested": 4096,
+   "engines": [
+    "llama.cpp"
+   ]
+  },
+  {
+   "rigKey": "radeon-pro-555x-4gb",
+   "modelSlug": "unsloth-lfm2-5-8b-a1b-gguf",
+   "bits": 4,
+   "n": 2,
+   "tokSOutMedian": 23.2206,
+   "tokSPrefillMedian": 149.9821,
+   "ttftMsMedian": null,
+   "peakVramGbMedian": 4.0,
+   "maxContextTested": 4096,
    "engines": [
     "llama.cpp"
    ]

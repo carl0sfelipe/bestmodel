@@ -1,0 +1,50 @@
+{
+  "source": "macbookpro15,1-omarchy-2026-09-13",
+  "measuredAt": "2026-09-13T21:04:55-03:00",
+  "host": {
+    "dmi": "MacBookPro15,1",
+    "cpu": "Intel Core i7-9750H 6c/12t",
+    "ramGb": 32,
+    "os": "Omarchy 4.0.3 / linux-t2 7.2.4",
+    "engine": "llama.cpp Vulkan RADV (Release, -march=native, ~/Work/llama.cpp-src ad6c668)",
+    "scenario": {"prompt_tokens": 512, "generated_tokens": 128, "repeats": 2, "threads": 6},
+    "notes": "source_class=reported (llama-bench, not Ed25519-signed). HT (t=12) discarded: 3-4x slower. Intel UHD 630 Vulkan discarded: slower than CPU."
+  },
+  "rigs": [
+    {
+      "key": "radeon-pro-555x-4gb",
+      "label": "Radeon Pro 555X 4GB (MacBookPro15,1)",
+      "hw_class": "DISCRETE_GPU",
+      "mem_gb": 4,
+      "gpu_count": 1,
+      "bandwidth_gbs": 94.1
+    },
+    {
+      "key": "cpu-i7-9750h-32gb",
+      "label": "Intel i7-9750H 32GB (CPU only)",
+      "hw_class": "CPU_ONLY",
+      "mem_gb": 32,
+      "gpu_count": 0,
+      "bandwidth_gbs": 37.5
+    }
+  ],
+  "runs": [
+    {"id": "mbp151-20260913-lfm25-12b-dgpu-fit", "model_slug": "liquidai-lfm2-5-1-2b-instruct-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_0", "engine": "llama.cpp", "tok_s_out": 74.752369, "tok_s_prefill": 422.568937, "ttft_ms": null, "peak_vram_gb": 0.66, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:10:08-03:00", "recipe": "fit-target-256", "raw": {"file": "LFM2.5-1.2B-Instruct-Q4_0.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-lfm25-12b-cpu", "model_slug": "liquidai-lfm2-5-1-2b-instruct-gguf", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "Q4_0", "engine": "llama.cpp", "tok_s_out": 26.961896, "tok_s_prefill": 68.432451, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:10:43-03:00", "recipe": "cpu-t6", "raw": {"file": "LFM2.5-1.2B-Instruct-Q4_0.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-minicpm5-1b-dgpu-fit", "model_slug": "openbmb-minicpm5-1b-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 70.4385, "tok_s_prefill": 568.026154, "ttft_ms": null, "peak_vram_gb": 0.65, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:12:27-03:00", "recipe": "fit-target-256", "raw": {"file": "MiniCPM5-1B-Q4_K_M.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-minicpm5-1b-cpu", "model_slug": "openbmb-minicpm5-1b-gguf", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 27.748811, "tok_s_prefill": 98.304465, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:12:54-03:00", "recipe": "cpu-t6", "raw": {"file": "MiniCPM5-1B-Q4_K_M.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-lfm25-8b-dgpu-fit", "model_slug": "unsloth-lfm2-5-8b-a1b-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "UD-Q4_K_M", "engine": "llama.cpp", "tok_s_out": 23.220559, "tok_s_prefill": 159.844274, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:11:16-03:00", "recipe": "fit-target-256", "raw": {"file": "LFM2.5-8B-A1B-UD-Q4_K_M.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-lfm25-8b-dgpu-ncmoe", "model_slug": "unsloth-lfm2-5-8b-a1b-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "UD-Q4_K_M", "engine": "llama.cpp", "tok_s_out": 16.11, "tok_s_prefill": 140.12, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:28:04-03:00", "recipe": "ngl99-ncmoe99", "raw": {"file": "LFM2.5-8B-A1B-UD-Q4_K_M.gguf", "ngl": 99, "ncmoe": 99}},
+    {"id": "mbp151-20260913-lfm25-8b-cpu", "model_slug": "unsloth-lfm2-5-8b-a1b-gguf", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "UD-Q4_K_M", "engine": "llama.cpp", "tok_s_out": 14.829525, "tok_s_prefill": 35.839089, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:12:19-03:00", "recipe": "cpu-t6", "raw": {"file": "LFM2.5-8B-A1B-UD-Q4_K_M.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-gemma4-e4b-dgpu-fit", "model_slug": "google-gemma-4-e4b-it", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_0", "engine": "llama.cpp", "tok_s_out": 17.9399, "tok_s_prefill": 109.969701, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:07:44-03:00", "recipe": "fit-target-256", "raw": {"file": "gemma-4-E4B-it-Q4_0.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-gemma4-e4b-cpu", "model_slug": "google-gemma-4-e4b-it", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "Q4_0", "engine": "llama.cpp", "tok_s_out": 6.085255, "tok_s_prefill": 17.895983, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:09:58-03:00", "recipe": "cpu-t6", "raw": {"file": "gemma-4-E4B-it-Q4_0.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-gemma4-26b-dgpu-fit", "model_slug": "unsloth-gemma-4-26b-a4b-it-qat-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "UD-Q4_K_XL", "engine": "llama.cpp", "tok_s_out": 7.841029, "tok_s_prefill": 60.917109, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:04:55-03:00", "recipe": "fit-target-256", "raw": {"file": "gemma-4-26B-A4B-it-qat-UD-Q4_K_XL.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-gemma4-26b-dgpu-ncmoe", "model_slug": "unsloth-gemma-4-26b-a4b-it-qat-gguf", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "UD-Q4_K_XL", "engine": "llama.cpp", "tok_s_out": 12.26, "tok_s_prefill": 58.02, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:28:04-03:00", "recipe": "ngl99-ncmoe99", "raw": {"file": "gemma-4-26B-A4B-it-qat-UD-Q4_K_XL.gguf", "ngl": 99, "ncmoe": 99}},
+    {"id": "mbp151-20260913-gemma4-26b-cpu", "model_slug": "unsloth-gemma-4-26b-a4b-it-qat-gguf", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "UD-Q4_K_XL", "engine": "llama.cpp", "tok_s_out": 7.329204, "tok_s_prefill": 19.027961, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:07:04-03:00", "recipe": "cpu-t6", "raw": {"file": "gemma-4-26B-A4B-it-qat-UD-Q4_K_XL.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-qwen35-9b-dgpu-fit", "model_slug": "qwen-qwen3-5-9b", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 5.600968, "tok_s_prefill": 51.226561, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:14:24-03:00", "recipe": "fit-target-256", "raw": {"file": "Qwen3.5-9B-Q4_K_M.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-qwen35-9b-cpu", "model_slug": "qwen-qwen3-5-9b", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 3.28492, "tok_s_prefill": 9.669053, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:18:27-03:00", "recipe": "cpu-t6", "raw": {"file": "Qwen3.5-9B-Q4_K_M.gguf", "ngl": 0}},
+    {"id": "mbp151-20260913-qwen3coder-30b-dgpu-fit", "model_slug": "qwen-qwen3-coder-30b-a3b-instruct", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 8.282911, "tok_s_prefill": 44.059871, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:19:50-03:00", "recipe": "fit-target-256", "raw": {"file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf", "ngl": -1}},
+    {"id": "mbp151-20260913-qwen3coder-30b-dgpu-ncmoe", "model_slug": "qwen-qwen3-coder-30b-a3b-instruct", "rig_key": "radeon-pro-555x-4gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 12.53, "tok_s_prefill": 47.64, "ttft_ms": null, "peak_vram_gb": 4.0, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:28:04-03:00", "recipe": "ngl99-ncmoe99", "raw": {"file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf", "ngl": 99, "ncmoe": 99}},
+    {"id": "mbp151-20260913-qwen3coder-30b-cpu", "model_slug": "qwen-qwen3-coder-30b-a3b-instruct", "rig_key": "cpu-i7-9750h-32gb", "bits": 4, "quant": "Q4_K_M", "engine": "llama.cpp", "tok_s_out": 8.78354, "tok_s_prefill": 20.205449, "ttft_ms": null, "peak_vram_gb": null, "context_length": 4096, "batch_size": 1, "spec_decoding": 0, "mtp_enabled": 0, "concurrency": 1, "created_at": "2026-09-13T21:22:05-03:00", "recipe": "cpu-t6", "raw": {"file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf", "ngl": 0}}
+  ]
+}

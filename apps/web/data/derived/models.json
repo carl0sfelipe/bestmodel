@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-08-30T04:43:50.758Z",
+ "snapshotAt": "2026-09-14T00:49:27.000Z",
  "models": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
@@ -405,7 +405,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 54,
+   "runCount": 56,
    "medianTokS": 47.11,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -660,7 +660,7 @@
    "activeParamsB": 4,
    "isMoE": true,
    "category": "chat",
-   "runCount": 43,
+   "runCount": 46,
    "medianTokS": 95.31,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -862,7 +862,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 37,
+   "runCount": 39,
    "medianTokS": 57.25,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -1101,7 +1101,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 32,
+   "runCount": 34,
    "medianTokS": 97.55,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -1425,7 +1425,7 @@
    "activeParamsB": 3,
    "isMoE": true,
    "category": "code",
-   "runCount": 27,
+   "runCount": 30,
    "medianTokS": 80.43,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -1496,7 +1496,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 26,
+   "runCount": 28,
    "medianTokS": 118.2,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -4859,7 +4859,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 6,
+   "runCount": 9,
    "medianTokS": 66.8,
    "sourceClass": "community_reported",
    "evalScore": {

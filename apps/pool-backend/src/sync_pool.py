@@ -40,6 +40,8 @@ BANDWIDTH_SEED_GBS = {
     "RTX 4070": 504,
     "M3 Ultra": 800,
     "RTX 4090": 1008,
+    "Radeon Pro 555X": 94.1,
+    "RX 570": 224.0,
 }
 
 

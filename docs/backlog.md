@@ -33,6 +33,21 @@ Open questions from the L01 spec (need a decision before/during build):
 - **A5 — Roofline threshold calibration**: 0.92 rule vs measured 0.94 on real
   QwQ-32B runs (lab runs quarantined pending decision).
 - **A6 — MoE residency model**: full-offload footprint vs active-weights formula.
+- **A7 — `n-cpu-moe` in the L03A search space** (F10): on 4–8 GB discrete GPUs
+  `-ngl 99 -ncmoe 99` beat `--fit-target` by +51–57 % on Qwen3-Coder-30B-A3B
+  and Gemma 4 26B-A4B (MacBookPro15,1, 2026-09-13). Add `ncmoe ∈ {0, all}`.
+- **A8 — Thread prior ≤ physical cores** (F11): HT on i7-9750H cut decode 3–4×.
+  Clamp the L03A thread dim; default to physical cores.
+- **A9 — `plan` must query catalog SOTA, not only local measurements** (F13):
+  `canirunit suggest` ranked the lab corpus correctly but never proposed
+  Qwen3.6-35B-A3B / Qwen3.6-27B / Qwen3.8-27B (top-3 by runCount in
+  models.json). L01 `plan` is the missing command.
+- **A10 — Bandwidth seed completeness** (F14): most `hardware.json` rigs have
+  `bandwidthGBs: null`, so the "extrapolated by memory bandwidth" tier is
+  dead. Extend `BANDWIDTH_SEED_GBS` (555X + RX 570 added 2026-09-13).
+- **A11 — `argos-opt` must be a git/registry dep**: `benchmark-probe` is
+  excluded from the workspace and will not compile on a machine without
+  `~/Work/argos-opt`. Private path dep blocks the advertised CLI.
 
 ## Track B — Two-tier reporting: verified + claimed
 

@@ -10,10 +10,19 @@ local API on port 8790:
 
 ## Operation
 
-Full cycle (sync → plausibility → derived → publish):
+Full cycle (sync → **local lab overlay** → plausibility → derived → publish):
 
 ```bash
 bash scripts/sync-all.sh
+```
+
+First-party llama-bench runs live in `local-runs/*.json` and are
+re-applied after every remote sync by `src.import_local_runs` (so they
+survive a localmaxxing pull). To publish the overlay onto
+`apps/web/data/derived` without a live SQLite:
+
+```bash
+uv run python -m src.import_local_runs --publish
 ```
 
 Local API service (refuses to start if port 8790 is taken, printing the

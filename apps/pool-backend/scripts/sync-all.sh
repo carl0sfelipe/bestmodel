@@ -6,6 +6,7 @@ cd "$(dirname "$0")/.."
 start=$(date +%s)
 
 uv run python -m src.sync_pool
+uv run python -m src.import_local_runs --sqlite-only
 uv run python -m src.plausibility
 uv run python -m src.derive_export --publish
 

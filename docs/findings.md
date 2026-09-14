@@ -66,3 +66,51 @@ exists precisely to catch this class. Keep `make gate` green on every merge.
 - **Roofline estimate_diffusion_step v1 estimou 13 716 s (3,81 h) → superestimativa de 3,21×.** f_attn=0.05 era calibração declarada; o gap real é maior e inclui efeitos não modelados: split em duas passadas (half-steps por modelo), fp8_scaled na 3090 (sem aceleração nativa, mas bandwidth de weights pela metade) e o estimador ser single-model/single-pass.
 - **Refit pendência:** estender estimate_diffusion_step com modo two-pass + calibrar f_attn contra esta célula (e as próximas); enquanto isso, célula derivada de 3090 fica 3,2× pessimista — sinalizar em suggest/transfer.
 - **Regra operacional:** com 98 % de VRAM a célula é marcada infeasible pela margem de 95 % e some da leaderboard (11.10) — o dado fica no banco e nos endpoints de run/transparência; é comportamento honesto, não bug.
+
+## F9 — Transfer por TFLOPS subestima decode em GPU pequena (OPEN — 2026-09-13)
+
+MacBookPro15,1 / Radeon Pro 555X 4 GB vs âncora RX 570 4 GB (mesma família GCN4).
+`canirunit` transferiu LFM2.5-1.2B Q4: previsto **32,2 tok/s**, medido **74,8** (2,3×).
+Gemma 4 E4B: previsto **7,5**, medido **17,9**. Razão de bandwidth (94,1/224 = 0,42)
+erra menos, ainda abaixo. Em modelo ~1B o gargalo é launch/overhead, não roofline
+de TFLOPS. `transfer.rs` documenta álgebra para difusão compute-bound; `decode_tok_s`
+precisa de fator por bandwidth **e** piso de overhead. Fontes: AMD RX 570 5,1 TFLOPS
+/ 224 GB/s; 555X 1,39 TFLOPS / 94,1 GB/s (topcpu/axiomgaming).
+
+## F10 — `n-cpu-moe` é a dimensão que mais importa em 4–8 GB (OPEN — L03A)
+
+`-ngl 99 -ncmoe 99` vs `--fit-target 256` no mesmo GGUF, mesma máquina:
+Qwen3-Coder-30B-A3B +51 % (8,3 → 12,5 tok/s); Gemma 4 26B-A4B +57 % (7,8 → 12,3).
+O espaço L03A (`ngl, ctx, threads, kv, fa`) **não tem** `n-cpu-moe`. Em VRAM
+pequena a dGPU deve rodar atenção, não experts. Adicionar `ncmoe ∈ {0, all}`
+como dim categórica.
+
+## F11 — Threads = núcleos físicos; HT queima trials (OPEN — L03A prior)
+
+i7-9750H: `-t 12` (HT) vs `-t 6`: LFM2.5-1.2B 24,5 → 6,8 tok/s; MiniCPM5-1B
+26,1 → 7,1. Espaço L03A vai até 32 threads sem prior. Default/clamp ≤ físicos.
+
+## F12 — Pacote distro com asserts não é o mesmo engine (OPEN — provenance)
+
+`llama-cpp` Arch extra imprime `asserts enabled`. Mesmo GGUF, mesmos flags:
+Gemma 4 26B-A4B CPU +83 % (4,0 → 7,3 tok/s) no build Release `-march=native`.
+`benchmark-probe` já grava `build_commit`; precisa gravar `asserts` / `CMAKE_BUILD_TYPE`.
+
+## F13 — `plan` / suggest não escolhe SOTA, escolhe o que já foi medido (OPEN — L01)
+
+`canirunit suggest` ranqueia só o corpus passado. No lab 2026-09-13 o ranking
+interno estava correto (LFM2.5-1.2B > MiniCPM5-1B > …), mas o conjunto medido
+**não** incluía Qwen3.6-35B-A3B nem Qwen3.6-27B nem Qwen3.8-27B — os três
+modelos com mais runs no `models.json` (snapshot 2026-08-30: 198 / 179 / 201).
+L01 `plan` ainda não existe. Sem ele o CLI não pode responder "melhor SOTA
+disponível", só "melhor entre o que você já rodou".
+
+## F14 — `hardware.json` bandwidthGBs é null em quase todos os rigs (OPEN)
+
+163 rigs no snapshot; a maioria `bandwidthGBs: null`. O README promete
+"extrapolated — scaled by memory bandwidth". Sem o campo, o tier não funciona.
+Seed em `sync_pool.BANDWIDTH_SEED_GBS` cobria 11 SKUs; 555X/RX 570 adicionados
+2026-09-13. Falta tabela completa (ou parse do label).
+
+Relato completo da sessão: `docs/findings-mbp15-1-2026-09-13.md`.
+Runs: `apps/pool-backend/local-runs/mbp15-1-2026-09-13.json`.

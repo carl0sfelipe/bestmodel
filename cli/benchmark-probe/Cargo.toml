@@ -13,10 +13,12 @@ name = "benchmark-probe"
 path = "src/main.rs"
 
 [dependencies]
-# L03A: the TPE optimizer (owner decision 2026-08-30). Path dep until the
-# crate is published (name pending) — LOAD-BEARING relative path:
-# cli/benchmark-probe -> ~/Work/argos-opt.
-argos-opt = { path = "../../../argos-opt" }
+# L03A: the TPE optimizer (owner decision 2026-08-30). Vendored at
+# third_party/argos-opt: a clean-room RECONSTRUCTION of the lost tree
+# 31feea6 (owner-authorized 2026-09-18 — no remote ever existed, no copy
+# was recoverable). Swap in the original tree when it resurfaces; the
+# goal remains publishing it as a git/registry dep (backlog A11).
+argos-opt = { path = "../../third_party/argos-opt" }
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

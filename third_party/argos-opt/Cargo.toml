@@ -1,0 +1,13 @@
+[package]
+name = "argos-opt"
+version = "0.1.0"
+edition = "2021"
+description = "TPE optimizer for the benchmark-probe lab (L03A). Reconstruction of the lost argos-opt tree 31feea6 — see README.md."
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+# float_roundtrip: the TrialLog and the lab's index.jsonl must round-trip
+# f64 losses EXACTLY (determinism: save -> load -> resumed ask sequence).
+serde_json = { version = "1", features = ["float_roundtrip"] }

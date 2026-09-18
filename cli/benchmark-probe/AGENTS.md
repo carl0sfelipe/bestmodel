@@ -9,7 +9,7 @@ user output + machine-readable artifacts.
 |---|---|
 | `main.rs` | arg parsing; **first subcommand `lab` (L03A) dispatched before the legacy flag parser** — everything else uses legacy flags unchanged |
 | `lib.rs` | exposes modules + `Runtime` enum for integration tests |
-| `tuning_search.rs` | L03A: llama.cpp serving space (frozen dim order: ngl, ctx, threads, kv_cache, flash_attn), TPE `run_lab` via **argos-opt** (path dep `../../../argos-opt` — LOAD-BEARING until the crate is published), deterministic SIM `stub_objective` (every output SIM-marked, never a real claim) |
+| `tuning_search.rs` | L03A: llama.cpp serving space (frozen dim order: ngl, ctx, threads, kv_cache, flash_attn), TPE `run_lab` via **argos-opt** (vendored at `third_party/argos-opt` — clean-room reconstruction of the lost tree `31feea6`, owner-authorized 2026-09-18; replace with the original tree when it resurfaces, then publish as git/registry dep per backlog A11), deterministic SIM `stub_objective` (every output SIM-marked, never a real claim) |
 | `lab_recorder.rs` | L01 slice: `experiments/<label>/{meta.json,index.jsonl,best.json}` — append-only, one JSON line per trial, null = failed trial; dirs immutable once created |
 | `collect_system_topology.rs` | GPU/CPU/OS fingerprint — macOS via sysctl/system_profiler; **Linux gap (backlog A4)** |
 | `detect_runtime_installations.rs` | PATH scan for llama-cli/ollama + versions |
@@ -44,9 +44,13 @@ the intake worker validates the run.
   `run_lab` feeds loss = -tok/s to argos-opt (which MINIMIZES). Invert
   this and the search optimizes the WORST corner — pinned by
   `tpe_beats_random_baseline` (bar measured in spec L03A, never lower it).
-- **argos-opt path dep**: `../../../argos-opt` resolves to `~/Work/argos-opt`
-  on this machine. Publishing argos-opt (needs the owner's name decision)
-  replaces it with a registry version — do not vendored-copy it.
+- **argos-opt dep**: vendored at `third_party/argos-opt` — a clean-room
+  reconstruction of the lost tree `31feea6` (owner-authorized 2026-09-18;
+  the original lived at `~/Work/argos-opt` and was lost with its machine).
+  Recovering the original tree (Time Machine 30–31 Aug, beelink) replaces
+  the directory; publishing it as a git/registry dep (backlog A11) removes
+  the vendored copy. NEVER swap it for the crates.io "optimizer" crate
+  (incident 2026-09-18).
 - `build_video_report`/`build_video_evidence` (main.rs) re-declaram o shape de
   cenário/métricas de vídeo: campo novo no contrato ⇒ `domain-schema`
   (benchmark_report/scenario/metrics) + main.rs + evidence keys do worker na

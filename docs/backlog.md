@@ -48,6 +48,14 @@ Open questions from the L01 spec (need a decision before/during build):
 - **A11 — `argos-opt` must be a git/registry dep**: `benchmark-probe` is
   excluded from the workspace and will not compile on a machine without
   `~/Work/argos-opt`. Private path dep blocks the advertised CLI.
+  Update 2026-09-18: interim unblock — the probe is a workspace member
+  again and depends on `third_party/argos-opt`, a clean-room
+  reconstruction of the lost tree `31feea6` (the original repo had no
+  remote and was lost with the machine that hosted it; owner authorized
+  the vendoring — provenance in that directory's README). A11 stays
+  OPEN: recover the original tree (Time Machine 30–31 Aug snapshot,
+  beelink machine), then publish it as the real git/registry dep,
+  replacing the reconstruction.
 
 ## Track B — Two-tier reporting: verified + claimed
 

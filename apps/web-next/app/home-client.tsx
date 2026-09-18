@@ -130,21 +130,29 @@ export default function HomeClient({
 
   const best = answers[0] ?? null;
 
-  // Best cell anywhere in the pool for this exact intent (+ quantization when
-  // it applies), used only to point beyond the selected rig's absence.
-  const bestAnywhere = useMemo(() => {
-    if (!category || !indexAny) return null;
-    let top: Answer | null = null;
+  // Claims tier (owner decision 2026-09-18): when this rig+intent has no
+  // cell, surface the strongest community claims for the same intent
+  // (+quantization) measured on OTHER rigs — always labeled unvalidated,
+  // always credited, never presented as this rig's number.
+  const claims = useMemo(() => {
+    if (!category || !indexAny) return [];
+    const seen = new Map<string, Answer>();
     for (const key of Object.keys(indexAny)) {
       const parts = key.split("|");
       if (parts[1] !== category) continue;
       if (!multimodal && parts[2] !== String(bits)) continue;
       for (const row of indexAny[key]) {
-        if (!top || (row.metric?.value ?? row.tokS) > (top.metric?.value ?? top.tokS)) top = row;
+        if (row.rigKey === rig) continue; // a claim is someone ELSE's number
+        const prev = seen.get(row.slug);
+        if (!prev || (row.metric?.value ?? row.tokS) > (prev.metric?.value ?? prev.tokS)) {
+          seen.set(row.slug, row);
+        }
       }
     }
-    return top;
-  }, [indexAny, category, bits, multimodal]);
+    return [...seen.values()]
+      .sort((a, b) => (b.metric?.value ?? b.tokS) - (a.metric?.value ?? a.tokS))
+      .slice(0, 3);
+  }, [indexAny, category, bits, multimodal, rig]);
 
   const rigLabel = rigs.find((item) => item.key === rig)?.label ?? rig;
 
@@ -275,17 +283,32 @@ export default function HomeClient({
                 . That is an absence, not a zero — <Link href="/submit">capture one</Link> and it
                 stops being empty.
               </p>
-              {bestAnywhere && bestAnywhere.rigLabel !== rigLabel && (
-                <p className="verdict-meta">
-                  Measured elsewhere in the pool:{" "}
-                  <strong>
-                    {(bestAnywhere.metric?.value ?? bestAnywhere.tokS).toLocaleString("en-US")}{" "}
-                    {bestAnywhere.metric?.unit ?? "tok/s"}
-                  </strong>{" "}
-                  · {bestAnywhere.name} on {bestAnywhere.rigLabel} ·{" "}
-                  <span className={`badge basis-${bestAnywhere.basis}`}>{bestAnywhere.basis}</span>{" "}
-                  n={bestAnywhere.n} · <Link href={`/m/${bestAnywhere.slug}`}>details</Link>
-                </p>
+              {claims.length > 0 && (
+                <div className="verdict-claims">
+                  <p className="verdict-meta">
+                    <strong>claim · unvalidated</strong> — same intent measured on other rigs in the
+                    community pool (orientation only, never this machine&apos;s number · via
+                    localmaxxing community pool):
+                  </p>
+                  {claims.map((row) => (
+                    <div className="verdict-row" key={row.slug}>
+                      <Link className="name" href={`/m/${row.slug}`}>
+                        {row.name}
+                      </Link>
+                      <span className="v">
+                        {(row.metric?.value ?? row.tokS).toLocaleString("en-US")}{" "}
+                        {row.metric?.unit ?? "tok/s"}
+                      </span>
+                      <span className="v">on {row.rigLabel}</span>
+                      <span className={`badge basis-${row.basis}`}>{row.basis}</span>
+                      <span className="v">n={row.n}</span>
+                    </div>
+                  ))}
+                  <p className="verdict-meta">
+                    Run this rig? <Link href="/submit">Claim it with a capture</Link> and the claim
+                    becomes a cell.
+                  </p>
+                </div>
               )}
             </>
           ) : (
@@ -398,6 +421,10 @@ export default function HomeClient({
           </div>
           <div>
             <span className="am">reported</span> 1–2 runs · real, but thin
+          </div>
+          <div>
+            <span className="am">claim (unvalidated)</span> best community claim for the same
+            intent on another rig · orientation only, always labeled
           </div>
           <div>
             <span className="p">extrapolated</span> scaled by memory bandwidth · never shown as

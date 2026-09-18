@@ -1,62 +1,72 @@
 {
- "snapshotAt": "2026-09-14T00:49:27.000Z",
+ "snapshotAt": "2026-09-18T17:08:19.808Z",
  "totals": {
-  "runs": 5866,
-  "models": 633,
-  "rigs": 167
+  "runs": 8230,
+  "models": 686,
+  "rigs": 184
  },
  "topRigs": [
   {
+   "key": "cmp-170hx-64gb",
+   "label": "CMP 170HX 64GB",
+   "runCount": 1819
+  },
+  {
    "key": "rtx-3090-24gb",
    "label": "RTX 3090 24GB",
-   "runCount": 629
+   "runCount": 655
   },
   {
    "key": "rtx-3060-12gb-x2",
-   "label": "RTX 3060 12GB \u00d72",
-   "runCount": 561
+   "label": "RTX 3060 12GB ×2",
+   "runCount": 562
   },
   {
    "key": "rtx-3060-12gb",
    "label": "RTX 3060 12GB",
-   "runCount": 541
+   "runCount": 552
   },
   {
    "key": "arc-pro-b70-32gb",
    "label": "Arc Pro B70 32GB",
-   "runCount": 328
+   "runCount": 339
   },
   {
    "key": "rtx-5090-32gb",
    "label": "RTX 5090 32GB",
-   "runCount": 303
+   "runCount": 320
   },
   {
    "key": "ryzen-ai-max-395-128gb",
    "label": "Ryzen AI Max 395 128GB",
-   "runCount": 295
+   "runCount": 300
   },
   {
    "key": "radeon-ai-pro-r9700-32gb-x3",
-   "label": "Radeon AI Pro R9700 32GB \u00d73",
-   "runCount": 275
-  },
-  {
-   "key": "rtx-4070-12gb",
-   "label": "RTX 4070 12GB",
-   "runCount": 221
+   "label": "Radeon AI Pro R9700 32GB ×3",
+   "runCount": 299
   }
  ],
  "topModels": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
    "displayName": "Qwen3.8-27B-GGUF",
-   "runCount": 201
+   "runCount": 553
+  },
+  {
+   "slug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "displayName": "Qwen3.6-35B-A3B-GGUF",
+   "runCount": 302
+  },
+  {
+   "slug": "jackrong-qwen3-8-27b-mtp-gguf",
+   "displayName": "Qwen3.8-27B-MTP-GGUF",
+   "runCount": 236
   },
   {
    "slug": "qwen-qwen3-6-35b-a3b",
    "displayName": "Qwen3.6-35B-A3B",
-   "runCount": 198
+   "runCount": 199
   },
   {
    "slug": "qwen-qwen3-6-27b",
@@ -69,54 +79,24 @@
    "runCount": 172
   },
   {
-   "slug": "unsloth-qwen3-6-35b-a3b-gguf",
-   "displayName": "Qwen3.6-35B-A3B-GGUF",
-   "runCount": 84
+   "slug": "lued-qwen3-8-27b-int8-w8a16-mtp",
+   "displayName": "Qwen3.8-27B-INT8-W8A16-MTP",
+   "runCount": 162
   },
   {
-   "slug": "unsloth-qwen3-6-27b-gguf",
-   "displayName": "Qwen3.6-27B-GGUF",
-   "runCount": 82
+   "slug": "miralabs-ornith-1-5-35b-a3b-w4a16-sym",
+   "displayName": "Ornith-1.5-35B-A3B-W4A16-SYM",
+   "runCount": 130
   },
   {
-   "slug": "unsloth-gemma-4-26b-a4b-it-gguf",
-   "displayName": "gemma-4-26B-A4B-it-GGUF",
-   "runCount": 76
+   "slug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
+   "displayName": "Ornith-1.5-35B-A3B-GGUF",
+   "runCount": 127
   },
   {
    "slug": "qwen-qwen3-8-27b",
    "displayName": "Qwen3.8-27B",
-   "runCount": 68
-  },
-  {
-   "slug": "nvidia-nvidia-nemotron-3-nano-4b-bf16",
-   "displayName": "NVIDIA-Nemotron-3-Nano-4B-BF16",
-   "runCount": 64
-  },
-  {
-   "slug": "lasimeri-minimax-m2-7-int4-autoround",
-   "displayName": "MiniMax-M2.7-int4-AutoRound",
-   "runCount": 60
+   "runCount": 122
   }
- ],
- "multimodal": {
-  "cells": 4,
-  "runs": 28,
-  "hw": "RTX 3090 24GB (vast.ai, overnight 2026-08-31)",
-  "categories": [
-   "image",
-   "video"
-  ]
- },
- "cloudAnchors": {
-  "cells": 5,
-  "runs": 19,
-  "hw": "NVIDIA L4 / A10 24GB (modal.com, 2026-08-31)",
-  "categories": [
-   "audio",
-   "chat",
-   "code",
-   "image"
-  ]
- }
+ ]
 }

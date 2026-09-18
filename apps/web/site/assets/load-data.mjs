@@ -1,6 +1,10 @@
 // S4 — shared derived-data loader. Data only: no DOM, no engine import.
-// Paths resolve relative to this module (../../data/derived/) so it works
-// from both site/ and site/m/ pages.
+// Paths anchor at the SITE ROOT derived from this module's own URL, so
+// they work from site/ and site/m/ pages AND under a subpath host
+// (GitHub Pages preview at <user>.github.io/<repo>/) — "../../" walking
+// would escape to the host root and break there.
+
+const SITE_ROOT = new URL(import.meta.url.replace(/(?:m\/)?assets\/load-data\.mjs$/, ""));
 
 let cache = null;
 
@@ -15,7 +19,7 @@ export async function loadDerived() {
   const loaded = {};
   try {
     await Promise.all(files.map(async ([name, file]) => {
-      const url = new URL(`../../data/derived/${file}`, import.meta.url);
+      const url = new URL(`data/derived/${file}`, SITE_ROOT);
       const res = await fetch(url);
       if (!res.ok) throw new Error(`${url.pathname}: HTTP ${res.status}`);
       loaded[name] = await res.json();

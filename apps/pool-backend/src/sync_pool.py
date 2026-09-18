@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 import httpx
 
+from src.category import model_category
 from src.config import API_BASE, DB_PATH, THROTTLE_MS, USER_AGENT
 from src.db import connect, migrate
 
@@ -190,10 +191,6 @@ def seed_bandwidth(identity: dict, hw_class: str) -> float | None:
     return BANDWIDTH_SEED_GBS[matches[0]]
 
 
-def model_category(display_name: str) -> str:
-    return "code" if re.search(r"coder|starcoder|codestral|code", display_name, re.I) else "chat"
-
-
 def _compact(raw: dict) -> str:
     return json.dumps(raw, ensure_ascii=False, separators=(",", ":"))
 
@@ -224,7 +221,7 @@ def model_row_from_catalog(raw: dict) -> dict:
         "params_b": _real_or_none(raw.get("params")),
         "active_params_b": _real_or_none(raw.get("activeParams")),
         "is_moe": 1 if raw.get("isMoE") else 0,
-        "category": model_category(raw["displayName"]),
+        "category": model_category(raw["displayName"], raw.get("hfId") or ""),
         "eval_score": _eval_score_value(raw),
         "raw_json": _compact(raw),
     }
@@ -241,7 +238,7 @@ def model_row_from_run_model(run_model: dict) -> dict:
         "params_b": _real_or_none(run_model.get("params")),
         "active_params_b": None,
         "is_moe": 0,
-        "category": model_category(display),
+        "category": model_category(display, run_model.get("hfId") or ""),
         "eval_score": None,
         "raw_json": _compact(run_model),
     }

@@ -2,10 +2,12 @@
 # ingest.py — Fase C: results.jsonl (runs cruas da sweep) → células agregadas
 # em public/data/derived/pool.json + entradas em models.json.
 # Formato da célula = o que o metricOf de lib/engine.ts consome (campos FLAT):
-#   category, imagesPerSec|audioXReal|videoFramesPerSec (mediana), steps,
+#   category, imagesPerSec|audioXReal|rtf|videoFramesPerSec (mediana), steps,
 #   resolution, durationS, pipeline, precision, peakVramGb (mediana), n.
 # Agregação: mediana por (category, pipeline, precision, steps, resolution).
 # Honestidade: n real; basis vem de n (>=3 measured) — o site decide pelo n.
+# music is the text-to-music intent of the audio modality (same ×real/RTF
+# path as Whisper STT); never decode_tok_s.
 import json, statistics, sys, time
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else "results.jsonl"
@@ -14,7 +16,7 @@ runs = [json.loads(l) for l in open(SRC) if l.strip()]
 print(f"runs cruas: {len(runs)}")
 
 def metric_key(r):
-    for k in ("imagesPerSec", "audioXReal", "videoFramesPerSec"):
+    for k in ("imagesPerSec", "audioXReal", "rtf", "videoFramesPerSec"):
         if r.get(k) is not None:
             return k
     return None

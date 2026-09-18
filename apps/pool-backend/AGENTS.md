@@ -8,6 +8,9 @@ No product code exists until the executor sessions run.
 
 - Read order: `README.md` -> `CONTRATO-GLOBAL.md` (incorporates web contract
   §3-§6 by reference) -> `ESTADO.md` -> `specs/`.
+- Category taxonomy (intent vs modality): `src/category.py`. `music` is the
+  text-to-music intent of the audio modality; keep in lockstep with
+  `apps/web/scripts/category.mjs`.
 - Executor protocol: `PROMPT-EXECUTOR.md` (one session, one oracle, one
   commit `feat(backend-S<n>)`).
 - Own uv project + SQLite by design — deliberately NOT wired to the Phase-0

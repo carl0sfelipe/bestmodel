@@ -16,16 +16,18 @@ const OUTPUTS = [
   { id: "code", label: "code", g: "<", ex: "Code completion, reasoning", enabled: true },
   { id: "image", label: "image", g: "▦", ex: "Text → image · diffusion", enabled: false },
   { id: "audio", label: "audio", g: "∿", ex: "Speech-to-text · text-to-speech", enabled: false },
+  { id: "music", label: "music", g: "♩", ex: "Text → music · song gen", enabled: false },
   { id: "video", label: "video", g: "▶", ex: "Video generation", enabled: false },
 ];
 
-// Pillars: chat/code have real data; the rest disabled until the pool covers
-// them (CONTRATO §4, §7.6). Same set as the desktop hardware journey.
+// Pillars: chat/code have real text-pool data; audio is STT/SFX; music is
+// the text-to-music intent of the same audio modality (CONTRATO §4, §7.6).
 const PILLARS = [
   { id: "chat", name: "Chat", icon: "▭", desc: "text generation · chat · reasoning", enabled: true },
   { id: "code", name: "Code", icon: "<", desc: "code completion · reasoning", enabled: true },
   { id: "image", name: "Image gen", icon: "▦", desc: "text → image · diffusion", enabled: false },
   { id: "audio", name: "Audio", icon: "∿", desc: "speech-to-text · text-to-speech", enabled: false },
+  { id: "music", name: "Music", icon: "♩", desc: "text → music · song gen", enabled: false },
   { id: "video", name: "Video", icon: "▶", desc: "video generation · animation", enabled: false },
   { id: "vision", name: "Vision", icon: "◉", desc: "image understanding · VLMs", enabled: false },
 ];
@@ -67,7 +69,11 @@ const currentRig = () => (state.machine ? rigByKey.get(state.machine) : null);
 function withRigLabel(claim) {
   return claim ? { ...claim, rigLabel: rigByKey.get(claim.rigKey)?.label ?? claim.rigKey } : null;
 }
-const currentCategory = () => (state.journey === "goal" ? (state.output === "code" ? "code" : "chat") : state.category);
+const currentCategory = () => {
+  if (state.journey !== "goal") return state.category;
+  if (state.output === "code" || state.output === "audio" || state.output === "music") return state.output;
+  return "chat";
+};
 const currentBits = () => (state.journey === "hardware" ? 4 : state.quant);
 const categoryModels = () => MODELS.filter((m) => m.category === currentCategory());
 

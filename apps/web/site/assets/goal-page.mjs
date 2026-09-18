@@ -18,6 +18,7 @@ const OUTPUTS = [
   { id: "code", label: "code", g: "<", enabled: true },
   { id: "image", label: "image", g: "▦", enabled: false },
   { id: "audio", label: "audio", g: "∿", enabled: false },
+  { id: "music", label: "music", g: "♩", enabled: false },
   { id: "video", label: "video", g: "▶", enabled: false },
   { id: "embed", label: "embeddings", g: "•", enabled: false },
 ];
@@ -48,7 +49,11 @@ const currentRig = () => (state.machine ? rigByKey.get(state.machine) : null);
 function withRigLabel(claim) {
   return claim ? { ...claim, rigLabel: rigByKey.get(claim.rigKey)?.label ?? claim.rigKey } : null;
 }
-const currentCategory = () => (state.output === "code" ? "code" : "chat");
+const currentCategory = () => {
+  if (state.output === "code") return "code";
+  if (state.output === "audio" || state.output === "music") return state.output;
+  return "chat";
+};
 const currentBits = () => state.quant;
 
 function setState(patch) {

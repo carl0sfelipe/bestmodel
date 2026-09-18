@@ -17,13 +17,15 @@ export type Answer = {
 export type AnswerIndex = Record<string, Answer[]>;
 export type RigOption = { key: string; label: string; runCount: number };
 
-/** The six from the approved prototype. Only text has pool data; the rest are
-    visible and honestly disabled rather than quietly dropped. */
+/** Intents. Chat/code are text; audio is STT/SFX; music is the text-to-music
+    intent of the same audio modality (not a third LLM bucket). Vision stays
+    uncategorized until there is a collection plan. */
 const INTENTS = [
   { id: "chat", name: "Chat", glyph: "▭", desc: "text generation · reasoning", category: "chat" },
   { id: "code", name: "Code", glyph: "<", desc: "completion · refactor", category: "code" },
   { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: "image" },
-  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: "audio" },
+  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text · SFX", category: "audio" },
+  { id: "music", name: "Music", glyph: "♩", desc: "text → music · song gen", category: "music" },
   { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: "video" },
   { id: "vision", name: "Vision", glyph: "◉", desc: "image understanding", category: null },
 ] as const;
@@ -105,7 +107,7 @@ export default function HomeClient({
   const [context, setContext] = useState<number>(0);
 
   const category = INTENTS.find((item) => item.id === intent)?.category ?? null;
-  const multimodal = category === "image" || category === "audio" || category === "video";
+  const multimodal = category === "image" || category === "audio" || category === "music" || category === "video";
 
   // Which quantizations this rig + intent actually has cells for. Unavailable
   // ones stay visible but disabled — the absence is information.
@@ -266,7 +268,7 @@ export default function HomeClient({
             <>
               <p className="verdict-none">No community data for this modality yet.</p>
               <p className="verdict-meta">
-                The pool is text inference only. Image, audio, video and vision stay listed so the
+                The pool is text inference plus multimodal cells when they exist. Image, audio, music, video and vision stay listed so the
                 gap is visible rather than hidden.
               </p>
             </>

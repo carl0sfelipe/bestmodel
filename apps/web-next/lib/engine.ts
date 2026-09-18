@@ -7,9 +7,10 @@ export const MIN_RUNS_MEASURED = 3;
 
 export type Model = (typeof modelsData.models)[number];
 export type Cell = (typeof poolData.cells)[number] & {
-  category?: "image" | "audio" | "video";
+  category?: "image" | "audio" | "music" | "video";
   imagesPerSec?: number;
   audioXReal?: number;
+  rtf?: number;
   videoFramesPerSec?: number;
   steps?: number;
   resolution?: string;
@@ -28,9 +29,14 @@ export function basisOf(cell: Pick<Cell, "n">) {
   return cell.n >= MIN_RUNS_MEASURED ? "measured" : "reported";
 }
 
-export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; videoFramesPerSec?: number | null; [k: string]: unknown }) {
+export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; rtf?: number | null; videoFramesPerSec?: number | null; [k: string]: unknown }) {
   if (cell.category === "image" && cell.imagesPerSec != null) return { value: cell.imagesPerSec, unit: "img/s", label: "images" };
-  if (cell.category === "audio" && cell.audioXReal != null) return { value: cell.audioXReal, unit: "×real", label: "realtime" };
+  // audio = STT/SFX; music = text-to-music. Same waveform modality; ×real
+  // is audio/wall. If the cell stored RTF (wall/audio), invert for ranking.
+  if (cell.category === "audio" || cell.category === "music") {
+    const value = cell.audioXReal ?? (cell.rtf != null && cell.rtf > 0 ? 1 / cell.rtf : null);
+    if (value != null) return { value, unit: "×real", label: "realtime" };
+  }
   if (cell.category === "video" && cell.videoFramesPerSec != null) return { value: cell.videoFramesPerSec, unit: "f/s", label: "frames" };
   return null;
 }

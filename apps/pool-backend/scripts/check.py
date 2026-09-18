@@ -268,6 +268,15 @@ def check_derived() -> None:
     _require_keys(stats, ["snapshotAt", "totals", "topRigs", "topModels", "curation"], "stats")
     _require_keys(stats["curation"], ["excludedImpossible", "flaggedSuspicious", "computedAt"], "stats.curation")
 
+    from src.category import MODEL_CATEGORIES
+
+    for model in models:
+        if model["category"] not in MODEL_CATEGORIES:
+            raise AssertionError(
+                f"model {model['slug']}: category {model['category']!r} "
+                f"not in {MODEL_CATEGORIES}"
+            )
+
     if len(cells) < 500:
         raise AssertionError(f"cells {len(cells)} < 500")
 
@@ -518,6 +527,23 @@ def check_match() -> None:
         chat_models = client.get("/v1/models?category=chat").json().get("models", [])
         if not chat_models or any(m["category"] != "chat" for m in chat_models):
             raise AssertionError("/v1/models?category=chat filter broken")
+        music = client.get("/v1/models?category=music")
+        if music.status_code != 200:
+            raise AssertionError(
+                f"/v1/models?category=music status={music.status_code}, expected 200"
+            )
+        audio = client.get("/v1/models?category=audio")
+        if audio.status_code != 200:
+            raise AssertionError(
+                f"/v1/models?category=audio status={audio.status_code}, expected 200"
+            )
+        if any(m["category"] != "music" for m in music.json().get("models", [])):
+            raise AssertionError("/v1/models?category=music leaked another category")
+        bogus = client.get("/v1/models?category=not-an-intent")
+        if bogus.status_code != 422 or "error" not in bogus.json():
+            raise AssertionError(
+                f"invalid category status={bogus.status_code} body={bogus.json()}"
+            )
     finally:
         conn.close()
 

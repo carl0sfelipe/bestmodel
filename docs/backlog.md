@@ -51,6 +51,15 @@ Open questions from the L01 spec (need a decision before/during build):
 - **A10 — Bandwidth seed completeness** (F14): most `hardware.json` rigs have
   `bandwidthGBs: null`, so the "extrapolated by memory bandwidth" tier is
   dead. Extend `BANDWIDTH_SEED_GBS` (555X + RX 570 added 2026-09-13).
+  Update 2026-09-18: seed extended 10 -> 44 keys (vendor/AMD/Apple/NVIDIA
+  spec pages + TechPowerUp; CMP 170HX 1493, Arc Pro B60/B70, Radeon AI Pro
+  R9700, M1/M2/M4/M5 families, RTX 30/40/50 gaps, V100, A5000, T4, RX
+  570/6700XT/7700XT/9070XT). Rigs with bandwidth 41 -> 73 of 184; 4-bit
+  extrapolated cards 4,501 -> 18,036. Deliberately EXCLUDED (ambiguity,
+  never guessed): BC-250 (8GB variant runs lower memory clocks), "RTX 5000"
+  (Ada vs Turing), Radeon 890M (host LPDDR5X dependent), H100/H200 (SXM vs
+  PCIe), A100 kept at 1555 (only the 40GB rig exists today; 80GB would need
+  2039 — revisit if it appears), multi-GPU rigs and CPU rigs (by design).
 - **A11 — `argos-opt` must be a git/registry dep**: `benchmark-probe` is
   excluded from the workspace and will not compile on a machine without
   `~/Work/argos-opt`. Private path dep blocks the advertised CLI.

@@ -4,11 +4,15 @@ name: backup-alarm
 # runs THERE — when that host dies, backups silently stop. This alarm runs
 # on GitHub's clock, independent of any host: if the private
 # bestmodel-backups repo has not received a commit in 48h, the job FAILS
-# and an issue is opened (one per streak, deduped by title).
+# and a deduped issue is opened.
+#
+# NOTE: GITHUB_TOKEN cannot read another private repo — set the repo secret
+# BACKUP_RO_TOKEN to a PAT with repo (read) scope, or the alarm fails with
+# a configuration error (which is itself the alarm).
 
 on:
   schedule:
-    - cron: "17 8 * * *" # daily, 08:17 UTC — off the top of the hour
+    - cron: "17 8 * * *" # daily, 08:17 UTC
   workflow_dispatch:
 
 permissions:
@@ -20,20 +24,23 @@ jobs:
     steps:
       - name: Check last backup age
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.BACKUP_RO_TOKEN || secrets.GITHUB_TOKEN }}
+          REPO: carl0sfelipe/bestmodel-backups
         run: |
           set -euo pipefail
-          LAST=$(gh api repos/carl0sfelipe/bestmodel-backups/commits --jq '.[0].commit.committer.date')
+          if ! LAST=$(gh api "repos/$REPO/commits" --jq '.[0].commit.committer.date' 2>/dev/null); then
+            echo "::error::cannot read $REPO — add the repo secret BACKUP_RO_TOKEN (PAT with repo scope). The default GITHUB_TOKEN cannot cross private repos."
+            exit 1
+          fi
           AGE_H=$(( ( $(date -u +%s) - $(date -u -d "$LAST" +%s) ) / 3600 ))
           echo "last backup commit: $LAST (${AGE_H}h ago)"
           if [ "$AGE_H" -ge 48 ]; then
             echo "::error::prod backup is ${AGE_H}h stale (last: $LAST). The beelink-side deploy/backup.sh cron is probably dead — DB at risk if the single disk dies."
-            if ! gh issue list --state open --search "in:title backup stale" --json number --jq 'length' | grep -qv '^0$'; then
+            OPEN=$(gh issue list --state open --search "in:title backup stale" --json number --jq 'length')
+            if [ "$OPEN" = "0" ]; then
               gh issue create \
                 --title "backup stale: no prod DB dump in ${AGE_H}h" \
-                --body "Last backup commit in carl0sfelipe/bestmodel-backups: **$LAST** (${AGE_H}h ago).
-
-Run \`deploy/backup.sh\` on the beelink (or wherever prod postgres lives) to refresh the off-host dump. The alarm lives in \`.github/workflows/backup-alarm.yml\`." || true
+                --body "Last backup commit in $REPO: $LAST (${AGE_H}h ago). Run deploy/backup.sh on the beelink (or wherever prod postgres lives) to refresh the off-host dump. Alarm: .github/workflows/backup-alarm.yml" || true
             fi
             exit 1
           fi

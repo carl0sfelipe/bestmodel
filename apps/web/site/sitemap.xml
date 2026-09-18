@@ -37,15 +37,21 @@
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/qwen-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/qwen-qwen3-6-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/qwen-qwen3-8-27b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/redhatai-qwen3-5-4b-quantized-w4a16.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/redhatai-qwen3-5-9b-quantized-w4a16.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/sergiiob-ornith-1-5-35b-a3b-gptq-int4-sym-g128-mtp-bf16-mixedcal-v2.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/sergiiob-qwen3-8-27b-gptq-int4-sym-g128-mtp-bf16.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/unsloth-gemma-4-26b-a4b-it-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/unsloth-qwen3-6-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb/webhie-qwen3-6-27b-int4-autoround.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/atomicchat-qwen3-8-flash-next-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/devan-carlin-qwen3-8-27b-int4-autoround.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/ggml-org-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/lorbus-qwen3-6-27b-int4-autoround.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/qwen-qwen3-8-27b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/qwen-qwen3-8-flash-next.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/webhie-qwen3-6-27b-int4-autoround.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x2/z-lab-qwen3-6-27b-dflash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x3/qwen-qwen3-6-27b.html</loc></url>
@@ -58,15 +64,42 @@
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/nameistoken-qwen3-6-35b-a3b-quark-w8a8-int8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/poolside-laguna-s-2-1-int4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/qwen-qwen3-6-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/qwen-qwen3-8-flash-next-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/unsloth-minimax-m2-7.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/unsloth-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/arc-pro-b70-32gb-x4/vrfai-qwen3-6-27b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/bartowski-ornith-1-5-35b-a3b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/ibm-granite-granite-4-2-30b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/ornith-ai-ornith-1-5-9b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/unsloth-gpt-oss-20b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/unsloth-qwen3-5-35b-a3b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/bc-250-8gb/unsloth-qwen3-6-35b-a3b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/born2bewild-qwen3-8-27b-w4a16-autoround-fast.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/dbirks-qwen3-8-27b-w4a16-autoround.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/ggml-org-nvidia-nemotron-3-5-lightning-30b-a3b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/ibm-granite-granite-4-2-30b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/jackrong-qwen3-8-27b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/lued-qwen3-8-27b-int8-w8a16-mtp.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/miralabs-ornith-1-5-35b-a3b-w4a16-sym.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/nvidia-gemma-4-31b-it-nvfp4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/nvidia-llama-3-3-70b-instruct-nvfp4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/ornith-ai-ornith-1-5-35b-a3b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/ornith-ai-ornith-1-5-9b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/qwen-qwen3-6-35b-a3b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/shisa-ai-ornith-1-5-35b-a3b-mtp-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/unsloth-llama-4-scout-17b-16e-instruct-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/unsloth-qwen3-6-35b-a3b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/unsloth-qwen3-8-flash-next-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb/useful-quants-nvidia-nemotron-3-5-lightning-30b-a3b-w4a16.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x10/quanttrio-glm-5-2-int4-int8mix.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x2/abiray-laguna-s-2-1-iq4-xs-q4-k-m-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x2/angelslim-hy3-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x2/mradermacher-baichuan-m3-235b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x2/tencent-hy-mt2-30b-a3b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x4/deepseek-ai-deepseek-v4-flash-0731.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/cmp-170hx-64gb-x8/quanttrio-glm-5-2-int4-int8mix.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cpu-amd-ryzen-7-7840hs/liquidai-lfm2-350m.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cpu-amd-ryzen-7-8745h-w-radeon-780m/qwen-qwen3-5-4b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/cpu-amd-ryzen-7-9800x3d/afrideva-tinystories-gpt-0-1-3m-gguf.html</loc></url>
@@ -78,6 +111,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/cyankiwi-minimax-m2-7-awq-4bit.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/intel-qwen3-5-122b-a10b-int4-autoround.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/lukealonso-mimo-v2-5-nvfp4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/nvidia-gemma-4-26b-a4b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/nvidia-qwen3-6-35b-a3b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/poolside-laguna-s-2-1-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/qwen-qwen-agentworld-35b-a3b.html</loc></url>
@@ -92,13 +126,20 @@
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/unsloth-minimax-m2-7.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/unsloth-qwen3-6-27b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/unsloth-qwen3-8-27b-nvfp4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-128gb/zai-org-glm-4-7-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-256gb/deepseek-ai-deepseek-v4-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-256gb/deepseek-ai-deepseek-v4-flash-0731.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-256gb/zai-org-glm-5-3-flash.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-512gb/deepseek-ai-deepseek-v4-1-flash.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/gb10-grace-blackwell-512gb/zai-org-glm-5-3-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gtx-1060-3gb/ibm-granite-granite-4-0-h-micro.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gtx-1060-3gb-x2/liquidai-lfm2-8b-a1b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gtx-1080-ti-11gb/qwen-qwen3-5-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gtx-1080-ti-11gb/qwen-qwen3-5-9b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/gtx-1080-ti-11gb/qwen-qwen3-6-35b-a3b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/h100-80gb/nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-bf16.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/h100-80gb/qwen-qwen3-6-35b-a3b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/h200-sxm-141gb/qwen-qwen3-8-27b-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m1-max-64gb/badtheorylabs-btl-3-compact.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m1-max-64gb/google-gemma-4-26b-a4b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m1-max-64gb/qwen-qwen3-6-35b-a3b.html</loc></url>
@@ -112,8 +153,10 @@
   <url><loc>https://REPLACE-DOMAIN/p/m3-ultra-512gb/unsloth-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m4-max-64gb/unsloth-qwen3-6-27b-ud-mlx-4bit.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m5-max-128gb/deepseek-ai-deepseek-v4-flash.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/m5-max-128gb/jackrong-qwopus3-8-27b-flash-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m5-max-128gb/pipenetwork-laguna-s-2-1-mlx-4bit.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m5-max-128gb/qwen-qwen3-6-35b-a3b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/m5-max-128gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m5-pro-24gb/unsloth-qwen3-6-27b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/m5-pro-24gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/multi-gpu-24gb-x2/qwen-qwen3-8b.html</loc></url>
@@ -134,9 +177,12 @@
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb/unsloth-qwen3-5-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb/unsloth-qwen3-6-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x2/amd-qwen3-8-27b-quark-awq-mxfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x2/google-gemma-4-26b-a4b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x2/qwen-qwen3-6-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x2/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x2/unsloth-qwen3-8-27b-nvfp4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/agentionai-signal-3-8-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/cerebras-minimax-m2-5-reap-139b-a10b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/deepseek-ai-deepseek-v4-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/deepseek-ai-deepseek-v4-flash-0731.html</loc></url>
@@ -157,9 +203,11 @@
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-6-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-8-flash-next.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-coder-30b-a3b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/qwen-qwen3-coder-next.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/xiaomimimo-mimo-v2-5.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x3/zai-org-glm-5-3-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-32gb-x4/deepseek-ai-deepseek-v4-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-57gb/qwen-qwen2-5-0-5b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/radeon-ai-pro-r9700-57gb/qwen-qwen3-6-35b-a3b.html</loc></url>
@@ -207,6 +255,8 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb/weiboai-vibethinker-3b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb/xhtoken-spark-x2-5-1-7b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb/xhtoken-spark-x2-5-4b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb-x2/allenai-olmo-3-32b-think.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb-x2/arcee-ai-trinity-mini.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3060-12gb-x2/bartowski-deepseek-r1-distill-qwen-14b-gguf.html</loc></url>
@@ -309,10 +359,12 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/jackrong-deepseek-v4-pro-qwen3-5-9b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/jackrong-qwopus3-5-27b-v3.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/jackrong-qwopus3-5-27b-v3-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/liquidai-lfm2-5-1-2b-instruct-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/llmfan46-qwen3-6-27b-uncensored-heretic-v2-native-mtp-preserved-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/lmstudio-community-openreasoning-nemotron-32b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/lorbus-qwen3-6-27b-int4-autoround.html</loc></url>
-  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/lucebox-deepseek-v4-flash-rocmfpx.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/lucebox-deepseek-v4-flash-0731-rocmfp3.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/mia-ailab-qwen3-8-27b-exl3-3-5bpw.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/microsoft-phi-4-mini-reasoning.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/microsoft-phi-4-reasoning.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/migtissera-tess-4-27b.html</loc></url>
@@ -338,8 +390,12 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-gemma-4-31b-it-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-phi-4-mini-reasoning-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-14b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-5-0-8b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-5-27b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-5-4b-mtp-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-5-9b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-6-27b-mtp-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/zai-org-glm-z1-32b-0414.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb/zai-org-glm-z1-rumination-32b-0414.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-3090-24gb-x2/anonimousa-qwen3-8-flash-next-reap-256-duo-gguf.html</loc></url>
@@ -395,9 +451,11 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-12gb/apodex-apodex-1-1-mini.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-12gb/atomicchat-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-12gb/nvidia-nvidia-nemotron-3-nano-4b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-12gb/turboderp-qwen3-8-27b-exl3.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-12gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5070-ti-16gb/liquidai-lfm2-5-8b-a1b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5080-16gb/meta-llama-meta-llama-3-8b-instruct.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5080-16gb/qwen-qwen3-30b-a3b-instruct-2507.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-text-nvfp4-mtp-xs.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/aidxteam-qwen3-coder-30b-a3b-instruct-awq.html</loc></url>
@@ -405,6 +463,8 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/cyankiwi-ornith-1-0-35b-awq-int4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/google-gemma-4-26b-a4b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/google-gemma-4-26b-a4b-it-qat-q4-0-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/neroued-qwen3-8-27b-nvfp4-ninfer.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/nvidia-nvidia-nemotron-3-nano-30b-a3b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/nvidia-qwen3-6-27b-nvfp4.html</loc></url>
@@ -418,6 +478,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/qwen-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/qwen-qwen3-6-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/radixark-qwen3-8-27b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/rdtand-ornith-1-0-35b-prismaaura-4-75bit-vllm-mtp.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/sakamakismile-gemma-4-12b-coder-fable5-composer2-5-mtp-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/sakamakismile-huihui-qwen3-6-27b-abliterated-nvfp4-mtp.html</loc></url>
@@ -425,7 +486,9 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/sakamakismile-qwen3-6-27b-text-nvfp4-mtp.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/sakamakismile-qwen3-8-27b-mtp-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-deepseek-v4-flash-0731-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-gemma-4-26b-a4b-it-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-qwen3-6-27b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-qwen3-6-35b-a3b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-qwen3-6-35b-a3b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-5090-32gb/unsloth-qwen3-8-27b-nvfp4.html</loc></url>
@@ -437,16 +500,20 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-a5000-24gb/qwen-qwen2-5-1-5b-instruct-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-a5000-24gb/unsloth-qwen3-6-27b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-a6000-48gb-x2/cyankiwi-qwen3-6-27b-awq-bf16-int4.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/aiconjured-qwen3-8-27b-uncensored-hauhaucs-aggressive-mtp-gguf-q8-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/cerebras-minimax-m2-5-reap-139b-a10b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/meta-models-muse-glimmer-30b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/meta-models-muse-glimmer-30b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/moonshotai-kimi-linear-48b-a3b-instruct.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/nvidia-qwen3-6-27b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/nvidia-qwen3-6-35b-a3b-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/openai-gpt-oss-120b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/orcarouter-qwen3-8-27b-uncensored-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/poolside-laguna-s-2-1-nvfp4.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/qwen-qwen3-6-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/qwen-qwen3-6-27b-fp8.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/qwen-qwen3-8-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/qwen-qwen3-8-27b-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/sakamakismile-qwen3-6-27b-text-nvfp4-mtp.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb/unsloth-muse-glimmer-30b-gguf.html</loc></url>
@@ -457,6 +524,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x2/deepseek-ai-deepseek-v4-flash-dspark.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x2/fraserprice-deepseek-v4-flash-abliterated-dspark.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x2/fraserprice-deepseek-v4-flash-dspark.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x2/qwen-qwen3-8-flash-next.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x2/zai-org-glm-5-3-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x4/deepseek-ai-deepseek-v4-flash-0731.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x4/fraserprice-deepseek-v4-flash-abliterated-dspark.html</loc></url>
@@ -465,10 +533,13 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x4/madeby561-glm-5-2-mxfp8-nvfp4-nf3-hybrid.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x4/madeby561-glm-5-2-nvfp4-reap-504b-term.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-96gb-x4/unsloth-glm-5-2-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-max-q-workstation-edition-96gb-x4/deepseek-ai-deepseek-v4-1-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/0xsero-qwen3-5-122b-a10b-reap-20.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/google-gemma-4-31b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/hauhaucs-qwen3-5-122b-a10b-uncensored-hauhaucs-aggressive.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/inclusionai-ling-2-6-flash.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/openai-gpt-oss-120b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/orcarouter-qwen3-8-27b-uncensored-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/qwen-qwen3-6-27b-fp8.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx-pro-6000-blackwell-workstation-edition-96gb/qwen-qwen3-6-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx3060-rtx2080-pooled-20gb-20gb/deepseek-ai-deepseek-coder-v2-lite-instruct.html</loc></url>
@@ -478,13 +549,20 @@
   <url><loc>https://REPLACE-DOMAIN/p/rtx3060-rtx2080-pooled-20gb-20gb/meta-llama-llama-3-1-8b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx3060-rtx2080-pooled-20gb-20gb/qwen-qwen2-5-14b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rtx3060-rtx2080-pooled-20gb-20gb/qwen-qwen2-5-coder-14b-instruct.html</loc></url>
-  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/deepreinforce-ai-ornith-1-0-9b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/google-gemma-4-e2b-it.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/internscience-agents-a1-4b-q4-k-m-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/jackrong-qwopus3-5-27b-v3.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/lgai-exaone-exaone-3-5-7-8b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/liquidai-lfm2-5-1-2b-instruct-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/liquidai-lfm2-8b-a1b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/openbmb-minicpm5-1b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/openbmb-minicpm5-1b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/openbmb-minicpm5-2b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/ornith-ai-ornith-1-0-9b.html</loc></url>
-  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/deepreinforce-ai-ornith-1-0-9b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/ornith-ai-ornith-1-0-9b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/ornith-ai-ornith-1-5-9b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/prism-ml-bonsai-27b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb/qwen-qwen3-4b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/deepseek-ai-deepseek-r1-distill-qwen-7b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/google-gemma-4-12b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/google-gemma-4-12b-it-qat-q4-0-gguf.html</loc></url>
@@ -504,6 +582,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/openbmb-minicpm5-1b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/openbmb-minicpm5-1b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/ornith-ai-ornith-1-0-9b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/ornith-ai-ornith-1-0-9b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/poolside-laguna-xs-2-1-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/qwen-qwen3-4b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-570-4gb-x2/rwkv-rwkv7-goose-world3-2-9b-hf.html</loc></url>
@@ -523,6 +602,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/bahushruth-qwen3-6-35b-a3b-abliterated-v4-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/jackrong-qwopus3-6-27b-coder-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/jackrong-qwopus3-6-27b-v2-mtp-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/openai-gpt-oss-20b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/qwen-qwen3-5-27b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/qwen-qwen3-5-35b-a3b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/qwen-qwen3-5-9b.html</loc></url>
@@ -532,6 +612,11 @@
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/unsloth-qwen3-5-9b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/unsloth-qwen3-6-27b-mtp-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb/unsloth-qwen3-8-27b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/agentionai-signal-3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/google-gemma-4-26b-a4b-it.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/poolside-laguna-xs-2-1.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/qwen-qwen3-8-27b.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/qwen-qwen3-coder-30b-a3b-instruct.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-7900-xtx-24gb-x2/teichai-qwen3-8-27b-fable-distill-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-9060-xt-16gb/google-gemma-4-e4b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/rx-9060-xt-16gb/qwen-qwen3guard-gen-4b.html</loc></url>
@@ -556,9 +641,10 @@
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/hauhaucs-qwen3-6-35b-a3b-uncensored-hauhaucs-aggressive.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/jackrong-gemopus-4-26b-a4b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/jackrong-qwopus3-5-27b-v3.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/jackrong-qwopus3-8-27b-flash.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/jcbtc-qwen3-8-27b-iu4-kairic-edge.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/kwaipilot-kat-coder-v2-5-dev.html</loc></url>
-  <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/lucebox-deepseek-v4-flash-rocmfpx.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/lucebox-deepseek-v4-flash-0731-rocmfp3.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/nousresearch-hermes-3-llama-3-1-8b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/nvidia-llama-3-1-nemotron-70b-instruct-hf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/ornith-ai-ornith-1-0-35b-gguf.html</loc></url>
@@ -584,7 +670,6 @@
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/unsloth-qwen3-8-flash-next-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-128gb/unsloth-qwen3-coder-30b-a3b-instruct-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/bartowski-deepseek-r1-distill-qwen-14b-gguf.html</loc></url>
-  <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/deepreinforce-ai-ornith-1-0-9b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/google-gemma-3-12b-it.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/internscience-agents-a1-q4-k-m-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/meta-models-muse-glimmer-30b.html</loc></url>
@@ -592,6 +677,7 @@
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/openai-gpt-oss-20b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/ornith-ai-ornith-1-0-35b.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/ornith-ai-ornith-1-0-35b-gguf.html</loc></url>
+  <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/ornith-ai-ornith-1-0-9b-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/poolside-laguna-s-2-1.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/poolside-laguna-xs-2-1-gguf.html</loc></url>
   <url><loc>https://REPLACE-DOMAIN/p/ryzen-ai-max-395-64gb/qwen-qwen3-6-27b.html</loc></url>

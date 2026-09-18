@@ -11,7 +11,7 @@ user output + machine-readable artifacts.
 | `lib.rs` | exposes modules + `Runtime` enum for integration tests |
 | `tuning_search.rs` | L03A: llama.cpp serving space (frozen dim order: ngl, ctx, threads, kv_cache, flash_attn), TPE `run_lab` via **argos-opt** (vendored at `third_party/argos-opt` — clean-room reconstruction of the lost tree `31feea6`, owner-authorized 2026-09-18; replace with the original tree when it resurfaces, then publish as git/registry dep per backlog A11), deterministic SIM `stub_objective` (every output SIM-marked, never a real claim) |
 | `lab_recorder.rs` | L01 slice: `experiments/<label>/{meta.json,index.jsonl,best.json}` — append-only, one JSON line per trial, null = failed trial; dirs immutable once created |
-| `collect_system_topology.rs` | GPU/CPU/OS fingerprint — macOS via sysctl/system_profiler; **Linux gap (backlog A4)** |
+| `collect_system_topology.rs` | GPU/CPU/OS fingerprint — macOS via sysctl/system_profiler; **Linux via nvidia-smi + /proc/cpuinfo + /etc/os-release (A4 done 2026-09-18; non-NVIDIA Linux GPUs undetected by design — empty, never invented)** |
 | `detect_runtime_installations.rs` | PATH scan for llama-cli/ollama + versions |
 | `execute_benchmark_scenario.rs` | scenario → engine run; mock mode built-in |
 | `parse_runtime_output.rs` | engine stdout → Metrics (mirror of packages/runtime-probes logic) |

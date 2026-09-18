@@ -1,0 +1,41 @@
+{
+  "snapshotAt": "2026-09-14T00:49:27.000Z",
+  "cells": [
+    {
+      "rigKey": "rtx-3090-24gb",
+      "modelSlug": "qwen3-8b-q4",
+      "bits": 4,
+      "n": 3,
+      "tokSOutMedian": 44.2,
+      "tokSPrefillMedian": 980.0,
+      "ttftMsMedian": 640,
+      "peakVramGbMedian": 6.1,
+      "maxContextTested": 32768,
+      "engines": ["llama.cpp"]
+    },
+    {
+      "rigKey": "rtx-3090-24gb",
+      "modelSlug": "qwen3-14b-q4",
+      "bits": 4,
+      "n": 1,
+      "tokSOutMedian": 28.7,
+      "tokSPrefillMedian": null,
+      "ttftMsMedian": 1100,
+      "peakVramGbMedian": 9.8,
+      "maxContextTested": 16384,
+      "engines": ["llama.cpp"]
+    },
+    {
+      "rigKey": "m4-pro-24gb",
+      "modelSlug": "qwen3-8b-q4",
+      "bits": 4,
+      "n": 2,
+      "tokSOutMedian": null,
+      "tokSPrefillMedian": null,
+      "ttftMsMedian": 900,
+      "peakVramGbMedian": 5.5,
+      "maxContextTested": 8192,
+      "engines": ["llama.cpp"]
+    }
+  ]
+}

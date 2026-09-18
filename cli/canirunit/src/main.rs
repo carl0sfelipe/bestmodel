@@ -1,7 +1,7 @@
 use std::process::exit;
 
 use canirunit::transfer::GpuTransferSpec;
-use canirunit::{suggest_with_transfer, RunEntry};
+use canirunit::{runs_from_pool, suggest_with_transfer, PoolFile, RunEntry};
 use std::collections::BTreeMap;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -39,10 +39,28 @@ fn run(cli: &CliArgs) -> Result<(), i32> {
         eprintln!("error: unable to read runs file '{}': {err}", cli.runs_path);
         1
     })?;
-    let runs: Vec<RunEntry> = serde_json::from_str(&runs_raw).map_err(|err| {
-        eprintln!("error: runs file is not a JSON array of run entries: {err}");
-        1
-    })?;
+    // Two accepted shapes: a JSON array of leaderboard run entries (the
+    // designed export), or a derived pool snapshot ({snapshotAt, cells}) —
+    // in-repo, offline, labeled `harvested`.
+    let (runs, source_note) = match serde_json::from_str::<Vec<RunEntry>>(&runs_raw) {
+        Ok(runs) => (runs, None),
+        Err(_) => {
+            let pool: PoolFile = serde_json::from_str(&runs_raw).map_err(|err| {
+                eprintln!(
+                    "error: runs file is neither a JSON array of run entries nor a pool snapshot: {err}"
+                );
+                1
+            })?;
+            let count = pool.cells.len();
+            let snapshot = pool.snapshot_at.clone();
+            (runs_from_pool(&pool), Some((snapshot, count)))
+        }
+    };
+    if let Some((snapshot, cells)) = source_note {
+        eprintln!(
+            "note: loaded pool snapshot {snapshot} ({cells} cells) — every entry is source_class=harvested (community medians, not signed runs)"
+        );
+    }
     let specs: Option<BTreeMap<String, GpuTransferSpec>> = cli.gpus_path.as_ref().map(|path| {
         let raw = std::fs::read_to_string(path)
             .unwrap_or_else(|err| panic!("unable to read gpu specs '{path}': {err}"));
@@ -117,6 +135,11 @@ fn print_usage() {
     println!();
     println!("USAGE:");
     println!("    canirunit suggest --gpu <gpu_model_id> --task <metric> --runs <runs.json> [--gpus gpu_transfer_specs.json]");
+    println!();
+    println!("    --runs accepts either a leaderboard run-entry export (JSON array)");
+    println!("    or the in-repo derived pool snapshot apps/web/data/derived/pool.json");
+    println!("    ({{snapshotAt, cells}} — entries load as source_class=harvested).");
+    println!("    Available GPU ids in the pool: jq -r '[.cells[].rigKey] | unique[]' <pool.json>");
     println!();
     println!("TASK METRICS:");
     println!("    decode_tok_s       LLM decode throughput (higher is better)");

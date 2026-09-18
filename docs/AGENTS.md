@@ -10,6 +10,7 @@ English.
 | `findings.md` | Numbered calibration findings (F1–F8) + open decisions | Before touching predictors, thresholds, contracts |
 | `backlog.md` | Canonical roadmap: tracks A (Local Lab), B (claims/votes), C (virality), D (diffusion) | Before proposing new work |
 | `research-2026-08.md` | Competitive landscape teardown + tooling research | Before building CLI v2 / social features |
+| `agent-quickstart.md` | Cold-start runbook: build, detect hardware, rank models offline, run the probe | First action on a fresh machine/checkout |
 | `en/submission-tiers.md` | Two-tier reporting design (verified + claimed) | Contract/reporting work |
 
 Rules:

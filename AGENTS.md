@@ -10,10 +10,13 @@
 
 1. This file (map + golden rules).
 2. `README.md` — product overview, quickstart.
-3. `docs/architecture.md` — module dependency graph.
-4. `docs/findings.md` — numbered calibration findings (open decisions reference these).
-5. `docs/backlog.md` — the canonical backlog (tracks A/B/C/D) and open questions.
-6. Then the relevant subtree map (every directory has its own `AGENTS.md`).
+3. `docs/agent-quickstart.md` — cold start on the machine you run on
+   (agent or human): build, detect hardware, rank models for it, run the
+   probe. Every command works offline from a public clone.
+4. `docs/architecture.md` — module dependency graph.
+5. `docs/findings.md` — numbered calibration findings (open decisions reference these).
+6. `docs/backlog.md` — the canonical backlog (tracks A/B/C/D) and open questions.
+7. Then the relevant subtree map (every directory has its own `AGENTS.md`).
 
 ## Map system (where things live)
 

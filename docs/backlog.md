@@ -30,6 +30,12 @@ Open questions from the L01 spec (need a decision before/during build):
   `--no-upload`. Confirm default direction.
 - **A4 — Linux topology collection** (prerequisite): nvidia-smi/lspci/procfs in
   `collect_system_topology`; without it fleet fingerprints are empty.
+  Update 2026-09-18: DONE for the NVIDIA + common-Linux path —
+  `/etc/os-release` + `/proc/cpuinfo` + `nvidia-smi` (name, VRAM MiB),
+  unit-tested parsers, verified on a real RTX 3090 box. macOS unchanged.
+  Remaining gap (deliberate): non-NVIDIA Linux GPUs (AMD/Intel discrete)
+  stay undetected — empty list, never invented; add lspci/rocm mapping
+  only when the fleet actually reports such rigs.
 - **A5 — Roofline threshold calibration**: 0.92 rule vs measured 0.94 on real
   QwQ-32B runs (lab runs quarantined pending decision).
 - **A6 — MoE residency model**: full-offload footprint vs active-weights formula.

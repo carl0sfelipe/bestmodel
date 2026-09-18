@@ -23,6 +23,7 @@ community-measured pool feeding a calibrated predictor:
 | [`apps/pool-backend/`](apps/pool-backend) | Pool sync + plausibility curation + local match API |
 | [`packages/`](packages) | `domain-schema`, `roofline-kernel` (prediction), `runtime-probes`, `recommendation-engine`, `fake-adapters` |
 | [`cli/benchmark-probe/`](cli/benchmark-probe) | Rust measurement agent: detects hardware/runtimes, runs standardized scenarios, signs reports (Ed25519), uploads |
+| [`cli/canirunit/`](cli/canirunit) | `suggest`: deterministic best-model ranking for a GPU from the measured pool (no LLM) |
 | [`cli/comfy-lab/`](cli/comfy-lab) | Diffusion vertical: ComfyUI probe, workflow analyzer, lab runner |
 | [`infra/`](infra) | Docker stack, migrations, seed catalogs, end-to-end gate |
 | [`docs/`](docs) | Architecture, calibration findings, backlog, research |
@@ -41,6 +42,12 @@ make gate          # end-to-end: CLI signed report → API → worker → leader
 
 Requires Docker, Python 3.11+ via [uv](https://docs.astral.sh/uv/), and Rust
 (for the CLI).
+
+**On a machine you just landed on** (yours or your AI agent's) and don't
+want the full stack? [`docs/agent-quickstart.md`](docs/agent-quickstart.md)
+is the offline path: build the two CLIs, detect the local hardware, rank
+the best models for it from the in-repo pool snapshot, run the probe —
+no Docker, no keys, no API.
 
 ## How scoring works
 

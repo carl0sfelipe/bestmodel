@@ -42,6 +42,53 @@ fn default_source_class() -> String {
     "measured_signed".to_string()
 }
 
+/// Derived pool snapshot (`apps/web/data/derived/pool.json`): community
+/// medians exported by the web pipeline. Accepted by `suggest --runs` so a
+/// cold checkout can rank models without hitting the API.
+#[derive(Deserialize, Debug)]
+pub struct PoolFile {
+    #[serde(rename = "snapshotAt")]
+    pub snapshot_at: String,
+    #[serde(default)]
+    pub cells: Vec<PoolCell>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct PoolCell {
+    #[serde(rename = "rigKey")]
+    pub rig_key: String,
+    #[serde(rename = "modelSlug")]
+    pub model_slug: String,
+    /// Median decode throughput of the cell, if the pool measured it.
+    #[serde(rename = "tokSOutMedian", default)]
+    pub tok_s_out_median: Option<f64>,
+}
+
+/// Convert pool cells into run entries. Every entry is labeled `harvested`
+/// (community-reported medians, never signed CLI runs) so the confidence
+/// ladder weights them as such and every explanation says where the number
+/// came from. Cells without a decode median are dropped — they carry no
+/// value for `decode_tok_s`.
+pub fn runs_from_pool(pool: &PoolFile) -> Vec<RunEntry> {
+    pool.cells
+        .iter()
+        .filter_map(|cell| {
+            cell.tok_s_out_median.map(|tok_s| RunEntry {
+                run_id: format!("{}/{}", cell.rig_key, cell.model_slug),
+                gpu_model_id: cell.rig_key.clone(),
+                model_release_id: cell.model_slug.clone(),
+                recipe_id: None,
+                source_class: "harvested".to_string(),
+                trust_score: None,
+                age_days: None,
+                decode_tok_s: Some(tok_s),
+                seconds_per_clip: None,
+                frames_per_s: None,
+            })
+        })
+        .collect()
+}
+
 #[derive(Serialize, Debug, PartialEq)]
 pub struct Suggestion {
     pub model_release_id: String,

@@ -25,7 +25,23 @@ cargo build -p benchmark-probe --release
 export PATH="$PWD/target/release:$PATH"
 ```
 
-### Passo 2 — Gere o seu comando pronto
+### Passo 2 — Quer saber o que rodar primeiro? (estimativa offline)
+
+Antes de medir, veja o que a comunidade já mediu no seu hardware
+(determinístico, sem LLM; offline a partir do clone):
+
+```bash
+cargo build -p canirunit --release
+jq -r '[.cells[].rigKey] | unique[]' apps/web/data/derived/pool.json   # acha o id do seu rig
+./target/release/canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s \
+    --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json
+```
+
+Células do pool entram como `harvested` (medianas da comunidade, confiança
+menor que `measured_signed`) — cada sugestão diz de quantos runs vem o
+número. Caminho completo para agentes: `docs/agent-quickstart.md`.
+
+### Passo 3 — Gere o seu comando pronto
 
 O probe detecta seu hardware (GPU, CPU, SO) sozinho. Peça o comando:
 
@@ -49,12 +65,12 @@ benchmark-probe --runtime comfyui \
   --print-command
 ```
 
-### Passo 3 — Rode o benchmark
+### Passo 4 — Rode o benchmark
 
 Cole o comando gerado. Ao final aparecem as métricas padronizadas
 (`Decode`, `Peak VRAM`, e para vídeo `seconds_per_clip`/`frames_per_s`).
 
-### Passo 4 — Assine e envie
+### Passo 5 — Assine e envie
 
 Rode o mesmo comando acrescentando `--sign --upload`:
 

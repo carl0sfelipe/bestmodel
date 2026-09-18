@@ -2,18 +2,39 @@
 //! over the llama.cpp serving-flag space, plus the deterministic SIM stub
 //! objective that lets the whole lab loop run without a rig.
 //!
-//! Owner decision 2026-08-30: the first real objective is llama.cpp flags
-//! on the 3090; the search is argos-opt's TPE. This module is the ONLY
-//! place that knows both the flag space and how to swap stub -> real.
+//! The first real objective is llama.cpp flags on the 3090; the search is a
+//! seeded public TPE implementation. This module is the ONLY place that knows
+//! both the flag space and how to swap stub -> real.
 
+use std::collections::HashSet;
 use std::path::Path;
 
-use argos_opt::{Dim, Optimizer, Space, TpeConfig, TrialResult, Value};
+use optimizer::parameter::{CategoricalParam, IntParam, Parameter};
+use optimizer::sampler::TpeSampler;
+use optimizer::{Direction, Study, Trial};
+use rand::Rng;
+use serde::Serialize;
 
 use crate::lab_recorder::{LabBest, LabMeta, LabRecorder};
 
 pub const KV_CHOICES: [&str; 3] = ["f16", "q8_0", "q4_0"];
 pub const FA_CHOICES: [&str; 2] = ["off", "on"];
+
+/// Stable lab-artifact value schema. It deliberately remains independent of
+/// the optimizer crate so recorded JSON stays compatible across upgrades.
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub enum Value {
+    Int(i64),
+    Real(f64),
+    Cat(usize),
+}
+
+/// Stable lab-artifact dimension schema in the frozen serving-flag order.
+#[derive(Clone, Debug, Serialize)]
+pub enum Dim {
+    Integer { low: i64, high: i64 },
+    Categorical { choices: Vec<String> },
+}
 
 // ── SIM stub constants (documented fake; nothing here leaves the machine
 //    as a real claim). Rig: ~30B q4 model (18 GiB weights at full
@@ -27,14 +48,22 @@ const STUB_BASE_TPS: f64 = 30.0;
 
 /// The llama.cpp serving space (frozen dim order — see spec L03A).
 pub struct LabSpace {
-    space: Space,
+    dims: Vec<Dim>,
+    ngl: IntParam,
+    ctx: IntParam,
+    threads: IntParam,
+    kv_cache: CategoricalParam<usize>,
+    flash_attn: CategoricalParam<usize>,
 }
 
 impl LabSpace {
     pub fn new() -> Result<LabSpace, String> {
-        let space = Space::new(vec![
+        let dims = vec![
             Dim::Integer { low: 0, high: 999 }, // ngl (-ngl)
-            Dim::Integer { low: 512, high: 32768 }, // ctx (-c)
+            Dim::Integer {
+                low: 512,
+                high: 32768,
+            }, // ctx (-c)
             Dim::Integer { low: 1, high: 32 },  // threads (-t)
             Dim::Categorical {
                 choices: KV_CHOICES.iter().map(|s| s.to_string()).collect(),
@@ -42,12 +71,40 @@ impl LabSpace {
             Dim::Categorical {
                 choices: FA_CHOICES.iter().map(|s| s.to_string()).collect(),
             },
-        ])?;
-        Ok(LabSpace { space })
+        ];
+        Ok(LabSpace {
+            dims,
+            ngl: IntParam::new(0, 999).name("ngl"),
+            ctx: IntParam::new(512, 32768).name("ctx"),
+            threads: IntParam::new(1, 32).name("threads"),
+            kv_cache: CategoricalParam::new(vec![0, 1, 2]).name("kv_cache"),
+            flash_attn: CategoricalParam::new(vec![0, 1]).name("flash_attn"),
+        })
     }
 
-    pub fn space(&self) -> &Space {
-        &self.space
+    pub fn dims(&self) -> &[Dim] {
+        &self.dims
+    }
+
+    fn suggest(&self, trial: &mut Trial) -> Result<Vec<Value>, String> {
+        Ok(vec![
+            Value::Int(self.ngl.suggest(trial).map_err(|e| e.to_string())?),
+            Value::Int(self.ctx.suggest(trial).map_err(|e| e.to_string())?),
+            Value::Int(self.threads.suggest(trial).map_err(|e| e.to_string())?),
+            Value::Cat(self.kv_cache.suggest(trial).map_err(|e| e.to_string())?),
+            Value::Cat(self.flash_attn.suggest(trial).map_err(|e| e.to_string())?),
+        ])
+    }
+
+    /// Uniform random draw for the test-only brute-force baseline.
+    pub fn sample_uniform(&self, rng: &mut impl Rng) -> Vec<Value> {
+        vec![
+            Value::Int(rng.gen_range(0..=999)),
+            Value::Int(rng.gen_range(512..=32768)),
+            Value::Int(rng.gen_range(1..=32)),
+            Value::Cat(rng.gen_range(0..KV_CHOICES.len())),
+            Value::Cat(rng.gen_range(0..FA_CHOICES.len())),
+        ]
     }
 
     /// Ready-to-paste llama-server command for a params vector.
@@ -138,7 +195,11 @@ pub fn stub_objective(params: &[Value]) -> Result<f64, ()> {
     let gpu_speedup = 3.0 + 9.0 * (ngl as f64 / 999.0).powf(0.7);
     let ctx_penalty = 1.0 / (1.0 + ctx as f64 / 16384.0);
     let kv_bonus = [1.0, 1.08, 1.15][kv];
-    let fa_bonus = if fa { 1.0 + 0.10 * ctx as f64 / 32768.0 } else { 1.0 };
+    let fa_bonus = if fa {
+        1.0 + 0.10 * ctx as f64 / 32768.0
+    } else {
+        1.0
+    };
     // threads only help the CPU-resident share of the workload
     let threads_term =
         1.0 + 0.15 * (1.0 - ngl as f64 / 999.0) * (1.0 + threads as f64).ln() / 33f64.ln();
@@ -160,7 +221,7 @@ pub struct LabOutcome {
     pub lab_dir: std::path::PathBuf,
 }
 
-/// Run the intelligent lab loop: TPE (argos-opt) over the serving space,
+/// Run the intelligent lab loop: TPE over the serving space,
 /// every trial recorded to `out_root/<label>/`, failed trials logged as
 /// null and excluded from best. The meta marks the run as SIMULATION —
 /// this is the stub-proof path; the real-objective path (L02, after the
@@ -181,33 +242,41 @@ pub fn run_lab(
             seed,
             max_evals,
             objective: "stub".into(),
-            space: space.space().dims().to_vec(),
+            space: space.dims().to_vec(),
             simulation: true,
         },
     )?;
-    let mut opt = Optimizer::new(space.space().clone(), seed, TpeConfig::default());
+    let sampler = TpeSampler::builder()
+        .gamma(0.5)
+        .n_startup_trials(0)
+        .seed(seed)
+        .build()
+        .map_err(|e| format!("create TPE sampler: {e}"))?;
+    // TPE is implemented as a minimizer, so feed it -tok/s. The recorded
+    // and selected value stays raw tok/s, preserving maximize semantics.
+    let study: Study<f64> = Study::with_sampler(Direction::Minimize, sampler);
+    let mut seen = HashSet::new();
+    let mut best: Option<(Vec<Value>, f64)> = None;
     for trial in 0..max_evals {
-        let params = opt.ask();
-        // THE OBJECTIVE IS tok/s (higher is better); argos-opt MINIMIZES.
-        // Feed loss = -tok/s to the engine, record the raw tok/s for
-        // humans. Inverting this inverts the search — caught by test
-        // tpe_beats_random_baseline (TPE converged to the WORST corner).
+        let mut optimizer_trial = study.ask();
+        let params = unique_params(space.suggest(&mut optimizer_trial)?, &mut seen);
         let result = match objective(&params) {
             Ok(v) => {
                 recorder.append(trial, &params, Some(v))?;
-                TrialResult::Value(-v)
+                if best.as_ref().is_none_or(|(_, best_value)| v > *best_value) {
+                    best = Some((params.clone(), v));
+                }
+                Ok(-v)
             }
             Err(()) => {
                 recorder.append(trial, &params, None)?;
-                TrialResult::Failed
+                Err("objective failed")
             }
         };
-        opt.tell(params, result);
+        study.tell(optimizer_trial, result);
     }
-    // best() = lowest loss = HIGHEST tok/s; flip the sign back for humans.
-    let (best_params, best_loss) =
-        opt.best().ok_or_else(|| "no successful trial in the whole budget".to_string())?;
-    let best_value = -best_loss;
+    let (best_params, best_value) =
+        best.ok_or_else(|| "no successful trial in the whole budget".to_string())?;
     let best = LabBest {
         server_command: space.to_server_command(&best_params, "MODEL.gguf"),
         params: best_params.clone(),
@@ -222,6 +291,46 @@ pub fn run_lab(
     })
 }
 
+fn params_key(params: &[Value]) -> String {
+    params
+        .iter()
+        .map(|value| match value {
+            Value::Int(value) => format!("i{value}"),
+            Value::Real(value) => format!("r{:016x}", value.to_bits()),
+            Value::Cat(value) => format!("c{value}"),
+        })
+        .collect::<Vec<_>>()
+        .join("|")
+}
+
+/// The public optimizer may legitimately re-suggest a mixed discrete point.
+/// Labs promise that an evaluated point never repeats, so deterministically
+/// move a duplicate to the nearest unseen threads/ctx neighbor. This leaves
+/// normal TPE proposals untouched, terminates for the finite search budget,
+/// and preserves seed reproducibility and the recorded five-value shape.
+fn unique_params(mut params: Vec<Value>, seen: &mut HashSet<String>) -> Vec<Value> {
+    if seen.insert(params_key(&params)) {
+        return params;
+    }
+
+    let threads = match params[2] {
+        Value::Int(value) => value,
+        ref other => panic!("threads dim is Integer, got {other:?}"),
+    };
+    let ctx = match params[1] {
+        Value::Int(value) => value,
+        ref other => panic!("ctx dim is Integer, got {other:?}"),
+    };
+    for offset in 1..=(32 * 32_257) {
+        params[2] = Value::Int(1 + (threads - 1 + offset as i64) % 32);
+        params[1] = Value::Int(512 + (ctx - 512 + (offset as i64 / 32)) % 32_257);
+        if seen.insert(params_key(&params)) {
+            return params;
+        }
+    }
+    unreachable!("lab budget cannot exhaust the frozen threads/ctx space")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -230,7 +339,13 @@ mod tests {
     fn server_command_frozen_order() {
         let sp = LabSpace::new().unwrap();
         let cmd = sp.to_server_command(
-            &[Value::Int(999), Value::Int(8192), Value::Int(8), Value::Cat(2), Value::Cat(1)],
+            &[
+                Value::Int(999),
+                Value::Int(8192),
+                Value::Int(8),
+                Value::Cat(2),
+                Value::Cat(1),
+            ],
             "MODEL.gguf",
         );
         assert_eq!(
@@ -242,16 +357,34 @@ mod tests {
     #[test]
     fn oom_corner_is_failed_trial() {
         // full offload + max ctx + f16 KV: over the 17 GiB budget
-        let p = &[Value::Int(999), Value::Int(32768), Value::Int(8), Value::Cat(0), Value::Cat(1)];
+        let p = &[
+            Value::Int(999),
+            Value::Int(32768),
+            Value::Int(8),
+            Value::Cat(0),
+            Value::Cat(1),
+        ];
         assert!(stub_objective(p).is_err());
         // small ctx same flags: fits
-        let p = &[Value::Int(999), Value::Int(512), Value::Int(8), Value::Cat(0), Value::Cat(1)];
+        let p = &[
+            Value::Int(999),
+            Value::Int(512),
+            Value::Int(8),
+            Value::Cat(0),
+            Value::Cat(1),
+        ];
         assert!(stub_objective(p).is_ok());
     }
 
     #[test]
     fn stub_is_deterministic() {
-        let p = vec![Value::Int(900), Value::Int(4096), Value::Int(8), Value::Cat(1), Value::Cat(1)];
+        let p = vec![
+            Value::Int(900),
+            Value::Int(4096),
+            Value::Int(8),
+            Value::Cat(1),
+            Value::Cat(1),
+        ];
         let a = stub_objective(&p).unwrap();
         let b = stub_objective(&p).unwrap();
         assert_eq!(a, b);

@@ -2,9 +2,9 @@
 
 > Slice of L01/L03 (`specs/en/L01-cli-v2-local-lab.md`), pulled ahead of the
 > L02 HTTP sweep runner so the intelligent search is proven rig-independent.
-> Owner decision 2026-08-30: the optimizer is **argos-opt** (`~/Work/argos-opt`,
-> dual MIT/Apache-2.0) — this answers open question 1 of the L01 cluster
-> ("embedded TPE vs argmin BO": neither; our own no-deps TPE crate).
+> The original 2026-08-30 implementation used a private **argos-opt** path
+> dependency. As of 2026-09-17 the public repository uses the maintained
+> crates.io `optimizer` crate so a clean checkout can build the CLI.
 > The first real objective is llama.cpp serving flags on the 3090 — searched
 > by TPE, NEVER by brute force/grid as the primary strategy (grid/random
 > exist only as measurement baselines).
@@ -12,11 +12,11 @@
 ## Objective
 
 Não invente número, prazo ou fonte além dos listados em Verified data —
-every number below is either measured, pinned by argos-opt's spec, or
+every number below is either measured, pinned by the optimizer contract, or
 marked [A DEFINIR] until measured.
 
 `benchmark-probe lab --stub --trials N` runs an intelligent search over the
-llama.cpp serving-flag space using argos-opt's TPE, records every trial to a
+llama.cpp serving-flag space using seeded TPE, records every trial to a
 resumable lab directory (L01 recorder format), and prints the best config as
 a ready-to-paste `llama-server` command. The same binary, with the stub
 swapped for the real bench script (owner's "sobe" on the 3090), is the L02
@@ -24,13 +24,10 @@ integration — the loop does not change.
 
 ## Verified data
 
-- argos-opt API consumed (verificado 2026-08-30, main 31feea6): `Space::new`,
-  `Dim::{Continuous, Integer, Categorical}`, `Optimizer::new/resume`,
-  `run(max_evals, f) -> usize`, `best()`, `TrialLog::save/load`,
-  `TrialResult::{Value, Failed}`; deps of argos-opt: serde/serde_json only.
-- Path dependency until the crate is published (name pending):
-  `argos-opt = { path = "../../../argos-opt" }` (verificado: resolves to
-  ~/Work/argos-opt from cli/benchmark-probe).
+- Public optimizer API consumed (verified 2026-09-17, crates.io `optimizer`
+  1.0.1): seeded `TpeSampler`, `Study::with_sampler`, `ask`/`tell`, and typed
+  integer/categorical parameters. Stable serialized `Dim`/`Value` types remain
+  local so lab artifacts do not depend on the optimizer crate's internals.
 - llama.cpp flag surface (llama-optimus pattern, L01 spec): `-ngl`, `-c`
   (ctx), `-t` (threads), KV cache type (`--cache-type-k/-v`), `-fa`
   (flash-attention).
@@ -43,7 +40,7 @@ integration — the loop does not change.
 // tuning_search.rs
 pub struct LabSpace;                       // the llama.cpp serving space
 LabSpace::new() -> Result<LabSpace, String>
-LabSpace::space(&self) -> &argos_opt::Space
+LabSpace::dims(&self) -> &[Dim]
 LabSpace::to_server_command(&self, params: &[Value], model: &str) -> String
 // dims (FROZEN order):
 //   0 ngl        Integer   0..=999
@@ -90,7 +87,7 @@ Behavior: exit 0 prints the best server command + tok/s + trial count;
 says `SIM`. Failed trials (OOM in the stub) appear in index.jsonl as
 `"value": null` and never win `best`. SIGN CONTRACT (load-bearing):
 the objective returns tok/s (higher is better); `run_lab` feeds
-loss = -tok/s to argos-opt, which MINIMIZES — inverting this makes the
+loss = -tok/s to the optimizer study, which MINIMIZES — inverting this makes the
 search converge to the WORST corner (measured 2026-08-30: TPE happily
 optimized the minimum before this was caught).
 
@@ -106,10 +103,11 @@ optimized the minimum before this was caught).
    above the uniform-random baseline's best at the same budget and seed.
    The quality bar pinned in the test is the MEASURED midpoint between
    the two at freeze time, with the measured values recorded here —
-   never tuned to let a cut pass. MEDIDO 2026-08-30, seed 42, 60 trials:
-   TPE 406.8 tok/s, random 329.4 tok/s, barra = 355.0.
+   never tuned to let a cut pass. REMEASURED 2026-09-17 after the public
+   dependency migration, seed 42, 60 trials: TPE 395.6275 tok/s, random
+   309.2427 tok/s; the existing bar remains 355.0.
 4. **No repeats**: across a full `run_lab`, no evaluated params vector
-    repeats (argos-opt never re-answers a known question). AJUSTE
+    repeats (deterministic de-duplication prevents re-answering a known question). AJUSTE
     registrado 2026-08-30, pré-verde: a afirmação original de que o
     baseline aleatório "DOES repeat" foi retirada — em espaço 5D misto
     com inteiros de amplitude 32k, duplicata exata de vetor completo é
@@ -128,7 +126,7 @@ optimized the minimum before this was caught).
 
 - No HTTP to llama-server/Ollama (L02), no priors endpoints (L04), no
   report/contribute commands (L05/L06), no Ollama tuner (L07).
-- No new dependency besides argos-opt (path) — benchmark-probe dep list
+- No new dependency besides public crates.io `optimizer` — benchmark-probe dep list
   otherwise frozen.
 - Do not invent tok/s numbers outside `stub_objective`'s formula; the
   real 3090 numbers only exist after the owner's "sobe" + real bench.
@@ -137,7 +135,7 @@ optimized the minimum before this was caught).
 
 ## Verificação
 
-VERIFICACAO: grep -q "tuning_search" src/lib.rs && grep -q "argos-opt" Cargo.toml && grep -q "run_lab" src/tuning_search.rs
+VERIFICACAO: grep -q "tuning_search" src/lib.rs && grep -q 'optimizer = "1.0.1"' Cargo.toml && grep -q "run_lab" src/tuning_search.rs
 
 ## Barra
 

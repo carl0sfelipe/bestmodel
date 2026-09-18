@@ -979,7 +979,7 @@ fn cmd_lab(args: &[String]) {
             .map(|d| d.as_millis())
             .unwrap_or(0)
     );
-    let mut objective = |p: &Vec<argos_opt::Value>| {
+    let mut objective = |p: &Vec<benchmark_probe::tuning_search::Value>| {
         benchmark_probe::tuning_search::stub_objective(p)
     };
     let outcome = match benchmark_probe::tuning_search::run_lab(

@@ -12,8 +12,9 @@ use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use argos_opt::{Dim, Value};
 use serde::Serialize;
+
+use crate::tuning_search::{Dim, Value};
 
 #[derive(Clone, Debug, Serialize)]
 pub struct LabMeta {
@@ -40,7 +41,7 @@ pub struct LabRecorder {
 impl LabRecorder {
     /// Creates experiments/<label>/ fresh. An existing directory with the
     /// same label is an error (labs are immutable once recorded; resume
-    /// comes from argos-opt's TrialLog, not from editing a lab).
+    /// comes from the optimizer trial log, not from editing a lab).
     pub fn create(root: &Path, label: &str, meta: &LabMeta) -> Result<LabRecorder, String> {
         let dir = root.join(label);
         if dir.exists() {

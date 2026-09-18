@@ -5,8 +5,8 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-use benchmark_probe::tuning_search::{run_lab, stub_objective, LabSpace};
-use argos_opt::{Rng, Value};
+use benchmark_probe::tuning_search::{run_lab, stub_objective, LabSpace, Value};
+use rand::{rngs::StdRng, SeedableRng};
 
 fn tmp_root(tag: &str) -> PathBuf {
     let p = std::env::temp_dir().join(format!("bm-l03a-{}-{}", tag, std::process::id()));
@@ -17,10 +17,10 @@ fn tmp_root(tag: &str) -> PathBuf {
 
 fn random_objective_baseline(trials: usize, seed: u64, space: &LabSpace) -> f64 {
     // uniform-random baseline over the same space, same budget
-    let mut rng = Rng::new(seed);
+    let mut rng = StdRng::seed_from_u64(seed);
     let mut best = f64::NEG_INFINITY;
     for _ in 0..trials {
-        let p = space.space().sample(&mut rng);
+        let p = space.sample_uniform(&mut rng);
         if let Ok(v) = stub_objective(&p) {
             if v > best {
                 best = v;
@@ -80,10 +80,9 @@ fn same_seed_same_lab() {
 /// Behavior 3 (intelligent beats brute — the owner's constraint) and
 /// Behavior 4 (no repeats), measured and pinned per the spec.
 ///
-/// MEASURED 2026-08-30, seed 42, 60 trials on the stub:
-///   TPE best     = 406.8 tok/s
-///   random best  = 329.4 tok/s
-/// Bar = midpoint (355.0): TPE >= bar, random < bar. Adjust ONLY with a
+/// REMEASURED 2026-09-17 after the public optimizer migration, seed 42,
+/// 60 trials on the stub: TPE best = 395.6275 tok/s; random best =
+/// 309.2427 tok/s. The existing bar remains 355.0. Adjust ONLY with a
 /// re-measurement recorded in the spec — never to let a cut pass.
 #[test]
 fn tpe_beats_random_baseline() {

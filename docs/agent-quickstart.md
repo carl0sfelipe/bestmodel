@@ -6,6 +6,9 @@ hardware you run on, (2) the best models measured for it, and (3) running
 the probe yourself. Every command here was executed on a clean checkout
 on 2026-09-18 — none of them needs the bestmodel API, a key, or a token.
 
+Self-check in one command after cloning: `make agent-smoke` (builds both
+CLIs and runs this whole page's flow with tiny budgets).
+
 House honesty ladder (applies to everything you emit): **measured** =
 n≥3, **reported** = 1–2, community pool data = **harvested**, stub/mock
 output = **SIMULATION**. Never present one as the other; never round a
@@ -22,9 +25,11 @@ export PATH="$PWD/target/release:$PATH"
 ```
 
 No Rust? `curl https://sh.rustup.rs | sh -s -- -y --profile minimal`
-(then source `~/.cargo/env`). A C toolchain is needed (gcc or clang,
-make, perl, pkg-config — standard on dev images). The optimizer dep is
-vendored in-repo (`third_party/argos-opt`): any checkout builds.
+(then source `~/.cargo/env`). The build needs a C toolchain plus make,
+perl and pkg-config (Debian/Ubuntu: `apt install -y build-essential
+pkg-config perl`; the OpenSSL used by the probe is vendored and builds
+from source). The optimizer dep is vendored in-repo
+(`third_party/argos-opt`): any checkout builds.
 
 ## 1. Detect the hardware you are running on
 
@@ -50,11 +55,17 @@ driver the GPU list is empty (not detected ≠ no GPU).
 
 Map the detected GPU to the pool's rig id: lowercase
 `maker-family-vram` (`rtx-3090-24gb`, `a100-40gb`, `m4-pro-24gb`), with
-`-x2`/`-x4` for multi-GPU. List what exists:
+`-x2`/`-x4` for multi-GPU. Don't guess — ask the corpus, filtering by
+whatever the topology told you:
 
 ```bash
-jq -r '[.cells[].rigKey] | unique[]' apps/web/data/derived/pool.json | head -60
+canirunit rigs --runs apps/web/data/derived/pool.json --filter rtx-3090
 ```
+
+No discrete GPU? The pool carries CPU rigs too (`cpu-amd-ryzen-*`,
+`cpu-intel-*`) and Apple machines (`m4-pro-24gb`, `m1-max-64gb`).
+And if your `--gpu` value misses, `suggest` itself prints the closest
+ids the corpus actually knows (deterministic ranking, never invented).
 
 Rank (offline, deterministic, no LLM anywhere in the path):
 

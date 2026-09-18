@@ -253,6 +253,55 @@ fn strongest_class(group: &[&RunEntry]) -> String {
     best
 }
 
+/// Sorted, de-duplicated GPU ids present in a runs corpus (pool rigKeys
+/// or leaderboard `gpu_model_id`s). This is how an agent finds out which
+/// ids `suggest` actually knows about.
+pub fn rig_ids(runs: &[RunEntry]) -> Vec<String> {
+    let mut ids: Vec<String> = runs.iter().map(|r| r.gpu_model_id.clone()).collect();
+    ids.sort();
+    ids.dedup();
+    ids
+}
+
+/// Up to `limit` rig ids closest to `gpu` — the "did you mean" hint when
+/// an exact match fails (detected `NVIDIA GeForce RTX 3090` → the corpus
+/// says `rtx-3090-24gb`). Deterministic token overlap both ways plus a
+/// prefix bonus, alphabetical on ties; it only ever RANKS ids that really
+/// exist in the corpus — no fuzzy invention.
+pub fn closest_rig_ids(runs: &[RunEntry], gpu: &str, limit: usize) -> Vec<String> {
+    let want: Vec<String> = gpu
+        .to_ascii_lowercase()
+        .split(['-', '_', ' '])
+        .filter(|t| !t.is_empty())
+        .map(String::from)
+        .collect();
+    let mut scored: Vec<(i64, String)> = rig_ids(runs)
+        .into_iter()
+        .map(|id| {
+            let tokens: Vec<String> = id
+                .to_ascii_lowercase()
+                .split('-')
+                .filter(|t| !t.is_empty())
+                .map(String::from)
+                .collect();
+            let both_ways = tokens
+                .iter()
+                .filter(|t| want.contains(t))
+                .count() as i64
+                + want.iter().filter(|t| tokens.contains(t)).count() as i64;
+            let prefix = if id.starts_with(gpu) || gpu.starts_with(&id) {
+                1
+            } else {
+                0
+            };
+            (both_ways + prefix, id)
+        })
+        .filter(|(score, _)| *score > 0)
+        .collect();
+    scored.sort_by(|a, b| b.0.cmp(&a.0).then_with(|| a.1.cmp(&b.1)));
+    scored.into_iter().take(limit).map(|(_, id)| id).collect()
+}
+
 /// Full suggestion flow with cross-hardware transfer (Story 3.2): exact runs
 /// always win; only when the GPU has no runs does the roofline transfer kick
 /// in, labeled `derived` with the anchor and factor named in the explanation.

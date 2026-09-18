@@ -1,4 +1,4 @@
-.PHONY: test migrate seed check-ports infra-up gate prod-up prod-migrate backup-db
+.PHONY: test migrate seed check-ports infra-up gate prod-up prod-migrate backup-db agent-smoke
 
 test:
 	uv run pytest -q
@@ -28,3 +28,15 @@ prod-migrate:
 
 backup-db:
 	deploy/scripts/backup-db.sh
+
+# Rust-only cold-path smoke: exactly what a fresh AI-agent session runs
+# (docs/agent-quickstart.md). No Docker, no uv, no keys, no network.
+agent-smoke:
+	cargo build --release -p canirunit -p benchmark-probe
+	./target/release/benchmark-probe --runtime mock --model qwen3:8b
+	./target/release/canirunit rigs --runs apps/web/data/derived/pool.json --filter rtx-3090
+	./target/release/canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s --runs apps/web/data/derived/pool.json > /dev/null
+	@echo "suggest: ranking OK"
+	./target/release/benchmark-probe lab --stub --trials 5 > /dev/null
+	@echo "lab: TPE loop OK (SIM)"
+	@echo "agent-smoke: ALL GREEN"

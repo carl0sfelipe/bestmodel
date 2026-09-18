@@ -19,11 +19,30 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 ## Docs
 
 - [README](README.md): product overview, monorepo map, quickstart
+- [Agent quickstart](docs/agent-quickstart.md): cold-start runbook — build,
+  detect hardware, rank models offline, run the probe (every command works
+  from a public clone with no keys)
 - [Architecture](docs/architecture.md): module dependency graph
 - [Findings](docs/findings.md): calibration findings F1–F8 + open decisions
 - [Backlog](docs/backlog.md): canonical roadmap tracks A/B/C/D
 - [Research 2026-08](docs/research-2026-08.md): competitive landscape teardown
 - [Specs index](specs/en/AGENTS.md): executable specs S00–S12 (done), L01/L02 (planned)
+
+## CLI quickstart for agents (offline, from the clone)
+
+```bash
+cargo build --release -p canirunit -p benchmark-probe
+./target/release/benchmark-probe --runtime mock --model qwen3:8b        # real hardware detection
+./target/release/canirunit rigs --runs apps/web/data/derived/pool.json  # GPU ids the pool knows
+./target/release/canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s \
+  --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json
+./target/release/benchmark-probe lab --stub --trials 60                 # TPE flag search (SIM-marked)
+```
+
+One-command self-check after cloning: `make agent-smoke`. Pool suggestions
+load as source_class=harvested (community medians); mock and lab-stub output
+is SIMULATION, never a measurement claim. Full runbook with the honesty
+rules: docs/agent-quickstart.md.
 
 ## Components
 
@@ -35,6 +54,8 @@ measured (pool median) > reported (1–2 runs) > extrapolated (bandwidth-scaled)
 - packages/domain-schema, runtime-probes, recommendation-engine, fake-adapters
 - cli/benchmark-probe: Rust agent — hardware detection, standardized scenarios,
   Ed25519-signed reports
+- cli/canirunit: `suggest`/`rigs` — deterministic best-model ranking per GPU
+  from the runs corpus (no LLM in the path)
 - cli/comfy-lab: ComfyUI probe/workflow analyzer/lab runner (diffusion vertical)
 
 ## API surface

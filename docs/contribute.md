@@ -32,7 +32,7 @@ Antes de medir, veja o que a comunidade já mediu no seu hardware
 
 ```bash
 cargo build -p canirunit --release
-jq -r '[.cells[].rigKey] | unique[]' apps/web/data/derived/pool.json   # acha o id do seu rig
+./target/release/canirunit rigs --runs apps/web/data/derived/pool.json --filter rtx-3090   # acha o id do seu rig
 ./target/release/canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s \
     --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json
 ```

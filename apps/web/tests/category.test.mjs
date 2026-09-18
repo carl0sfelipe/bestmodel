@@ -73,7 +73,7 @@ test("multimodalMetricOf: music uses RTF/xrealtime, never tok/s", () => {
 
 test("fixture keeps music distinct from Whisper audio", async () => {
   const raw = JSON.parse(
-    await readFile(join(here, "../../tests/fixtures/music_audio_intent.json"), "utf8"),
+    await readFile(join(here, "../../../tests/fixtures/music_audio_intent.json"), "utf8"),
   );
   assert.equal(raw.sourceClass, "fixture_stub");
   const bySlug = Object.fromEntries(raw.models.map((m) => [m.slug, m]));

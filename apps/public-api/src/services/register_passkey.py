@@ -156,7 +156,7 @@ def _generate_registration_options(config: WebAuthnConfig, user: dict, excluded_
         rp_name=config.rp_name,
         user_name=user["handle"],
         user_display_name=user["display_name"],
-        user_id=bytes.fromhex(user["id"].replace("-", "")),
+        user_id=bytes.fromhex(str(user["id"]).replace("-", "")),
         exclude_credentials=[
             PublicKeyCredentialDescriptor(id=credential_id)
             for credential_id in excluded_credential_ids

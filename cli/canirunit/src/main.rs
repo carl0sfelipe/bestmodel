@@ -1,8 +1,8 @@
+use std::collections::BTreeMap;
 use std::process::exit;
 
 use canirunit::transfer::GpuTransferSpec;
-use canirunit::{runs_from_pool, suggest_with_transfer, PoolFile, RunEntry};
-use std::collections::BTreeMap;
+use canirunit::{closest_rig_ids, rig_ids, runs_from_pool, suggest_with_transfer, PoolFile, RunEntry};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -13,8 +13,8 @@ fn main() {
             print_usage();
             exit(0);
         }
-        Ok(Some(cli)) => {
-            if let Err(code) = run(&cli) {
+        Ok(Some(mode)) => {
+            if let Err(code) = run(mode) {
                 exit(code);
             }
         }
@@ -27,23 +27,99 @@ fn main() {
     }
 }
 
-struct CliArgs {
-    gpu: String,
-    task: String,
-    runs_path: String,
-    gpus_path: Option<String>,
+enum Mode {
+    Suggest {
+        gpu: String,
+        task: String,
+        runs_path: String,
+        gpus_path: Option<String>,
+    },
+    Rigs {
+        runs_path: String,
+        filter: Option<String>,
+    },
 }
 
-fn run(cli: &CliArgs) -> Result<(), i32> {
-    let runs_raw = std::fs::read_to_string(&cli.runs_path).map_err(|err| {
-        eprintln!("error: unable to read runs file '{}': {err}", cli.runs_path);
+fn run(mode: Mode) -> Result<(), i32> {
+    match mode {
+        Mode::Suggest { gpu, task, runs_path, gpus_path } => {
+            let (runs, _) = load_runs(&runs_path)?;
+            let specs: Option<BTreeMap<String, GpuTransferSpec>> = gpus_path.as_ref().map(|path| {
+                let raw = std::fs::read_to_string(path)
+                    .unwrap_or_else(|err| panic!("unable to read gpu specs '{path}': {err}"));
+                let list: Vec<GpuTransferSpec> = serde_json::from_str(&raw)
+                    .unwrap_or_else(|err| panic!("gpu specs '{path}' is not valid: {err}"));
+                list.into_iter().map(|spec| (spec.id.clone(), spec)).collect()
+            });
+            let outcome =
+                suggest_with_transfer(&gpu, &task, &runs, specs.as_ref()).map_err(|message| {
+                    eprintln!("error: {message}");
+                    2
+                })?;
+            println!("{}", serde_json::to_string_pretty(&outcome).expect("serialize outcome"));
+            if outcome.suggestions.is_empty() {
+                let closest = closest_rig_ids(&runs, &gpu, 5);
+                if !closest.is_empty() {
+                    eprintln!(
+                        "no data for '{gpu}' — closest rig ids in this corpus: {}",
+                        closest.join(", ")
+                    );
+                } else {
+                    eprintln!(
+                        "no data for '{gpu}' and nothing similar — list what the corpus knows: canirunit rigs --runs {runs_path}"
+                    );
+                }
+                return Err(3);
+            }
+            Ok(())
+        }
+        Mode::Rigs { runs_path, filter } => {
+            let (runs, _) = load_runs(&runs_path)?;
+            let ids = match &filter {
+                Some(needle) => rig_ids(&runs)
+                    .into_iter()
+                    .filter(|id| id.to_ascii_lowercase().contains(&needle.to_ascii_lowercase()))
+                    .collect::<Vec<_>>(),
+                None => rig_ids(&runs),
+            };
+            if ids.is_empty() {
+                let closest = closest_rig_ids(&runs, filter.as_deref().unwrap_or_default(), 5);
+                if closest.is_empty() {
+                    eprintln!(
+                        "no rig id matches '{}' in '{}' — drop --filter to list them all",
+                        filter.unwrap_or_default(),
+                        runs_path
+                    );
+                } else {
+                    eprintln!(
+                        "no rig id contains '{}' — closest by tokens: {} (or drop --filter to list them all)",
+                        filter.unwrap_or_default(),
+                        closest.join(", ")
+                    );
+                }
+                return Err(3);
+            }
+            for id in ids {
+                println!("{id}");
+            }
+            Ok(())
+        }
+    }
+}
+
+/// Loads a runs corpus in either accepted shape (leaderboard run-entry
+/// array, or derived pool snapshot). Prints its own errors; the bool-ish
+/// second element carries the pool note when that shape was used.
+fn load_runs(runs_path: &str) -> Result<(Vec<RunEntry>, Option<(String, usize)>), i32> {
+    let runs_raw = std::fs::read_to_string(runs_path).map_err(|err| {
+        eprintln!("error: unable to read runs file '{runs_path}': {err}");
         1
     })?;
     // Two accepted shapes: a JSON array of leaderboard run entries (the
     // designed export), or a derived pool snapshot ({snapshotAt, cells}) —
     // in-repo, offline, labeled `harvested`.
-    let (runs, source_note) = match serde_json::from_str::<Vec<RunEntry>>(&runs_raw) {
-        Ok(runs) => (runs, None),
+    match serde_json::from_str::<Vec<RunEntry>>(&runs_raw) {
+        Ok(runs) => Ok((runs, None)),
         Err(_) => {
             let pool: PoolFile = serde_json::from_str(&runs_raw).map_err(|err| {
                 eprintln!(
@@ -53,42 +129,27 @@ fn run(cli: &CliArgs) -> Result<(), i32> {
             })?;
             let count = pool.cells.len();
             let snapshot = pool.snapshot_at.clone();
-            (runs_from_pool(&pool), Some((snapshot, count)))
+            eprintln!(
+                "note: loaded pool snapshot {snapshot} ({count} cells) — every entry is source_class=harvested (community medians, not signed runs)"
+            );
+            Ok((runs_from_pool(&pool), Some((snapshot, count))))
         }
-    };
-    if let Some((snapshot, cells)) = source_note {
-        eprintln!(
-            "note: loaded pool snapshot {snapshot} ({cells} cells) — every entry is source_class=harvested (community medians, not signed runs)"
-        );
     }
-    let specs: Option<BTreeMap<String, GpuTransferSpec>> = cli.gpus_path.as_ref().map(|path| {
-        let raw = std::fs::read_to_string(path)
-            .unwrap_or_else(|err| panic!("unable to read gpu specs '{path}': {err}"));
-        let list: Vec<GpuTransferSpec> = serde_json::from_str(&raw)
-            .unwrap_or_else(|err| panic!("gpu specs '{path}' is not valid: {err}"));
-        list.into_iter().map(|spec| (spec.id.clone(), spec)).collect()
-    });
-    let outcome = suggest_with_transfer(&cli.gpu, &cli.task, &runs, specs.as_ref()).map_err(|message| {
-        eprintln!("error: {message}");
-        2
-    })?;
-    println!("{}", serde_json::to_string_pretty(&outcome).expect("serialize outcome"));
-    if outcome.suggestions.is_empty() {
-        return Err(3);
-    }
-    Ok(())
 }
 
-fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
+fn parse_args(raw_args: &[String]) -> Result<Option<Mode>, String> {
+    let mut mode: Option<&str> = None;
     let mut gpu: Option<String> = None;
     let mut task: Option<String> = None;
     let mut runs_path: Option<String> = None;
     let mut gpus_path: Option<String> = None;
+    let mut filter: Option<String> = None;
 
     let mut index = 0;
     while index < raw_args.len() {
         let raw = &raw_args[index];
-        if raw == "suggest" {
+        if raw == "suggest" || raw == "rigs" {
+            mode = Some(raw);
             index += 1;
             continue;
         }
@@ -114,18 +175,26 @@ fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
             "--task" => task = Some(take_value(&mut index)?),
             "--runs" => runs_path = Some(take_value(&mut index)?),
             "--gpus" => gpus_path = Some(take_value(&mut index)?),
+            "--filter" => filter = Some(take_value(&mut index)?),
             other => return Err(format!("unknown argument '{other}'")),
         }
         index += 1;
     }
 
-    let gpu = gpu.ok_or_else(|| "missing required argument '--gpu <gpu_model_id>'".to_string())?;
-    let task = task.ok_or_else(|| {
-        "missing required argument '--task <metric>' (decode_tok_s, seconds_per_clip, frames_per_s)".to_string()
-    })?;
-    let runs_path =
-        runs_path.ok_or_else(|| "missing required argument '--runs <runs.json>'".to_string())?;
-    Ok(Some(CliArgs { gpu, task, runs_path, gpus_path }))
+    let runs_path = runs_path
+        .ok_or_else(|| "missing required argument '--runs <runs.json>'".to_string())?;
+
+    match mode.unwrap_or("suggest") {
+        "rigs" => Ok(Some(Mode::Rigs { runs_path, filter })),
+        _ => {
+            let gpu =
+                gpu.ok_or_else(|| "missing required argument '--gpu <gpu_model_id>'".to_string())?;
+            let task = task.ok_or_else(|| {
+                "missing required argument '--task <metric>' (decode_tok_s, seconds_per_clip, frames_per_s)".to_string()
+            })?;
+            Ok(Some(Mode::Suggest { gpu, task, runs_path, gpus_path }))
+        }
+    }
 }
 
 fn print_usage() {
@@ -135,11 +204,13 @@ fn print_usage() {
     println!();
     println!("USAGE:");
     println!("    canirunit suggest --gpu <gpu_model_id> --task <metric> --runs <runs.json> [--gpus gpu_transfer_specs.json]");
+    println!("    canirunit rigs --runs <runs.json> [--filter <substring>]");
     println!();
     println!("    --runs accepts either a leaderboard run-entry export (JSON array)");
     println!("    or the in-repo derived pool snapshot apps/web/data/derived/pool.json");
     println!("    ({{snapshotAt, cells}} — entries load as source_class=harvested).");
-    println!("    Available GPU ids in the pool: jq -r '[.cells[].rigKey] | unique[]' <pool.json>");
+    println!("    'rigs' lists the GPU ids the corpus actually knows (this is how you");
+    println!("    map detected hardware, e.g. 'NVIDIA GeForce RTX 3090' -> rtx-3090-24gb).");
     println!();
     println!("TASK METRICS:");
     println!("    decode_tok_s       LLM decode throughput (higher is better)");

@@ -21,7 +21,12 @@ git clone https://github.com/carl0sfelipe/bestmodel.git
 cd bestmodel
 ```
 
-Then README.md. There is no one-line installer yet.
+Agent runbook from this clone (offline, no keys):
+[docs/agent-quickstart.md](https://github.com/carl0sfelipe/bestmodel/blob/main/docs/agent-quickstart.md)
+— build the two Rust CLIs, detect your hardware, rank the best models for
+it against the in-repo pool snapshot, run the probe. Self-check in one
+command: `make agent-smoke`. Humans: README.md. There is no one-line
+installer yet.
 
 ## Honesty ladder
 

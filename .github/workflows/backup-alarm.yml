@@ -28,8 +28,9 @@ jobs:
           REPO: carl0sfelipe/bestmodel-backups
         run: |
           set -euo pipefail
-          if ! LAST=$(gh api "repos/$REPO/commits" --jq '.[0].commit.committer.date' 2>/dev/null); then
-            echo "::error::cannot read $REPO — add the repo secret BACKUP_RO_TOKEN (PAT with repo scope). The default GITHUB_TOKEN cannot cross private repos."
+          if ! LAST=$(gh api "repos/$REPO/commits" --jq '.[0].commit.committer.date' 2>/tmp/gherr); then
+            echo "::error::$(cat /tmp/gherr)"
+            echo "::error::the BACKUP_RO_TOKEN secret could not read $REPO. For a fine-grained PAT: Repository access = Only select repositories -> include $REPO, and Contents = Read-only. HTTP 404 usually means the repo was not selected; 401 means the token was pasted truncated/with a newline."
             exit 1
           fi
           AGE_H=$(( ( $(date -u +%s) - $(date -u -d "$LAST" +%s) ) / 3600 ))

@@ -6,7 +6,7 @@
 import { el, fmt, basisBadge, fitLabel, attributionFooter } from "./ui.mjs";
 import { loadDerived } from "./load-data.mjs";
 import {
-  quantBits, usableMemGb, vramNeededGb, fitClass, estimateTokS, topPicks,
+  quantBits, usableMemGb, vramNeededGb, fitClass, estimateTokS, topPicks, claimFor,
 } from "./engine.mjs";
 
 // Output options: text/code have real community data (CONTRATO §4); the rest
@@ -62,6 +62,11 @@ const rigByKey = new Map();
 const modelsBySlug = new Map();
 
 const currentRig = () => (state.machine ? rigByKey.get(state.machine) : null);
+
+// Claims tier: label the claim's rig with its display name when known.
+function withRigLabel(claim) {
+  return claim ? { ...claim, rigLabel: rigByKey.get(claim.rigKey)?.label ?? claim.rigKey } : null;
+}
 const currentCategory = () => (state.journey === "goal" ? (state.output === "code" ? "code" : "chat") : state.category);
 const currentBits = () => (state.journey === "hardware" ? 4 : state.quant);
 const categoryModels = () => MODELS.filter((m) => m.category === currentCategory());
@@ -91,8 +96,13 @@ function rigDsc(rig) {
 function escapeHtml(s) { return s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
 function haptic() { if (navigator.vibrate) navigator.vibrate(8); }
 
-function subCopy(est) {
-  if (!est) return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+function subCopy(est, claim) {
+  if (!est) {
+    if (claim) {
+      return `No data for this rig + quant yet. Unvalidated claim for the same model elsewhere: ${fmt(claim.value)} tok/s on ${claim.rigLabel} (${claim.n} ${claim.n === 1 ? "run" : "runs"}) — different hardware, orientation only.`;
+    }
+    return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+  }
   if (est.basis === "measured" || est.basis === "reported") {
     return `Based on ${est.n} community ${est.n === 1 ? "run" : "runs"} on this exact rig. Real speed may vary with drivers, power state, and concurrent workloads.`;
   }
@@ -642,7 +652,8 @@ function renderTestDrive() {
 
   document.getElementById("tdName").textContent = m.displayName;
   document.getElementById("tdMeta").textContent = `${paramsLabel(m)} · ${bits}-bit · ${m.category}`;
-  document.getElementById("tdSub").textContent = subCopy(est);
+  const tdClaim = est ? null : withRigLabel(claimFor(rig, m, bits, CELLS));
+  document.getElementById("tdSub").textContent = subCopy(est, tdClaim);
 
   const pct = need && usable ? (need.gb / usable) * 100 : 0;
   const fill = document.getElementById("tdVramFill");

@@ -2,9 +2,9 @@
 // All data comes from data/derived/* via loadDerived(); every displayed
 // number carries a basis (CONTRATO §1). The engine does fit/speed; this
 // module only wires DOM + the real pool.
-import { el, fmt, basisBadge, fitLabel, attributionFooter } from "./ui.mjs";
+import { el, fmt, basisBadge, fitLabel, attributionFooter, claimStrip } from "./ui.mjs";
 import { loadDerived } from "./load-data.mjs";
-import { usableMemGb, fitClass, estimateTokS, vramNeededGb } from "./engine.mjs";
+import { usableMemGb, fitClass, estimateTokS, vramNeededGb, claimFor } from "./engine.mjs";
 
 // This journey fixes 4-bit quantization (spec S5 — no quant switcher here).
 const BITS = 4;
@@ -223,9 +223,20 @@ function statEl(label, val, cls) {
   ]);
 }
 
+// Claims tier: for a model with no number on THIS rig, the strongest
+// community claim from another rig (labeled unvalidated, credit included).
+function claimForCard(model) {
+  const rig = currentRig();
+  if (!rig) return null;
+  const claim = claimFor(rig, model, BITS, CELLS);
+  if (!claim) return null;
+  return { ...claim, rigLabel: rigByKey.get(claim.rigKey)?.label ?? claim.rigKey };
+}
+
 function cardNode({ m, est, need }) {
   const fitLbl = fitLabel(fitClass(currentRig(), m, BITS));
   const runsTxt = est ? ` · ${est.n} ${est.n === 1 ? "run" : "runs"}` : " · no data yet";
+  const claim = est ? null : claimForCard(m);
   return el("div", { class: "model-card", "data-slug": m.slug }, [
     el("div", { class: "top" }, [
       el("div", { class: "name" }, m.displayName),
@@ -241,6 +252,7 @@ function cardNode({ m, est, need }) {
       statEl("VRAM", need ? `${fmt(need.gb)} GB` : "—"),
       statEl("Fit", fitLbl.text, FIT_VAL_CLASS[fitLbl.cssClass] ?? ""),
     ]),
+    claimStrip(claim),
     el("div", { class: "run" }, "Test drive →"),
   ]);
 }
@@ -295,8 +307,13 @@ function autoSelectTestModel() {
 
 /* ---------------- SCENE 05 — TEST DRIVE ---------------- */
 
-function subCopy(est) {
-  if (!est) return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+function subCopy(est, claim) {
+  if (!est) {
+    if (claim) {
+      return `No community speed data for this exact rig + quant yet. Unvalidated claim for the same model elsewhere: ${fmt(claim.value)} tok/s on ${claim.rigLabel} (${claim.n} ${claim.n === 1 ? "run" : "runs"}) — different hardware, orientation only, never this rig's number.`;
+    }
+    return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+  }
   if (est.basis === "measured" || est.basis === "reported") {
     return `Based on ${est.n} community ${est.n === 1 ? "run" : "runs"} on this exact rig. Real speed may vary with drivers, power state, and concurrent workloads.`;
   }
@@ -316,7 +333,7 @@ function renderTestDrive() {
   document.getElementById("tdName").textContent = m.displayName;
   document.getElementById("tdMeta").textContent = `${paramsLabel(m)} · 4-bit · ${m.category}`;
   document.getElementById("tdUnit").textContent = "tokens / sec";
-  document.getElementById("tdSub").textContent = subCopy(est);
+  document.getElementById("tdSub").textContent = subCopy(est, est ? null : claimForCard(m));
 
   const pct = need && usable ? (need.gb / usable) * 100 : 0;
   const fill = document.getElementById("tdVramFill");
@@ -398,7 +415,15 @@ function renderCoorte() {
     ]));
   }
   if (!top5.length) {
-    list.appendChild(el("li", null, [el("span", { class: "meta" }, "no runs on this rig yet")]));
+    const claimable = buildCards().filter((c) => !c.est && claimForCard(c.m)).length;
+    list.appendChild(
+      el("li", null, [
+        el("span", { class: "meta" }, "no runs on this rig yet"),
+        claimable
+          ? el("span", { class: "ppl" }, `${claimable} fitting ${claimable === 1 ? "model has" : "models have"} unvalidated claims from other rigs — see catalog`)
+          : null,
+      ])
+    );
   }
 
   const totalRuns = rigCells.reduce((a, c) => a + c.n, 0);

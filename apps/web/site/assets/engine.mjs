@@ -89,6 +89,27 @@ export function topPicks(rig, models, cells, rigs, k) {
   return picks.slice(0, k);
 }
 
+// Claims tier (owner decision 2026-09-18): when a hardware+intent combo has
+// no number of its own, surface the strongest community CLAIM for the same
+// model measured on ANOTHER rig. It orients, it never answers: the claim is
+// about someone else's machine, is always rendered labeled "unvalidated",
+// and never enters this rig's basis ladder (measured/reported/extrapolated).
+export function claimFor(rig, model, bits, cells) {
+  const candidates = cells.filter(
+    (c) => c.modelSlug === model.slug && c.rigKey !== rig?.key && c.tokSOutMedian != null
+  );
+  if (!candidates.length) return null;
+  const sameBits = candidates.filter((c) => c.bits === bits);
+  const pool = sameBits.length ? sameBits : candidates;
+  // Strongest first: most runs behind the median, then the faster rig as a
+  // best-case orientation; rigKey breaks ties so the pick is deterministic.
+  pool.sort(
+    (a, b) => b.n - a.n || b.tokSOutMedian - a.tokSOutMedian || a.rigKey.localeCompare(b.rigKey)
+  );
+  const c = pool[0];
+  return { value: c.tokSOutMedian, n: c.n, bits: c.bits, rigKey: c.rigKey, basis: "claim" };
+}
+
 function better(a, b) {
   const dw = BASIS_WEIGHT[a.est.basis] - BASIS_WEIGHT[b.est.basis];
   if (dw !== 0) return dw > 0;

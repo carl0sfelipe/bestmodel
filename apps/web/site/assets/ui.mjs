@@ -67,6 +67,26 @@ export function basisBadge(basis) {
   return el("span", { class: "basis-badge", "data-basis": key }, BASIS_TEXT[basis] ?? "no data yet");
 }
 
+// Claims tier (owner decision 2026-09-18): context for combos with no number
+// of their own — the strongest community claim for the same model on ANOTHER
+// rig. Presentation only; the claim object comes from engine.claimFor() with
+// a `rigLabel` added by the page. Always labeled unvalidated, always with
+// the pool credit; never mixed into the basis ladder of this rig.
+export const CLAIM_CREDIT = "via localmaxxing community pool";
+export const CONTRIBUTE_URL = "https://github.com/carl0sfelipe/bestmodel/blob/main/docs/contribute.md";
+
+export function claimStrip(claim) {
+  if (!claim) return null;
+  const runs = `${claim.n} ${claim.n === 1 ? "run" : "runs"}`;
+  return el("div", { class: "claim-strip" }, [
+    el("span", { class: "tag" }, "claim · unvalidated"),
+    el("span", { class: "num" }, `${fmt(claim.value)} tok/s`),
+    el("span", { class: "where" }, `on ${claim.rigLabel} · ${claim.bits}-bit · ${runs}`),
+    el("span", { class: "via" }, CLAIM_CREDIT),
+    el("a", { class: "cta", href: CONTRIBUTE_URL, target: "_blank", rel: "noopener" }, "run this rig? claim it →"),
+  ]);
+}
+
 export function fitLabel(fitClass) {
   return FIT_LABELS[fitClass] ?? { text: "no data yet", cssClass: "fit-none" };
 }

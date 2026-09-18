@@ -294,3 +294,15 @@ html[data-journey="ask"] .who-btn{color:var(--amber)}
   .reader-doors{grid-template-columns:1fr}
   .who-kicker{display:none}
 }
+
+/* ---------- claims tier (owner decision 2026-09-18) ----------
+   Context for hardware+intent combos with no number of their own: the
+   strongest community claim for the same model on ANOTHER rig. Dashed
+   border on purpose — it never merges with the basis ladder. */
+.claim-strip{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-top:10px;padding:7px 10px;border:1px dashed var(--hair-strong);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.claim-strip .tag{text-transform:uppercase;letter-spacing:.08em;color:var(--amber)}
+.claim-strip .num{color:var(--ink);font-weight:600}
+.claim-strip .via{color:var(--dim)}
+.claim-strip .cta{margin-left:auto;color:var(--amber);text-decoration:none;border-bottom:1px dotted currentColor}
+.claim-strip .cta:hover{border-bottom-style:solid}
+.basis-badge[data-basis="claim"]{color:var(--amber)}

@@ -5,7 +5,7 @@
 import { el, fmt, basisBadge, fitLabel, attributionFooter, sourceBadge } from "./ui.mjs";
 import { loadDerived } from "./load-data.mjs";
 import {
-  quantBits, usableMemGb, vramNeededGb, fitClass, estimateTokS, topPicks,
+  quantBits, usableMemGb, vramNeededGb, fitClass, estimateTokS, topPicks, claimFor,
 } from "./engine.mjs";
 
 // Quant segment labels (CONTRATO §6): FP16/Q8/Q6/Q4 map via engine.quantBits.
@@ -43,6 +43,11 @@ const rigByKey = new Map();
 const modelsBySlug = new Map();
 
 const currentRig = () => (state.machine ? rigByKey.get(state.machine) : null);
+
+// Claims tier: label the claim's rig with its display name when known.
+function withRigLabel(claim) {
+  return claim ? { ...claim, rigLabel: rigByKey.get(claim.rigKey)?.label ?? claim.rigKey } : null;
+}
 const currentCategory = () => (state.output === "code" ? "code" : "chat");
 const currentBits = () => state.quant;
 
@@ -342,7 +347,16 @@ function showTip(e, d) {
   const need = vramNeededGb(d.m, bits);
   const est = estimateTokS(rig, d.m, bits, CELLS, RIGS);
   const fitLbl = fitLabel(d.fit).text;
-  tip.textContent = `${d.m.displayName}\n${paramsLabel(d.m)} · ${bits}-bit · ${fitLbl}\n${need ? need.gb.toFixed(1) : "?"} GB · ${est ? est.value.toFixed(1) + " tok/s (" + est.basis + ")" : "no speed data"}`;
+  let speedTxt = "no speed data";
+  if (est) {
+    speedTxt = est.value.toFixed(1) + " tok/s (" + est.basis + ")";
+  } else {
+    const claim = claimFor(rig, d.m, bits, CELLS);
+    if (claim) {
+      speedTxt = `no data here · claim: ${claim.value.toFixed(1)} tok/s on ${claim.rigKey} (${claim.n}${claim.n === 1 ? " run" : " runs"}, unvalidated)`;
+    }
+  }
+  tip.textContent = `${d.m.displayName}\n${paramsLabel(d.m)} · ${bits}-bit · ${fitLbl}\n${need ? need.gb.toFixed(1) : "?"} GB · ${speedTxt}`;
   tip.classList.add("on");
   moveTip(e);
 }
@@ -423,12 +437,20 @@ function renderSim() {
     requestAnimationFrame(tick);
   }
   document.getElementById("speedUnit").textContent = "tokens / sec";
-  document.getElementById("speedSub").textContent = subCopy(est);
+  document.getElementById("speedSub").textContent = subCopy(
+    est,
+    est ? null : withRigLabel(claimFor(rig, m, bits, CELLS))
+  );
   renderSimPreview(m, est);
 }
 
-function subCopy(est) {
-  if (!est) return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+function subCopy(est, claim) {
+  if (!est) {
+    if (claim) {
+      return `No community speed data for this exact rig + quant yet. Unvalidated claim for the same model elsewhere: ${fmt(claim.value)} tok/s on ${claim.rigLabel} (${claim.n} ${claim.n === 1 ? "run" : "runs"}) — different hardware, orientation only, never this rig's number.`;
+    }
+    return "No community speed data for this exact rig + quant yet — fit is estimated from VRAM.";
+  }
   if (est.basis === "measured" || est.basis === "reported") {
     return `Based on ${est.n} community ${est.n === 1 ? "run" : "runs"} on this exact rig. Real speed may vary with drivers, power state, and concurrent workloads.`;
   }

@@ -39,6 +39,15 @@ browser ──> bestmodel.run (Vercel: site + console)
    docker compose -f deploy/docker-compose.prod.yml exec -T api \
      sh -c "cd /app && uv run python infra/scripts/migrate.py && uv run python infra/scripts/seed/load_seed.py"
    ```
+**GitHub Pages (auto-deploy, 2026-09-18).** `.github/workflows/pages.yml`
+publishes `site/` + `data/` + `console/` to Pages on every push to main —
+the same content the Vercel project serves, preview at
+`https://carl0sfelipe.github.io/bestmodel/` (the console talks to
+`https://api.bestmodel.run` directly there; no same-origin rewrite exists
+on Pages). Cutover from Vercel = owner, one record: point
+`www.bestmodel.run` (CNAME) at `carl0sfelipe.github.io`, then add the
+domain in repo Settings → Pages. Until then Vercel keeps serving prod.
+
 4. **Frontend** — import `apps/web/` on Vercel (framework: Other). `vercel.json`
    publishes `site/` + `console/` and proxies `/v1/*` to
    `api.bestmodel.run`. Point the domain, done.

@@ -1,0 +1,53 @@
+name: pages
+
+# GitHub Pages deployment of the static site (apps/web/site + derived data
+# + console). Mirrors the Vercel build (apps/web/vercel.json) so both hosts
+# serve identical content; Pages auto-deploys on every push to main.
+# Custom-domain cutover (owner, one DNS record): see docs/en/deploy.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/site/**"
+      - "apps/web/data/derived/**"
+      - "apps/web/data/seed/**"
+      - "apps/web/console/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build publish directory (mirrors vercel.json buildCommand)
+        run: |
+          set -euo pipefail
+          mkdir -p publish
+          cp -r apps/web/site/. publish/
+          mkdir -p publish/data
+          cp -r apps/web/data/derived publish/data/derived
+          cp -r apps/web/data/seed publish/data/seed
+          mkdir -p publish/console
+          cp -r apps/web/console/. publish/console/
+          cp apps/web/console/config.js publish/config.js
+          touch publish/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish
+      - id: deployment
+        uses: actions/deploy-pages@v4

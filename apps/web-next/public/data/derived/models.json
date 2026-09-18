@@ -1,5 +1,5 @@
 {
- "snapshotAt": "2026-09-14T00:49:27.000Z",
+ "snapshotAt": "2026-09-18T17:08:19.808Z",
  "models": [
   {
    "slug": "unsloth-qwen3-8-27b-gguf",
@@ -10,13 +10,13 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 201,
-   "medianTokS": 38,
+   "runCount": 553,
+   "medianTokS": 44,
    "sourceClass": "community_reported",
    "evalScore": {
     "score": 0.8773048727899957,
     "count": 7,
-    "quant": "Q8_0",
+    "quant": "Q4_K_XL",
     "mixedQuants": true
    },
    "vramMeasuredGb": {
@@ -25,8 +25,8 @@
      "n": 1
     },
     "2": {
-     "gb": 9.65,
-     "n": 7
+     "gb": 9.61,
+     "n": 8
     },
     "3": {
      "gb": 17.33,
@@ -34,15 +34,15 @@
     },
     "4": {
      "gb": 19.4,
-     "n": 25
+     "n": 33
     },
     "5": {
      "gb": 23.15,
      "n": 4
     },
     "6": {
-     "gb": 25.68,
-     "n": 5
+     "gb": 28.31,
+     "n": 7
     },
     "8": {
      "gb": 31.11,
@@ -50,6 +50,56 @@
     }
    },
    "maxContextTested": 262144
+  },
+  {
+   "slug": "unsloth-qwen3-6-35b-a3b-gguf",
+   "hfId": "unsloth/Qwen3.6-35B-A3B-GGUF",
+   "displayName": "Qwen3.6-35B-A3B-GGUF",
+   "family": "Qwen",
+   "paramsB": 35,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 302,
+   "medianTokS": 105.44,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9233369361592224,
+    "count": 5,
+    "quant": "Q4_K_XL",
+    "mixedQuants": true
+   },
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 12.8,
+     "n": 2
+    },
+    "4": {
+     "gb": 21.6,
+     "n": 32
+    },
+    "6": {
+     "gb": 19.8,
+     "n": 1
+    }
+   },
+   "maxContextTested": 1048576
+  },
+  {
+   "slug": "jackrong-qwen3-8-27b-mtp-gguf",
+   "hfId": "Jackrong/Qwen3.8-27B-MTP-GGUF",
+   "displayName": "Qwen3.8-27B-MTP-GGUF",
+   "family": "Qwen",
+   "paramsB": 27,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 236,
+   "medianTokS": 36.59,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 132352
   },
   {
    "slug": "qwen-qwen3-6-35b-a3b",
@@ -60,14 +110,14 @@
    "activeParamsB": 3,
    "isMoE": true,
    "category": "chat",
-   "runCount": 198,
-   "medianTokS": 70.81,
+   "runCount": 199,
+   "medianTokS": 71.28,
    "sourceClass": "community_reported",
    "evalScore": {
-    "score": 0.9900990099009901,
-    "count": 1,
-    "quant": "MQ4P",
-    "mixedQuants": false
+    "score": 0.9155346801526514,
+    "count": 2,
+    "quant": "BF16",
+    "mixedQuants": true
    },
    "vramMeasuredGb": {
     "1": {
@@ -160,38 +210,191 @@
    "maxContextTested": 262144
   },
   {
-   "slug": "unsloth-qwen3-6-35b-a3b-gguf",
-   "hfId": "unsloth/Qwen3.6-35B-A3B-GGUF",
-   "displayName": "Qwen3.6-35B-A3B-GGUF",
+   "slug": "lued-qwen3-8-27b-int8-w8a16-mtp",
+   "hfId": "lued/Qwen3.8-27B-INT8-W8A16-MTP",
+   "displayName": "Qwen3.8-27B-INT8-W8A16-MTP",
    "family": "Qwen",
-   "paramsB": 35,
+   "paramsB": 28,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 84,
-   "medianTokS": 56.93,
+   "runCount": 162,
+   "medianTokS": 43.62,
    "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.9233369361592224,
-    "count": 5,
-    "quant": "Q4_K_XL",
-    "mixedQuants": true
-   },
+   "evalScore": null,
    "vramMeasuredGb": {
-    "3": {
-     "gb": 12.8,
-     "n": 2
-    },
-    "4": {
-     "gb": 21.6,
-     "n": 28
-    },
-    "6": {
-     "gb": 19.8,
+    "8": {
+     "gb": 54.55,
      "n": 1
     }
    },
-   "maxContextTested": 1048576
+   "maxContextTested": 258311
+  },
+  {
+   "slug": "miralabs-ornith-1-5-35b-a3b-w4a16-sym",
+   "hfId": "MIRALABS/Ornith-1.5-35B-A3B-W4A16-SYM",
+   "displayName": "Ornith-1.5-35B-A3B-W4A16-SYM",
+   "family": "Qwen",
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 130,
+   "medianTokS": 146.37,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131336
+  },
+  {
+   "slug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
+   "hfId": "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+   "displayName": "Ornith-1.5-35B-A3B-GGUF",
+   "family": null,
+   "paramsB": 35,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 127,
+   "medianTokS": 104.93,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 10.2,
+     "n": 8
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "qwen-qwen3-8-27b",
+   "hfId": "Qwen/Qwen3.8-27B",
+   "displayName": "Qwen3.8-27B",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 122,
+   "medianTokS": 50.94,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.5833333333333334,
+    "count": 2,
+    "quant": "W4A16",
+    "mixedQuants": true
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 18.4,
+     "n": 23
+    },
+    "6": {
+     "gb": 25.75,
+     "n": 6
+    },
+    "8": {
+     "gb": 32.94,
+     "n": 15
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "ibm-granite-granite-4-2-30b-gguf",
+   "hfId": "ibm-granite/granite-4.2-30b-GGUF",
+   "displayName": "granite-4.2-30b-GGUF",
+   "family": "Llama",
+   "paramsB": 29,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 109,
+   "medianTokS": 29.7,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 67589
+  },
+  {
+   "slug": "ggml-org-nvidia-nemotron-3-5-lightning-30b-a3b-gguf",
+   "hfId": "ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF",
+   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF",
+   "family": null,
+   "paramsB": 32,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 100,
+   "medianTokS": 128.89,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 21.36,
+     "n": 1
+    }
+   },
+   "maxContextTested": 67592
+  },
+  {
+   "slug": "qwen-qwen3-6-35b-a3b-fp8",
+   "hfId": "Qwen/Qwen3.6-35B-A3B-FP8",
+   "displayName": "Qwen3.6-35B-A3B-FP8",
+   "family": "Qwen",
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 93,
+   "medianTokS": 161.66,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 63.56,
+     "n": 8
+    }
+   },
+   "maxContextTested": 131335
+  },
+  {
+   "slug": "born2bewild-qwen3-8-27b-w4a16-autoround-fast",
+   "hfId": "born2bewild/Qwen3.8-27B-W4A16-AutoRound-fast",
+   "displayName": "Qwen3.8-27B-W4A16-AutoRound-fast",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 92,
+   "medianTokS": 114.79,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131336
+  },
+  {
+   "slug": "ornith-ai-ornith-1-5-9b",
+   "hfId": "ornith-ai/Ornith-1.5-9B",
+   "displayName": "Ornith-1.5-9B",
+   "family": "Qwen",
+   "paramsB": 10,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 90,
+   "medianTokS": 73.46,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 5.37,
+     "n": 1
+    }
+   },
+   "maxContextTested": 131336
   },
   {
    "slug": "unsloth-qwen3-6-27b-gguf",
@@ -248,8 +451,8 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 76,
-   "medianTokS": 89.85,
+   "runCount": 79,
+   "medianTokS": 90.32,
    "sourceClass": "community_reported",
    "evalScore": {
     "score": 0.8913904678727699,
@@ -259,45 +462,77 @@
    },
    "vramMeasuredGb": {
     "4": {
-     "gb": 18,
-     "n": 17
+     "gb": 18.1,
+     "n": 19
     }
    },
    "maxContextTested": 262144
   },
   {
-   "slug": "qwen-qwen3-8-27b",
-   "hfId": "Qwen/Qwen3.8-27B",
-   "displayName": "Qwen3.8-27B",
+   "slug": "shisa-ai-ornith-1-5-35b-a3b-mtp-fp8",
+   "hfId": "shisa-ai/Ornith-1.5-35B-A3B-MTP-FP8",
+   "displayName": "Ornith-1.5-35B-A3B-MTP-FP8",
    "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
    "category": "chat",
-   "runCount": 68,
-   "medianTokS": 47.83,
+   "runCount": 76,
+   "medianTokS": 131.07,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131336
+  },
+  {
+   "slug": "deepseek-ai-deepseek-v4-flash-0731",
+   "hfId": "deepseek-ai/DeepSeek-V4-Flash-0731",
+   "displayName": "DeepSeek-V4-Flash-0731",
+   "family": "Deepseek",
+   "paramsB": 304,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 73,
+   "medianTokS": 84.8,
    "sourceClass": "community_reported",
    "evalScore": {
-    "score": 0.5833333333333334,
-    "count": 2,
-    "quant": "W4A16",
-    "mixedQuants": true
+    "score": 0.904321219923261,
+    "count": 5,
+    "quant": "FP8",
+    "mixedQuants": false
    },
    "vramMeasuredGb": {
-    "4": {
-     "gb": 18.61,
-     "n": 18
-    },
-    "6": {
-     "gb": 25.7,
+    "2": {
+     "gb": 25.59,
      "n": 4
     },
+    "4": {
+     "gb": 28.05,
+     "n": 1
+    },
     "8": {
-     "gb": 35,
+     "gb": 139.43,
      "n": 2
     }
    },
-   "maxContextTested": 262144
+   "maxContextTested": 487713
+  },
+  {
+   "slug": "quanttrio-glm-5-2-int4-int8mix",
+   "hfId": "QuantTrio/GLM-5.2-Int4-Int8Mix",
+   "displayName": "GLM-5.2-Int4-Int8Mix",
+   "family": null,
+   "paramsB": 753,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 68,
+   "medianTokS": 30.6,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
   },
   {
    "slug": "nvidia-nvidia-nemotron-3-nano-4b-bf16",
@@ -350,8 +585,8 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 55,
-   "medianTokS": 189.3,
+   "runCount": 56,
+   "medianTokS": 189,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
@@ -363,40 +598,6 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "deepseek-ai-deepseek-v4-flash-0731",
-   "hfId": "deepseek-ai/DeepSeek-V4-Flash-0731",
-   "displayName": "DeepSeek-V4-Flash-0731",
-   "family": "Deepseek",
-   "paramsB": 304,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 54,
-   "medianTokS": 48.7,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.9103921568627451,
-    "count": 2,
-    "quant": null,
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "2": {
-     "gb": 25.2,
-     "n": 2
-    },
-    "4": {
-     "gb": 28.05,
-     "n": 1
-    },
-    "8": {
-     "gb": 139.43,
-     "n": 2
-    }
-   },
-   "maxContextTested": 327680
-  },
-  {
    "slug": "qwen-qwen3-5-9b",
    "hfId": "Qwen/Qwen3.5-9B",
    "displayName": "Qwen3.5-9B",
@@ -405,8 +606,8 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 56,
-   "medianTokS": 47.11,
+   "runCount": 55,
+   "medianTokS": 46.68,
    "sourceClass": "community_reported",
    "evalScore": {
     "score": 0.4444444444444444,
@@ -435,6 +636,31 @@
    "maxContextTested": 250000
   },
   {
+   "slug": "openai-gpt-oss-20b",
+   "hfId": "openai/gpt-oss-20b",
+   "displayName": "gpt-oss-20b",
+   "family": "Gpt",
+   "paramsB": 21,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 54,
+   "medianTokS": 106.9,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 0.01,
+     "n": 16
+    },
+    "8": {
+     "gb": 16.04,
+     "n": 3
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "lmstudio-community-openreasoning-nemotron-7b-gguf",
    "hfId": "lmstudio-community/OpenReasoning-Nemotron-7B-GGUF",
    "displayName": "OpenReasoning-Nemotron-7B-GGUF",
@@ -456,29 +682,62 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "openai-gpt-oss-20b",
-   "hfId": "openai/gpt-oss-20b",
-   "displayName": "gpt-oss-20b",
-   "family": "Gpt",
-   "paramsB": 21,
+   "slug": "ornith-ai-ornith-1-5-9b-gguf",
+   "hfId": "ornith-ai/Ornith-1.5-9B-GGUF",
+   "displayName": "Ornith-1.5-9B-GGUF",
+   "family": null,
+   "paramsB": 9,
    "activeParamsB": null,
-   "isMoE": true,
+   "isMoE": false,
    "category": "chat",
    "runCount": 52,
-   "medianTokS": 102.77,
+   "medianTokS": 41.7,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "5": {
+     "gb": 9.46,
+     "n": 1
+    },
+    "6": {
+     "gb": 8.46,
+     "n": 1
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "google-gemma-4-26b-a4b-it",
+   "hfId": "google/gemma-4-26B-A4B-it",
+   "displayName": "gemma-4-26B-A4B-it",
+   "family": "Gemma",
+   "paramsB": 27,
+   "activeParamsB": 4,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 50,
+   "medianTokS": 63.26,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
     "4": {
-     "gb": 0.01,
-     "n": 16
+     "gb": 21.38,
+     "n": 5
+    },
+    "6": {
+     "gb": 23.84,
+     "n": 1
     },
     "8": {
-     "gb": 16.95,
-     "n": 2
+     "gb": 35.84,
+     "n": 5
+    },
+    "16": {
+     "gb": 161.2,
+     "n": 1
     }
    },
-   "maxContextTested": 131072
+   "maxContextTested": 262144
   },
   {
    "slug": "poolside-laguna-s-2-1",
@@ -531,35 +790,6 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "google-gemma-4-26b-a4b-it",
-   "hfId": "google/gemma-4-26B-A4B-it",
-   "displayName": "gemma-4-26B-A4B-it",
-   "family": "Gemma",
-   "paramsB": 27,
-   "activeParamsB": 4,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 45,
-   "medianTokS": 60.57,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 21.38,
-     "n": 5
-    },
-    "6": {
-     "gb": 23.84,
-     "n": 1
-    },
-    "8": {
-     "gb": 40.25,
-     "n": 4
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "meta-llama-llama-3-2-3b-instruct",
    "hfId": "meta-llama/Llama-3.2-3B-Instruct",
    "displayName": "Llama-3.2-3B-Instruct",
@@ -568,11 +798,16 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 45,
+   "runCount": 46,
    "medianTokS": 75.94,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {},
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 2.58,
+     "n": 1
+    }
+   },
    "maxContextTested": 131072
   },
   {
@@ -605,7 +840,7 @@
    "hfId": "ornith-ai/Ornith-1.0-9B",
    "displayName": "Ornith-1.0-9B",
    "family": "Qwen",
-   "paramsB": 0,
+   "paramsB": 9,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -660,7 +895,7 @@
    "activeParamsB": 4,
    "isMoE": true,
    "category": "chat",
-   "runCount": 46,
+   "runCount": 43,
    "medianTokS": 95.31,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -720,11 +955,70 @@
    "maxContextTested": 108000
   },
   {
+   "slug": "prism-ml-bonsai-27b-gguf",
+   "hfId": "prism-ml/Bonsai-27B-gguf",
+   "displayName": "Bonsai-27B-gguf",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 40,
+   "medianTokS": 30.74,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9,
+    "count": 3,
+    "quant": null,
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "1": {
+     "gb": 5.45,
+     "n": 12
+    },
+    "4": {
+     "gb": 21.9,
+     "n": 18
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
+   "hfId": "unsloth/Qwen3.6-35B-A3B-MTP-GGUF",
+   "displayName": "Qwen3.6-35B-A3B-MTP-GGUF",
+   "family": "Qwen",
+   "paramsB": 35,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 40,
+   "medianTokS": 72.77,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 12.1,
+     "n": 2
+    },
+    "4": {
+     "gb": 23.2,
+     "n": 11
+    },
+    "5": {
+     "gb": 11.4,
+     "n": 1
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
    "slug": "liquidai-lfm2-350m",
    "hfId": "LiquidAI/LFM2-350M",
    "displayName": "LFM2-350M",
    "family": null,
-   "paramsB": 0,
+   "paramsB": 0.35,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -739,6 +1033,40 @@
     }
    },
    "maxContextTested": 4608
+  },
+  {
+   "slug": "zai-org-glm-5-3-flash",
+   "hfId": "zai-org/GLM-5.3-Flash",
+   "displayName": "GLM-5.3-Flash",
+   "family": null,
+   "paramsB": 321,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 39,
+   "medianTokS": 122.7,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.7343189250924747,
+    "count": 8,
+    "quant": "exl3",
+    "mixedQuants": true
+   },
+   "vramMeasuredGb": {
+    "2": {
+     "gb": 87.35,
+     "n": 4
+    },
+    "3": {
+     "gb": 186.84,
+     "n": 7
+    },
+    "4": {
+     "gb": 186.9,
+     "n": 7
+    }
+   },
+   "maxContextTested": 1000000
   },
   {
    "slug": "deepseek-ai-deepseek-v4-flash",
@@ -833,6 +1161,22 @@
    "maxContextTested": 262144
   },
   {
+   "slug": "useful-quants-nvidia-nemotron-3-5-lightning-30b-a3b-w4a16",
+   "hfId": "useful-quants/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-W4A16",
+   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-W4A16",
+   "family": null,
+   "paramsB": 32,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 38,
+   "medianTokS": 226.44,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 67592
+  },
+  {
    "slug": "gestaltlabs-ornstein3-6-27b-mtp-nsc-ace-saber-gguf",
    "hfId": "GestaltLabs/Ornstein3.6-27B-MTP-NSC-ACE-SABER-GGUF",
    "displayName": "Ornstein3.6-27B-MTP-NSC-ACE-SABER-GGUF",
@@ -862,7 +1206,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 39,
+   "runCount": 37,
    "medianTokS": 57.25,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -884,75 +1228,51 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "jackrong-qwen3-8-27b-mtp-gguf",
-   "hfId": "Jackrong/Qwen3.8-27B-MTP-GGUF",
-   "displayName": "Qwen3.8-27B-MTP-GGUF",
-   "family": "Qwen",
-   "paramsB": 27,
+   "slug": "openbmb-minicpm5-1b-gguf",
+   "hfId": "openbmb/MiniCPM5-1B-GGUF",
+   "displayName": "MiniCPM5-1B-GGUF",
+   "family": "Llama",
+   "paramsB": 1,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 36,
-   "medianTokS": 26.65,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 132352
-  },
-  {
-   "slug": "prism-ml-bonsai-27b-gguf",
-   "hfId": "prism-ml/Bonsai-27B-gguf",
-   "displayName": "Bonsai-27B-gguf",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 36,
-   "medianTokS": 31.51,
+   "runCount": 37,
+   "medianTokS": 99.8,
    "sourceClass": "community_reported",
    "evalScore": {
-    "score": 0.9,
+    "score": 0.5222222222222223,
     "count": 3,
     "quant": null,
     "mixedQuants": false
    },
    "vramMeasuredGb": {
-    "1": {
-     "gb": 5.45,
-     "n": 12
-    },
     "4": {
-     "gb": 21.9,
-     "n": 18
+     "gb": 4.3,
+     "n": 1
     }
    },
-   "maxContextTested": 262144
+   "maxContextTested": 128000
   },
   {
-   "slug": "unsloth-qwen3-6-35b-a3b-mtp-gguf",
-   "hfId": "unsloth/Qwen3.6-35B-A3B-MTP-GGUF",
-   "displayName": "Qwen3.6-35B-A3B-MTP-GGUF",
+   "slug": "qwen-qwen3-0-6b-gguf",
+   "hfId": "Qwen/Qwen3-0.6B-GGUF",
+   "displayName": "Qwen3-0.6B-GGUF",
    "family": "Qwen",
-   "paramsB": 35,
+   "paramsB": 1,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 36,
-   "medianTokS": 69.44,
+   "medianTokS": 117.54,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
-    "3": {
-     "gb": 12.1,
-     "n": 2
-    },
     "4": {
-     "gb": 23.2,
-     "n": 11
+     "gb": 6.1,
+     "n": 9
     }
    },
-   "maxContextTested": 262144
+   "maxContextTested": 131072
   },
   {
    "slug": "0xsero-deepseek-v4-flash-180b",
@@ -992,27 +1312,6 @@
     "4": {
      "gb": 6.66,
      "n": 26
-    }
-   },
-   "maxContextTested": 131072
-  },
-  {
-   "slug": "qwen-qwen3-0-6b-gguf",
-   "hfId": "Qwen/Qwen3-0.6B-GGUF",
-   "displayName": "Qwen3-0.6B-GGUF",
-   "family": "Qwen",
-   "paramsB": 1,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 35,
-   "medianTokS": 117.54,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 6.1,
-     "n": 8
     }
    },
    "maxContextTested": 131072
@@ -1072,6 +1371,36 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "liquidai-lfm2-5-1-2b-instruct-gguf",
+   "hfId": "LiquidAI/LFM2.5-1.2B-Instruct-GGUF",
+   "displayName": "LFM2.5-1.2B-Instruct-GGUF",
+   "family": "Llama",
+   "paramsB": 1,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 32,
+   "medianTokS": 120.25,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.3333333333333333,
+    "count": 1,
+    "quant": null,
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 2.36,
+     "n": 3
+    },
+    "6": {
+     "gb": 2.58,
+     "n": 3
+    }
+   },
+   "maxContextTested": 24576
+  },
+  {
    "slug": "liquidai-lfm2-5-350m",
    "hfId": "LiquidAI/LFM2.5-350M",
    "displayName": "LFM2.5-350M",
@@ -1093,42 +1422,16 @@
    "maxContextTested": 4608
   },
   {
-   "slug": "openbmb-minicpm5-1b-gguf",
-   "hfId": "openbmb/MiniCPM5-1B-GGUF",
-   "displayName": "MiniCPM5-1B-GGUF",
-   "family": "Llama",
-   "paramsB": 1,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 34,
-   "medianTokS": 97.55,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.5222222222222223,
-    "count": 3,
-    "quant": null,
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 4.3,
-     "n": 1
-    }
-   },
-   "maxContextTested": 128000
-  },
-  {
-   "slug": "deepreinforce-ai-ornith-1-0-9b-gguf",
-   "hfId": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+   "slug": "ornith-ai-ornith-1-0-9b-gguf",
+   "hfId": "ornith-ai/Ornith-1.0-9B-GGUF",
    "displayName": "Ornith-1.0-9B-GGUF",
    "family": null,
    "paramsB": 9,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 31,
-   "medianTokS": 34.3,
+   "runCount": 32,
+   "medianTokS": 34.9,
    "sourceClass": "community_reported",
    "evalScore": {
     "score": 0.8936170212765957,
@@ -1138,15 +1441,36 @@
    },
    "vramMeasuredGb": {
     "4": {
-     "gb": 6.25,
-     "n": 2
+     "gb": 6.2,
+     "n": 3
     },
     "5": {
      "gb": 6.85,
      "n": 1
     }
    },
-   "maxContextTested": 8192
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "ista-daslab-qwen3-8-27b-gsq-rco-gguf",
+   "hfId": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+   "displayName": "Qwen3.8-27B-GSQ-RCO-GGUF",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 31,
+   "medianTokS": 33.94,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 23.61,
+     "n": 1
+    }
+   },
+   "maxContextTested": 32768
   },
   {
    "slug": "meta-llama-meta-llama-3-8b-instruct",
@@ -1329,6 +1653,40 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "qwen-qwen3-coder-30b-a3b-instruct",
+   "hfId": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+   "displayName": "Qwen3-Coder-30B-A3B-Instruct",
+   "family": "Qwen",
+   "paramsB": 31,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "code",
+   "runCount": 29,
+   "medianTokS": 80.46,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9207920792079208,
+    "count": 1,
+    "quant": "Q4_K_M",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 30.3,
+     "n": 9
+    },
+    "5": {
+     "gb": 23.91,
+     "n": 5
+    },
+    "6": {
+     "gb": 58,
+     "n": 2
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "deepseek-ai-deepseek-r1-distill-qwen-7b",
    "hfId": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
    "displayName": "DeepSeek-R1-Distill-Qwen-7B",
@@ -1396,6 +1754,60 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "qwen-qwen3-8-27b-fp8",
+   "hfId": "Qwen/Qwen3.8-27B-FP8",
+   "displayName": "Qwen3.8-27B-FP8",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 28,
+   "medianTokS": 80.79,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 111.4,
+     "n": 5
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "jackrong-qwopus3-5-27b-v3",
+   "hfId": "Jackrong/Qwopus3.5-27B-v3",
+   "displayName": "Qwopus3.5-27B-v3",
+   "family": "Qwen",
+   "paramsB": 27,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 27,
+   "medianTokS": 12.86,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 0.01,
+     "n": 14
+    },
+    "5": {
+     "gb": 19.86,
+     "n": 5
+    },
+    "6": {
+     "gb": 23.53,
+     "n": 2
+    },
+    "8": {
+     "gb": 29.23,
+     "n": 2
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "liquidai-lfm2-5-230m",
    "hfId": "LiquidAI/LFM2.5-230M",
    "displayName": "LFM2.5-230M",
@@ -1415,40 +1827,6 @@
     }
    },
    "maxContextTested": 4096
-  },
-  {
-   "slug": "qwen-qwen3-coder-30b-a3b-instruct",
-   "hfId": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
-   "displayName": "Qwen3-Coder-30B-A3B-Instruct",
-   "family": "Qwen",
-   "paramsB": 31,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "code",
-   "runCount": 30,
-   "medianTokS": 80.43,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.9207920792079208,
-    "count": 1,
-    "quant": "Q4_K_M",
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 30.3,
-     "n": 9
-    },
-    "5": {
-     "gb": 23.91,
-     "n": 5
-    },
-    "6": {
-     "gb": 58,
-     "n": 2
-    }
-   },
-   "maxContextTested": 131072
   },
   {
    "slug": "arcee-ai-trinity-mini",
@@ -1488,25 +1866,25 @@
    "maxContextTested": 65664
   },
   {
-   "slug": "liquidai-lfm2-5-1-2b-instruct-gguf",
-   "hfId": "LiquidAI/LFM2.5-1.2B-Instruct-GGUF",
-   "displayName": "LFM2.5-1.2B-Instruct-GGUF",
-   "family": "Llama",
-   "paramsB": 1,
+   "slug": "google-gemma-4-e2b-it",
+   "hfId": "google/gemma-4-E2B-it",
+   "displayName": "gemma-4-E2B-it",
+   "family": "Gemma",
+   "paramsB": 5,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 28,
-   "medianTokS": 118.2,
+   "runCount": 26,
+   "medianTokS": 106.8,
    "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.3333333333333333,
-    "count": 1,
-    "quant": null,
-    "mixedQuants": false
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 4.89,
+     "n": 8
+    }
    },
-   "vramMeasuredGb": {},
-   "maxContextTested": 4224
+   "maxContextTested": 32768
   },
   {
    "slug": "lmstudio-community-nvidia-nemotron-3-5-lightning-30b-a3b-gguf",
@@ -1546,6 +1924,36 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "unsloth-gemma-4-31b-it-gguf",
+   "hfId": "unsloth/gemma-4-31B-it-GGUF",
+   "displayName": "gemma-4-31B-it-GGUF",
+   "family": "Gemma",
+   "paramsB": 31,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 26,
+   "medianTokS": 15.47,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9106815026266084,
+    "count": 5,
+    "quant": "Q4_K_XL",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 21.5,
+     "n": 16
+    },
+    "6": {
+     "gb": 20.7,
+     "n": 1
+    }
+   },
+   "maxContextTested": 98304
+  },
+  {
    "slug": "frosty40-nex-n2-mini-b70-turbo-gguf",
    "hfId": "Frosty40/Nex-N2-mini-B70-Turbo-GGUF",
    "displayName": "Nex-N2-mini-B70-Turbo-GGUF",
@@ -1578,58 +1986,34 @@
    "maxContextTested": 65664
   },
   {
-   "slug": "jackrong-qwopus3-5-27b-v3",
-   "hfId": "Jackrong/Qwopus3.5-27B-v3",
-   "displayName": "Qwopus3.5-27B-v3",
-   "family": "Qwen",
-   "paramsB": 27,
+   "slug": "openai-gpt-oss-120b",
+   "hfId": "openai/gpt-oss-120b",
+   "displayName": "gpt-oss-120b",
+   "family": "Gpt",
+   "paramsB": 117,
    "activeParamsB": null,
-   "isMoE": false,
+   "isMoE": true,
    "category": "chat",
    "runCount": 25,
-   "medianTokS": 12.86,
+   "medianTokS": 72.56,
    "sourceClass": "community_reported",
-   "evalScore": null,
+   "evalScore": {
+    "score": 0.7839966175149304,
+    "count": 2,
+    "quant": "MXFP4",
+    "mixedQuants": false
+   },
    "vramMeasuredGb": {
     "4": {
-     "gb": 0.01,
-     "n": 14
-    },
-    "5": {
-     "gb": 19.86,
+     "gb": 85.1,
      "n": 5
     },
-    "6": {
-     "gb": 23.53,
-     "n": 2
-    },
-    "8": {
-     "gb": 29.23,
+    "16": {
+     "gb": 68.47,
      "n": 2
     }
    },
    "maxContextTested": 131072
-  },
-  {
-   "slug": "google-gemma-4-e2b-it",
-   "hfId": "google/gemma-4-E2B-it",
-   "displayName": "gemma-4-E2B-it",
-   "family": "Gemma",
-   "paramsB": 5,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 24,
-   "medianTokS": 107.04,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 4.89,
-     "n": 8
-    }
-   },
-   "maxContextTested": 32768
   },
   {
    "slug": "liquidai-lfm2-8b-a1b",
@@ -1653,6 +2037,27 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "nvidia-qwen3-6-35b-a3b-nvfp4",
+   "hfId": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+   "displayName": "Qwen3.6-35B-A3B-NVFP4",
+   "family": "Qwen",
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 24,
+   "medianTokS": 233.4,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 41.4,
+     "n": 2
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
    "slug": "opengvlab-internvl3-14b",
    "hfId": "OpenGVLab/InternVL3-14B",
    "displayName": "InternVL3-14B",
@@ -1674,27 +2079,6 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "nvidia-qwen3-6-35b-a3b-nvfp4",
-   "hfId": "nvidia/Qwen3.6-35B-A3B-NVFP4",
-   "displayName": "Qwen3.6-35B-A3B-NVFP4",
-   "family": "Qwen",
-   "paramsB": 36,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 23,
-   "medianTokS": 233.4,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 41.4,
-     "n": 2
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "palmfuture-qwen3-6-35b-a3b-gptq-int4",
    "hfId": "palmfuture/Qwen3.6-35B-A3B-GPTQ-Int4",
    "displayName": "Qwen3.6-35B-A3B-GPTQ-Int4",
@@ -1703,8 +2087,8 @@
    "activeParamsB": 3,
    "isMoE": true,
    "category": "chat",
-   "runCount": 23,
-   "medianTokS": 80.9,
+   "runCount": 24,
+   "medianTokS": 80.5,
    "sourceClass": "community_reported",
    "evalScore": {
     "score": 0.7293607056123402,
@@ -1808,13 +2192,13 @@
    "maxContextTested": 262144
   },
   {
-   "slug": "lucebox-deepseek-v4-flash-rocmfpx",
-   "hfId": "Lucebox/DeepSeek-V4-Flash-ROCMFPX",
-   "displayName": "DeepSeek-V4-Flash-ROCMFPX",
+   "slug": "lucebox-deepseek-v4-flash-0731-rocmfp3",
+   "hfId": "Lucebox/DeepSeek-V4-Flash-0731-ROCmFP3",
+   "displayName": "DeepSeek-V4-Flash-0731-ROCmFP3",
    "family": "Deepseek",
-   "paramsB": null,
+   "paramsB": 304,
    "activeParamsB": null,
-   "isMoE": false,
+   "isMoE": true,
    "category": "chat",
    "runCount": 22,
    "medianTokS": 77.54,
@@ -1845,59 +2229,25 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "unsloth-gemma-4-31b-it-gguf",
-   "hfId": "unsloth/gemma-4-31B-it-GGUF",
-   "displayName": "gemma-4-31B-it-GGUF",
-   "family": "Gemma",
-   "paramsB": 31,
+   "slug": "unsloth-qwen3-8-27b-nvfp4",
+   "hfId": "unsloth/Qwen3.8-27B-NVFP4",
+   "displayName": "Qwen3.8-27B-NVFP4",
+   "family": "Qwen",
+   "paramsB": 28,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 22,
-   "medianTokS": 15.44,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.9106815026266084,
-    "count": 5,
-    "quant": "Q4_K_XL",
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 21.5,
-     "n": 16
-    },
-    "6": {
-     "gb": 20.7,
-     "n": 1
-    }
-   },
-   "maxContextTested": 98304
-  },
-  {
-   "slug": "openai-gpt-oss-120b",
-   "hfId": "openai/gpt-oss-120b",
-   "displayName": "gpt-oss-120b",
-   "family": "Gpt",
-   "paramsB": 117,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 21,
-   "medianTokS": 70.72,
+   "medianTokS": 89.53,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
     "4": {
-     "gb": 60,
-     "n": 1
-    },
-    "16": {
-     "gb": 68.47,
-     "n": 2
+     "gb": 30.11,
+     "n": 7
     }
    },
-   "maxContextTested": 32768
+   "maxContextTested": 262144
   },
   {
    "slug": "bartowski-deepseek-r1-distill-qwen-14b-gguf",
@@ -1961,6 +2311,31 @@
     }
    },
    "maxContextTested": 131072
+  },
+  {
+   "slug": "qwen-qwen3-8-flash-next",
+   "hfId": "Qwen/Qwen3.8-Flash-Next",
+   "displayName": "Qwen3.8-Flash-Next",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 20,
+   "medianTokS": 69.42,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 64,
+     "n": 1
+    },
+    "4": {
+     "gb": 124.07,
+     "n": 1
+    }
+   },
+   "maxContextTested": 262144
   },
   {
    "slug": "unsloth-qwen3-6-35b-a3b",
@@ -2344,25 +2719,20 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "ornith-ai-ornith-1-5-35b-a3b-gguf",
-   "hfId": "ornith-ai/Ornith-1.5-35B-A3B-GGUF",
-   "displayName": "Ornith-1.5-35B-A3B-GGUF",
-   "family": null,
-   "paramsB": 35,
-   "activeParamsB": 3,
-   "isMoE": true,
+   "slug": "qwen-qwen3-4b",
+   "hfId": "Qwen/Qwen3-4B",
+   "displayName": "Qwen3-4B",
+   "family": "Qwen",
+   "paramsB": 4,
+   "activeParamsB": null,
+   "isMoE": false,
    "category": "chat",
    "runCount": 17,
-   "medianTokS": 42.66,
+   "medianTokS": 55.2,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 10.2,
-     "n": 8
-    }
-   },
-   "maxContextTested": 262144
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "unsloth-gemma-4-12b-it-qat-gguf",
@@ -2384,6 +2754,51 @@
     }
    },
    "maxContextTested": 262144
+  },
+  {
+   "slug": "unsloth-qwen3-5-35b-a3b-gguf",
+   "hfId": "unsloth/Qwen3.5-35B-A3B-GGUF",
+   "displayName": "Qwen3.5-35B-A3B-GGUF",
+   "family": "Qwen",
+   "paramsB": 35,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 17,
+   "medianTokS": 72.89,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "unsloth-qwen3-8-flash-next-gguf",
+   "hfId": "unsloth/Qwen3.8-Flash-Next-GGUF",
+   "displayName": "Qwen3.8-Flash-Next-GGUF",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 17,
+   "medianTokS": 43.96,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "1": {
+     "gb": 42.12,
+     "n": 5
+    },
+    "3": {
+     "gb": 43.6,
+     "n": 2
+    },
+    "4": {
+     "gb": 66.43,
+     "n": 7
+    }
+   },
+   "maxContextTested": 217088
   },
   {
    "slug": "zai-org-glm-z1-32b-0414",
@@ -2481,6 +2896,27 @@
    "maxContextTested": 172800
   },
   {
+   "slug": "unsloth-qwen3-5-9b-gguf",
+   "hfId": "unsloth/Qwen3.5-9B-GGUF",
+   "displayName": "Qwen3.5-9B-GGUF",
+   "family": "Qwen",
+   "paramsB": 9,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 16,
+   "medianTokS": 52.2,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 7.3,
+     "n": 11
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "badtheorylabs-btl-4-compact",
    "hfId": "badtheorylabs/BTL-4-Compact",
    "displayName": "BTL-4-Compact",
@@ -2555,41 +2991,50 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "qwen-qwen3-4b",
-   "hfId": "Qwen/Qwen3-4B",
-   "displayName": "Qwen3-4B",
-   "family": "Qwen",
-   "paramsB": 4,
-   "activeParamsB": null,
-   "isMoE": false,
+   "slug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-bf16",
+   "hfId": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+   "family": null,
+   "paramsB": 32,
+   "activeParamsB": 3,
+   "isMoE": true,
    "category": "chat",
    "runCount": 15,
-   "medianTokS": 55.33,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
-   "slug": "unsloth-qwen3-5-9b-gguf",
-   "hfId": "unsloth/Qwen3.5-9B-GGUF",
-   "displayName": "Qwen3.5-9B-GGUF",
-   "family": "Qwen",
-   "paramsB": 9,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 15,
-   "medianTokS": 51.89,
+   "medianTokS": 93,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
-    "4": {
-     "gb": 7.3,
-     "n": 11
+    "16": {
+     "gb": 72.8,
+     "n": 3
     }
    },
-   "maxContextTested": 131072
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "qwen-qwen3-5-122b-a10b",
+   "hfId": "Qwen/Qwen3.5-122B-A10B",
+   "displayName": "Qwen3.5-122B-A10B",
+   "family": "Qwen",
+   "paramsB": 125,
+   "activeParamsB": 10,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 15,
+   "medianTokS": 26.41,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 10.3,
+     "n": 1
+    },
+    "4": {
+     "gb": 75.57,
+     "n": 2
+    }
+   },
+   "maxContextTested": 262144
   },
   {
    "slug": "yuxinlu1-gemma-4-12b-agentic-fable5-composer2-5-v2-3-5x-tau2-gguf",
@@ -2634,6 +3079,69 @@
    "maxContextTested": 65536
   },
   {
+   "slug": "dbirks-qwen3-8-27b-w4a16-autoround",
+   "hfId": "dbirks/Qwen3.8-27B-W4A16-AutoRound",
+   "displayName": "Qwen3.8-27B-W4A16-AutoRound",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 14,
+   "medianTokS": 187.5,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 1,
+    "count": 1,
+    "quant": "W4A16-AutoRound",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 56.5,
+     "n": 3
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "internscience-agents-a1-4b-q4-k-m-gguf",
+   "hfId": "InternScience/Agents-A1-4B-Q4_K_M-GGUF",
+   "displayName": "Agents-A1-4B-Q4_K_M-GGUF",
+   "family": null,
+   "paramsB": 5,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 14,
+   "medianTokS": 72.3,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
+  },
+  {
+   "slug": "nvidia-gemma-4-26b-a4b-nvfp4",
+   "hfId": "nvidia/Gemma-4-26B-A4B-NVFP4",
+   "displayName": "Gemma-4-26B-A4B-NVFP4",
+   "family": "Gemma",
+   "paramsB": 14,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 14,
+   "medianTokS": 441.95,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 87.5,
+     "n": 1
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "opengvlab-internvl3-38b",
    "hfId": "OpenGVLab/InternVL3-38B",
    "displayName": "InternVL3-38B",
@@ -2659,7 +3167,7 @@
    "hfId": "ornith-ai/Ornith-1.0-35B",
    "displayName": "Ornith-1.0-35B",
    "family": "Qwen",
-   "paramsB": 0,
+   "paramsB": 35,
    "activeParamsB": null,
    "isMoE": true,
    "category": "chat",
@@ -2775,6 +3283,22 @@
    "maxContextTested": 262144
   },
   {
+   "slug": "bartowski-ornith-1-5-35b-a3b-gguf",
+   "hfId": "bartowski/Ornith-1.5-35B-A3B-GGUF",
+   "displayName": "Ornith-1.5-35B-A3B-GGUF",
+   "family": null,
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 13,
+   "medianTokS": 77.49,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 12553
+  },
+  {
    "slug": "cyankiwi-qwen3-5-9b-awq-4bit",
    "hfId": "cyankiwi/Qwen3.5-9B-AWQ-4bit",
    "displayName": "Qwen3.5-9B-AWQ-4bit",
@@ -2794,6 +3318,22 @@
     }
    },
    "maxContextTested": 131072
+  },
+  {
+   "slug": "deepseek-ai-deepseek-v4-1-flash",
+   "hfId": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "displayName": "DeepSeek-V4.1-Flash",
+   "family": "Deepseek",
+   "paramsB": 763,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 13,
+   "medianTokS": 71.98,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 524288
   },
   {
    "slug": "josefprusa-thinkingcap-qwen3-6-27b-int4-autoround-v1",
@@ -2831,27 +3371,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 16384
-  },
-  {
-   "slug": "nvidia-gemma-4-26b-a4b-nvfp4",
-   "hfId": "nvidia/Gemma-4-26B-A4B-NVFP4",
-   "displayName": "Gemma-4-26B-A4B-NVFP4",
-   "family": "Gemma",
-   "paramsB": 14,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 13,
-   "medianTokS": 482.3,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 87.5,
-     "n": 1
-    }
-   },
-   "maxContextTested": 131072
   },
   {
    "slug": "qwen-qwen-agentworld-35b-a3b",
@@ -2895,31 +3414,6 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "qwen-qwen3-5-122b-a10b",
-   "hfId": "Qwen/Qwen3.5-122B-A10B",
-   "displayName": "Qwen3.5-122B-A10B",
-   "family": "Qwen",
-   "paramsB": 125,
-   "activeParamsB": 10,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 13,
-   "medianTokS": 25.43,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "3": {
-     "gb": 10.3,
-     "n": 1
-    },
-    "4": {
-     "gb": 75.57,
-     "n": 2
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "sergiiob-qwen3-8-27b-gptq-int4-sym-g128-mtp-bf16",
    "hfId": "SergiioB/Qwen3.8-27B-GPTQ-Int4-sym-G128-MTP-BF16",
    "displayName": "Qwen3.8-27B-GPTQ-Int4-sym-G128-MTP-BF16",
@@ -2934,6 +3428,27 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 131072
+  },
+  {
+   "slug": "unsloth-gpt-oss-20b-gguf",
+   "hfId": "unsloth/gpt-oss-20b-GGUF",
+   "displayName": "gpt-oss-20b-GGUF",
+   "family": "Gpt",
+   "paramsB": 22,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 13,
+   "medianTokS": 50.81,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 12.2,
+     "n": 1
+    }
+   },
+   "maxContextTested": 65536
   },
   {
    "slug": "bartowski-deepseek-r1-distill-qwen-32b-gguf",
@@ -3071,6 +3586,22 @@
    "maxContextTested": 262144
   },
   {
+   "slug": "qwen-qwen3-8-flash-next-fp8",
+   "hfId": "Qwen/Qwen3.8-Flash-Next-FP8",
+   "displayName": "Qwen3.8-Flash-Next-FP8",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 12,
+   "medianTokS": 32.41,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 4352
+  },
+  {
    "slug": "unsloth-muse-glimmer-30b-gguf",
    "hfId": "unsloth/Muse-Glimmer-30B-GGUF",
    "displayName": "Muse-Glimmer-30B-GGUF",
@@ -3126,35 +3657,6 @@
    "maxContextTested": 262144
   },
   {
-   "slug": "unsloth-qwen3-8-flash-next-gguf",
-   "hfId": "unsloth/Qwen3.8-Flash-Next-GGUF",
-   "displayName": "Qwen3.8-Flash-Next-GGUF",
-   "family": "Qwen",
-   "paramsB": 180,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 12,
-   "medianTokS": 44.26,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "1": {
-     "gb": 42.12,
-     "n": 5
-    },
-    "3": {
-     "gb": 43.6,
-     "n": 2
-    },
-    "4": {
-     "gb": 66.43,
-     "n": 5
-    }
-   },
-   "maxContextTested": 217088
-  },
-  {
    "slug": "empero-ai-qwythos-9b-claude-mythos-5-1m-gguf",
    "hfId": "empero-ai/Qwythos-9B-Claude-Mythos-5-1M-GGUF",
    "displayName": "Qwythos-9B-Claude-Mythos-5-1M-GGUF",
@@ -3178,6 +3680,27 @@
     }
    },
    "maxContextTested": 65536
+  },
+  {
+   "slug": "google-gemma-3-1b-it",
+   "hfId": "google/gemma-3-1b-it",
+   "displayName": "gemma-3-1b-it",
+   "family": "Gemma",
+   "paramsB": 1,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 11,
+   "medianTokS": 204.53,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 1.9,
+     "n": 1
+    }
+   },
+   "maxContextTested": 2048
   },
   {
    "slug": "ibm-granite-granite-4-0-h-micro",
@@ -3204,22 +3727,6 @@
     }
    },
    "maxContextTested": 2048
-  },
-  {
-   "slug": "internscience-agents-a1-4b-q4-k-m-gguf",
-   "hfId": "InternScience/Agents-A1-4B-Q4_K_M-GGUF",
-   "displayName": "Agents-A1-4B-Q4_K_M-GGUF",
-   "family": null,
-   "paramsB": 5,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 11,
-   "medianTokS": 76.59,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 131072
   },
   {
    "slug": "jackrong-qwopus3-5-27b-v3-gguf",
@@ -3305,27 +3812,6 @@
    "maxContextTested": 262144
   },
   {
-   "slug": "unsloth-qwen3-8-27b-nvfp4",
-   "hfId": "unsloth/Qwen3.8-27B-NVFP4",
-   "displayName": "Qwen3.8-27B-NVFP4",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 11,
-   "medianTokS": 71.5,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 30.02,
-     "n": 4
-    }
-   },
-   "maxContextTested": 153664
-  },
-  {
    "slug": "vrfai-qwen3-6-27b-fp8",
    "hfId": "vrfai/Qwen3.6-27B-FP8",
    "displayName": "Qwen3.6-27B-FP8",
@@ -3379,6 +3865,27 @@
    "maxContextTested": 262144
   },
   {
+   "slug": "amd-qwen3-8-27b-quark-awq-mxfp4",
+   "hfId": "amd/Qwen3.8-27B-Quark-AWQ-MXFP4",
+   "displayName": "Qwen3.8-27B-Quark-AWQ-MXFP4",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 10,
+   "medianTokS": 194.91,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 55.7,
+     "n": 5
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
    "slug": "deepseek-ai-deepseek-r1-distill-qwen-14b",
    "hfId": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
    "displayName": "DeepSeek-R1-Distill-Qwen-14B",
@@ -3398,22 +3905,6 @@
     }
    },
    "maxContextTested": 131072
-  },
-  {
-   "slug": "google-gemma-3-1b-it",
-   "hfId": "google/gemma-3-1b-it",
-   "displayName": "gemma-3-1b-it",
-   "family": "Gemma",
-   "paramsB": 1,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 10,
-   "medianTokS": 204.38,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
   },
   {
    "slug": "jetbrains-mellum2-12b-a2-5b-instruct-gguf-q4-k-m",
@@ -3495,6 +3986,32 @@
    "maxContextTested": null
   },
   {
+   "slug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4",
+   "hfId": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
+   "family": "Opt",
+   "paramsB": 18,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 10,
+   "medianTokS": 494.65,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.7475086470646959,
+    "count": 3,
+    "quant": "NVFP4",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 85,
+     "n": 7
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "qwen-qwen2-5-14b-instruct",
    "hfId": "Qwen/Qwen2.5-14B-Instruct",
    "displayName": "Qwen2.5-14B-Instruct",
@@ -3532,6 +4049,27 @@
     "4": {
      "gb": 15.76,
      "n": 2
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "radixark-qwen3-8-27b-nvfp4-bf16-lmhead",
+   "hfId": "RadixArk/Qwen3.8-27B-NVFP4-BF16-LMHead",
+   "displayName": "Qwen3.8-27B-NVFP4-BF16-LMHead",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 10,
+   "medianTokS": 189.6,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 57.3,
+     "n": 5
     }
    },
    "maxContextTested": 262144
@@ -3812,22 +4350,6 @@
    "maxContextTested": 28000
   },
   {
-   "slug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-bf16",
-   "hfId": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
-   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
-   "family": null,
-   "paramsB": 32,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 9,
-   "medianTokS": 93,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 16384
-  },
-  {
    "slug": "poolside-laguna-s-2-1-nvfp4",
    "hfId": "poolside/Laguna-S-2.1-NVFP4",
    "displayName": "Laguna-S-2.1-NVFP4",
@@ -3921,6 +4443,31 @@
     }
    },
    "maxContextTested": 32768
+  },
+  {
+   "slug": "zai-org-glm-4-7-flash",
+   "hfId": "zai-org/GLM-4.7-Flash",
+   "displayName": "GLM-4.7-Flash",
+   "family": null,
+   "paramsB": 31,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 9,
+   "medianTokS": 93.28,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 21.6,
+     "n": 1
+    },
+    "6": {
+     "gb": 25,
+     "n": 1
+    }
+   },
+   "maxContextTested": 65536
   },
   {
    "slug": "aeon-7-qwen3-6-27b-aeon-ultimate-uncensored-nvfp4",
@@ -4171,6 +4718,22 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "lgai-exaone-exaone-3-5-7-8b-instruct",
+   "hfId": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+   "displayName": "EXAONE-3.5-7.8B-Instruct",
+   "family": null,
+   "paramsB": 8,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 8,
+   "medianTokS": 25.66,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
    "slug": "lmstudio-community-acereason-nemotron-1-1-7b-gguf",
    "hfId": "lmstudio-community/AceReason-Nemotron-1.1-7B-GGUF",
    "displayName": "AceReason-Nemotron-1.1-7B-GGUF",
@@ -4250,6 +4813,27 @@
    "maxContextTested": 8192
   },
   {
+   "slug": "radixark-qwen3-8-27b-nvfp4",
+   "hfId": "RadixArk/Qwen3.8-27B-NVFP4",
+   "displayName": "Qwen3.8-27B-NVFP4",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 8,
+   "medianTokS": 4617.85,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 29.52,
+     "n": 2
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "sakamakismile-qwen3-8-27b-mtp-nvfp4",
    "hfId": "sakamakismile/Qwen3.8-27B-MTP-NVFP4",
    "displayName": "Qwen3.8-27B-MTP-NVFP4",
@@ -4269,6 +4853,27 @@
    },
    "vramMeasuredGb": {},
    "maxContextTested": 172800
+  },
+  {
+   "slug": "tencent-hy-mt2-30b-a3b-fp8",
+   "hfId": "tencent/Hy-MT2-30B-A3B-FP8",
+   "displayName": "Hy-MT2-30B-A3B-FP8",
+   "family": null,
+   "paramsB": 30,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 8,
+   "medianTokS": 86.46,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 114.82,
+     "n": 8
+    }
+   },
+   "maxContextTested": 32768
   },
   {
    "slug": "unsloth-internvl3-8b-gguf",
@@ -4327,6 +4932,22 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "jackrong-qwopus3-8-27b-flash-gguf",
+   "hfId": "Jackrong/Qwopus3.8-27B-Flash-GGUF",
+   "displayName": "Qwopus3.8-27B-Flash-GGUF",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 7,
+   "medianTokS": 27.6,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "meta-llama-llama-3-2-1b-instruct",
@@ -4491,29 +5112,29 @@
    "maxContextTested": 8192
   },
   {
-   "slug": "zai-org-glm-4-7-flash",
-   "hfId": "zai-org/GLM-4.7-Flash",
-   "displayName": "GLM-4.7-Flash",
-   "family": null,
-   "paramsB": 31,
+   "slug": "unsloth-qwen3-5-9b-mtp-gguf",
+   "hfId": "unsloth/Qwen3.5-9B-MTP-GGUF",
+   "displayName": "Qwen3.5-9B-MTP-GGUF",
+   "family": "Qwen",
+   "paramsB": 9,
    "activeParamsB": null,
-   "isMoE": true,
+   "isMoE": false,
    "category": "chat",
    "runCount": 7,
-   "medianTokS": 97.39,
+   "medianTokS": 90.8,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
     "4": {
-     "gb": 21.6,
+     "gb": 9.7,
      "n": 1
     },
     "6": {
-     "gb": 25,
-     "n": 1
+     "gb": 12.63,
+     "n": 4
     }
    },
-   "maxContextTested": 8192
+   "maxContextTested": 262144
   },
   {
    "slug": "1337hero-qwen3-coder-30b-a3b-codemonkey",
@@ -4683,25 +5304,20 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "lued-qwen3-8-27b-int8-w8a16-mtp",
-   "hfId": "lued/Qwen3.8-27B-INT8-W8A16-MTP",
-   "displayName": "Qwen3.8-27B-INT8-W8A16-MTP",
+   "slug": "jonathancoletti-qwen3-8-27b-uncensored",
+   "hfId": "JonathanColetti/Qwen3.8-27B-Uncensored",
+   "displayName": "Qwen3.8-27B-Uncensored",
    "family": "Qwen",
    "paramsB": 28,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 6,
-   "medianTokS": 161.06,
+   "medianTokS": 123.45,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 54.55,
-     "n": 1
-    }
-   },
-   "maxContextTested": 65536
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
   },
   {
    "slug": "mradermacher-gemma-4-19b-a4b-it-reap-gguf",
@@ -4767,6 +5383,48 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "poolside-laguna-xs-2-1",
+   "hfId": "poolside/Laguna-XS-2.1",
+   "displayName": "Laguna-XS-2.1",
+   "family": null,
+   "paramsB": 33,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 6,
+   "medianTokS": 106.42,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 47.11,
+     "n": 1
+    }
+   },
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "qwen-qwen2-5-0-5b-instruct",
+   "hfId": "Qwen/Qwen2.5-0.5B-Instruct",
+   "displayName": "Qwen2.5-0.5B-Instruct",
+   "family": "Qwen",
+   "paramsB": 0,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 6,
+   "medianTokS": 263.44,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 2.34,
+     "n": 3
+    }
+   },
+   "maxContextTested": 4608
+  },
+  {
    "slug": "qwen-qwen2-5-coder-7b-instruct",
    "hfId": "Qwen/Qwen2.5-Coder-7B-Instruct",
    "displayName": "Qwen2.5-Coder-7B-Instruct",
@@ -4788,25 +5446,25 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "qwen-qwen3-6-35b-a3b-fp8",
-   "hfId": "Qwen/Qwen3.6-35B-A3B-FP8",
-   "displayName": "Qwen3.6-35B-A3B-FP8",
-   "family": "Qwen",
-   "paramsB": 35,
+   "slug": "rwkv-rwkv7-goose-world3-2-9b-hf",
+   "hfId": "RWKV/RWKV7-Goose-World3-2.9B-HF",
+   "displayName": "RWKV7-Goose-World3-2.9B-HF",
+   "family": null,
+   "paramsB": 3,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 6,
-   "medianTokS": 196.86,
+   "medianTokS": 39.38,
    "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 47.08,
-     "n": 4
-    }
+   "evalScore": {
+    "score": 0.6159420289855072,
+    "count": 2,
+    "quant": null,
+    "mixedQuants": false
    },
-   "maxContextTested": 128000
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "samuelcardillo-qwopus-moe-35b-a3b-gguf",
@@ -4859,7 +5517,7 @@
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
-   "runCount": 9,
+   "runCount": 6,
    "medianTokS": 66.8,
    "sourceClass": "community_reported",
    "evalScore": {
@@ -4988,6 +5646,47 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "agentionai-signal-3-8-27b",
+   "hfId": "agentionai/Signal-3.8-27B",
+   "displayName": "Signal-3.8-27B",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 50.72,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "angelslim-hy3-gguf",
+   "hfId": "AngelSlim/Hy3-GGUF",
+   "displayName": "Hy3-GGUF",
+   "family": null,
+   "paramsB": 299,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 35.84,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "1": {
+     "gb": 121.6,
+     "n": 1
+    },
+    "2": {
+     "gb": 98.61,
+     "n": 4
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "bartowski-badtheorylabs-btl-4-gguf",
    "hfId": "bartowski/badtheorylabs_BTL-4-GGUF",
    "displayName": "badtheorylabs_BTL-4-GGUF",
@@ -5107,6 +5806,106 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "google-gemma-4-e4b-it-qat-q4-0-gguf",
+   "hfId": "google/gemma-4-E4B-it-qat-q4_0-gguf",
+   "displayName": "gemma-4-E4B-it-qat-q4_0-gguf",
+   "family": "Gemma",
+   "paramsB": 4,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 83.95,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.8333333333333334,
+    "count": 1,
+    "quant": null,
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 4.89,
+     "n": 1
+    }
+   },
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "huggingfacetb-smollm2-360m-instruct",
+   "hfId": "HuggingFaceTB/SmolLM2-360M-Instruct",
+   "displayName": "SmolLM2-360M-Instruct",
+   "family": "Llama",
+   "paramsB": 0,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 208.04,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 1.5,
+     "n": 2
+    }
+   },
+   "maxContextTested": 4608
+  },
+  {
+   "slug": "inclusionai-ling-3-0-tiny",
+   "hfId": "inclusionAI/Ling-3.0-tiny",
+   "displayName": "Ling-3.0-tiny",
+   "family": null,
+   "paramsB": 8,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 128.83,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 7.65,
+     "n": 2
+    }
+   },
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "jackrong-qwopus3-8-27b-flash",
+   "hfId": "Jackrong/Qwopus3.8-27B-Flash",
+   "displayName": "Qwopus3.8-27B-Flash",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 21.29,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 790
+  },
+  {
+   "slug": "jundot-qwen3-8-flash-next-oq4e-mtp",
+   "hfId": "Jundot/Qwen3.8-Flash-Next-oQ4e-mtp",
+   "displayName": "Qwen3.8-Flash-Next-oQ4e-mtp",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 70.6,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": null
+  },
+  {
    "slug": "liquidai-lfm2-5-1-2b-instruct",
    "hfId": "LiquidAI/LFM2.5-1.2B-Instruct",
    "displayName": "LFM2.5-1.2B-Instruct",
@@ -5148,6 +5947,27 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "mia-ailab-qwen3-8-27b-exl3-3-5bpw",
+   "hfId": "Mia-AiLab/Qwen3.8-27B-EXL3-3.5bpw",
+   "displayName": "Qwen3.8-27B-EXL3-3.5bpw",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 115.1,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 17.33,
+     "n": 5
+    }
+   },
+   "maxContextTested": 24576
+  },
+  {
    "slug": "nousresearch-hermes-3-llama-3-1-8b",
    "hfId": "NousResearch/Hermes-3-Llama-3.1-8B",
    "displayName": "Hermes-3-Llama-3.1-8B",
@@ -5171,6 +5991,32 @@
     }
    },
    "maxContextTested": 32768
+  },
+  {
+   "slug": "nvidia-gemma-4-31b-it-nvfp4",
+   "hfId": "nvidia/Gemma-4-31B-IT-NVFP4",
+   "displayName": "Gemma-4-31B-IT-NVFP4",
+   "family": "Gemma",
+   "paramsB": 33,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 31.85,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9525668432630047,
+    "count": 3,
+    "quant": null,
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 58.67,
+     "n": 5
+    }
+   },
+   "maxContextTested": 131072
   },
   {
    "slug": "nvidia-nemotron-3-nano-omni-30b-a3b-reasoning-bf16",
@@ -5215,6 +6061,32 @@
    "maxContextTested": 65536
   },
   {
+   "slug": "orcarouter-qwen3-8-27b-uncensored-fp8",
+   "hfId": "orcarouter/Qwen3.8-27B-Uncensored-FP8",
+   "displayName": "Qwen3.8-27B-Uncensored-FP8",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 128.4,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.9195778068372875,
+    "count": 2,
+    "quant": "FP8",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 76.9,
+     "n": 2
+    }
+   },
+   "maxContextTested": 524288
+  },
+  {
    "slug": "pipenetwork-laguna-s-2-1-mlx-4bit",
    "hfId": "pipenetwork/Laguna-S-2.1-MLX-4bit",
    "displayName": "Laguna-S-2.1-MLX-4bit",
@@ -5234,27 +6106,6 @@
     }
    },
    "maxContextTested": 1800
-  },
-  {
-   "slug": "qwen-qwen2-5-0-5b-instruct",
-   "hfId": "Qwen/Qwen2.5-0.5B-Instruct",
-   "displayName": "Qwen2.5-0.5B-Instruct",
-   "family": "Qwen",
-   "paramsB": 0,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 5,
-   "medianTokS": 135.92,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 2.42,
-     "n": 2
-    }
-   },
-   "maxContextTested": 4608
   },
   {
    "slug": "qwen-qwen2-5-1-5b-instruct-gguf",
@@ -5303,27 +6154,6 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "qwen-qwen3-8-27b-fp8",
-   "hfId": "Qwen/Qwen3.8-27B-FP8",
-   "displayName": "Qwen3.8-27B-FP8",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 5,
-   "medianTokS": 58.54,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 30.94,
-     "n": 1
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "qwen-qwen3-coder-next-fp8",
    "hfId": "Qwen/Qwen3-Coder-Next-FP8",
    "displayName": "Qwen3-Coder-Next-FP8",
@@ -5338,27 +6168,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 32768
-  },
-  {
-   "slug": "radixark-qwen3-8-27b-nvfp4-bf16-lmhead",
-   "hfId": "RadixArk/Qwen3.8-27B-NVFP4-BF16-LMHead",
-   "displayName": "Qwen3.8-27B-NVFP4-BF16-LMHead",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 5,
-   "medianTokS": 183.6,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 57.35,
-     "n": 2
-    }
-   },
-   "maxContextTested": 262144
   },
   {
    "slug": "redhatai-qwen3-6-35b-a3b-nvfp4",
@@ -5382,32 +6191,11 @@
    "maxContextTested": 262144
   },
   {
-   "slug": "rwkv-rwkv7-goose-world3-2-9b-hf",
-   "hfId": "RWKV/RWKV7-Goose-World3-2.9B-HF",
-   "displayName": "RWKV7-Goose-World3-2.9B-HF",
-   "family": null,
-   "paramsB": 3,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 5,
-   "medianTokS": 47.2,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.6159420289855072,
-    "count": 2,
-    "quant": null,
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
    "slug": "segestic-tinystories-gpt-0-1-3m",
    "hfId": "segestic/Tinystories-gpt-0.1-3m",
    "displayName": "Tinystories-gpt-0.1-3m",
    "family": "Gpt",
-   "paramsB": 0,
+   "paramsB": null,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -5461,45 +6249,58 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "unsloth-qwen3-5-35b-a3b-gguf",
-   "hfId": "unsloth/Qwen3.5-35B-A3B-GGUF",
-   "displayName": "Qwen3.5-35B-A3B-GGUF",
-   "family": "Qwen",
-   "paramsB": 35,
+   "slug": "unsloth-laguna-s-2-1-gguf",
+   "hfId": "unsloth/Laguna-S-2.1-GGUF",
+   "displayName": "Laguna-S-2.1-GGUF",
+   "family": null,
+   "paramsB": 118,
    "activeParamsB": null,
-   "isMoE": false,
+   "isMoE": true,
    "category": "chat",
    "runCount": 5,
-   "medianTokS": 60.3,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 262144
-  },
-  {
-   "slug": "unsloth-qwen3-5-9b-mtp-gguf",
-   "hfId": "unsloth/Qwen3.5-9B-MTP-GGUF",
-   "displayName": "Qwen3.5-9B-MTP-GGUF",
-   "family": "Qwen",
-   "paramsB": 9,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 5,
-   "medianTokS": 70.6,
+   "medianTokS": 43.71,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
+    "3": {
+     "gb": 51.9,
+     "n": 1
+    }
+   },
+   "maxContextTested": 8192
+  },
+  {
+   "slug": "xhtoken-spark-x2-5-4b",
+   "hfId": "XHToken/Spark-X2.5-4B",
+   "displayName": "Spark-X2.5-4B",
+   "family": null,
+   "paramsB": 4,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 5,
+   "medianTokS": 84.7,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 3.82,
+     "n": 1
+    },
     "4": {
-     "gb": 9.7,
+     "gb": 3.49,
+     "n": 2
+    },
+    "5": {
+     "gb": 3.97,
      "n": 1
     },
     "6": {
-     "gb": 16.2,
-     "n": 2
+     "gb": 4.58,
+     "n": 1
     }
    },
-   "maxContextTested": 262144
+   "maxContextTested": 4096
   },
   {
    "slug": "xiaomimimo-mimo-v2-5",
@@ -5515,6 +6316,27 @@
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "abiray-laguna-s-2-1-iq4-xs-q4-k-m-gguf",
+   "hfId": "Abiray/Laguna-S-2.1-IQ4_XS-Q4_K_M-GGUF",
+   "displayName": "Laguna-S-2.1-IQ4_XS-Q4_K_M-GGUF",
+   "family": "Llama",
+   "paramsB": 118,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 68.07,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 71.68,
+     "n": 4
+    }
+   },
    "maxContextTested": 32768
   },
   {
@@ -5571,6 +6393,43 @@
    "maxContextTested": 8192
   },
   {
+   "slug": "deepseek-ai-deepseek-v4-flash-dspark",
+   "hfId": "deepseek-ai/DeepSeek-V4-Flash-DSpark",
+   "displayName": "DeepSeek-V4-Flash-DSpark",
+   "family": "Deepseek",
+   "paramsB": 165,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 212.9,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 184,
+     "n": 3
+    }
+   },
+   "maxContextTested": 1048576
+  },
+  {
+   "slug": "devan-carlin-qwen3-8-27b-int4-autoround",
+   "hfId": "devan-carlin/Qwen3.8-27B-int4-AutoRound",
+   "displayName": "Qwen3.8-27B-int4-AutoRound",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 107.13,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
    "slug": "djlougen-ornstein3-6-35b-a3b",
    "hfId": "DJLougen/Ornstein3.6-35B-A3B",
    "displayName": "Ornstein3.6-35B-A3B",
@@ -5592,6 +6451,35 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "empero-ai-qwen3-8-9b-distill-gguf",
+   "hfId": "empero-ai/Qwen3.8-9B-Distill-GGUF",
+   "displayName": "Qwen3.8-9B-Distill-GGUF",
+   "family": "Qwen",
+   "paramsB": 9,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 58.08,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 5.37,
+     "n": 1
+    },
+    "5": {
+     "gb": 6.04,
+     "n": 1
+    },
+    "6": {
+     "gb": 6.74,
+     "n": 1
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
    "slug": "fraserprice-deepseek-v4-flash-abliterated-dspark",
    "hfId": "fraserprice/DeepSeek-V4-Flash-Abliterated-DSpark",
    "displayName": "DeepSeek-V4-Flash-Abliterated-DSpark",
@@ -5606,27 +6494,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 2048
-  },
-  {
-   "slug": "ggml-org-nvidia-nemotron-3-5-lightning-30b-a3b-gguf",
-   "hfId": "ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF",
-   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF",
-   "family": null,
-   "paramsB": 32,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 115.8,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 21.36,
-     "n": 1
-    }
-   },
-   "maxContextTested": 8192
   },
   {
    "slug": "ggml-org-qwen3-8-27b-gguf",
@@ -5664,53 +6531,6 @@
     }
    },
    "maxContextTested": 2048
-  },
-  {
-   "slug": "google-gemma-4-e4b-it-qat-q4-0-gguf",
-   "hfId": "google/gemma-4-E4B-it-qat-q4_0-gguf",
-   "displayName": "gemma-4-E4B-it-qat-q4_0-gguf",
-   "family": "Gemma",
-   "paramsB": 4,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 58.58,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.8333333333333334,
-    "count": 1,
-    "quant": null,
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 4.89,
-     "n": 1
-    }
-   },
-   "maxContextTested": 4608
-  },
-  {
-   "slug": "huggingfacetb-smollm2-360m-instruct",
-   "hfId": "HuggingFaceTB/SmolLM2-360M-Instruct",
-   "displayName": "SmolLM2-360M-Instruct",
-   "family": "Llama",
-   "paramsB": 0,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 189.91,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 1.92,
-     "n": 1
-    }
-   },
-   "maxContextTested": 4608
   },
   {
    "slug": "ibm-granite-granite-4-1-30b",
@@ -5828,22 +6648,6 @@
    "maxContextTested": 787
   },
   {
-   "slug": "lgai-exaone-exaone-3-5-7-8b-instruct",
-   "hfId": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
-   "displayName": "EXAONE-3.5-7.8B-Instruct",
-   "family": null,
-   "paramsB": 8,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 22.45,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
    "slug": "madeby561-glm-5-2-mxfp8-nvfp4-nf3-hybrid",
    "hfId": "madeby561/GLM-5.2-MXFP8-NVFP4-NF3-Hybrid",
    "displayName": "GLM-5.2-MXFP8-NVFP4-NF3-Hybrid",
@@ -5881,6 +6685,27 @@
    "maxContextTested": 1000000
   },
   {
+   "slug": "mradermacher-baichuan-m3-235b-gguf",
+   "hfId": "mradermacher/Baichuan-M3-235B-GGUF",
+   "displayName": "Baichuan-M3-235B-GGUF",
+   "family": "Baichuan",
+   "paramsB": 235,
+   "activeParamsB": 22,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 31.68,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 107.65,
+     "n": 4
+    }
+   },
+   "maxContextTested": 32768
+  },
+  {
    "slug": "mradermacher-ornith-1-5-35b-a3b-mtp-gguf",
    "hfId": "mradermacher/Ornith-1.5-35B-A3B-MTP-GGUF",
    "displayName": "Ornith-1.5-35B-A3B-MTP-GGUF",
@@ -5895,6 +6720,27 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 2048
+  },
+  {
+   "slug": "nvidia-llama-3-3-70b-instruct-nvfp4",
+   "hfId": "nvidia/Llama-3.3-70B-Instruct-NVFP4",
+   "displayName": "Llama-3.3-70B-Instruct-NVFP4",
+   "family": "Llama",
+   "paramsB": 71,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 23.69,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 57.41,
+     "n": 4
+    }
+   },
+   "maxContextTested": 32768
   },
   {
    "slug": "nvidia-nemotron-3-nano-omni-30b-a3b-reasoning-nvfp4",
@@ -5939,50 +6785,46 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "ornith-ai-ornith-1-5-9b-gguf",
-   "hfId": "ornith-ai/Ornith-1.5-9B-GGUF",
-   "displayName": "Ornith-1.5-9B-GGUF",
-   "family": null,
-   "paramsB": 9,
+   "slug": "nvidia-qwen3-8-flash-next-nvfp4",
+   "hfId": "nvidia/Qwen3.8-Flash-Next-NVFP4",
+   "displayName": "Qwen3.8-Flash-Next-NVFP4",
+   "family": "Qwen",
+   "paramsB": 180,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 4,
-   "medianTokS": 73.9,
+   "medianTokS": 112.75,
    "sourceClass": "community_reported",
-   "evalScore": null,
+   "evalScore": {
+    "score": 0.903260093413024,
+    "count": 5,
+    "quant": "NVFP4",
+    "mixedQuants": false
+   },
    "vramMeasuredGb": {
-    "5": {
-     "gb": 9.46,
-     "n": 1
-    },
-    "6": {
-     "gb": 8.46,
+    "4": {
+     "gb": 179.1,
      "n": 1
     }
    },
    "maxContextTested": 262144
   },
   {
-   "slug": "poolside-laguna-xs-2-1",
-   "hfId": "poolside/Laguna-XS-2.1",
-   "displayName": "Laguna-XS-2.1",
-   "family": null,
-   "paramsB": 33,
+   "slug": "openbmb-minicpm5-2b",
+   "hfId": "openbmb/MiniCPM5-2B",
+   "displayName": "MiniCPM5-2B",
+   "family": "Llama",
+   "paramsB": 3,
    "activeParamsB": null,
-   "isMoE": true,
+   "isMoE": false,
    "category": "chat",
    "runCount": 4,
-   "medianTokS": 94.07,
+   "medianTokS": 66.79,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 47.11,
-     "n": 1
-    }
-   },
-   "maxContextTested": 2048
+   "vramMeasuredGb": {},
+   "maxContextTested": 32768
   },
   {
    "slug": "prism-ml-ternary-bonsai-27b-gguf",
@@ -6026,6 +6868,38 @@
    "maxContextTested": 65536
   },
   {
+   "slug": "qwen-qwen3-235b-a22b-thinking-2507",
+   "hfId": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+   "displayName": "Qwen3-235B-A22B-Thinking-2507",
+   "family": "Qwen",
+   "paramsB": 235,
+   "activeParamsB": 22,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 15.79,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 32768
+  },
+  {
+   "slug": "qwen-qwen3-30b-a3b-instruct-2507",
+   "hfId": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+   "displayName": "Qwen3-30B-A3B-Instruct-2507",
+   "family": "Qwen",
+   "paramsB": 31,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 72.45,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
    "slug": "qwen-qwen3-5-2b",
    "hfId": "Qwen/Qwen3.5-2B",
    "displayName": "Qwen3.5-2B",
@@ -6047,22 +6921,6 @@
    "maxContextTested": 65536
   },
   {
-   "slug": "radixark-qwen3-8-27b-nvfp4",
-   "hfId": "RadixArk/Qwen3.8-27B-NVFP4",
-   "displayName": "Qwen3.8-27B-NVFP4",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 35.33,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 131072
-  },
-  {
    "slug": "samuelcardillo-carnice-moe-35b-a3b",
    "hfId": "samuelcardillo/Carnice-MoE-35B-A3B",
    "displayName": "Carnice-MoE-35B-A3B",
@@ -6082,6 +6940,27 @@
     }
    },
    "maxContextTested": 80000
+  },
+  {
+   "slug": "turboderp-qwen3-8-27b-exl3",
+   "hfId": "turboderp/Qwen3.8-27B-exl3",
+   "displayName": "Qwen3.8-27B-exl3",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 4,
+   "medianTokS": 71.85,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 10.04,
+     "n": 3
+    }
+   },
+   "maxContextTested": 126976
   },
   {
    "slug": "unsloth-glm-5-3-flash-gguf",
@@ -6113,27 +6992,6 @@
    "maxContextTested": 204800
   },
   {
-   "slug": "unsloth-laguna-s-2-1-gguf",
-   "hfId": "unsloth/Laguna-S-2.1-GGUF",
-   "displayName": "Laguna-S-2.1-GGUF",
-   "family": null,
-   "paramsB": 118,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 4,
-   "medianTokS": 43.55,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "3": {
-     "gb": 51.9,
-     "n": 1
-    }
-   },
-   "maxContextTested": 8192
-  },
-  {
    "slug": "unsloth-qwen3-5-0-8b-gguf",
    "hfId": "unsloth/Qwen3.5-0.8B-GGUF",
    "displayName": "Qwen3.5-0.8B-GGUF",
@@ -6159,25 +7017,49 @@
    "maxContextTested": 4608
   },
   {
-   "slug": "zai-org-glm-5-3-flash",
-   "hfId": "zai-org/GLM-5.3-Flash",
-   "displayName": "GLM-5.3-Flash",
+   "slug": "xhtoken-spark-x2-5-1-7b",
+   "hfId": "XHToken/Spark-X2.5-1.7B",
+   "displayName": "Spark-X2.5-1.7B",
    "family": null,
-   "paramsB": 321,
+   "paramsB": 2,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 4,
-   "medianTokS": 148.41,
+   "medianTokS": 186.25,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
-    "3": {
-     "gb": 174.14,
-     "n": 3
+    "4": {
+     "gb": 3.09,
+     "n": 2
+    },
+    "6": {
+     "gb": 3.46,
+     "n": 1
+    },
+    "8": {
+     "gb": 3.35,
+     "n": 1
     }
    },
-   "maxContextTested": 1000000
+   "maxContextTested": 4096
+  },
+  {
+   "slug": "abenzerps-nex-n2-5-mini-gguf",
+   "hfId": "abenzerps/Nex-N2.5-mini-GGUF",
+   "displayName": "Nex-N2.5-mini-GGUF",
+   "family": "Qwen",
+   "paramsB": 35,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 35.21,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": null
   },
   {
    "slug": "agentica-org-deepcoder-14b-preview",
@@ -6224,6 +7106,22 @@
     }
    },
    "maxContextTested": 131000
+  },
+  {
+   "slug": "atomicchat-qwen3-8-flash-next-gguf",
+   "hfId": "AtomicChat/Qwen3.8-Flash-Next-GGUF",
+   "displayName": "Qwen3.8-Flash-Next-GGUF",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 27.71,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 16384
   },
   {
    "slug": "bartowski-qwen-qwen3-5-2b-gguf",
@@ -6284,48 +7182,6 @@
    "maxContextTested": 150000
   },
   {
-   "slug": "dbirks-qwen3-8-27b-w4a16-autoround",
-   "hfId": "dbirks/Qwen3.8-27B-W4A16-AutoRound",
-   "displayName": "Qwen3.8-27B-W4A16-AutoRound",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 3,
-   "medianTokS": 182.4,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 44.36,
-     "n": 1
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
-   "slug": "deepseek-ai-deepseek-v4-flash-dspark",
-   "hfId": "deepseek-ai/DeepSeek-V4-Flash-DSpark",
-   "displayName": "DeepSeek-V4-Flash-DSpark",
-   "family": "Deepseek",
-   "paramsB": 165,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 3,
-   "medianTokS": 261.8,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 184,
-     "n": 3
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "drawais-qwen3-6-27b-awq-int4",
    "hfId": "drawais/Qwen3.6-27B-AWQ-INT4",
    "displayName": "Qwen3.6-27B-AWQ-INT4",
@@ -6345,6 +7201,32 @@
     }
    },
    "maxContextTested": 814
+  },
+  {
+   "slug": "ggml-org-gpt-oss-20b-gguf",
+   "hfId": "ggml-org/gpt-oss-20b-GGUF",
+   "displayName": "gpt-oss-20b-GGUF",
+   "family": "Gpt",
+   "paramsB": 22,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 74.64,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.7546902938272264,
+    "count": 2,
+    "quant": "MXFP4",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 9.26,
+     "n": 1
+    }
+   },
+   "maxContextTested": 32768
   },
   {
    "slug": "google-functiongemma-270m-it",
@@ -6473,6 +7355,22 @@
    "maxContextTested": 32768
   },
   {
+   "slug": "jetbrains-mellum2-12b-a2-5b-instruct",
+   "hfId": "JetBrains/Mellum2-12B-A2.5B-Instruct",
+   "displayName": "Mellum2-12B-A2.5B-Instruct",
+   "family": null,
+   "paramsB": 12,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 51.8,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
    "slug": "liquidai-lfm2-5-1-2b-thinking-gguf",
    "hfId": "LiquidAI/LFM2.5-1.2B-Thinking-GGUF",
    "displayName": "LFM2.5-1.2B-Thinking-GGUF",
@@ -6525,6 +7423,22 @@
    "category": "chat",
    "runCount": 3,
    "medianTokS": 118.04,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 8192
+  },
+  {
+   "slug": "lmstudio-community-olmocr-2-7b-1025-gguf",
+   "hfId": "lmstudio-community/olmOCR-2-7B-1025-GGUF",
+   "displayName": "olmOCR-2-7B-1025-GGUF",
+   "family": null,
+   "paramsB": 7,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 14.91,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
@@ -6637,32 +7551,6 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "nvidia-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4",
-   "hfId": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-   "displayName": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4",
-   "family": "Opt",
-   "paramsB": 18,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 3,
-   "medianTokS": 197,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.4444444444444444,
-    "count": 1,
-    "quant": "NVFP4",
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 19.5,
-     "n": 2
-    }
-   },
-   "maxContextTested": 131072
-  },
-  {
    "slug": "nvidia-nvidia-nemotron-3-nano-30b-a3b-bf16",
    "hfId": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
    "displayName": "NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
@@ -6751,20 +7639,29 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "ornith-ai-ornith-1-5-9b",
-   "hfId": "ornith-ai/Ornith-1.5-9B",
-   "displayName": "Ornith-1.5-9B",
+   "slug": "orcarouter-qwen3-8-27b-uncensored-gguf",
+   "hfId": "orcarouter/Qwen3.8-27B-Uncensored-GGUF",
+   "displayName": "Qwen3.8-27B-Uncensored-GGUF",
    "family": "Qwen",
-   "paramsB": 10,
+   "paramsB": 28,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 3,
-   "medianTokS": 30.94,
+   "medianTokS": 51.79,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
+   "vramMeasuredGb": {
+    "2": {
+     "gb": 9.07,
+     "n": 2
+    },
+    "8": {
+     "gb": 44.6,
+     "n": 1
+    }
+   },
+   "maxContextTested": 262144
   },
   {
    "slug": "pearsonkyle-qwen3-8-27b-gptq-w4a16",
@@ -6841,36 +7738,78 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "qwen-qwen3-235b-a22b-thinking-2507",
-   "hfId": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-   "displayName": "Qwen3-235B-A22B-Thinking-2507",
+   "slug": "qwen-qwen3-vl-8b-instruct",
+   "hfId": "Qwen/Qwen3-VL-8B-Instruct",
+   "displayName": "Qwen3-VL-8B-Instruct",
    "family": "Qwen",
-   "paramsB": 235,
-   "activeParamsB": 22,
-   "isMoE": true,
+   "paramsB": 9,
+   "activeParamsB": null,
+   "isMoE": false,
    "category": "chat",
    "runCount": 3,
-   "medianTokS": 15.6,
+   "medianTokS": 89.84,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 15.51,
+     "n": 1
+    }
+   },
+   "maxContextTested": 8192
   },
   {
-   "slug": "qwen-qwen3-8-flash-next",
-   "hfId": "Qwen/Qwen3.8-Flash-Next",
-   "displayName": "Qwen3.8-Flash-Next",
+   "slug": "radixark-qwen3-8-flash-next-nvfp4",
+   "hfId": "RadixArk/Qwen3.8-Flash-Next-NVFP4",
+   "displayName": "Qwen3.8-Flash-Next-NVFP4",
    "family": "Qwen",
    "paramsB": 180,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 3,
-   "medianTokS": 14.8,
+   "medianTokS": 74.53,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 76.8,
+     "n": 2
+    }
+   },
+   "maxContextTested": 1048576
+  },
+  {
+   "slug": "redhatai-qwen3-5-4b-quantized-w4a16",
+   "hfId": "RedHatAI/Qwen3.5-4B-quantized.w4a16",
+   "displayName": "Qwen3.5-4B-quantized.w4a16",
+   "family": "Qwen",
+   "paramsB": 4,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 191.73,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
-   "maxContextTested": 2048
+   "maxContextTested": 1024
+  },
+  {
+   "slug": "redhatai-qwen3-5-9b-quantized-w4a16",
+   "hfId": "RedHatAI/Qwen3.5-9B-quantized.w4a16",
+   "displayName": "Qwen3.5-9B-quantized.w4a16",
+   "family": "Qwen",
+   "paramsB": 10,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 124.08,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 1024
   },
   {
    "slug": "sakamakismile-qwen3-6-27b-nvfp4",
@@ -6962,7 +7901,7 @@
    "hfId": "tiiuae/Falcon-H1-Tiny-90M-Instruct",
    "displayName": "Falcon-H1-Tiny-90M-Instruct",
    "family": "Falcon",
-   "paramsB": 0,
+   "paramsB": 0.09,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -6993,27 +7932,6 @@
     }
    },
    "maxContextTested": 131072
-  },
-  {
-   "slug": "unsloth-gpt-oss-20b-gguf",
-   "hfId": "unsloth/gpt-oss-20b-GGUF",
-   "displayName": "gpt-oss-20b-GGUF",
-   "family": "Gpt",
-   "paramsB": 22,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 3,
-   "medianTokS": 93.44,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 12.2,
-     "n": 1
-    }
-   },
-   "maxContextTested": 65536
   },
   {
    "slug": "unsloth-nvidia-nemotron-3-nano-omni-30b-a3b-reasoning",
@@ -7090,6 +8008,27 @@
    "maxContextTested": null
   },
   {
+   "slug": "unsloth-qwen3-5-4b-gguf",
+   "hfId": "unsloth/Qwen3.5-4B-GGUF",
+   "displayName": "Qwen3.5-4B-GGUF",
+   "family": "Qwen",
+   "paramsB": 4,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 3,
+   "medianTokS": 68,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 3.5,
+     "n": 1
+    }
+   },
+   "maxContextTested": 32768
+  },
+  {
    "slug": "unsloth-qwen3-8b-gguf",
    "hfId": "unsloth/Qwen3-8B-GGUF",
    "displayName": "Qwen3-8B-GGUF",
@@ -7163,6 +8102,22 @@
    "category": "chat",
    "runCount": 2,
    "medianTokS": 6090.28,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
+   "slug": "aiconjured-qwen3-8-27b-uncensored-hauhaucs-aggressive-mtp-gguf-q8-nvfp4",
+   "hfId": "AIconjured/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF-Q8-NVFP4",
+   "displayName": "Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF-Q8-NVFP4",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 73.81,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
@@ -7381,6 +8336,27 @@
    "maxContextTested": 8192
   },
   {
+   "slug": "brandonmusic-glm-5-3-flash-tr3-4bpw",
+   "hfId": "brandonmusic/GLM-5.3-Flash-tr3-4bpw",
+   "displayName": "GLM-5.3-Flash-tr3-4bpw",
+   "family": null,
+   "paramsB": 321,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 82.6,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.7437341038764125,
+    "count": 8,
+    "quant": "exl3",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
+  },
+  {
    "slug": "cerebras-minimax-m2-reap-172b-a10b",
    "hfId": "cerebras/MiniMax-M2-REAP-172B-A10B",
    "displayName": "MiniMax-M2-REAP-172B-A10B",
@@ -7438,28 +8414,12 @@
    "hfId": "delphi-suite/stories-llama2-50k",
    "displayName": "stories-llama2-50k",
    "family": "Llama",
-   "paramsB": 0,
+   "paramsB": null,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 2,
    "medianTokS": 171427.86,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
-   "slug": "devan-carlin-qwen3-8-27b-int4-autoround",
-   "hfId": "devan-carlin/Qwen3.8-27B-int4-AutoRound",
-   "displayName": "Qwen3.8-27B-int4-AutoRound",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 101.21,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
@@ -7514,6 +8474,22 @@
    "maxContextTested": null
   },
   {
+   "slug": "empero-ai-qwen3-8-35b-a3b-distill-gguf",
+   "hfId": "empero-ai/Qwen3.8-35B-A3B-Distill-GGUF",
+   "displayName": "Qwen3.8-35B-A3B-Distill-GGUF",
+   "family": "Qwen",
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 38.41,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": null
+  },
+  {
    "slug": "empero-ai-qwen3-8-9b-distill",
    "hfId": "empero-ai/Qwen3.8-9B-Distill",
    "displayName": "Qwen3.8-9B-Distill",
@@ -7528,6 +8504,48 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "facebook-mobilellm-125m",
+   "hfId": "facebook/MobileLLM-125M",
+   "displayName": "MobileLLM-125M",
+   "family": null,
+   "paramsB": 0.13,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 987.08,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 1.26,
+     "n": 2
+    }
+   },
+   "maxContextTested": 4608
+  },
+  {
+   "slug": "facebook-mobilellm-350m",
+   "hfId": "facebook/MobileLLM-350M",
+   "displayName": "MobileLLM-350M",
+   "family": null,
+   "paramsB": 0.35,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 714.44,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 1.44,
+     "n": 2
+    }
+   },
+   "maxContextTested": 4608
   },
   {
    "slug": "fraserprice-deepseek-v4-flash-abliterated",
@@ -7576,32 +8594,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 2048
-  },
-  {
-   "slug": "ggml-org-gpt-oss-20b-gguf",
-   "hfId": "ggml-org/gpt-oss-20b-GGUF",
-   "displayName": "gpt-oss-20b-GGUF",
-   "family": "Gpt",
-   "paramsB": 22,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 65.87,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.7546902938272264,
-    "count": 2,
-    "quant": "MXFP4",
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 9.26,
-     "n": 1
-    }
-   },
-   "maxContextTested": 32768
   },
   {
    "slug": "ggml-org-models-moved",
@@ -7752,27 +8744,6 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "inclusionai-ling-3-0-tiny",
-   "hfId": "inclusionAI/Ling-3.0-tiny",
-   "displayName": "Ling-3.0-tiny",
-   "family": null,
-   "paramsB": 8,
-   "activeParamsB": null,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 104.8,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 7.65,
-     "n": 2
-    }
-   },
-   "maxContextTested": 262144
-  },
-  {
    "slug": "intel-gemma-4-12b-it-int4-autoround",
    "hfId": "Intel/gemma-4-12B-it-int4-AutoRound",
    "displayName": "gemma-4-12B-it-int4-AutoRound",
@@ -7884,22 +8855,6 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "jetbrains-mellum2-12b-a2-5b-instruct",
-   "hfId": "JetBrains/Mellum2-12B-A2.5B-Instruct",
-   "displayName": "Mellum2-12B-A2.5B-Instruct",
-   "family": null,
-   "paramsB": 12,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 62.65,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
    "slug": "jetbrains-mellum2-12b-a2-5b-thinking-gguf-q4-k-m",
    "hfId": "JetBrains/Mellum2-12B-A2.5B-Thinking-GGUF-Q4_K_M",
    "displayName": "Mellum2-12B-A2.5B-Thinking-GGUF-Q4_K_M",
@@ -7951,22 +8906,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 2048
-  },
-  {
-   "slug": "jonathancoletti-qwen3-8-27b-uncensored",
-   "hfId": "JonathanColetti/Qwen3.8-27B-Uncensored",
-   "displayName": "Qwen3.8-27B-Uncensored",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 87.15,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": null
   },
   {
    "slug": "kai-os-carnice-27b",
@@ -8022,11 +8961,32 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "liquidai-lfm2-5-2-6b-gguf",
+   "hfId": "LiquidAI/LFM2.5-2.6B-GGUF",
+   "displayName": "LFM2.5-2.6B-GGUF",
+   "family": "Llama",
+   "paramsB": 3,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 218.98,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 2.31,
+     "n": 1
+    }
+   },
+   "maxContextTested": 24576
+  },
+  {
    "slug": "liquidai-lfm2-700m",
    "hfId": "LiquidAI/LFM2-700M",
    "displayName": "LFM2-700M",
    "family": null,
-   "paramsB": 1,
+   "paramsB": 0.74,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -8099,22 +9059,6 @@
     }
    },
    "maxContextTested": 4224
-  },
-  {
-   "slug": "lmstudio-community-olmocr-2-7b-1025-gguf",
-   "hfId": "lmstudio-community/olmOCR-2-7B-1025-GGUF",
-   "displayName": "olmOCR-2-7B-1025-GGUF",
-   "family": null,
-   "paramsB": 7,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 14.91,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
   },
   {
    "slug": "lmstudio-community-qwen3-coder-30b-a3b-instruct-gguf",
@@ -8254,7 +9198,7 @@
    "hfId": "mlx-community/Qwen3.5-35B-A3B-4bit",
    "displayName": "Qwen3.5-35B-A3B-4bit",
    "family": "Qwen",
-   "paramsB": 6,
+   "paramsB": 35,
    "activeParamsB": 3,
    "isMoE": true,
    "category": "chat",
@@ -8376,6 +9320,27 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "neroued-qwen3-8-27b-nvfp4-ninfer",
+   "hfId": "neroued/Qwen3.8-27B-nvfp4-NInfer",
+   "displayName": "Qwen3.8-27B-nvfp4-NInfer",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 231.78,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 23.19,
+     "n": 2
+    }
+   },
+   "maxContextTested": 16384
+  },
+  {
    "slug": "nousresearch-nouscoder-14b",
    "hfId": "NousResearch/NousCoder-14B",
    "displayName": "NousCoder-14B",
@@ -8427,27 +9392,6 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 262144
-  },
-  {
-   "slug": "orcarouter-qwen3-8-27b-uncensored-gguf",
-   "hfId": "orcarouter/Qwen3.8-27B-Uncensored-GGUF",
-   "displayName": "Qwen3.8-27B-Uncensored-GGUF",
-   "family": "Qwen",
-   "paramsB": 28,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 60.69,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "2": {
-     "gb": 9.07,
-     "n": 2
-    }
-   },
-   "maxContextTested": 16384
   },
   {
    "slug": "poolside-laguna-s-2-1-dflash-fp8",
@@ -8524,20 +9468,25 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "quanttrio-glm-5-2-int4-int8mix",
-   "hfId": "QuantTrio/GLM-5.2-Int4-Int8Mix",
-   "displayName": "GLM-5.2-Int4-Int8Mix",
-   "family": null,
-   "paramsB": 753,
+   "slug": "quasar-qat-qwen3-8-27b-quasar-nvfp4",
+   "hfId": "QUASAR-QAT/Qwen3.8-27B-QUASAR-NVFP4",
+   "displayName": "Qwen3.8-27B-QUASAR-NVFP4",
+   "family": "Qwen",
+   "paramsB": 28,
    "activeParamsB": null,
-   "isMoE": true,
+   "isMoE": false,
    "category": "chat",
    "runCount": 2,
-   "medianTokS": 35,
+   "medianTokS": 263.71,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": null
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 73.18,
+     "n": 2
+    }
+   },
+   "maxContextTested": 262144
   },
   {
    "slug": "qwen-qwen2-5-7b",
@@ -8614,27 +9563,6 @@
    "maxContextTested": null
   },
   {
-   "slug": "qwen-qwen3-vl-8b-instruct",
-   "hfId": "Qwen/Qwen3-VL-8B-Instruct",
-   "displayName": "Qwen3-VL-8B-Instruct",
-   "family": "Qwen",
-   "paramsB": 9,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 2,
-   "medianTokS": 77.36,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 15.51,
-     "n": 1
-    }
-   },
-   "maxContextTested": 786
-  },
-  {
    "slug": "qwen-qwen3guard-gen-4b",
    "hfId": "Qwen/Qwen3Guard-Gen-4B",
    "displayName": "Qwen3Guard-Gen-4B",
@@ -8670,6 +9598,22 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 262144
+  },
+  {
+   "slug": "redhatai-qwen3-5-9b-fp8-dynamic",
+   "hfId": "RedHatAI/Qwen3.5-9B-FP8-dynamic",
+   "displayName": "Qwen3.5-9B-FP8-dynamic",
+   "family": "Qwen",
+   "paramsB": 10,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 122.97,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 1024
   },
   {
    "slug": "ruler97-godoter-27b-gguf",
@@ -8736,6 +9680,27 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "unsloth-llama-4-scout-17b-16e-instruct-gguf",
+   "hfId": "unsloth/Llama-4-Scout-17B-16E-Instruct-GGUF",
+   "displayName": "Llama-4-Scout-17B-16E-Instruct-GGUF",
+   "family": "Llama",
+   "paramsB": 109,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 44.93,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "3": {
+     "gb": 46.37,
+     "n": 2
+    }
+   },
+   "maxContextTested": 2048
+  },
+  {
    "slug": "unsloth-qwen3-5-0-8b",
    "hfId": "unsloth/Qwen3.5-0.8B",
    "displayName": "Qwen3.5-0.8B",
@@ -8757,6 +9722,27 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "unsloth-qwen3-5-0-8b-mtp-gguf",
+   "hfId": "unsloth/Qwen3.5-0.8B-MTP-GGUF",
+   "displayName": "Qwen3.5-0.8B-MTP-GGUF",
+   "family": "Qwen",
+   "paramsB": 0.8,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 2,
+   "medianTokS": 434.05,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "6": {
+     "gb": 1.51,
+     "n": 2
+    }
+   },
+   "maxContextTested": 24576
+  },
+  {
    "slug": "unsloth-qwen3-5-35b-a3b",
    "hfId": "unsloth/Qwen3.5-35B-A3B",
    "displayName": "Qwen3.5-35B-A3B",
@@ -8773,25 +9759,25 @@
    "maxContextTested": null
   },
   {
-   "slug": "unsloth-qwen3-5-4b-gguf",
-   "hfId": "unsloth/Qwen3.5-4B-GGUF",
-   "displayName": "Qwen3.5-4B-GGUF",
+   "slug": "unsloth-qwen3-5-4b-mtp-gguf",
+   "hfId": "unsloth/Qwen3.5-4B-MTP-GGUF",
+   "displayName": "Qwen3.5-4B-MTP-GGUF",
    "family": "Qwen",
    "paramsB": 4,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 2,
-   "medianTokS": 50.44,
+   "medianTokS": 191.15,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
-    "4": {
-     "gb": 3.5,
-     "n": 1
+    "6": {
+     "gb": 5.35,
+     "n": 2
     }
    },
-   "maxContextTested": 32768
+   "maxContextTested": 24576
   },
   {
    "slug": "unsloth-qwen3-6-27b-ud-mlx-4bit",
@@ -8948,25 +9934,25 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "angelslim-hy3-gguf",
-   "hfId": "AngelSlim/Hy3-GGUF",
-   "displayName": "Hy3-GGUF",
+   "slug": "apolloparty-lfm2-350m-nvfp4a16",
+   "hfId": "apolloparty/LFM2-350M-NVFP4A16",
+   "displayName": "LFM2-350M-NVFP4A16",
    "family": null,
-   "paramsB": 299,
+   "paramsB": 0,
    "activeParamsB": null,
-   "isMoE": true,
+   "isMoE": false,
    "category": "chat",
    "runCount": 1,
-   "medianTokS": 87.11,
+   "medianTokS": 11076834495.29,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
-    "1": {
-     "gb": 121.6,
+    "4": {
+     "gb": 28.4,
      "n": 1
     }
    },
-   "maxContextTested": 131072
+   "maxContextTested": 704
   },
   {
    "slug": "ar4ikov-kat-coder-v2-5-dev-awq-w4a16-asym",
@@ -9238,22 +10224,6 @@
    "maxContextTested": 4096
   },
   {
-   "slug": "bartowski-ornith-1-5-35b-a3b-gguf",
-   "hfId": "bartowski/Ornith-1.5-35B-A3B-GGUF",
-   "displayName": "Ornith-1.5-35B-A3B-GGUF",
-   "family": null,
-   "paramsB": 36,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 1,
-   "medianTokS": 32.2,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
    "slug": "bartowski-qwen-qwen3-5-0-8b-gguf",
    "hfId": "bartowski/Qwen_Qwen3.5-0.8B-GGUF",
    "displayName": "Qwen_Qwen3.5-0.8B-GGUF",
@@ -9264,6 +10234,22 @@
    "category": "chat",
    "runCount": 1,
    "medianTokS": 427.87,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
+   "slug": "blackfrost-ai-qwen3-8-27b-abliterated-gguf",
+   "hfId": "Blackfrost-AI/Qwen3.8-27B-ABLITERATED-GGUF",
+   "displayName": "Qwen3.8-27B-ABLITERATED-GGUF",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 17.3,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
@@ -9315,6 +10301,22 @@
     }
    },
    "maxContextTested": 8192
+  },
+  {
+   "slug": "canada-quant-glm-5-3-flash-w4a16-mtp",
+   "hfId": "canada-quant/GLM-5.3-Flash-W4A16-MTP",
+   "displayName": "GLM-5.3-Flash-W4A16-MTP",
+   "family": "Gpt",
+   "paramsB": 321,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 153.1,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
   },
   {
    "slug": "curvedinf-qwen3-8-27b-gptq-int8-w8a8-gs128",
@@ -9391,6 +10393,22 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "dealignai-deepseek-v4-1-flash-uncensored-fp8",
+   "hfId": "dealignai/DeepSeek-V4.1-Flash-UNCENSORED-FP8",
+   "displayName": "DeepSeek-V4.1-Flash-UNCENSORED-FP8",
+   "family": "Deepseek",
+   "paramsB": 763,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 316.55,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 524288
+  },
+  {
    "slug": "dealignai-minimax-m2-7-jangtq-crack",
    "hfId": "dealignai/MiniMax-M2.7-JANGTQ-CRACK",
    "displayName": "MiniMax-M2.7-JANGTQ-CRACK",
@@ -9423,6 +10441,27 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "deepseek-ai-deepseek-v4-flash-vision-exp",
+   "hfId": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+   "displayName": "DeepSeek-V4-Flash-Vision-Exp",
+   "family": "Deepseek",
+   "paramsB": 305,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 179.5,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 183.1,
+     "n": 1
+    }
+   },
+   "maxContextTested": 1048576
+  },
+  {
    "slug": "djlougen-harmonic-hermes-9b-gguf",
    "hfId": "DJLougen/Harmonic-Hermes-9B-GGUF",
    "displayName": "Harmonic-Hermes-9B-GGUF",
@@ -9444,20 +10483,46 @@
    "maxContextTested": 4608
   },
   {
-   "slug": "empero-ai-qwen3-8-9b-distill-gguf",
-   "hfId": "empero-ai/Qwen3.8-9B-Distill-GGUF",
-   "displayName": "Qwen3.8-9B-Distill-GGUF",
+   "slug": "drowzeys-keys-deepseekv4flash-vision-exp-ablit",
+   "hfId": "drowzeys/keys-DeepSeekV4Flash-Vision-EXP-ablit",
+   "displayName": "keys-DeepSeekV4Flash-Vision-EXP-ablit",
+   "family": "Deepseek",
+   "paramsB": 305,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 66.85,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 183.13,
+     "n": 1
+    }
+   },
+   "maxContextTested": 131072
+  },
+  {
+   "slug": "empero-ai-qwen3-8-4b-distill-gguf",
+   "hfId": "empero-ai/Qwen3.8-4B-Distill-GGUF",
+   "displayName": "Qwen3.8-4B-Distill-GGUF",
    "family": "Qwen",
-   "paramsB": 9,
+   "paramsB": 4,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 1,
-   "medianTokS": 76.4,
+   "medianTokS": 97.14,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 131072
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 3,
+     "n": 1
+    }
+   },
+   "maxContextTested": 8192
   },
   {
    "slug": "empero-ai-qwythos-9b-claude-mythos-5-1m",
@@ -9492,46 +10557,36 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "facebook-mobilellm-125m",
-   "hfId": "facebook/MobileLLM-125M",
-   "displayName": "MobileLLM-125M",
+   "slug": "fraserprice-ternary-bonsai-2-27b-dflash2-vllm",
+   "hfId": "fraserprice/Ternary-Bonsai-2-27B-DFlash2-vllm",
+   "displayName": "Ternary-Bonsai-2-27B-DFlash2-vllm",
    "family": null,
-   "paramsB": null,
+   "paramsB": 27,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 1,
-   "medianTokS": 702.81,
+   "medianTokS": 360.75,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 1.56,
-     "n": 1
-    }
-   },
-   "maxContextTested": 4608
+   "vramMeasuredGb": {},
+   "maxContextTested": 65536
   },
   {
-   "slug": "facebook-mobilellm-350m",
-   "hfId": "facebook/MobileLLM-350M",
-   "displayName": "MobileLLM-350M",
-   "family": null,
-   "paramsB": null,
+   "slug": "fraserprice-ternary-bonsai-2-27b-vllm",
+   "hfId": "fraserprice/Ternary-Bonsai-2-27B-vllm",
+   "displayName": "Ternary-Bonsai-2-27B-vllm",
+   "family": "Qwen",
+   "paramsB": 28,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
    "runCount": 1,
-   "medianTokS": 448.09,
+   "medianTokS": 236.72,
    "sourceClass": "community_reported",
    "evalScore": null,
-   "vramMeasuredGb": {
-    "8": {
-     "gb": 1.84,
-     "n": 1
-    }
-   },
-   "maxContextTested": 4608
+   "vramMeasuredGb": {},
+   "maxContextTested": 262144
   },
   {
    "slug": "gestaltlabs-ornstein-3-6-27b-gguf",
@@ -9782,6 +10837,27 @@
    "maxContextTested": 131072
   },
   {
+   "slug": "hell0ks-glm-5-3-flash-uncensored-awq",
+   "hfId": "hell0ks/GLM-5.3-Flash-Uncensored-AWQ",
+   "displayName": "GLM-5.3-Flash-Uncensored-AWQ",
+   "family": "Orca",
+   "paramsB": 321,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 76.7,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 183.74,
+     "n": 1
+    }
+   },
+   "maxContextTested": 204800
+  },
+  {
    "slug": "hesamation-qwen3-6-35b-a3b-claude-4-6-opus-reasoning-distilled",
    "hfId": "hesamation/Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled",
    "displayName": "Qwen3.6-35B-A3B-Claude-4.6-Opus-Reasoning-Distilled",
@@ -9812,6 +10888,22 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "heterodoxin-qwen3-6-27b-apostate",
+   "hfId": "heterodoxin/qwen3.6-27b-apostate",
+   "displayName": "qwen3.6-27b-apostate",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 5.6,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "hotdogs-qwen27b-abliterated-fable-mtp",
@@ -9899,6 +10991,22 @@
    "maxContextTested": 114688
   },
   {
+   "slug": "inclusionai-ling-3-0-flash-int4",
+   "hfId": "inclusionAI/Ling-3.0-flash-int4",
+   "displayName": "Ling-3.0-flash-int4",
+   "family": null,
+   "paramsB": 127,
+   "activeParamsB": null,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 37.3,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 131072
+  },
+  {
    "slug": "infatoshi-qwen3-6-35b-a3b-nvfp4-fp8",
    "hfId": "Infatoshi/Qwen3.6-35B-A3B-NVFP4-FP8",
    "displayName": "Qwen3.6-35B-A3B-NVFP4-FP8",
@@ -9940,7 +11048,7 @@
    "hfId": "ivnle/tinystories-lay4-hs128-hd2-1M",
    "displayName": "tinystories-lay4-hs128-hd2-1M",
    "family": "Llama",
-   "paramsB": 0,
+   "paramsB": 0.03,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -10087,6 +11195,22 @@
     }
    },
    "maxContextTested": 4608
+  },
+  {
+   "slug": "jakeatx-qwen3-8-27b-atx-iq4-xs-m-gguf",
+   "hfId": "jakeatx/Qwen3.8-27B-ATX-IQ4_XS-M-GGUF",
+   "displayName": "Qwen3.8-27B-ATX-IQ4_XS-M-GGUF",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 107.9,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 112640
   },
   {
    "slug": "jdfelo-gemma-4-31b-v2-mlx-4bit",
@@ -10237,22 +11361,6 @@
    "maxContextTested": 131072
   },
   {
-   "slug": "liquidai-lfm2-5-2-6b-gguf",
-   "hfId": "LiquidAI/LFM2.5-2.6B-GGUF",
-   "displayName": "LFM2.5-2.6B-GGUF",
-   "family": "Llama",
-   "paramsB": 3,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 1,
-   "medianTokS": 132.35,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 8192
-  },
-  {
    "slug": "liquidai-lfm2-5-350m-gguf",
    "hfId": "LiquidAI/LFM2.5-350M-GGUF",
    "displayName": "LFM2.5-350M-GGUF",
@@ -10267,6 +11375,22 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": null
+  },
+  {
+   "slug": "llmfan46-gemma-4-26b-a4b-it-ultra-uncensored-heretic-gguf",
+   "hfId": "llmfan46/gemma-4-26B-A4B-it-ultra-uncensored-heretic-GGUF",
+   "displayName": "gemma-4-26B-A4B-it-ultra-uncensored-heretic-GGUF",
+   "family": "Gemma",
+   "paramsB": 27,
+   "activeParamsB": 4,
+   "isMoE": true,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 88.16,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "llmfan46-qwen3-6-35b-a3b-uncensored-heretic",
@@ -10417,7 +11541,7 @@
    "hfId": "lmstudio-community/gemma-4-26B-A4B-it-QAT-MLX-4bit",
    "displayName": "gemma-4-26B-A4B-it-QAT-MLX-4bit",
    "family": "Gemma",
-   "paramsB": 5,
+   "paramsB": 26,
    "activeParamsB": 4,
    "isMoE": true,
    "category": "chat",
@@ -10663,6 +11787,59 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "local-inference-lab-qwen3-8-flash-next-nvfp4",
+   "hfId": "local-inference-lab/Qwen3.8-Flash-Next-NVFP4",
+   "displayName": "Qwen3.8-Flash-Next-NVFP4",
+   "family": "Qwen",
+   "paramsB": 180,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 93.5,
+   "sourceClass": "community_reported",
+   "evalScore": {
+    "score": 0.8665672416200673,
+    "count": 7,
+    "quant": "NVFP4",
+    "mixedQuants": false
+   },
+   "vramMeasuredGb": {},
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "lottolabs-qwen3-5-9b-tt-bfp4-p150",
+   "hfId": "Lottolabs/Qwen3.5-9B-TT-BFP4-P150",
+   "displayName": "Qwen3.5-9B-TT-BFP4-P150",
+   "family": "Qwen",
+   "paramsB": 10,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 76.15,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 8192
+  },
+  {
+   "slug": "luis23333-qwen3-8-27b-ssmfix-ud-q3-k-xl-gguf",
+   "hfId": "Luis23333/Qwen3.8-27B-SSMFIX-UD-Q3_K_XL-GGUF",
+   "displayName": "Qwen3.8-27B-SSMFIX-UD-Q3_K_XL-GGUF",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 43.4,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 8192
+  },
+  {
    "slug": "luisppb16-qwen3-5-9b-red-team",
    "hfId": "LuisPPB16/Qwen3.5-9B-Red_Team",
    "displayName": "Qwen3.5-9B-Red_Team",
@@ -10704,7 +11881,7 @@
    "hfId": "Manojb/Qwen3.5-0.8B-Q8_0.gguf",
    "displayName": "Qwen3.5-0.8B-Q8_0.gguf",
    "family": "Qwen",
-   "paramsB": 1,
+   "paramsB": 0.8,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -11171,32 +12348,6 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "nvidia-gemma-4-31b-it-nvfp4",
-   "hfId": "nvidia/Gemma-4-31B-IT-NVFP4",
-   "displayName": "Gemma-4-31B-IT-NVFP4",
-   "family": "Gemma",
-   "paramsB": 33,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 1,
-   "medianTokS": 31.7,
-   "sourceClass": "community_reported",
-   "evalScore": {
-    "score": 0.9525668432630047,
-    "count": 3,
-    "quant": null,
-    "mixedQuants": false
-   },
-   "vramMeasuredGb": {
-    "4": {
-     "gb": 67.8,
-     "n": 1
-    }
-   },
-   "maxContextTested": 131072
-  },
-  {
    "slug": "nvidia-glm-5-nvfp4",
    "hfId": "nvidia/GLM-5-NVFP4",
    "displayName": "GLM-5-NVFP4",
@@ -11298,25 +12449,41 @@
    "maxContextTested": 32768
   },
   {
-   "slug": "ornith-ai-ornith-1-0-9b-gguf",
-   "hfId": "ornith-ai/Ornith-1.0-9B-GGUF",
-   "displayName": "Ornith-1.0-9B-GGUF",
-   "family": null,
-   "paramsB": 9,
-   "activeParamsB": null,
-   "isMoE": false,
+   "slug": "openvino-qwen3-6-35b-a3b-int4-ov",
+   "hfId": "OpenVINO/Qwen3.6-35B-A3B-int4-ov",
+   "displayName": "Qwen3.6-35B-A3B-int4-ov",
+   "family": "Qwen",
+   "paramsB": 36,
+   "activeParamsB": 3,
+   "isMoE": true,
    "category": "chat",
    "runCount": 1,
-   "medianTokS": 52.47,
+   "medianTokS": 11.12,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {
     "4": {
-     "gb": 5.66,
+     "gb": 9.2,
      "n": 1
     }
    },
-   "maxContextTested": 32768
+   "maxContextTested": 262144
+  },
+  {
+   "slug": "orcarouter-qwen3-8-27b-uncensored-nvfp4",
+   "hfId": "orcarouter/Qwen3.8-27B-Uncensored-NVFP4",
+   "displayName": "Qwen3.8-27B-Uncensored-NVFP4",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 37.7,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
   },
   {
    "slug": "ornith-ai-ornith-1-5-35b-a3b",
@@ -11347,7 +12514,7 @@
    "medianTokS": 258.8,
    "sourceClass": "community_reported",
    "evalScore": {
-    "score": 0.6668472420414707,
+    "score": 0.7085139087081375,
     "count": 3,
     "quant": "NVFP4",
     "mixedQuants": false
@@ -11526,6 +12693,27 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "prism-ml-ternary-bonsai-2-27b-gguf",
+   "hfId": "prism-ml/Ternary-Bonsai-2-27B-gguf",
+   "displayName": "Ternary-Bonsai-2-27B-gguf",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 95.74,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "2": {
+     "gb": 13.12,
+     "n": 1
+    }
+   },
+   "maxContextTested": 16384
+  },
+  {
    "slug": "prism-ml-ternary-bonsai-27b-mlx-2bit",
    "hfId": "prism-ml/Ternary-Bonsai-27B-mlx-2bit",
    "displayName": "Ternary-Bonsai-27B-mlx-2bit",
@@ -11579,27 +12767,11 @@
    "maxContextTested": 2048
   },
   {
-   "slug": "qwen-qwen3-30b-a3b-instruct-2507",
-   "hfId": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-   "displayName": "Qwen3-30B-A3B-Instruct-2507",
-   "family": "Qwen",
-   "paramsB": 31,
-   "activeParamsB": 3,
-   "isMoE": true,
-   "category": "chat",
-   "runCount": 1,
-   "medianTokS": 100.49,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 2048
-  },
-  {
    "slug": "qwen-qwen3-5-0-8b-base",
    "hfId": "Qwen/Qwen3.5-0.8B-Base",
    "displayName": "Qwen3.5-0.8B-Base",
    "family": "Qwen",
-   "paramsB": 1,
+   "paramsB": 0.87,
    "activeParamsB": null,
    "isMoE": false,
    "category": "chat",
@@ -11738,22 +12910,6 @@
    "maxContextTested": 131000
   },
   {
-   "slug": "radixark-qwen3-8-flash-next-nvfp4",
-   "hfId": "RadixArk/Qwen3.8-Flash-Next-NVFP4",
-   "displayName": "Qwen3.8-Flash-Next-NVFP4",
-   "family": "Qwen",
-   "paramsB": 180,
-   "activeParamsB": null,
-   "isMoE": false,
-   "category": "chat",
-   "runCount": 1,
-   "medianTokS": 161.2,
-   "sourceClass": "community_reported",
-   "evalScore": null,
-   "vramMeasuredGb": {},
-   "maxContextTested": 262144
-  },
-  {
    "slug": "rdtand-qwen3-6-27b-prismascout-blackwell-nvfp4-bf16-vllm",
    "hfId": "rdtand/Qwen3.6-27B-PrismaSCOUT-Blackwell-NVFP4-BF16-vllm",
    "displayName": "Qwen3.6-27B-PrismaSCOUT-Blackwell-NVFP4-BF16-vllm",
@@ -11834,6 +12990,27 @@
    "maxContextTested": 4096
   },
   {
+   "slug": "shawnw3i-qwen3-8-27b-awq-mtp",
+   "hfId": "shawnw3i/Qwen3.8-27B-AWQ-MTP",
+   "displayName": "Qwen3.8-27B-AWQ-MTP",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 87.1,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 31,
+     "n": 1
+    }
+   },
+   "maxContextTested": 2048
+  },
+  {
    "slug": "sroecker-qwen3-6-35b-reap-pruned-ratio-0-5-nvfp4",
    "hfId": "sroecker/Qwen3.6-35B-REAP-Pruned-ratio-0.5-NVFP4",
    "displayName": "Qwen3.6-35B-REAP-Pruned-ratio-0.5-NVFP4",
@@ -11882,6 +13059,27 @@
    "maxContextTested": 2048
   },
   {
+   "slug": "syvai-qwen3-8-27b-dflash2-w4a16",
+   "hfId": "syvai/Qwen3.8-27B-DFlash2-W4A16",
+   "displayName": "Qwen3.8-27B-DFlash2-W4A16",
+   "family": "Qwen",
+   "paramsB": 28,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 101,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "4": {
+     "gb": 23.6,
+     "n": 1
+    }
+   },
+   "maxContextTested": 2048
+  },
+  {
    "slug": "tiiuae-falcon-h1-tiny-coder-90m",
    "hfId": "tiiuae/Falcon-H1-Tiny-Coder-90M",
    "displayName": "Falcon-H1-Tiny-Coder-90M",
@@ -11908,6 +13106,22 @@
    "category": "chat",
    "runCount": 1,
    "medianTokS": 433.85,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {},
+   "maxContextTested": 2048
+  },
+  {
+   "slug": "tiiuae-falcon3-7b-instruct",
+   "hfId": "tiiuae/Falcon3-7B-Instruct",
+   "displayName": "Falcon3-7B-Instruct",
+   "family": "Llama",
+   "paramsB": 7,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 19.9,
    "sourceClass": "community_reported",
    "evalScore": null,
    "vramMeasuredGb": {},
@@ -12007,6 +13221,27 @@
    "evalScore": null,
    "vramMeasuredGb": {},
    "maxContextTested": 2048
+  },
+  {
+   "slug": "unsloth-llama-3-2-1b-instruct-gguf",
+   "hfId": "unsloth/Llama-3.2-1B-Instruct-GGUF",
+   "displayName": "Llama-3.2-1B-Instruct-GGUF",
+   "family": "Llama",
+   "paramsB": 1,
+   "activeParamsB": null,
+   "isMoE": false,
+   "category": "chat",
+   "runCount": 1,
+   "medianTokS": 699.91,
+   "sourceClass": "community_reported",
+   "evalScore": null,
+   "vramMeasuredGb": {
+    "8": {
+     "gb": 2.12,
+     "n": 1
+    }
+   },
+   "maxContextTested": 4096
   },
   {
    "slug": "unsloth-minimax-m2-7-gguf",
@@ -12399,28 +13634,6 @@
    "isMoE": false,
    "sourceClass": "owner_measured",
    "runCount": 5
-  },
-  {
-   "slug": "unsloth-llama-3-1-8b-instruct-gguf",
-   "hfId": "unsloth/Llama-3.1-8B-Instruct-GGUF",
-   "displayName": "Llama 3.1 8B Instruct GGUF",
-   "family": "Llama",
-   "paramsB": 8,
-   "category": "chat",
-   "isMoE": false,
-   "sourceClass": "owner_measured",
-   "runCount": 6
-  },
-  {
-   "slug": "unsloth-qwen2-5-coder-7b-instruct-gguf",
-   "hfId": "unsloth/Qwen2.5-Coder-7B-Instruct-GGUF",
-   "displayName": "Qwen2.5 Coder 7B Instruct GGUF",
-   "family": "Qwen",
-   "paramsB": 7,
-   "category": "code",
-   "isMoE": false,
-   "sourceClass": "owner_measured",
-   "runCount": 3
   }
  ]
 }

@@ -21,7 +21,11 @@ git clone https://github.com/carl0sfelipe/bestmodel.git
 cd bestmodel
 ```
 
-Then README.md. There is no one-line installer yet.
+Agent runbook from this clone (offline, no keys):
+docs/agent-quickstart.md — build the two Rust CLIs, detect your hardware,
+rank the best models for it against the in-repo pool snapshot, run the
+probe. Self-check in one command: `make agent-smoke`. Humans: README.md.
+There is no one-line installer yet.
 
 ## Honesty ladder
 
@@ -29,13 +33,16 @@ Then README.md. There is no one-line installer yet.
 2. reported — one or two runs on the same rig, shown as reported
 3. extrapolated — scaled by memory bandwidth from the closest tested rig
 4. formula — a published VRAM rule when no measurement exists yet
-5. no data yet — we say so instead of inventing a number
+5. claim (unvalidated) — for combos with no cell of their own: the best
+   community claims for the same intent on other rigs, orientation only,
+   always labeled and credited
+6. no data yet — we say so instead of inventing a number
 
-## Snapshot totals (apps/web/data/derived/stats.json, 2026-08-13)
+## Snapshot totals (apps/web/data/derived/stats.json, 2026-09-18)
 
-- runs: 4849
-- models: 527
-- rigs: 147
+- runs: 8230
+- models: 686
+- rigs: 184
 
 Frozen snapshot counts — not live, not throughput.
 

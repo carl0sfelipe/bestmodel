@@ -1,0 +1,40 @@
+name: backup-alarm
+
+# The prod Postgres lives on a single disk (beelink) and deploy/backup.sh
+# runs THERE — when that host dies, backups silently stop. This alarm runs
+# on GitHub's clock, independent of any host: if the private
+# bestmodel-backups repo has not received a commit in 48h, the job FAILS
+# and an issue is opened (one per streak, deduped by title).
+
+on:
+  schedule:
+    - cron: "17 8 * * *" # daily, 08:17 UTC — off the top of the hour
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check last backup age
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          LAST=$(gh api repos/carl0sfelipe/bestmodel-backups/commits --jq '.[0].commit.committer.date')
+          AGE_H=$(( ( $(date -u +%s) - $(date -u -d "$LAST" +%s) ) / 3600 ))
+          echo "last backup commit: $LAST (${AGE_H}h ago)"
+          if [ "$AGE_H" -ge 48 ]; then
+            echo "::error::prod backup is ${AGE_H}h stale (last: $LAST). The beelink-side deploy/backup.sh cron is probably dead — DB at risk if the single disk dies."
+            if ! gh issue list --state open --search "in:title backup stale" --json number --jq 'length' | grep -qv '^0$'; then
+              gh issue create \
+                --title "backup stale: no prod DB dump in ${AGE_H}h" \
+                --body "Last backup commit in carl0sfelipe/bestmodel-backups: **$LAST** (${AGE_H}h ago).
+
+Run \`deploy/backup.sh\` on the beelink (or wherever prod postgres lives) to refresh the off-host dump. The alarm lives in \`.github/workflows/backup-alarm.yml\`." || true
+            fi
+            exit 1
+          fi
+          echo "backup is fresh enough (${AGE_H}h < 48h)"

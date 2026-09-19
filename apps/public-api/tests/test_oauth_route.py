@@ -95,6 +95,12 @@ def test_begin_unconfigured_provider_is_503(client, monkeypatch):
     assert _begin(client).status_code == 503
 
 
+def test_begin_without_redirect_uri_defaults_to_production_console(client, github_env):
+    response = client.get("/v1/auth/oauth/github/begin")
+    assert response.status_code == 307
+    assert response.headers["location"].startswith("https://github.com/login/oauth/authorize?")
+
+
 # ---- callback --------------------------------------------------------------
 
 

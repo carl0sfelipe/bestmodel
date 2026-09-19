@@ -32,7 +32,7 @@ def _json_error(status_code: int, detail: str) -> JSONResponse:
 @router.get("/oauth/{provider}/begin", response_model=None)
 def begin_oauth(
     provider: str,
-    redirect_uri: str = Query(...),
+    redirect_uri: str = Query(default=oauth_login.ALLOWED_REDIRECT_URIS[0]),
     session: DatabaseSession = Depends(get_database_session),
 ) -> JSONResponse | RedirectResponse:
     if provider not in oauth_login.PROVIDERS:

@@ -171,3 +171,14 @@ Feito por CLI no Omarchy (binário `~/.local/bin/cloudflared`, 2026.9.1):
   runbook, POINTERS, direction v3, unit com `%h`. Suíte Python: 339 pass;
   6 falhas só por redis dev 6380 ausente (stack dev não sobe nesta
   máquina; rodado dentro da imagem `bestmodel-prod-api`).
+- **2026-09-19 17:47 — Fable: H12, OPS-1b, D5, S31 em prod.**
+  `GET /v1/health` devolve o sha da imagem (`deploy/build-args.sh` antes do
+  `up --build`); backup off-host a cada 6 h (unit viva + repo); console do
+  Pages com rota de report certa; **S31 link OAuth↔conta** (`f73df9a`):
+  `POST /v1/auth/oauth/{p}/link` + `GET /v1/auth/oauth/accounts`, botões
+  "link GitHub / link HF" no console (as duas cópias, idênticas). Pushed:
+  Vercel publicou em <1 min, Pages verde. **Próximo passo é do dono:**
+  KeePassXC + KeePassXC-Browser no Chromium → registrar passkey em
+  `carl0sfelipe` (H6 agora exige que o handle seja seu ou órfão — é órfão)
+  → "link GitHub" → a identidade sai de `carl0sfelipe-gh` (outcome=moved)
+  → voltar `MODERATOR_HANDLES=carl0sfelipe` no `.env` e recriar a api.

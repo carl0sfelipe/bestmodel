@@ -112,6 +112,55 @@ def test_register_options_reuses_existing_handle(client, database):
     assert len(handles) == 1
 
 
+def test_register_options_rejects_enrolment_on_owned_handle_without_session(client, database, monkeypatch):
+    """H6 (direction v3): a handle that already has a passkey is not open to
+    anyone who asks — that would be account takeover."""
+    _register_passkey(client, database, monkeypatch)
+    response = client.post("/v1/auth/passkey/register/options", json={"handle": HANDLE})
+    assert response.status_code == 409
+    assert "already registered" in response.json()["detail"]
+
+
+def test_register_options_rejects_enrolment_on_oauth_owned_handle(client, database):
+    """An account created via OAuth (zero passkeys) is owned too."""
+    client.post("/v1/auth/passkey/register/options", json={"handle": HANDLE})
+    user = database.find_app_user_by_handle(HANDLE)
+    database.insert_oauth_account(
+        {
+            "id": "oa-1",
+            "app_user_id": user["id"],
+            "provider": "github",
+            "provider_account_id": "42",
+            "login": HANDLE,
+            "display_name": None,
+        }
+    )
+    response = client.post("/v1/auth/passkey/register/options", json={"handle": HANDLE})
+    assert response.status_code == 409
+
+
+def test_register_options_allows_owner_to_add_second_passkey(client, database, monkeypatch):
+    token = _login_token(client, database, monkeypatch)
+    response = client.post(
+        "/v1/auth/passkey/register/options",
+        json={"handle": HANDLE},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    assert response.json()["user_id"] == database.find_app_user_by_handle(HANDLE)["id"]
+
+
+def test_register_options_rejects_other_users_session(client, database, monkeypatch):
+    _register_passkey(client, database, monkeypatch)
+    other_token = _login_token_for(client, database, monkeypatch, "someone-else")
+    response = client.post(
+        "/v1/auth/passkey/register/options",
+        json={"handle": HANDLE},
+        headers={"Authorization": f"Bearer {other_token}"},
+    )
+    assert response.status_code == 409
+
+
 def test_register_options_rejects_bad_handle(client):
     response = client.post("/v1/auth/passkey/register/options", json={"handle": "-bad handle!"})
     assert response.status_code == 400

@@ -340,6 +340,9 @@ class FakeDatabase(DatabaseSession):
     def insert_oauth_account(self, record: dict[str, Any]) -> None:
         self._oauth_accounts.append(dict(record))
 
+    def fetch_oauth_accounts_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        return [dict(row) for row in self._oauth_accounts if row["app_user_id"] == user_id]
+
     # S23: same validation contract as Postgres — the fake rejects what the
     # real backend rejects (S25a single-source discipline).
     def fetch_contributor_points(self) -> list[dict[str, Any]]:

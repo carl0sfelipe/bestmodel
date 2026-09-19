@@ -12,6 +12,7 @@ from src.dependencies.auth_provider import (
     AuthenticatedCaller,
     WebAuthnConfig,
     get_current_user,
+    get_optional_user,
     get_webauthn_config,
 )
 from src.dependencies.database_session_provider import DatabaseSession, get_database_session
@@ -55,9 +56,16 @@ def start_passkey_registration(
     payload: PasskeyRegisterOptionsRequest,
     session: DatabaseSession = Depends(get_database_session),
     config: WebAuthnConfig = Depends(get_webauthn_config),
+    caller: AuthenticatedCaller | None = Depends(get_optional_user),
 ) -> Any:
     try:
-        return passkey_registration_options(session, config, payload.handle, payload.display_name)
+        return passkey_registration_options(
+            session,
+            config,
+            payload.handle,
+            payload.display_name,
+            caller_user_id=caller.user["id"] if caller else None,
+        )
     except AuthError as exc:
         return _error_response(exc)
 

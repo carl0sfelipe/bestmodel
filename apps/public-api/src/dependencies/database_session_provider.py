@@ -203,6 +203,13 @@ class DatabaseSession(ABC):
         """Insert an oauth_account row."""
 
     @abstractmethod
+    def fetch_oauth_accounts_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        """Return every oauth_account row bound to ``user_id`` (H6: ownership evidence).
+
+        lockstep: fake + postgres + contract test, same commit.
+        """
+
+    @abstractmethod
     def insert_auth_challenge(self, record: dict[str, Any]) -> None:
         """Insert an auth_challenge row (upsert on challenge)."""
 
@@ -661,6 +668,12 @@ class PostgresSession(DatabaseSession):
         return self._fetchone(
             "SELECT * FROM oauth_account WHERE provider = %s AND provider_account_id = %s",
             (provider, provider_account_id),
+        )
+
+    def fetch_oauth_accounts_by_user(self, user_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT * FROM oauth_account WHERE app_user_id = %s ORDER BY created_at",
+            (user_id,),
         )
 
     def insert_oauth_account(self, record: dict[str, Any]) -> None:

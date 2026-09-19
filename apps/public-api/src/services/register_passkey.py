@@ -39,7 +39,20 @@ def passkey_registration_options(
     config: WebAuthnConfig,
     handle: str,
     display_name: str | None,
+    caller_user_id: str | None = None,
 ) -> dict[str, Any]:
+    """Start a passkey registration for ``handle``.
+
+    H6 (direction v3): an existing handle is NOT open for enrolment by
+    anyone who asks. Rules, in order:
+    - handle unknown → create the user, proceed (normal sign-up);
+    - handle owned by the caller's session → proceed (add a second passkey);
+    - handle exists but nobody ever proved ownership (zero passkeys AND zero
+      OAuth identities — an abandoned sign-up) → proceed, it is a fresh
+      sign-up in every way that matters;
+    - otherwise → 409. Enrolling a passkey on someone else's account would
+      be account takeover.
+    """
     handle = _normalize_handle(handle)
     user = session.find_app_user_by_handle(handle)
     if user is None:
@@ -52,6 +65,13 @@ def passkey_registration_options(
         session.commit()
 
     existing = session.fetch_webauthn_credentials_by_user(user["id"])
+    if caller_user_id != user["id"]:
+        owned = bool(existing) or bool(session.fetch_oauth_accounts_by_user(user["id"]))
+        if owned:
+            raise AuthError(
+                409,
+                f"handle already registered: {handle} — sign in to that account and add a passkey from there",
+            )
     options = _generate_registration_options(
         config=config,
         user=user,

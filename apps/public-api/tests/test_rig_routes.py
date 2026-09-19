@@ -60,11 +60,17 @@ def _passkey_session(client, database, monkeypatch, handle: str) -> str:
     monkeypatch.setattr(authenticate_passkey, "_options_to_json", fake_opt_json)
     monkeypatch.setattr(authenticate_passkey, "_verify_assertion", fake_assert)
 
-    options = client.post("/v1/auth/passkey/register/options", json={"handle": handle}).json()
-    client.post(
-        "/v1/auth/passkey/register/verify",
-        json={"handle": handle, "credential": {"response": {"challenge": options["options"]["challenge"]}}},
-    )
+    # H6: enrolling on an already-owned handle without a session is 409 by
+    # design — the second call for the same handle just logs in.
+    options_resp = client.post("/v1/auth/passkey/register/options", json={"handle": handle})
+    if options_resp.status_code == 200:
+        options = options_resp.json()
+        client.post(
+            "/v1/auth/passkey/register/verify",
+            json={"handle": handle, "credential": {"response": {"challenge": options["options"]["challenge"]}}},
+        )
+    else:
+        assert options_resp.status_code == 409, options_resp.text
     login_options = client.post("/v1/auth/passkey/login/options", json={"handle": handle}).json()
     login = client.post(
         "/v1/auth/passkey/login/verify",

@@ -159,3 +159,15 @@ Feito por CLI no Omarchy (binário `~/.local/bin/cloudflared`, 2026.9.1):
   single-source; D6 nada externo até o dogfood loop fechar, depois S24; D7
   commitar agora (`%h` nas units). Ordem na tabela do record. Ponteiros v0
   adotados (linha + presence grep no S25c).
+- **2026-09-19 17:50 — Fable executou ordem 0–1 do record (prod).** H6
+  **confirmado e corrigido** (`aaad02f`, deployado: register/options em
+  handle com dono sem sessão → 409; órfão → 200; própria sessão → 200).
+  Prod DB: token de agente `vast-benchmark-probe` (26/08, rig Vast
+  devolvida, sem expiração) **revogado**; usuário typo `carl0felipe`
+  apagado; 16 challenges vencidos de `carl0sfelipe` purgados.
+  `MODERATOR_HANDLES=carl0sfelipe-gh` no `deploy/.env` (conta que o dono
+  controla) até passkey em `carl0sfelipe` + S31. API rebuild `up -d
+  --build api`, healthy. D7 commitado (`f601d06`): compose omarchy,
+  runbook, POINTERS, direction v3, unit com `%h`. Suíte Python: 339 pass;
+  6 falhas só por redis dev 6380 ausente (stack dev não sobe nesta
+  máquina; rodado dentro da imagem `bestmodel-prod-api`).

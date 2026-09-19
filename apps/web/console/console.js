@@ -48,12 +48,20 @@ function show(view) {
 function renderSession() {
   const area = $("#session-area");
   if (token()) {
-    area.innerHTML = `<button id="btn-signout" class="linkish">sign out</button>`;
+    // S31: one human, one account — link GitHub / Hugging Face to THIS account
+    // instead of letting a provider login create a suffixed twin.
+    area.innerHTML = `<span id="linked-identities" class="muted"></span>
+      <button id="btn-link-github" class="linkish" title="link your GitHub identity to this account">link GitHub</button>
+      <button id="btn-link-huggingface" class="linkish" title="link your Hugging Face identity to this account">link HF</button>
+      <button id="btn-signout" class="linkish">sign out</button>`;
     $("#btn-signout").onclick = () => {
       localStorage.removeItem(TOKEN_KEY);
       renderSession();
       show("auth");
     };
+    $("#btn-link-github").onclick = () => startOauthLink("github");
+    $("#btn-link-huggingface").onclick = () => startOauthLink("huggingface");
+    loadLinkedIdentities().catch(() => {});
   } else {
     area.innerHTML = `<button data-view="auth">sign in</button>`;
     area.querySelector("[data-view]").onclick = () => show("auth");
@@ -356,16 +364,61 @@ function oauthBeginUrl(provider) {
   return `${API_BASE}/v1/auth/oauth/${provider}/begin?redirect_uri=${encodeURIComponent(redirectUri)}`;
 }
 
+// S31: link flow. The API signs a state that carries our user id; the
+// callback binds the provider identity to this account and comes back with
+// #linked=<provider>&login=<login>&outcome=linked|moved|already_linked.
+async function startOauthLink(provider) {
+  const redirectUri = location.origin + location.pathname;
+  const response = await api(`/v1/auth/oauth/${provider}/link`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ redirect_uri: redirectUri }),
+  });
+  if (!response.ok) {
+    const detail = (await response.json().catch(() => ({}))).detail || response.statusText;
+    alert(`could not start ${provider} link: ${detail}`);
+    return;
+  }
+  location.href = (await response.json()).authorize_url;
+}
+
+async function loadLinkedIdentities() {
+  const el = $("#linked-identities");
+  if (!el) return;
+  const response = await api("/v1/auth/oauth/accounts");
+  if (!response.ok) return;
+  const data = await response.json();
+  const parts = data.accounts.map((a) => `${a.provider}: ${a.login}`);
+  el.textContent = data.handle + (parts.length ? ` · ${parts.join(" · ")}` : "");
+  const has = new Set(data.accounts.map((a) => a.provider));
+  const gh = $("#btn-link-github"), hf = $("#btn-link-huggingface");
+  if (gh) gh.hidden = has.has("github");
+  if (hf) hf.hidden = has.has("huggingface");
+}
+
 function captureOauthFragment() {
   const params = new URLSearchParams(location.hash.slice(1));
   const accessToken = params.get("auth_token");
   const authError = params.get("auth_error");
+  const linked = params.get("linked");
+  const linkError = params.get("link_error");
   if (accessToken) {
     localStorage.setItem(TOKEN_KEY, accessToken);
   } else if (authError) {
     const status = $("#auth-status");
     status.textContent = `oauth sign-in failed: ${authError}`;
     status.hidden = false;
+  } else if (linked) {
+    const outcome = params.get("outcome");
+    const login = params.get("login");
+    const msg = outcome === "moved"
+      ? `${linked} identity ${login} moved to this account (the suffixed account it created is now empty)`
+      : outcome === "already_linked"
+        ? `${linked} identity ${login} was already linked`
+        : `${linked} identity ${login} linked to this account`;
+    setTimeout(() => alert(msg), 0);
+  } else if (linkError) {
+    setTimeout(() => alert(`link failed: ${linkError}`), 0);
   } else {
     return;
   }
@@ -386,4 +439,3 @@ captureOauthFragment();
 renderSession();
 show(token() ? "feed" : "auth");
 if (token()) loadFeed().catch(() => {});
-

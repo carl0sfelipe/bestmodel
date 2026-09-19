@@ -210,6 +210,13 @@ class DatabaseSession(ABC):
         """
 
     @abstractmethod
+    def update_oauth_account_user(self, account_id: str, new_user_id: str) -> None:
+        """S31: re-point an oauth_account at another app_user (identity move).
+
+        lockstep: fake + postgres + contract test, same commit.
+        """
+
+    @abstractmethod
     def insert_auth_challenge(self, record: dict[str, Any]) -> None:
         """Insert an auth_challenge row (upsert on challenge)."""
 
@@ -674,6 +681,12 @@ class PostgresSession(DatabaseSession):
         return self._fetchall(
             "SELECT * FROM oauth_account WHERE app_user_id = %s ORDER BY created_at",
             (user_id,),
+        )
+
+    def update_oauth_account_user(self, account_id: str, new_user_id: str) -> None:
+        self._connection.execute(
+            "UPDATE oauth_account SET app_user_id = %s WHERE id = %s",
+            (new_user_id, account_id),
         )
 
     def insert_oauth_account(self, record: dict[str, Any]) -> None:

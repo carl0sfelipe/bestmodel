@@ -97,25 +97,33 @@ def _state_secret() -> bytes:
     return hashlib.sha256(seed.encode()).digest()
 
 
-def _state_mac(nonce: str, ts: str, provider: str, index: str) -> str:
-    message = "\n".join((nonce, ts, provider, index)).encode()
+def _state_mac(nonce: str, ts: str, provider: str, index: str, link: str = "") -> str:
+    message = "\n".join((nonce, ts, provider, index, link)).encode()
     return hmac.new(_state_secret(), message, hashlib.sha256).hexdigest()
 
 
-def sign_state(provider: str, redirect_uri: str) -> str:
+def sign_state(provider: str, redirect_uri: str, link_user_id: str | None = None) -> str:
+    """Sign a state. ``link_user_id`` (S31) turns the callback into a LINK of
+    the provider identity to that already-authenticated user instead of a
+    login; it is MAC'd so nobody can point the link at someone else."""
     nonce = secrets.token_urlsafe(16)
     ts = str(int(time.time()))
     index = str(ALLOWED_REDIRECT_URIS.index(redirect_uri))
-    return f"{ts}.{nonce}.{index}.{_state_mac(nonce, ts, provider, index)}"
+    link = link_user_id or ""
+    return f"{ts}.{nonce}.{index}.{link}.{_state_mac(nonce, ts, provider, index, link)}"
 
 
-def resolve_state(provider: str, state: str) -> str | None:
-    """Return the redirect_uri baked into a valid, fresh state, else None."""
+def resolve_state_full(provider: str, state: str) -> tuple[str, str | None] | None:
+    """Return (redirect_uri, link_user_id|None) for a valid, fresh state."""
     parts = state.split(".")
-    if len(parts) != 4:
+    if len(parts) == 4:  # pre-S31 states still in flight: no link field
+        ts, nonce, index, mac = parts
+        link = ""
+    elif len(parts) == 5:
+        ts, nonce, index, link, mac = parts
+    else:
         return None
-    ts, nonce, index, mac = parts
-    if not hmac.compare_digest(mac, _state_mac(nonce, ts, provider, index)):
+    if not hmac.compare_digest(mac, _state_mac(nonce, ts, provider, index, link)):
         return None
     if not ts.isdigit() or not index.isdigit():
         return None
@@ -124,7 +132,13 @@ def resolve_state(provider: str, state: str) -> str | None:
     age = time.time() - int(ts)
     if not 0 <= age <= STATE_TTL_SECONDS:
         return None
-    return ALLOWED_REDIRECT_URIS[int(index)]
+    return ALLOWED_REDIRECT_URIS[int(index)], (link or None)
+
+
+def resolve_state(provider: str, state: str) -> str | None:
+    """Return the redirect_uri baked into a valid, fresh state, else None."""
+    resolved = resolve_state_full(provider, state)
+    return resolved[0] if resolved else None
 
 
 # ---- outbound (monkeypatchable network boundary) ---------------------------
@@ -233,6 +247,84 @@ def oauth_authorize_url(provider: str, redirect_uri: str) -> str:
     if config["scope"]:
         params["scope"] = config["scope"]
     return f"{config['authorize_url']}?{urllib.parse.urlencode(params)}"
+
+
+def oauth_link_url(provider: str, redirect_uri: str, user_id: str) -> str:
+    """S31: authorize URL whose state links the identity to ``user_id``."""
+    client_id, _ = _credentials(provider)
+    config = PROVIDERS[provider]
+    params = {
+        "client_id": client_id,
+        "redirect_uri": callback_url(provider),
+        "state": sign_state(provider, redirect_uri, link_user_id=user_id),
+    }
+    if config["scope"]:
+        params["scope"] = config["scope"]
+    return f"{config['authorize_url']}?{urllib.parse.urlencode(params)}"
+
+
+def oauth_link(session, provider: str, code: str, state: str) -> tuple[str, dict]:
+    """S31: bind the provider identity to the user baked into the state.
+
+    One human, one account. Rules:
+    - the target user must exist;
+    - the target must not already hold a different identity of this provider;
+    - if the identity is bound to another user, re-point it only when that
+      other account has no passkey and no other provider identity — its
+      only proof of ownership is this very identity, which the caller just
+      proved by logging in at the provider. Otherwise 409. No merge tool.
+    """
+    resolved = resolve_state_full(provider, state)
+    if resolved is None:
+        raise AuthError(400, "unknown or expired oauth state")
+    redirect_uri, link_user_id = resolved
+    if not link_user_id:
+        raise AuthError(400, "state is not a link state")
+    target = session.find_app_user_by_id(link_user_id)
+    if target is None:
+        raise AuthError(404, "link target user no longer exists")
+
+    client_id, client_secret = _credentials(provider)
+    access_token = _exchange_code(provider, code, client_id, client_secret)
+    identity = _fetch_identity(provider, access_token)
+
+    mine = [a for a in session.fetch_oauth_accounts_by_user(link_user_id) if a["provider"] == provider]
+    account = session.find_oauth_account(provider, identity["provider_account_id"])
+    if mine and (account is None or account["app_user_id"] != link_user_id):
+        raise AuthError(409, f"your account is already linked to another {provider} identity")
+
+    if account is None:
+        session.insert_oauth_account(
+            {
+                "id": str(uuid.uuid4()),
+                "app_user_id": link_user_id,
+                "provider": provider,
+                "provider_account_id": identity["provider_account_id"],
+                "login": identity["login"][:64],
+                "display_name": identity["display_name"][:64],
+            }
+        )
+        outcome = "linked"
+    elif account["app_user_id"] == link_user_id:
+        outcome = "already_linked"
+    else:
+        other_id = account["app_user_id"]
+        other_has_passkey = bool(session.fetch_webauthn_credentials_by_user(other_id))
+        other_other_ids = [a for a in session.fetch_oauth_accounts_by_user(other_id) if a["id"] != account["id"]]
+        if other_has_passkey or other_other_ids:
+            raise AuthError(
+                409,
+                f"this {provider} identity belongs to another account that has its own credentials — sign in there and unlink first",
+            )
+        session.update_oauth_account_user(account["id"], link_user_id)
+        outcome = "moved"
+    session.commit()
+    return redirect_uri, {
+        "provider": provider,
+        "login": identity["login"],
+        "handle": target["handle"],
+        "outcome": outcome,
+    }
 
 
 def oauth_login(session, provider: str, code: str, state: str) -> tuple[str, dict]:

@@ -348,6 +348,42 @@ for (const button of document.querySelectorAll("#vote-row [data-verdict]")) {
   button.addEventListener("click", () => vote(button.dataset.verdict));
 }
 
+// S30: OAuth sign-in (GitHub / Hugging Face). The API redirects back to this
+// page with the session token in the URL fragment — fragments are never sent
+// to any server. Capture it once and clean the address bar.
+function oauthBeginUrl(provider) {
+  const redirectUri = location.origin + location.pathname;
+  return `${API_BASE}/v1/auth/oauth/${provider}/begin?redirect_uri=${encodeURIComponent(redirectUri)}`;
+}
+
+function captureOauthFragment() {
+  const params = new URLSearchParams(location.hash.slice(1));
+  const accessToken = params.get("auth_token");
+  const authError = params.get("auth_error");
+  if (accessToken) {
+    localStorage.setItem(TOKEN_KEY, accessToken);
+  } else if (authError) {
+    const status = $("#auth-status");
+    status.textContent = `oauth sign-in failed: ${authError}`;
+    status.hidden = false;
+  } else {
+    return;
+  }
+  history.replaceState(null, "", location.pathname + location.search);
+}
+
+for (const [selector, provider] of [
+  ["#oauth-github", "github"],
+  ["#oauth-huggingface", "huggingface"],
+]) {
+  const button = document.querySelector(selector);
+  if (button) button.addEventListener("click", () => {
+    location.href = oauthBeginUrl(provider);
+  });
+}
+
+captureOauthFragment();
 renderSession();
 show(token() ? "feed" : "auth");
 if (token()) loadFeed().catch(() => {});
+

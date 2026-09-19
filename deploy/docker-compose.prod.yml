@@ -54,6 +54,13 @@ services:
       # S28: quem modera denúncias (fake pego). Dial do dono — sobrescreva
       # em deploy/.env (vírgula-lista de handles). Vazio = ninguém modera.
       MODERATOR_HANDLES: ${MODERATOR_HANDLES:-carl0sfelipe}
+      # S30: OAuth sign-in (GitHub / Hugging Face). Empty pair = provider
+      # answers 503 "not configured"; set both in deploy/.env to enable.
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      HUGGINGFACE_CLIENT_ID: ${HUGGINGFACE_CLIENT_ID:-}
+      HUGGINGFACE_CLIENT_SECRET: ${HUGGINGFACE_CLIENT_SECRET:-}
+      PUBLIC_API_BASE: ${PUBLIC_API_BASE:-https://api.bestmodel.run}
     volumes:
       - artifacts:/artifacts
       - ./secrets:/secrets:ro

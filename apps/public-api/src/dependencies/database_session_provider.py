@@ -195,6 +195,14 @@ class DatabaseSession(ABC):
         """Insert an app_user row plus its zeroed user_reputation row."""
 
     @abstractmethod
+    def find_oauth_account(self, provider: str, provider_account_id: str) -> dict[str, Any] | None:
+        """Return the oauth_account row for (provider, provider_account_id) or None."""
+
+    @abstractmethod
+    def insert_oauth_account(self, record: dict[str, Any]) -> None:
+        """Insert an oauth_account row."""
+
+    @abstractmethod
     def insert_auth_challenge(self, record: dict[str, Any]) -> None:
         """Insert an auth_challenge row (upsert on challenge)."""
 
@@ -647,6 +655,21 @@ class PostgresSession(DatabaseSession):
         self._connection.execute(
             "INSERT INTO user_reputation (app_user_id) VALUES (%(app_user_id)s)",
             {"app_user_id": record["id"]},
+        )
+
+    def find_oauth_account(self, provider: str, provider_account_id: str) -> dict[str, Any] | None:
+        return self._fetchone(
+            "SELECT * FROM oauth_account WHERE provider = %s AND provider_account_id = %s",
+            (provider, provider_account_id),
+        )
+
+    def insert_oauth_account(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO oauth_account "
+            "(id, app_user_id, provider, provider_account_id, login, display_name) "
+            "VALUES (%(id)s, %(app_user_id)s, %(provider)s, %(provider_account_id)s, "
+            "%(login)s, %(display_name)s)",
+            record,
         )
 
     def insert_signing_key(self, record: dict[str, Any]) -> None:

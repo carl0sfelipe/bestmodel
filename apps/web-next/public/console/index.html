@@ -30,6 +30,11 @@
       <label>handle <input name="handle" required placeholder="existing handle"></label>
       <button type="submit">sign in</button>
     </form>
+    <p class="muted">or sign in with a provider:</p>
+    <div class="row">
+      <button type="button" id="oauth-github">GitHub</button>
+      <button type="button" id="oauth-huggingface">Hugging Face</button>
+    </div>
     <pre id="auth-status" class="status" hidden></pre>
   </section>
 

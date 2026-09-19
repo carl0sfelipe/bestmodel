@@ -28,6 +28,7 @@ from src.routes import (
     hardware_match_route,
     leaderboard_route,
     model_match_route,
+    oauth_route,
     reported_submission_route,
     report_route,
     rig_route,
@@ -75,6 +76,7 @@ def create_app() -> FastAPI:
     app.include_router(reported_submission_route.router)
     app.include_router(transparency_route.router)
     app.include_router(auth_route.router)
+    app.include_router(oauth_route.router)
     app.include_router(rig_route.router)
     app.include_router(catalog_route.router)
     app.include_router(claim_route.router)

@@ -55,6 +55,29 @@ domain in repo Settings → Pages. Until then Vercel keeps serving prod.
 The console talks same-origin (`config.js` sets an empty base); passkeys and
 the honesty ladder work unchanged.
 
+## OAuth sign-in (optional, S30)
+
+The console also offers **Sign in with GitHub / Hugging Face** alongside
+passkeys. Each provider needs an OAuth app owned by you; until both values
+of a pair are set, that provider's `begin` endpoint answers
+`503 oauth provider not configured` and the buttons simply fail gracefully.
+
+1. **GitHub** — <https://github.com/settings/developers> → New OAuth App:
+   - Application name: `bestmodel.run`
+   - Homepage: `https://www.bestmodel.run`
+   - Callback: `https://api.bestmodel.run/v1/auth/oauth/github/callback`
+   - Approval is instant; copy Client ID + generate a Client Secret.
+2. **Hugging Face** — <https://huggingface.co/settings/connected-applications>
+   → New OAuth app, same homepage and callback pattern
+   (`…/v1/auth/oauth/huggingface/callback`). HF may review the app manually.
+3. Put the four values in `deploy/.env` (`GITHUB_CLIENT_ID/SECRET`,
+   `HUGGINGFACE_CLIENT_ID/SECRET`) and recreate the api service.
+
+First login with a provider creates the account (handle = provider login,
+suffixed `-gh`/`-hf` on collision); sessions are the same 12h bearer tokens
+passkeys issue. Linking a provider to an existing passkey account is
+backlog.
+
 ## Backups (do this before anything else)
 
 ```bash

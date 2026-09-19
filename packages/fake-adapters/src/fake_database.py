@@ -69,6 +69,7 @@ class FakeDatabase(DatabaseSession):
         self._reports: list[dict[str, Any]] = []
         self._users: list[dict[str, Any]] = []
         self._reputations: list[dict[str, Any]] = []
+        self._oauth_accounts: list[dict[str, Any]] = []
         self._credentials: list[dict[str, Any]] = []
         self._challenges: list[dict[str, Any]] = []
         self._tokens: list[dict[str, Any]] = []
@@ -324,6 +325,20 @@ class FakeDatabase(DatabaseSession):
             raise ValueError(f"duplicate handle: {record['handle']}")
         self._users.append(dict(record))
         self._reputations.append({"app_user_id": record["id"], "points": 0, "tier": "L0"})
+
+    def find_oauth_account(self, provider: str, provider_account_id: str) -> dict[str, Any] | None:
+        return next(
+            (
+                row
+                for row in self._oauth_accounts
+                if row["provider"] == provider
+                and row["provider_account_id"] == provider_account_id
+            ),
+            None,
+        )
+
+    def insert_oauth_account(self, record: dict[str, Any]) -> None:
+        self._oauth_accounts.append(dict(record))
 
     # S23: same validation contract as Postgres — the fake rejects what the
     # real backend rejects (S25a single-source discipline).

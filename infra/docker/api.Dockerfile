@@ -23,7 +23,13 @@ COPY infra/migrations/ infra/migrations/
 COPY infra/seed/ infra/seed/
 COPY infra/scripts/ infra/scripts/
 
-ENV PATH="/app/.venv/bin:${PATH}" \
+# H12 (direction v3): the running image carries the commit it was built
+# from, exposed by GET /v1/health — "what is in prod" is read, not recalled.
+ARG BESTMODEL_GIT_SHA=unknown
+ARG BESTMODEL_BUILT_AT=unknown
+ENV BESTMODEL_GIT_SHA=${BESTMODEL_GIT_SHA} \
+    BESTMODEL_BUILT_AT=${BESTMODEL_BUILT_AT} \
+    PATH="/app/.venv/bin:${PATH}" \
     PYTHONPATH="/app/packages/domain-schema/src:/app/packages/roofline-kernel/src:/app/packages/runtime-probes/src:/app/packages/recommendation-engine/src:/app/packages/fake-adapters/src"
 
 WORKDIR /app/apps/public-api

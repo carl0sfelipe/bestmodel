@@ -1,8 +1,8 @@
 [Unit]
-Description=Backup diario do bestmodel
+Description=Backup off-host do bestmodel (a cada 6h — DB tem ~70 KB; RPO é escolha, não custo)
 
 [Timer]
-OnCalendar=daily
+OnCalendar=*-*-* 00,06,12,18:12:00
 Persistent=true
 RandomizedDelaySec=15m
 

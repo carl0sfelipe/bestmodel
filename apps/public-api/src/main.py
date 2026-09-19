@@ -26,6 +26,7 @@ from src.routes import (
     claim_route,
     contributor_route,
     hardware_match_route,
+    health_route,
     leaderboard_route,
     model_match_route,
     oauth_route,
@@ -68,6 +69,7 @@ def create_app() -> FastAPI:
         os.environ.get("REDIS_URL", DEFAULT_REDIS_URL)
     )
     app.state.auth_config = WebAuthnConfig.from_env()
+    app.include_router(health_route.router)
     app.include_router(hardware_match_route.router)
     app.include_router(model_match_route.router)
     app.include_router(leaderboard_route.router)

@@ -42,6 +42,10 @@ services:
     build:
       context: ..
       dockerfile: infra/docker/api.Dockerfile
+      args:
+        # deploy/build-args.sh exports these from git before `up --build`
+        BESTMODEL_GIT_SHA: ${BESTMODEL_GIT_SHA:-unknown}
+        BESTMODEL_BUILT_AT: ${BESTMODEL_BUILT_AT:-unknown}
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       REDIS_URL: redis://redis:6379/0

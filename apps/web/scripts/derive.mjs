@@ -1,6 +1,7 @@
 // S2 — aggregate the raw snapshot into the derived JSONs the site consumes.
 // Rules: CONTRATO-GLOBAL.md §4 (schemas, identity §4.1), §6 (quant bits, seed).
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { modelCategory } from "./category.mjs";
 
 const round2 = (x) => Math.round(x * 100) / 100;
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -140,7 +141,7 @@ for (const run of runs) {
       paramsB: cat?.params ?? run.model.params ?? null,
       activeParamsB: cat?.activeParams ?? null,
       isMoE: cat?.isMoE ?? false,
-      category: /coder|starcoder|codestral|code/i.test(display) ? "code" : "chat",
+      category: modelCategory(display, hfId),
       runCount: 0, medianTokS: cat?.speedStats?.medianTokS != null ? round2(cat.speedStats.medianTokS) : null,
       // S24: data provenance badge — every run in the current pool comes from
       // the localmaxxing community harvest (APPROVED speedTests), so the whole

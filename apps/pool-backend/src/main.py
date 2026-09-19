@@ -10,6 +10,7 @@ import sqlite3
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from src.category import validate_category_filter
 from src.config import BITS_DOMAIN
 from src.db import connect
 from src.derive_export import build_cells, build_models, build_rigs
@@ -121,9 +122,11 @@ def list_models(category: str | None = None) -> dict:
     finally:
         conn.close()
     if category is not None:
-        if category not in ("chat", "code"):
-            return _json_error(422, f"invalid category {category!r}")
-        models = [model for model in models if model["category"] == category]
+        try:
+            wanted = validate_category_filter(category)
+        except ValueError as exc:
+            return _json_error(422, str(exc))
+        models = [model for model in models if model["category"] == wanted]
     return {"models": models}
 
 

@@ -1,0 +1,33 @@
+# Omarchy overrides — durable Postgres bytes live on the 6 TB HDD.
+#
+# /data is the WDC WD64PURZ-85BWUY0 ext4 partition mounted at boot via fstab
+# (UUID=94ab8449-90ff-4886-b593-31f189e4eba4, options defaults,nofail —
+# systemd unit data.mount). Redis, artifacts and caddy state stay in named
+# volumes on the SSD: they are small and re-derivable from backups.
+#
+# Usage (note the second -f):
+#   docker compose -f deploy/docker-compose.prod.yml -f deploy/docker-compose.omarchy.yml \
+#     --env-file deploy/.env up -d --build
+#
+# First boot only: /data/bestmodel/postgres must exist and be owned by the
+# uid the timescaledb image drops to, or initdb refuses to start.
+
+services:
+  postgres:
+    # timescaledb-ha defaults PGDATA to /home/postgres/pgdata/data (inside
+    # the container fs, NOT the bind mount) — force it onto the HDD.
+    environment:
+      PGDATA: /var/lib/postgresql/data
+    volumes: !override
+      - /data/bestmodel/postgres:/var/lib/postgresql/data
+
+  # Tunnel gerenciado localmente via CLI (cloudflared tunnel login/create),
+  # não via TUNNEL_TOKEN do painel: o cert e as credenciais vivem em
+  # ~/.cloudflared no Omarchy. Ignora o comando "tunnel run" do base file.
+  cloudflared:
+    command: tunnel --config /etc/cloudflared/config.yml run
+    # a imagem roda como nonroot (uid 65532) e não lê ~/.cloudflared (700);
+    # rodar como uid do dono dos arquivos evita relaxar permissões.
+    user: "1000:1000"
+    volumes: !override
+      - /home/carlos/.cloudflared:/etc/cloudflared:ro

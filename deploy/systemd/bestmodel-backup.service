@@ -4,4 +4,4 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/beelink/Work/bestmodel/deploy/backup.sh
+ExecStart=%h/Work/bestmodel/deploy/backup.sh

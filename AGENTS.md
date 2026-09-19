@@ -8,15 +8,17 @@
 
 ## Read order (do this first)
 
-1. This file (map + golden rules).
-2. `README.md` — product overview, quickstart.
-3. `docs/agent-quickstart.md` — cold start on the machine you run on
-   (agent or human): build, detect hardware, rank models for it, run the
-   probe. Every command works offline from a public clone.
-4. `docs/architecture.md` — module dependency graph.
-5. `docs/findings.md` — numbered calibration findings (open decisions reference these).
-6. `docs/backlog.md` — the canonical backlog (tracks A/B/C/D) and open questions.
-7. Then the relevant subtree map (every directory has its own `AGENTS.md`).
+1. This file (map + golden rules) — stop after the golden rules unless
+   you are lost.
+2. **`docs/POINTERS.md`** — pick a **job card**, OPEN only those paths.
+   Do not ingest the rest of this list “because it is here”.
+3. Then the nearest subtree `AGENTS.md` to the files you will touch.
+
+The paths below are a **map** (where things live), not a mandatory ingest.
+Cold-start on a fresh machine is the `cold-start` job in POINTERS
+(`docs/agent-quickstart.md`). Strategy is the `fable-escalation` job.
+A 2026-08 architecture graph still sits at `docs/architecture.md` and is
+marked STALE in POINTERS — do not treat it as prod topology.
 
 ## Map system (where things live)
 
@@ -25,6 +27,7 @@ edit wins. Root → subtree:
 
 | Path | What it maps |
 |---|---|
+| `docs/POINTERS.md` | Job cards (OPEN/SKIP/STALE). Read this instead of ingesting the map |
 | `docs/AGENTS.md` | Planning docs: architecture, findings, backlog, research |
 | `docs/en/deploy.md` | Production runbook: Vercel front + Docker backend, backups, cloud migration, closed-source boundary |
 | `infra/scripts/import_localmaxxing.py` | S22: localmaxxing pool → run_claims (owner-approved, idempotent per external_ref) |

@@ -109,7 +109,7 @@ def test_callback_issues_working_session_token(client, database, github_env, mon
     state = _state_from(_begin(client))
     response = client.get(
         "/v1/auth/oauth/github/callback",
-        params={"code": "abc", "state": state, "redirect_uri": REDIRECT_URI},
+        params={"code": "abc", "state": state},
     )
     assert response.status_code == 303
     location = response.headers["location"]
@@ -133,7 +133,7 @@ def test_callback_huggingface_maps_oidc_fields(client, database, hf_env, monkeyp
     state = _state_from(_begin(client, provider="huggingface"))
     response = client.get(
         "/v1/auth/oauth/huggingface/callback",
-        params={"code": "abc", "state": state, "redirect_uri": REDIRECT_URI},
+        params={"code": "abc", "state": state},
     )
     assert response.status_code == 303
     assert database.find_app_user_by_handle("enziindustries") is not None
@@ -144,13 +144,13 @@ def test_second_login_reuses_the_same_user(client, database, github_env, monkeyp
     state = _state_from(_begin(client))
     first = client.get(
         "/v1/auth/oauth/github/callback",
-        params={"code": "abc", "state": state, "redirect_uri": REDIRECT_URI},
+        params={"code": "abc", "state": state},
     )
     _mock_provider(monkeypatch, _identity())
     state = _state_from(_begin(client))
     second = client.get(
         "/v1/auth/oauth/github/callback",
-        params={"code": "def", "state": state, "redirect_uri": REDIRECT_URI},
+        params={"code": "def", "state": state},
     )
     assert first.status_code == second.status_code == 303
     handles = [row["handle"] for row in database._users]
@@ -165,7 +165,7 @@ def test_handle_collision_gets_provider_suffix(client, database, github_env, mon
     state = _state_from(_begin(client))
     response = client.get(
         "/v1/auth/oauth/github/callback",
-        params={"code": "abc", "state": state, "redirect_uri": REDIRECT_URI},
+        params={"code": "abc", "state": state},
     )
     assert response.status_code == 303
     assert database.find_app_user_by_handle("octocat-gh") is not None
@@ -175,7 +175,7 @@ def test_bad_state_redirects_with_error(client, github_env, monkeypatch):
     _mock_provider(monkeypatch, _identity())
     response = client.get(
         "/v1/auth/oauth/github/callback",
-        params={"code": "abc", "state": "garbage", "redirect_uri": REDIRECT_URI},
+        params={"code": "abc", "state": "garbage"},
     )
     assert response.status_code == 303
     assert "auth_error=" in response.headers["location"]
@@ -183,19 +183,30 @@ def test_bad_state_redirects_with_error(client, github_env, monkeypatch):
 
 def test_state_is_provider_bound(client, github_env):
     state = oauth_login.sign_state("github", REDIRECT_URI)
-    assert oauth_login.verify_state("github", REDIRECT_URI, state)
-    assert not oauth_login.verify_state("huggingface", REDIRECT_URI, state)
+    assert oauth_login.resolve_state("github", state) == REDIRECT_URI
+    assert oauth_login.resolve_state("huggingface", state) is None
+
+
+def test_state_carries_its_own_destination():
+    other = oauth_login.ALLOWED_REDIRECT_URIS[1]
+    state = oauth_login.sign_state("github", other)
+    assert oauth_login.resolve_state("github", state) == other
 
 
 def test_expired_state_is_rejected():
     old_ts = str(int(time.time()) - oauth_login.STATE_TTL_SECONDS - 60)
     nonce = "abcdef"
-    mac = oauth_login._state_mac(nonce, old_ts, "github", REDIRECT_URI)
-    assert not oauth_login.verify_state("github", REDIRECT_URI, f"{old_ts}.{nonce}.{mac}")
+    mac = oauth_login._state_mac(nonce, old_ts, "github", "1")
+    assert oauth_login.resolve_state("github", f"{old_ts}.{nonce}.1.{mac}") is None
 
 
-def test_state_is_redirect_uri_bound():
-    state = oauth_login.sign_state("github", REDIRECT_URI)
-    assert not oauth_login.verify_state(
-        "github", oauth_login.ALLOWED_REDIRECT_URIS[1], state
+def test_github_style_callback_has_only_code_and_state(client, database, github_env, monkeypatch):
+    """Regressão S30: o GitHub redireciona com só code+state — sem redirect_uri."""
+    _mock_provider(monkeypatch, _identity())
+    state = _state_from(_begin(client))
+    response = client.get(
+        "/v1/auth/oauth/github/callback",
+        params={"code": "abc", "state": state},
     )
+    assert response.status_code == 303
+    assert response.headers["location"].startswith(REDIRECT_URI + "#auth_token=bm_")

@@ -51,23 +51,23 @@ def oauth_callback(
     provider: str,
     code: str = Query(...),
     state: str = Query(...),
-    redirect_uri: str = Query(...),
     session: DatabaseSession = Depends(get_database_session),
 ) -> JSONResponse | RedirectResponse:
     if provider not in oauth_login.PROVIDERS:
         return _json_error(404, f"unknown oauth provider: {provider}")
-    if redirect_uri not in oauth_login.ALLOWED_REDIRECT_URIS:
-        return _json_error(400, "redirect_uri not allowed")
 
-    def redirect_with(**fragment: str) -> RedirectResponse:
-        separator = "#" if "#" not in redirect_uri else "&"
+    # Providers redirect back with only code + state; the return destination
+    # is baked into the signed state. Unknown/broken states fall back to the
+    # production console so the user always lands somewhere useful.
+    fallback = oauth_login.ALLOWED_REDIRECT_URIS[0]
+
+    def redirect_with(base: str, **fragment: str) -> RedirectResponse:
+        separator = "#" if "#" not in base else "&"
         pair = urllib.parse.urlencode(fragment)
-        return RedirectResponse(f"{redirect_uri}{separator}{pair}", status_code=303)
+        return RedirectResponse(f"{base}{separator}{pair}", status_code=303)
 
     try:
-        result = oauth_login.oauth_login(session, provider, code, state, redirect_uri)
+        redirect_uri, result = oauth_login.oauth_login(session, provider, code, state)
     except AuthError as exc:
-        return redirect_with(auth_error=exc.detail)
-    return redirect_with(
-        auth_token=result["access_token"], expires_at=result["expires_at"]
-    )
+        return redirect_with(fallback, auth_error=exc.detail)
+    return redirect_with(redirect_uri, auth_token=result["access_token"], expires_at=result["expires_at"])

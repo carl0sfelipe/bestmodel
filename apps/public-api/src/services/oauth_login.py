@@ -81,7 +81,13 @@ def callback_url(provider: str) -> str:
     return f"{base}/v1/auth/oauth/{provider}/callback"
 
 
-# ---- state (CSRF) ----------------------------------------------------------
+# ---- state (CSRF + return destination) -------------------------------------
+#
+# The state carries everything the callback needs to know: when it was
+# issued, for which provider, and WHERE the browser must land afterwards
+# (an index into ALLOWED_REDIRECT_URIS). Providers redirect back with only
+# code + state, so the return destination has to live inside the state
+# itself, MAC'd against tampering.
 
 
 def _state_secret() -> bytes:
@@ -91,28 +97,34 @@ def _state_secret() -> bytes:
     return hashlib.sha256(seed.encode()).digest()
 
 
-def _state_mac(nonce: str, ts: str, provider: str, redirect_uri: str) -> str:
-    message = "\n".join((nonce, ts, provider, redirect_uri)).encode()
+def _state_mac(nonce: str, ts: str, provider: str, index: str) -> str:
+    message = "\n".join((nonce, ts, provider, index)).encode()
     return hmac.new(_state_secret(), message, hashlib.sha256).hexdigest()
 
 
 def sign_state(provider: str, redirect_uri: str) -> str:
     nonce = secrets.token_urlsafe(16)
     ts = str(int(time.time()))
-    return f"{ts}.{nonce}.{_state_mac(nonce, ts, provider, redirect_uri)}"
+    index = str(ALLOWED_REDIRECT_URIS.index(redirect_uri))
+    return f"{ts}.{nonce}.{index}.{_state_mac(nonce, ts, provider, index)}"
 
 
-def verify_state(provider: str, redirect_uri: str, state: str) -> bool:
+def resolve_state(provider: str, state: str) -> str | None:
+    """Return the redirect_uri baked into a valid, fresh state, else None."""
     parts = state.split(".")
-    if len(parts) != 3:
-        return False
-    ts, nonce, mac = parts
-    if not hmac.compare_digest(mac, _state_mac(nonce, ts, provider, redirect_uri)):
-        return False
-    if not ts.isdigit():
-        return False
+    if len(parts) != 4:
+        return None
+    ts, nonce, index, mac = parts
+    if not hmac.compare_digest(mac, _state_mac(nonce, ts, provider, index)):
+        return None
+    if not ts.isdigit() or not index.isdigit():
+        return None
+    if int(index) >= len(ALLOWED_REDIRECT_URIS):
+        return None
     age = time.time() - int(ts)
-    return 0 <= age <= STATE_TTL_SECONDS
+    if not 0 <= age <= STATE_TTL_SECONDS:
+        return None
+    return ALLOWED_REDIRECT_URIS[int(index)]
 
 
 # ---- outbound (monkeypatchable network boundary) ---------------------------
@@ -223,10 +235,9 @@ def oauth_authorize_url(provider: str, redirect_uri: str) -> str:
     return f"{config['authorize_url']}?{urllib.parse.urlencode(params)}"
 
 
-def oauth_login(
-    session, provider: str, code: str, state: str, redirect_uri: str
-) -> dict:
-    if not verify_state(provider, redirect_uri, state):
+def oauth_login(session, provider: str, code: str, state: str) -> tuple[str, dict]:
+    redirect_uri = resolve_state(provider, state)
+    if redirect_uri is None:
         raise AuthError(400, "unknown or expired oauth state")
     client_id, client_secret = _credentials(provider)
     access_token = _exchange_code(provider, code, client_id, client_secret)
@@ -266,7 +277,7 @@ def oauth_login(
         expires_at=expiry_iso(SESSION_TTL_SECONDS),
     )
     session.commit()
-    return {
+    return redirect_uri, {
         "access_token": plaintext,
         "token_type": "bearer",
         "expires_at": record["expires_at"],

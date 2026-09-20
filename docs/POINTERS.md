@@ -86,6 +86,22 @@ escalation.
 
 ---
 
+## Job: mobile-s32 (2026-09-20)
+
+Executing one S32 story (phones as rigs; Galaxy S25 Ultra first). Open
+the story's section only; the oracle is frozen there.
+
+| Verb | Path | One line |
+|---|---|---|
+| OPEN | `specs/en/S32-mobile-soc-support.md` | Verified data + the one story you were dispatched; oracle per story |
+| OPEN | `docs/QA-MOBILE-DOGFOOD-2026-09-20.md` | Why: findings M1–M14, vendor numbers with sources (claims, never cells) |
+| OPEN | `docs/incidents/2026-09-20-cli-nao-responde-hardware-fora-do-catalogo-ia-fez-workaround.md` | The workaround list W1–W8 → which story removes each; frontmatter is the aggregation key |
+| OPEN | nearest `AGENTS.md` to the files you will touch | edit-site checklist (web: `apps/web/AGENTS.md`; DB: `packages/domain-schema/AGENTS.md`; CLI: `cli/benchmark-probe/AGENTS.md`) |
+| SKIP | `docs/direction-2026-09-19.md` | already sized; only D5 (llms.txt line) is touched by S32b |
+| SKIP | vendor pages (Qualcomm AI Hub, LiteRT-LM) | numbers already transcribed in the QA doc; do not re-scrape mid-story |
+
+---
+
 ## Job: cold-start (any agent, public clone)
 
 Unchanged: `docs/agent-quickstart.md`. That path is for *running the

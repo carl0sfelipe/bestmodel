@@ -138,6 +138,16 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   organic traction.
 - Anti-fraud worker already provides the plausibility priors reused by B3;
   no separate ML needed for launch.
+- **Mobile (2026-09-20, owner dogfood on a Galaxy S25 Ultra):** phones
+  are not selectable rigs today (home picker = top-24 by runs; pool has
+  two phone-class rigs with 1 and 4 runs; no Snapdragon 8 Elite anywhere;
+  `llms.txt` on prod sends mobile readers to a 404). Spec
+  `specs/en/S32-mobile-soc-support.md` (stories a–f, each with its own
+  oracle, dispatchable through llms.surf); findings M1–M13 in
+  `docs/QA-MOBILE-DOGFOOD-2026-09-20.md`. Backlog lines that S32 leaves
+  open: **M11** mobile runtime ids (LiteRT-LM, MLC-LLM, GenieX) wait for
+  S26's registry instead of growing the `runtime_engine` enum; **M13**
+  PWA manifest (installable site) — nice-to-have, unsized.
 
 ## Decisões do dono — 2026-08-30 (tarde)
 

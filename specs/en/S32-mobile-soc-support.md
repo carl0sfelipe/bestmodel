@@ -2,9 +2,12 @@
 
 > Origin: owner dogfood request 2026-09-20 ("bought an S25 Ultra — what
 > runs on it, how do I use bestmodel.run on it, get the mobile SOTAs on
-> the site"). Read-side record with every finding (M1–M13) and every
-> vendor number: `docs/QA-MOBILE-DOGFOOD-2026-09-20.md`. This file is the
-> write side: six independently dispatchable stories (S32a–S32f), each
+> the site"). Read-side record with every finding (M1–M14) and every
+> vendor number: `docs/QA-MOBILE-DOGFOOD-2026-09-20.md`; incident diary
+> entry (workarounds W1–W8 → the story that removes each):
+> `docs/incidents/2026-09-20-cli-nao-responde-hardware-fora-do-catalogo-ia-fez-workaround.md`.
+> This file is the
+> write side: seven independently dispatchable stories (S32a–S32g), each
 > with its own frozen oracle, sized for a cheap executor through llms.surf
 > (one session · one story · one oracle · one commit `feat(S32x): ...`).
 >
@@ -106,6 +109,21 @@ Repo facts:
 - Worker: `apps/intake-worker/src/postgres_repository.py` line 296 —
   `gpu_model_id = run_row["gpu_model_id"] or UNBOUND_HARDWARE`; an
   unresolved GPU is an existing, handled state.
+- canirunit (built and run 2026-09-20 against `pool.json`):
+  `suggest --gpu snapdragon-8-elite-12gb --task decode_tok_s --gpus
+  cli/canirunit/gpu_transfer_specs.json` → `match_class: unknown`, exit
+  3, hint `arc-b580-12gb, cpu-qualcomm-snapdragon-888-arm64,
+  rtx-3060-12gb, ...`. `gpu_transfer_specs.json` = 5 entries, ids
+  `gpu-rtx-3090|4090|4080|4070-ti-super|5090`; pool rig keys are
+  `rtx-3090-24gb`-style, so `transfer_suggestions` (`transfer.rs`,
+  `specs.contains_key(&run.gpu_model_id)`) never finds an anchor with the
+  repo snapshot (`--gpu gpu-rtx-3080` → unknown as well).
+  `GpuTransferSpec { id, arch_family, fp16_tflops: f64,
+  memory_bandwidth_gib_s: f64, has_native_fp8 }`; factor =
+  `effective_tflops(anchor)/effective_tflops(target)` (compute-bound,
+  documented for diffusion). Tiers: `same_arch_family` 0.7,
+  `roofline_transfer` 0.5, `source_class: derived`. `closest_rig_ids`
+  (`lib.rs` line 271) is plain string similarity.
 
 Device / vendor facts (sources in the QA doc §1–2):
 
@@ -136,11 +154,13 @@ S32a registry + formFactor (web data)   ──▶  S32b web-next picker/detect/l
 S32c model catalog (HF-sourced)         ──▶  S32d vendor-claim import (needs S32e too)
 S32e DB catalog: SoC rows + migration   ──▶  S32d
 S32f Termux measured path (CLI)         independent; last (needs the owner's phone for the bar)
+S32g canirunit bandwidth transfer       independent; small; first honest offline answer for a phone
 ```
 
-Recommended dispatch order: a → b (user-visible with data already in the
-repo) → c → e → d → f. None of these touch `benchmark_run` schema,
-signing, the leaderboard query, or Vast.
+Recommended dispatch order: g (one afternoon, closes the CLI half of the
+incident) → a → b (user-visible with data already in the repo) → c → e →
+d → f. None of these touch `benchmark_run` schema, signing, the
+leaderboard query, or Vast.
 
 ---
 
@@ -689,6 +709,93 @@ first validated phone run is the bar, and it is the owner's.
 - exit esperado: 0 with the new android tests counted in the suite.
   Before implementation: `cargo test` fails to compile the missing
   test target — red by design.
+
+---
+
+## S32g — canirunit: bandwidth transfer for decode, rig-keyed specs, phone rows, unknown-query ledger
+
+Independent of a–f. Closes the CLI half of the incident (W3, W8).
+
+Deliverables (exact paths):
+
+- `cli/canirunit/gpu_transfer_specs.json` — entries gain
+  `"aliases": [<pool rig keys>]` (e.g. `gpu-rtx-3090` → `["rtx-3090-24gb"]`,
+  `gpu-rtx-4090` → `["rtx-4090-24gb"]`, and so on for the 5 existing
+  rows, taken from `canirunit rigs` output, never guessed) and two phone
+  rows:
+
+```jsonc
+{ "id": "cpu-qualcomm-snapdragon-888-arm64", "arch_family": "adreno-6xx",
+  "fp16_tflops": null, "memory_bandwidth_gib_s": 51.2, "has_native_fp8": false,
+  "source": "Qualcomm SD888 product brief: 4x16-bit LPDDR5 @ 3200 MHz" },
+{ "id": "snapdragon-8-elite-12gb", "arch_family": "adreno-8xx",
+  "fp16_tflops": null, "memory_bandwidth_gib_s": 84.8, "has_native_fp8": false,
+  "source": "Qualcomm 8 Elite product brief: dual-channel LPDDR5X up to 5.3 GHz" }
+```
+
+- `cli/canirunit/src/transfer.rs`:
+  `fp16_tflops: Option<f64>`; loader indexes every spec by `id` **and**
+  each alias; **metric-aware factor**: for `decode_tok_s` (bandwidth-bound)
+  `rate_factor = bw(target) / bw(anchor)`; for `seconds_per_clip` /
+  `frames_per_s` keep the effective-TFLOPS algebra and skip anchor pairs
+  where either side has `fp16_tflops: null` (never substitute a number).
+  Explanation string names the anchor, the metric regime
+  (`bandwidth-bound` / `compute-bound`) and the numeric factor.
+- `cli/canirunit/src/lib.rs` `closest_rig_ids`: strip the trailing
+  `-<n>gb[-x<k>]` suffix from both sides before scoring, so a shared
+  memory size alone never makes a "closest" rig.
+- `cli/canirunit/src/main.rs`: on `match_class: unknown`, if
+  `BESTMODEL_QUERY_LOG` is set, append one JSON line
+  `{"ts": <RFC3339>, "event": "unknown_hardware_query", "gpu": <id>, "task": <metric>, "corpus": <path>}`
+  to that file; unset → nothing is written (tests stay hermetic). Exit
+  code stays 3.
+- `docs/agent-quickstart.md`: the suggest example gains the phone case
+  and the one-line explanation of `derived` transfers.
+
+Mandatory behaviors (tests in `cli/canirunit/tests/`):
+
+1. Pinned arithmetic: `suggest --gpu snapdragon-8-elite-12gb --task
+   decode_tok_s --runs apps/web/data/derived/pool.json --gpus
+   cli/canirunit/gpu_transfer_specs.json` → exit 0, `match_class:
+   roofline_transfer` (families differ), one suggestion for
+   `google-gemma-4-e2b-it` with `expected = 6.2 × 84.8 / 51.2 = 10.27`
+   (±0.01), `source_class: derived`, `n_runs: 1`, explanation containing
+   `bandwidth-bound` and `1.656`. **This number is an estimate of an
+   estimate** (1 harvested run × vendor bandwidth ratio) and the
+   confidence tier must say so (0.5 tier, unchanged).
+2. Aliases: `suggest --gpu rtx-3080-12gb --task decode_tok_s ... --gpus
+   specs` still returns `exact_gpu` (aliases never override a real
+   match); `suggest --gpu gpu-rtx-4090 ...` resolves through the alias
+   to the `rtx-4090-24gb` runs.
+3. Video metrics with a `null`-TFLOPS target produce **no** transferred
+   suggestion (unknown + hint), never a bandwidth-scaled video number.
+4. `closest_rig_ids("snapdragon-8-elite-12gb")` puts
+   `cpu-qualcomm-snapdragon-888-arm64` first and contains no
+   `arc-b580-12gb`.
+5. Ledger: with `BESTMODEL_QUERY_LOG=$TMP/q.jsonl`, an unknown query
+   appends exactly one valid JSON line; without the variable no file is
+   created. `confidence_property_test.rs` and existing suites untouched
+   and green.
+
+Out of scope: any change to the pool snapshot; new metrics; uploading
+the ledger anywhere (it is local demand evidence for the owner, read by
+hand).
+
+### Verificação
+
+VERIFICACAO: grep -q '"aliases"' cli/canirunit/gpu_transfer_specs.json && grep -q 'snapdragon-8-elite-12gb' cli/canirunit/gpu_transfer_specs.json && grep -q 'bandwidth-bound' cli/canirunit/src/transfer.rs && grep -q 'BESTMODEL_QUERY_LOG' cli/canirunit/src/main.rs
+
+### Barra
+
+The phone answer is `derived` with factor 1.656 from exactly one anchor;
+zero invented TFLOPS; the five desktop rows keep their numbers.
+
+### Oráculo
+
+- comando: `cargo test -p canirunit --quiet && cargo run -q -p canirunit -- suggest --gpu snapdragon-8-elite-12gb --task decode_tok_s --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json`
+- exit esperado: 0 with `"match_class": "roofline_transfer"` on stdout.
+  Before implementation: exit 3 (`unknown`) — red by design (reproduced
+  2026-09-20).
 
 ---
 

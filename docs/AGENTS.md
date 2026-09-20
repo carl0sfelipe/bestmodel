@@ -16,7 +16,8 @@ English.
 | `backlog.md` | Canonical roadmap: tracks A (Local Lab), B (claims/votes), C (virality), D (diffusion) | Before proposing new work |
 | `research-2026-08.md` | Competitive landscape teardown + tooling research | Before building CLI v2 / social features |
 | `agent-quickstart.md` | Cold-start runbook: build, detect hardware, rank models offline, run the probe | First action on a fresh machine/checkout |
-| `QA-MOBILE-DOGFOOD-2026-09-20.md` | Galaxy S25 Ultra dogfood: device facts, vendor on-device numbers (labelled), findings M1–M13 on the live site | Job `mobile-s32`, before executing any S32 story |
+| `QA-MOBILE-DOGFOOD-2026-09-20.md` | Galaxy S25 Ultra dogfood: device facts, vendor on-device numbers (labelled), findings M1–M14 on the live site and CLI | Job `mobile-s32`, before executing any S32 story |
+| `incidents/` | Incident diary entries in the llms.surf format (frontmatter `id/titulo/data/recorrivel/regra/status/interage_com` + `workarounds` list; Portuguese, as the private diary they are copied to). Entry `2026-09-20-cli-nao-responde-hardware-fora-do-catalogo-ia-fez-workaround.md`: CLI/site could not answer for a phone, an agent answered by workaround (W1–W8) | When a product gap was papered over by an agent — record it here so recurrences become mechanisms |
 | `en/submission-tiers.md` | Two-tier reporting design (verified + claimed) | Contract/reporting work |
 
 Rules:

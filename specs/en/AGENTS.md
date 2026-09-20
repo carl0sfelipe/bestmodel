@@ -22,7 +22,7 @@ commit time); L01+ is the active frontier.
 | L01-cli-v2-local-lab | PLANNED (Phase 1) | stories L01–L07 inside |
 | L02-social-platform | PLANNED (Phase 1) | stories S13–S18 inside |
 | L03-engine-unification | DONE (U0–U6, 2026-08-28) | engine port complete: domain schema+kernels (U1), migrations 0011/0012 (U2), comfyui adapter (U3), reported/transparency API (U4), canirunit CLI + harvester (U5); engine lineage frozen as archive |
-| S32-mobile-soc-support | PLANNED (2026-09-20) | phones as rigs, Galaxy S25 Ultra first: a registry+formFactor (web data) · b web-next picker/detect + llms.txt fix · c HF-sourced mobile SOTA rows · e migration 0018 SoC rows · d Qualcomm AI Hub vendor claims · f Termux measured path; one oracle per story; QA record `docs/QA-MOBILE-DOGFOOD-2026-09-20.md` |
+| S32-mobile-soc-support | PLANNED (2026-09-20) | phones as rigs, Galaxy S25 Ultra first: g canirunit bandwidth transfer + rig-keyed specs + unknown-query ledger · a registry+formFactor (web data) · b web-next picker/detect + llms.txt fix · c HF-sourced mobile SOTA rows · e migration 0018 SoC rows · d Qualcomm AI Hub vendor claims · f Termux measured path; one oracle per story; QA record `docs/QA-MOBILE-DOGFOOD-2026-09-20.md`; incident `docs/incidents/2026-09-20-cli-nao-responde-hardware-fora-do-catalogo-ia-fez-workaround.md` |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

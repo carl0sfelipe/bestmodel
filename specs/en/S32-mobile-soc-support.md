@@ -10,6 +10,11 @@
 > write side: seven independently dispatchable stories (S32a–S32g), each
 > with its own frozen oracle, sized for a cheap executor through llms.surf
 > (one session · one story · one oracle · one commit `feat(S32x): ...`).
+> Dispatch note (llms.surf v4.1.0 dogfood, 2026-09-20): the dispatcher
+> honours only the **first** `- comando:` in a file — cut the story you are
+> dispatching into its own `specs/en/S32<x>-*.md` (header + Verified data +
+> that story's sections) before `llms-surf run`. This file passes
+> `bin/check-spec.sh` as a whole; the per-story cut inherits that.
 >
 > **Não invente número, prazo ou fonte além dos listados em Verified
 > data.** Every figure below is either read from this repo at `main`
@@ -31,7 +36,7 @@ phone's catalog row; (4) eventually produce a **signed** run from Termux
 that the worker validates. The pool gains a class of rigs
 (`formFactor: phone`) without losing the honesty ladder.
 
-## Verified data (on-disk facts at `main` `16cf014` — the only inputs allowed)
+## Verified data — dados verificados (verificado 2026-09-20 at `main` `16cf014`; the only inputs allowed)
 
 Repo facts:
 
@@ -264,7 +269,7 @@ Raise the "≥ 2 phones" floor when more phones enter the pool; never lower.
 
 ### Oráculo
 
-- comando: `cd apps/web && node scripts/enrich-mobile.mjs && node scripts/check.mjs mobile && node scripts/check.mjs all`
+- comando: cd apps/web && node scripts/enrich-mobile.mjs && node scripts/check.mjs mobile && node scripts/check.mjs all
 - exit esperado: 0. Before implementation: exit 1 (unknown target
   `mobile` / missing script) — red by design.
 
@@ -363,7 +368,7 @@ screen on `/` and `/hardware`; detection suggests, never decides.
 
 ### Oráculo
 
-- comando: `cd apps/web-next && npm ci && npm run build && node --test lib/*.test.mjs && node scripts/check-mobile.mjs`
+- comando: cd apps/web-next && npm ci && npm run build && node --test lib/*.test.mjs && node scripts/check-mobile.mjs
   (the check script starts `next start -p 3999`, fetches `/`, `/hardware`,
   `/llms.txt` and every human-tour path, asserts 1–4, and kills the server;
   it exits non-zero on any assertion or if the port is busy — never skips).
@@ -425,7 +430,7 @@ zero hand-typed parameter counts.
 
 ### Oráculo
 
-- comando: `uv run python infra/scripts/expand_catalog_from_hf.py --help >/dev/null && uv run pytest packages/domain-schema -q && make seed`
+- comando: uv run python infra/scripts/expand_catalog_from_hf.py --help >/dev/null && uv run pytest packages/domain-schema -q && make seed
   (`make seed` needs `make infra-up`; the executor runs it against the
   local compose stack, ports per root `AGENTS.md` golden rule 1).
 - exit esperado: 0 and `loaded N rows into model_release` with N ≥ 77 +
@@ -542,7 +547,7 @@ the values listed above; NULL is the answer for the rest.
 
 ### Oráculo
 
-- comando: `make infra-up && make seed && uv run pytest tests/test_mobile_catalog.py packages/domain-schema -q && uv run pytest tests/test_session_contract.py -q`
+- comando: make infra-up && make seed && uv run pytest tests/test_mobile_catalog.py packages/domain-schema -q && uv run pytest tests/test_session_contract.py -q
 - exit esperado: 0 on both backends (DATABASE_URL set). Before
   implementation: exit 5 (test file not collected) — red by design.
 
@@ -621,7 +626,7 @@ whose provenance chipset is not exactly "Snapdragon® 8 Elite Mobile".
 
 ### Oráculo
 
-- comando: `uv run pytest tests/test_import_qai_hub.py -q && uv run python infra/scripts/import_qai_hub.py --dry-run`
+- comando: uv run pytest tests/test_import_qai_hub.py -q && uv run python infra/scripts/import_qai_hub.py --dry-run
 - exit esperado: 0 on both backends; dry-run prints five counters.
   Before implementation: exit 5 — red by design.
 
@@ -705,7 +710,7 @@ first validated phone run is the bar, and it is the owner's.
 
 ### Oráculo
 
-- comando: `cargo test -p benchmark-probe --quiet && cargo run -p benchmark-probe --quiet -- --runtime mock --model qwen3:8b`
+- comando: cargo test -p benchmark-probe --quiet && cargo run -p benchmark-probe --quiet -- --runtime mock --model qwen3:8b
 - exit esperado: 0 with the new android tests counted in the suite.
   Before implementation: `cargo test` fails to compile the missing
   test target — red by design.
@@ -792,7 +797,7 @@ zero invented TFLOPS; the five desktop rows keep their numbers.
 
 ### Oráculo
 
-- comando: `cargo test -p canirunit --quiet && cargo run -q -p canirunit -- suggest --gpu snapdragon-8-elite-12gb --task decode_tok_s --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json`
+- comando: cargo test -p canirunit --quiet && cargo run -q -p canirunit -- suggest --gpu snapdragon-8-elite-12gb --task decode_tok_s --runs apps/web/data/derived/pool.json --gpus cli/canirunit/gpu_transfer_specs.json
 - exit esperado: 0 with `"match_class": "roofline_transfer"` on stdout.
   Before implementation: exit 3 (`unknown`) — red by design (reproduced
   2026-09-20).

@@ -16,6 +16,7 @@ English.
 | `backlog.md` | Canonical roadmap: tracks A (Local Lab), B (claims/votes), C (virality), D (diffusion) | Before proposing new work |
 | `research-2026-08.md` | Competitive landscape teardown + tooling research | Before building CLI v2 / social features |
 | `agent-quickstart.md` | Cold-start runbook: build, detect hardware, rank models offline, run the probe | First action on a fresh machine/checkout |
+| `QA-MOBILE-DOGFOOD-2026-09-20.md` | Galaxy S25 Ultra dogfood: device facts, vendor on-device numbers (labelled), findings M1–M13 on the live site | Job `mobile-s32`, before executing any S32 story |
 | `en/submission-tiers.md` | Two-tier reporting design (verified + claimed) | Contract/reporting work |
 
 Rules:

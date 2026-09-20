@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# s0-identity — reference stage: proves the stage contract end to end.
+# Copies manifest.json to --out and writes a valid result.json. No pixels touched.
+set -euo pipefail
+
+IN=""; OUT=""; PARAMS=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --in) IN="${2:?}"; shift 2 ;;
+    --out) OUT="${2:?}"; shift 2 ;;
+    --params) PARAMS="${2:-}"; shift 2 ;;
+    *) echo "s0-identity: unknown flag $1" >&2; exit 3 ;;
+  esac
+done
+[ -n "$IN" ] && [ -n "$OUT" ] || { echo "usage: run --in <pack-dir> --out <out-dir> [--params p.json]" >&2; exit 3; }
+[ -f "$IN/manifest.json" ] || { echo "s0-identity: $IN/manifest.json missing" >&2; exit 4; }
+mkdir -p "$OUT"
+
+sha() { sha256sum "$1" | cut -d' ' -f1; }
+
+start_ns=$(date +%s%N)
+cp "$IN/manifest.json" "$OUT/manifest.json"
+end_ns=$(date +%s%N)
+wall_s=$(awk -v a="$start_ns" -v b="$end_ns" 'BEGIN { printf "%.6f", (b-a)/1e9 }')
+
+in_sha=$(sha "$IN/manifest.json")
+out_sha=$(sha "$OUT/manifest.json")
+
+cat > "$OUT/result.json" <<EOF
+{"schema":"rawpack/stage-result@1","stage":"s0-identity","impl":"bash","version":"0.1.0","inputs_sha256":"$in_sha","ok":true,"outputs":[{"path":"manifest.json","kind":"manifest","sha256":"$out_sha"}],"metrics":{"wall_s":$wall_s,"gpu_s":null},"notes":"identity stage: copies the pack manifest unchanged; proves the contract end to end"}
+EOF
+echo "s0-identity: ok ($OUT/result.json)"

@@ -1,0 +1,11 @@
+.gradle/
+build/
+**/build/
+.kotlin/
+.idea/
+*.iml
+local.properties
+.dispatch/
+packs/
+bench/results/
+*.log

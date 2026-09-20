@@ -1,0 +1,91 @@
+{
+  "schema": "rawpack/manifest@1",
+  "pack_id": "20260920T180411Z_SM-S938B_0001",
+  "captured_at": "2026-09-20T18:04:11Z",
+  "device": {
+    "model": "SM-S938B",
+    "soc": "SM8750",
+    "os": "16",
+    "app_version": "0.0.0-fixture"
+  },
+  "sensor_mode": {
+    "camera_id": "0",
+    "physical_camera_id": null,
+    "raw_width": 4080,
+    "raw_height": 3060,
+    "binning": "4x4",
+    "reason": "fixture: values illustrative, not measured on a device"
+  },
+  "frames": [
+    {
+      "index": 0,
+      "path": "frames/000.dng",
+      "role": "reference",
+      "timestamp_ns": 1000000000,
+      "exposure_ns": 8333333,
+      "iso": 200
+    },
+    {
+      "index": 1,
+      "path": "frames/001.dng",
+      "role": "burst",
+      "timestamp_ns": 1033333333,
+      "exposure_ns": 8333333,
+      "iso": 200
+    },
+    {
+      "index": 2,
+      "path": "frames/002.dng",
+      "role": "underexposed",
+      "timestamp_ns": 1066666666,
+      "exposure_ns": 2083333,
+      "iso": 200
+    }
+  ],
+  "files": [
+    {
+      "path": "frames/000.dng",
+      "kind": "raw_dng",
+      "bytes": 42,
+      "sha256": "9a26fac0bf7af96f86bcf3dd893fef59618c92328adb582175c098d05c413bfe"
+    },
+    {
+      "path": "frames/001.dng",
+      "kind": "raw_dng",
+      "bytes": 38,
+      "sha256": "5b2922bf762e5dd451cbd80d90f35b36545dfc8cf6c277b649ee3764c02d2e01"
+    },
+    {
+      "path": "frames/002.dng",
+      "kind": "raw_dng",
+      "bytes": 45,
+      "sha256": "884ea98ca87746714118f64e0d1fbf4ae0a77d9046dff569c9d396459ea1554b"
+    },
+    {
+      "path": "capture.jsonl",
+      "kind": "capture_jsonl",
+      "bytes": 724,
+      "sha256": "ee4c03c1da6bedf8a6621dcb832c6fb07f2d1e35b133f5d50621fa4f7ef14b65"
+    },
+    {
+      "path": "imu.jsonl",
+      "kind": "imu_jsonl",
+      "bytes": 185,
+      "sha256": "abbf2c716c6043be50d7fe4675b214d9ef379bcf343d26bf5f17dd44ed72c30a"
+    },
+    {
+      "path": "calib.json",
+      "kind": "calib_json",
+      "bytes": 147,
+      "sha256": "73da05ea9337830a40ca91c42e0678ecab8efea57a598c3050392617490c31a4"
+    },
+    {
+      "path": "derived/sidecar.json",
+      "kind": "derived",
+      "bytes": 74,
+      "sha256": "791494b6f227cf285e9532d09ec4e97f563d58b5ac6da4eb7aeb33f7cea2c08a",
+      "derivable": true
+    }
+  ],
+  "notes": "fixture pack: frames are text placeholders (not DNG). Only the contract is real here."
+}

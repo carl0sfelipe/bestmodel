@@ -564,20 +564,26 @@ Deliverables:
 - Idempotent per `external_ref`; `--dry-run` prints `total / existing /
   imported / unbound_gpu / nomodel`.
 
-Mandatory behaviors (tests, Fake + Postgres): 12 rows from the two Gemma
-cards import on first `--apply`, 0 on the second; the six "Snapdragon® 8
-Elite Mobile" rows carry the S25 gpu id and a frozen prior with a
-roofline leg; the six Gen 5 rows carry `gpu_model_id NULL` and a prior
+Snapshot scope: only the **phone chipset rows** of each card —
+"Snapdragon® 8 Elite Mobile" and "Snapdragon® 8 Elite Gen 5 Mobile" (3
+device instances × 2 context lengths = 6 rows each, 12 per card). X
+Elite / X2 Elite / Dragonwing rows are laptop and IoT parts: out of scope
+for a phone story, not captured.
+
+Mandatory behaviors (tests, Fake + Postgres): 24 rows from the two Gemma
+cards import on first `--apply`, 0 on the second; the twelve "Snapdragon®
+8 Elite Mobile" rows carry the S25 gpu id and a frozen prior with a
+roofline leg; the twelve Gen 5 rows carry `gpu_model_id NULL` and a prior
 without roofline; every row has `provenance.source_url` starting with
 `https://huggingface.co/qualcomm/`; none appears in `/v1/leaderboard`
 (claims never do — assert against the Fake leaderboard derivation).
 
 Prod procedure (owner, after review): `--dry-run` against prod → paste
 counts into `docs/transparency.md` under a new "qai-hub vendor claims"
-line → `--apply`. Web: the claims tier on `/` already renders claims for
-"other rigs"; once S32b offers the S25 row… it is a **catalog** row, not a
-pool rig, so it will not be a selectable machine until a run lands. The
-claims wall (`/claims`) shows them immediately with `source = qai-hub`.
+line → `--apply`. Web: the claims wall (`/claims`) shows them immediately
+with `source = qai-hub`; the home's claims tier surfaces them as "other
+rigs" claims. The S25 Ultra remains a **catalog** row, not a pool rig —
+it becomes a selectable machine on `/` only when a real run lands (S32f).
 
 Out of scope: LiteRT-LM (Google) numbers — different chip (S26 Ultra)
 and no per-device table to snapshot yet; Liquid's "~30 tok/s on a

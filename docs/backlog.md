@@ -72,6 +72,26 @@ Open questions from the L01 spec (need a decision before/during build):
   beelink machine), then publish it as the real git/registry dep,
   replacing the reconstruction.
 
+### L05 CLI maturation ruling (Fable, 2026-09-21) — spec: specs/en/L05-cli-maturation.md
+
+- **A1 CLOSED** (owner: `argos-opt` is the optimizer). **A2 CLOSED** (both
+  acquisition paths; real-lab execution owner-blocked, out of the maturation
+  cut). **A3 CLOSED** (opt-out transparent + giveaway gamification → S41
+  consent). **A4 DONE**. **A9 → S39** (`plan`). **A10 DONE**.
+- **A5 KEEP OPEN** (roofline 0.92 vs 0.94): a calibration/findings decision; it
+  does NOT block S37–S42, it only gates whether contributed lab runs pass
+  validation (S41 acceptance is "accepted/stored", never "validated").
+- **A6 KEEP OPEN** (MoE residency): predictor calibration; affects `plan`
+  accuracy for MoE only, surfaced honestly by basis, never blocking.
+- **A11 KEEP OPEN, owner-gated**: blocks crates.io only; **S38** ships GitHub
+  Release binaries and routes distribution around it. `cargo publish` stays a
+  backlog line, after A11.
+- **D6 (one-line installer)**: still OUT of V1, but **unblocked by S38** — once
+  a real Release binary exists, a download-based installer becomes honest;
+  promote from "no artifact to host" to "buildable after S38, backlog line".
+- Rejections: hard-merging `benchmark-probe`/`canirunit` (YAGNI; SEE ALSO line
+  instead) and a universal `--dry-run` (YAGNI).
+
 ## Track B — Two-tier reporting: verified + claimed
 
 Direction (owner decision): verification is OPTIONAL. Both tracks coexist;

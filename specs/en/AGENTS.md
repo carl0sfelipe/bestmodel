@@ -28,6 +28,13 @@ commit time); L01+ is the active frontier.
 | S34-console-social-surface | PLANNED | console restyled into a social surface over existing endpoints |
 | S35-agent-twin-rollout | PLANNED | agent/TUI twin across the remaining prod routes |
 | S36-retire-pages-divergence | PLANNED | redirect + freeze the GitHub Pages copy |
+| L05-cli-maturation | PLANNED (2026-09-21) | CLI maturation epic + decision record (A1–A6 ruled); stories S37–S42 |
+| S37-cli-clap-ergonomics-baseline | PLANNED | clap migration: `--version`, uniform help/errors, exit codes, SEE ALSO |
+| S38-github-release-binaries | PLANNED | tagged-release CI: cross-compiled binaries + checksums (routes around A11) |
+| S39-cli-plan-command | PLANNED | `plan` — catalog SOTA + predictors, `--json` (realizes A9) |
+| S40-cli-report-command | PLANNED | `report` — measured-vs-predicted table, `--json`/`--markdown` |
+| S41-cli-contribute-command | PLANNED | `contribute` — contract 0.9.0 signed upload, A3 consent, `--no-upload` |
+| S42-cli-login-and-signing-key | PLANNED | `login` + per-user signing-key registration (S23-CLI, existing endpoints) |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

@@ -15,6 +15,22 @@ output = **SIMULATION**. Never present one as the other; never round a
 number in the flattering direction; hardware you cannot detect stays
 undetected — never guessed.
 
+## Download a release (or build from source)
+
+Prebuilt binaries for Linux x86_64 and macOS arm64 are attached to every
+version tag on the GitHub Releases page — checksummed (`SHA256SUMS-*`),
+built by CI in the same run that publishes them:
+
+```bash
+# from https://github.com/carl0sfelipe/bestmodel/releases (pick the tag)
+curl -LO https://github.com/carl0sfelipe/bestmodel/releases/download/v0.1.0/benchmark-probe-x86_64-unknown-linux-gnu.tar.gz
+tar -xzf benchmark-probe-x86_64-unknown-linux-gnu.tar.gz
+chmod +x benchmark-probe canirunit && export PATH="$PWD:$PATH"
+```
+
+Verify against the SHA256SUMS file from the same release before trusting
+the binary. There is no one-line installer yet.
+
 ## 0. Build (once)
 
 ```bash

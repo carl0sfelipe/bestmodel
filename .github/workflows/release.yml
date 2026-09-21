@@ -1,0 +1,78 @@
+name: release
+
+# S38 (L05 D3): a version tag builds and publishes the CLI binaries.
+# Only artifacts this workflow actually builds are published — no installer,
+# no crates.io (blocked by A11), no target the matrix does not produce.
+# The tag is the source of the version (Cargo.toml semver must match the tag).
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: benchmark-probe-x86_64-unknown-linux-gnu.tar.gz
+          - os: macos-14
+            target: aarch64-apple-darwin
+            archive: benchmark-probe-aarch64-apple-darwin.tar.gz
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{ matrix.target }}
+      - name: Build both CLIs (release)
+        run: |
+          # The workspace carries the vendored third_party/argos-opt path dep
+          # (A11) — a plain build needs no publish and no network crates beyond
+          # the registry. OpenSSL is vendored and builds from source.
+          sudo apt-get update && sudo apt-get install -y build-essential perl pkg-config || true
+          cargo build --release --target ${{ matrix.target }} -p benchmark-probe -p canirunit
+      - name: Package archives + checksums
+        run: |
+          set -euo pipefail
+          stage="release-${{ matrix.target }}"
+          mkdir -p "$stage"
+          cp "target/${{ matrix.target }}/release/benchmark-probe" "$stage/"
+          cp "target/${{ matrix.target }}/release/canirunit" "$stage/"
+          cp LICENSE-MIT "$stage/"
+          printf '%s\n' \
+            "bestmodel CLI release $(git describe --tags --exact-match)" \
+            "" \
+            "benchmark-probe — measure your hardware and capture signed runs" \
+            "canirunit — offline pool query (best-model suggestions)" \
+            "" \
+            "Install: untar, chmod +x, put both binaries on PATH." \
+            "Build from source: git clone + cargo build --release -p benchmark-probe -p canirunit" \
+            > "$stage/README.txt"
+          tar -czf "benchmark-probe-${{ matrix.target }}.tar.gz" -C "$stage" benchmark-probe canirunit LICENSE-MIT README.txt
+          tar -czf "canirunit-${{ matrix.target }}.tar.gz" -C "$stage" canirunit LICENSE-MIT README.txt
+          # One checksum line per archive actually built in THIS run.
+          sha256sum benchmark-probe-${{ matrix.target }}.tar.gz canirunit-${{ matrix.target }}.tar.gz > SHA256SUMS-${{ matrix.target }}.txt
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.target }}
+          path: |
+            benchmark-probe-${{ matrix.target }}.tar.gz
+            canirunit-${{ matrix.target }}.tar.gz
+            SHA256SUMS-${{ matrix.target }}.txt
+      - name: Attach to the GitHub Release for the tag
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            benchmark-probe-${{ matrix.target }}.tar.gz
+            canirunit-${{ matrix.target }}.tar.gz
+            SHA256SUMS-${{ matrix.target }}.txt
+          generate_release_notes: true

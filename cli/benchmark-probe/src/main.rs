@@ -150,6 +150,18 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
+    /// Measured-vs-predicted table over a lab directory (S40)
+    Report {
+        /// Lab label under experiments/ (default: latest finished)
+        #[arg(long)]
+        label: Option<String>,
+        /// Stable machine object
+        #[arg(long)]
+        json: bool,
+        /// Markdown table document
+        #[arg(long)]
+        markdown: bool,
+    },
 }
 
 /// Lab invocation as parsed by clap (same defaults the manual parser had).
@@ -168,6 +180,7 @@ fn main() {
             cmd_lab(LabConfig { stub, trials, seed, out_root: out, json });
         }
         Some(Command::Plan { gpu, json }) => cmd_plan(&gpu, json),
+        Some(Command::Report { label, json, markdown }) => cmd_report(label.as_deref(), json, markdown),
         None => match build_cli_args(&cli) {
             Ok(args) => {
                 if let Err(code) = run(&args) {
@@ -248,6 +261,25 @@ fn cmd_plan(gpu: &str, json: bool) {
             eprintln!("error: {}", e.message);
             exit(3);
         }
+    }
+}
+
+fn cmd_report(label: Option<&str>, json: bool, markdown: bool) {
+    use benchmark_probe::report_lab;
+    let root = PathBuf::from(report_lab::DEFAULT_LAB_ROOT);
+    let report = match report_lab::load_report(&root, label) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(2);
+        }
+    };
+    if json {
+        println!("{}", serde_json::to_string_pretty(&report).expect("serialize report"));
+    } else if markdown {
+        print!("{}", report_lab::render_markdown(&report));
+    } else {
+        print!("{}", report_lab::render_text(&report));
     }
 }
 

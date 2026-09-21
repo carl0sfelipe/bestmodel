@@ -5,6 +5,7 @@ pub mod execute_benchmark_scenario;
 pub mod lab_recorder;
 pub mod parse_runtime_output;
 pub mod plan_candidates;
+pub mod report_lab;
 pub mod sign_submission_payload;
 pub mod tuning_search;
 pub mod upload_benchmark_report;

@@ -125,6 +125,18 @@ class rig. Output is SIM-marked and **is not a benchmark claim**; it
 exercises the full loop (failures → null trials, immutable lab dirs in
 `experiments/<label>/` with `meta.json`, `index.jsonl`, `best.json`).
 
+## 3b. Report: read the lab back (measured vs predicted)
+
+```bash
+benchmark-probe report                 # latest lab: config | measured | predicted | delta
+benchmark-probe report --json          # stable machine object
+benchmark-probe report --markdown      # table document
+```
+
+Reads `experiments/<label>/` (append-only, immutable). `predicted` is the
+deterministic simulator re-evaluated — a delta != 0 means a corrupted
+record. SIM cells stay labelled SIM, never presented as a real benchmark.
+
 ## 4. Test for real (only if a runtime is installed)
 
 The probe scans PATH for llama.cpp and ollama. Dry-run first — it just

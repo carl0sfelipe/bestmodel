@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 from src.config import BITS_DOMAIN
 from src.db import connect
+from src.intents import storable_categories
 from src.derive_export import build_cells, build_models, build_rigs
 from src.match import model_to_hardware, top_picks
 from src.plausibility import summary
@@ -121,7 +122,7 @@ def list_models(category: str | None = None) -> dict:
     finally:
         conn.close()
     if category is not None:
-        if category not in ("chat", "code"):
+        if category not in storable_categories():
             return _json_error(422, f"invalid category {category!r}")
         models = [model for model in models if model["category"] == category]
     return {"models": models}

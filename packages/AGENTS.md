@@ -11,6 +11,7 @@ each has a declarative pyproject but is NOT pip-installed — see decision D4 in
 | `runtime-probes/` | Probe protocol + engine stdout parsers | `runtime-probes/AGENTS.md` |
 | `recommendation-engine/` | ranking score + feasibility filter | `recommendation-engine/AGENTS.md` |
 | `fake-adapters/` | test doubles for API providers | `fake-adapters/AGENTS.md` |
+| `intent-catalog/` | JSON intent list (not a Python package; read by path) | `intent-catalog/AGENTS.md` |
 
 Conventions: one concept per module; functions 4–20 lines, files < 500 lines;
 no vague names (`data`, `handler`, `Manager`); exceptions carry the offending

@@ -2,12 +2,13 @@ import modelsData from "../public/data/derived/models.json";
 import poolData from "../public/data/derived/pool.json";
 import hardwareData from "../public/data/derived/hardware.json";
 import statsData from "../public/data/derived/stats.json";
+import { intentOf, type IntentId } from "./intents";
 
 export const MIN_RUNS_MEASURED = 3;
 
 export type Model = (typeof modelsData.models)[number];
 export type Cell = (typeof poolData.cells)[number] & {
-  category?: "image" | "audio" | "video";
+  category?: IntentId;
   imagesPerSec?: number;
   audioXReal?: number;
   videoFramesPerSec?: number;
@@ -28,11 +29,17 @@ export function basisOf(cell: Pick<Cell, "n">) {
   return cell.n >= MIN_RUNS_MEASURED ? "measured" : "reported";
 }
 
-export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; videoFramesPerSec?: number | null; [k: string]: unknown }) {
-  if (cell.category === "image" && cell.imagesPerSec != null) return { value: cell.imagesPerSec, unit: "img/s", label: "images" };
-  if (cell.category === "audio" && cell.audioXReal != null) return { value: cell.audioXReal, unit: "×real", label: "realtime" };
-  if (cell.category === "video" && cell.videoFramesPerSec != null) return { value: cell.videoFramesPerSec, unit: "f/s", label: "frames" };
-  return null;
+export function metricOf(cell: { category?: string | null; [key: string]: unknown }) {
+  const row = intentOf(cell.category);
+  if (!row || row.modality === "text") return null;
+  const value = cell[row.metric.field];
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  return {
+    value,
+    unit: row.metric.unit,
+    label: row.metric.label,
+    higherIsBetter: row.metric.higherIsBetter,
+  };
 }
 
 export function joinCells() {

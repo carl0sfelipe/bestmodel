@@ -51,6 +51,8 @@ did not return (anti-phantom; no stubbed success, the Rust analogue of "never
 use `declare const` as a workaround"). Do not weaken existing signing-keys
 tests.
 
+- Gate clause: do not invent a number, deadline or source beyond the ones listed; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Verified data (2026-09-21)
 
 - S23 backend exists: `infra/migrations/0013_signing_keys.sql`,

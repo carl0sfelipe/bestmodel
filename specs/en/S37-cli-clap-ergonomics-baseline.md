@@ -51,6 +51,7 @@ banner (Rust analogue of "never use `declare const` as a workaround" — do not
 stub a flag into existence). Never weaken an existing test to make clap pass;
 `tests/cli_smoke.rs` and `tests/test_tuning_search.rs` stay green unchanged.
 
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Verified data (2026-09-21)
 
 - `benchmark-probe --version` → "unknown argument", exit 2; `VERSION =
@@ -63,7 +64,7 @@ stub a flag into existence). Never weaken an existing test to make clap pass;
 ## Acceptance (each criterion = one command)
 
 1. Build stays green: `cargo build --release -p benchmark-probe -p canirunit`
-2. `--version` now works (was exit 2): `./target/release/benchmark-probe --version | grep -Eq '^benchmark-probe [0-9]+\.[0-9]+\.[0-9]+'`
+2. `--version` now works (was exit 2): `out=$(./target/release/benchmark-probe --version 2>/dev/null) && printf '%s\n' "$out" | grep -Eq '^benchmark-probe [0-9]+\.[0-9]+\.[0-9]+$'` (amendment 2026-09-21: the plain pipe matched the usage banner the error path prints to stdout — exit code must gate the chain; llms.surf incident 2026-09-21-oraculo-de-version-via-pipe)
 3. `-V` short flag: `./target/release/benchmark-probe -V | grep -Eq '[0-9]+\.[0-9]+\.[0-9]+'`
 4. canirunit versioned too: `./target/release/canirunit --version | grep -Eq '^canirunit [0-9]'`
 5. `lab` preserved: `./target/release/benchmark-probe lab --help >/dev/null`
@@ -73,7 +74,7 @@ stub a flag into existence). Never weaken an existing test to make clap pass;
 
 ## Oráculo
 
-- comando: cargo build --release -p benchmark-probe -p canirunit && ./target/release/benchmark-probe --version | grep -Eq '^benchmark-probe [0-9]+\.[0-9]+\.[0-9]+' && ./target/release/canirunit --version | grep -Eq '^canirunit [0-9]' && ./target/release/benchmark-probe lab --help >/dev/null && cargo test -p benchmark-probe -q
+- comando: cargo build --release -p benchmark-probe -p canirunit && out=$(./target/release/benchmark-probe --version 2>/dev/null) && printf '%s\n' "$out" | grep -Eq '^benchmark-probe [0-9]+\.[0-9]+\.[0-9]+$' && ./target/release/canirunit --version >/dev/null && ./target/release/benchmark-probe lab --help >/dev/null && cargo test -p benchmark-probe -q
 - exit esperado: 0 — clap parses both binaries, `--version`/`-V` print
   name+semver, `lab` and all legacy flags still work, smoke tests green. Before
   the migration the same command fails at `--version` (exit 2) — the clean red

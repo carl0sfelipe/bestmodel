@@ -200,6 +200,8 @@ Parallel lanes: `{S38}` ∥ `{S37 → {S39, S40, S42} → S41}`.
 - Every acceptance criterion is mechanically verifiable (a command + expected
   exit); each spec carries a `## Oráculo` with a raw `- comando:` line.
 
+- Gate clause: do not invent a number, deadline or source beyond the ones listed; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Hygiene note (line)
 
 L01's internal wave labels (`L01`…`L07`) collide with epic **file** ids

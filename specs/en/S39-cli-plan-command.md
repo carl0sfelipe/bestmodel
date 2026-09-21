@@ -45,6 +45,8 @@ command does not implement in the same commit (anti-phantom; no stubbed success
 roofline kernel and catalog already in the repo — do not hardcode a model list.
 Do not weaken existing predictor tests.
 
+- Gate clause: do not invent a number, deadline or source beyond the ones listed; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Verified data (2026-09-21)
 
 - A9: `canirunit suggest` ranks the lab corpus but never proposes catalog SOTA

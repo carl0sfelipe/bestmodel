@@ -44,6 +44,8 @@ as a workaround": do not conjure a release/target that CI did not produce). Do
 not invent a version — the tag is the source of the version. Do not weaken
 existing CI jobs to add this one.
 
+- Gate clause: do not invent a number, deadline or source beyond the ones listed; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Verified data (2026-09-21)
 
 - Install today = `git clone` + `cargo build --release` + PATH (what `/cli`

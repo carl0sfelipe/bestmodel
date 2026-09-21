@@ -49,6 +49,8 @@ a metric or a contract field beyond 0.9.0. Consent defaults are exactly A3
 (opt-out transparent) — do not silently upload and do not hide the notice. Do
 not weaken the existing sign/canonical-JSON/digest tests.
 
+- Gate clause: do not invent a number, deadline or source beyond the ones listed; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stub success or a fake banner as a workaround — wire the real capability.
 ## Verified data (2026-09-21)
 
 - `sign_submission_payload.rs` builds the report, canonical JSON, SHA-256

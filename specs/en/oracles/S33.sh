@@ -10,8 +10,14 @@ ensure_app || exit 3
 # 2. documents the real CLI
 curl -s "$BASE/cli" | grep -q 'benchmark-probe' || fail "2a (mentions benchmark-probe)"
 curl -s "$BASE/cli" | grep -q 'agent-smoke' || fail "2b (mentions agent-smoke)"
-# 3. unshipped subcommands quarantined, not runnable
-curl -s "$BASE/cli" | grep -iq 'not shipped\|in construction' || fail "3 (not-shipped quarantine block)"
+# 3. D10 inverse (amendment 2026-09-21, L05): the quarantine block retired
+#    when plan/report/contribute/login shipped — the standing invariant is
+#    'every subcommand the page documents dispatches in the binary'.
+for c in lab plan report contribute login; do
+  if curl -s "$BASE/cli" | grep -q "$c"; then
+    ./target/release/benchmark-probe "$c" --help >/dev/null 2>&1 || fail "3 ($c documented on /cli but not dispatched)"
+  fi
+done
 # 4. nav points to it
 grep -q '"/cli"' apps/web-next/app/layout.tsx || fail "4 (nav has /cli)"
 # 5. agent twin (needs S32)

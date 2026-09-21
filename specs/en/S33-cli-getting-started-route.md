@@ -73,7 +73,7 @@ App up: `cd apps/web-next && pnpm install && pnpm build && pnpm start &`.
 
 1. Route exists (was 404 → red before): `test "$(curl -so /dev/null -w '%{http_code}' http://localhost:3000/cli)" = 200`
 2. It documents the real CLI: `curl -s http://localhost:3000/cli | grep -q 'benchmark-probe'` and `curl -s http://localhost:3000/cli | grep -q 'agent-smoke'`
-3. Unshipped subcommands are quarantined, not runnable: `curl -s http://localhost:3000/cli | grep -iq 'not shipped\|in construction'`
+3. Every subcommand the page documents dispatches in the binary (amendment 2026-09-21, L05 D10: the quarantine block retired when plan/report/contribute/login shipped): `for c in lab plan report contribute login; do curl -s http://localhost:3000/cli | grep -q "$c" && ./target/release/benchmark-probe "$c" --help >/dev/null; done`
 4. Nav points to it: `grep -q '"/cli"' apps/web-next/app/layout.tsx`
 5. Agent twin (needs S32): `curl -s "http://localhost:3000/cli?as=agent" | grep -q 'data-view="agent"'`
 6. Phantom installer is gone from every shipped surface: `! grep -rn 'canirun.it/sh' apps/web/site/ apps/web/console/ apps/web-next/` (amendment 2026-09-21: `apps/web/prototypes/` is never deployed and outside this story's diff scope, so it stays as-is — S36 freezes it with the rest of the archive).

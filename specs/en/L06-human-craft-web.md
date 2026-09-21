@@ -179,3 +179,8 @@ Parallel lanes: `{S47}` ∥ `{S43 → {S44, S45, S46}}`.
 - Design gates that cannot be a grep (macrostructure, rhythm, restraint) are a
   **documented hallmark self-critique** the implementer records in the PR (the
   six-axis stamp + the named gates), not a mechanical oracle.
+- Gate clause: do not invent a number, metric, handle, testimonial or copy
+  beyond the ones listed in each story's Verified data; missing data renders as
+  "no data yet".
+- Gate clause: never use declare const, a stubbed success or a fake badge as a
+  workaround — implement the real capability.

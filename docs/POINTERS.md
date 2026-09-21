@@ -58,6 +58,25 @@ STALE (do not treat as prod):
 
 ---
 
+## Job: fable-escalation-2026-09-21
+
+This instance. After this card: decide D1–D8. The owner already authorized
+the executor to implement the record in the same turn. Do not invent cells.
+
+| # | Verb | Path | One line | Budget |
+|---|---|---|---|---|
+| 1 | OPEN | `docs/POINTERS.md` | This card | this job only |
+| 2 | OPEN | `docs/ESCALACAO-FABLE-2026-09-21.md` | Verify / Learn / D1–D8 / response shape | whole |
+| 3 | OPEN | `docs/handoffs/2026-09-21-music-intent.md` | PR #11 dump; music under audio; no measured cell | whole |
+| 4 | OPEN | `docs/handoffs/2026-09-21-3d-gen-intent.md` | rig3d dump; `image-to-3d` root; do not submit | whole |
+| 5 | OPEN | `docs/direction-2026-08-29.md` | D1 chronic cause, D2.5 modality registry | D1–D2 only |
+| 6 | OPEN | `docs/direction-2026-09-19.md` | v3 D4 hand-edit of PR #11 is the line under review | D4 + order row 7 |
+
+SKIP: application source, except the paths named in the escalation §2.
+SKIP: `docs/ESCALACAO-FABLE-2026-09-19.md` (already decided; do not re-litigate D1–D7).
+
+---
+
 ## Job: zcode-execute
 
 After Fable's record is owner-approved. Open the story spec + the nearest

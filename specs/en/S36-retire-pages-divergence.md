@@ -1,0 +1,76 @@
+# S36 — Retire the GitHub Pages divergence (redirect + freeze)
+
+> Decision source: `specs/en/L04-web-redesign-dual-view.md` D5/D9. Once web-next
+> owns the `?as=` mechanism (S32) and every route has an agent twin (S35), the
+> divergent GitHub Pages copy (`apps/web/site`) has no unique job left. This
+> story makes Pages redirect to the canonical `www.bestmodel.run` and freezes
+> the source as an archived visual reference — killing the second source of
+> truth. It runs **last** in the cluster.
+
+## Objective
+
+`carl0sfelipe.github.io/bestmodel` stops serving a divergent site and instead
+sends visitors to `https://www.bestmodel.run` (preserving path where feasible).
+`apps/web/site` becomes a frozen archive (like `apps/web/prototypes/`), and
+`llms.txt`'s human-tour pointers move from Pages-only `index.html?as=human` to
+the web-next `/?as=human` routes.
+
+## Contract
+
+1. **Redirect the Pages deployment**:
+   - The GitHub Pages build output (driven by
+     `.github/workflows/*pages*.yml`) publishes a redirect surface to
+     `https://www.bestmodel.run`: a root `index.html` with
+     `<meta http-equiv="refresh" content="0; url=https://www.bestmodel.run/">`
+     plus a `<link rel="canonical">`, and (where supported) per-path stubs or a
+     catch-all. No divergent content is published.
+2. **Freeze the source**:
+   - Mark `apps/web/site` as archived in `apps/web/AGENTS.md` (visual reference
+     only, not deployed content); the `?as=` mechanism now lives in web-next
+     (S32). `apps/web/prototypes/` stays frozen as before.
+3. **Contract** (D9) — `apps/web/site/llms.txt`:
+   - Replace the Pages-only human-tour examples
+     (`index.html?as=human`, `hardware.html?as=human`, `m/index.html?as=human`)
+     with the canonical web-next routes (`/?as=human`, `/hardware?as=human`,
+     etc.). The agent-map `?as=agent` twins point at web-next routes.
+
+## Rules
+
+- Do not delete the archived source (history/visual reference is kept); only
+  the *deployed* Pages output changes to a redirect.
+- No web-next code change beyond `llms.txt` and docs.
+- The redirect target is `www.bestmodel.run` (the canonical prod host per the
+  verified surface map).
+
+## Verified data
+
+- Two browser surfaces exist today: `www.bestmodel.run` (web-next, prod) and
+  `carl0sfelipe.github.io/bestmodel` (Pages, from `apps/web/site`, DIVERGENT).
+- The `?as=` mechanism currently lives only in `apps/web/site/assets/journey.js`
+  (Pages) — S32 moves it to web-next, which is the precondition for retiring
+  Pages.
+- `llms.txt` human tours currently point at `index.html?as=human` etc. (Pages).
+
+## Acceptance (each criterion = one command)
+
+1. The Pages build emits a redirect, not divergent content:
+   `grep -rqi 'http-equiv="refresh".*www.bestmodel.run\|url=https://www.bestmodel.run' apps/web/site/ .github/workflows/`
+2. Canonical link is present: `grep -rqi 'rel="canonical".*bestmodel.run' apps/web/site/`
+3. `apps/web/site` is documented as archived: `grep -qi 'archive\|frozen' apps/web/AGENTS.md`
+4. Contract no longer routes humans to Pages-only tours:
+   `! grep -q 'index.html?as=human' apps/web/site/llms.txt`
+5. Contract points humans at web-next: `grep -q '/?as=human\|/hardware?as=human' apps/web/site/llms.txt`
+
+## Oracle
+
+- command: `bash specs/en/oracles/S36.sh` (runs acceptance 1–5; fails on first
+  miss).
+- expected exit: `0`. Red state before impl: criterion 4 fails (the Pages tour
+  links are still in `llms.txt`).
+
+## Dependencies / out of scope
+
+- Depends on: S35 (never retire Pages until web-next fully covers the agent
+  view), which depends on S32.
+- Out: any DNS/hosting change beyond the Pages workflow output; changing the
+  canonical host.

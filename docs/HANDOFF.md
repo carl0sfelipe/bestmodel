@@ -192,3 +192,46 @@ Validações rápidas de sanidade: `make gate` (e2e completo), `uv run pytest ap
 ---
 
 *Última atualização deste documento: pós-S22 (`083b29e`), 233 testes verdes, 551 claims em produção.*
+
+---
+
+## CLI maturation 2026-09-21 (Fable Clarify → Plan)
+
+Escalation (owner): "what's missing to be a normal CLI?" then "scale". Fable
+returned a decision record + spec cluster
+(`specs/en/L05-cli-maturation.md`; stories S37–S42), CLI-only, nothing promised
+before it exists (the `canirun.it/sh` phantom lesson). ZCode implements via
+llms.surf, one PR per story, mechanical `## Oráculo` per spec.
+
+Backlog rulings (full text in L05): A1 CLOSED (argos-opt), A2 CLOSED (both
+acquisition paths; real-lab owner-blocked, out), A3 CLOSED (opt-out
+transparent), A4/A10 DONE, A9 → S39. **A5 KEEP OPEN** (roofline calibration —
+does not block; only gates contribute *validation*), **A6 KEEP OPEN** (MoE
+residency — affects `plan` accuracy, surfaced by basis), **A11 KEEP OPEN,
+owner-gated** (blocks crates.io only; S38 routes around it). D6 installer stays
+out of V1 but is unblocked by S38.
+
+Decisions: D1 adopt clap (S37, keystone) · D2 reject binary merge (SEE ALSO
+line) · D3 GitHub Release binaries (S38) · D4 crates.io stays blocked on A11
+(line) · D5 `plan` (S39) · D6 `report` (S40) · D7 `contribute` on contract
+0.9.0 (S41; 0.9.1 evolution deferred) · D8 `login` + signing-key registration
+(S42, existing endpoints) · D9 reject universal `--dry-run` · D10 honesty/
+phantom guard on every doc/spec touch.
+
+Story map & order:
+
+| Story | Title | Depends on |
+|---|---|---|
+| S37 | clap ergonomics baseline (`--version`, uniform help, exit codes) | — |
+| S38 | GitHub Release binary distribution | — |
+| S39 | `plan` command (catalog SOTA + predictors) | S37 |
+| S40 | `report` command (measured-vs-predicted) | S37 |
+| S41 | `contribute` command (contract 0.9.0, A3 consent) | S37, S42 |
+| S42 | `login` + per-user signing-key registration (S23-CLI) | S37 |
+
+Parallel lanes: `{S38}` ∥ `{S37 → {S39, S40, S42} → S41}`. Guardrails: CLI-only —
+S41/S42 use existing endpoints (a diff adding an API/worker/migration is out of
+contract; contract 0.9.1 is a separate deferred line); web L04 is out (only
+coupling: `/cli` S33 un-quarantines a subcommand when it lands). This updates
+HANDOFF §8 item 2 (per-user signing keys → S42) and item 4 (L01 A1–A6 → ruled
+above).

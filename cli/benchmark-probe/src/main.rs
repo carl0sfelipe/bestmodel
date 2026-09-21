@@ -162,6 +162,24 @@ enum Command {
         #[arg(long)]
         markdown: bool,
     },
+    /// Store an account token and register the local public signing key (S42)
+    Login {
+        /// Web-issued account bearer token (stored 0600, never printed)
+        #[arg(long)]
+        token: Option<String>,
+        /// Store the token but skip the public-key registration call
+        #[arg(long = "no-register")]
+        no_register: bool,
+        /// Print login state (never the token)
+        #[arg(long)]
+        status: bool,
+        /// Print the PUBLIC key PEM that login would register (dry-run)
+        #[arg(long = "print-key-registration")]
+        print_key_registration: bool,
+        /// Label for the registered key (default: benchmark-probe-cli)
+        #[arg(long, default_value = "benchmark-probe-cli")]
+        label: String,
+    },
 }
 
 /// Lab invocation as parsed by clap (same defaults the manual parser had).
@@ -181,6 +199,9 @@ fn main() {
         }
         Some(Command::Plan { gpu, json }) => cmd_plan(&gpu, json),
         Some(Command::Report { label, json, markdown }) => cmd_report(label.as_deref(), json, markdown),
+        Some(Command::Login { token, no_register, status, print_key_registration, label }) => {
+            cmd_login(token, no_register, status, print_key_registration, &label);
+        }
         None => match build_cli_args(&cli) {
             Ok(args) => {
                 if let Err(code) = run(&args) {
@@ -280,6 +301,56 @@ fn cmd_report(label: Option<&str>, json: bool, markdown: bool) {
         print!("{}", report_lab::render_markdown(&report));
     } else {
         print!("{}", report_lab::render_text(&report));
+    }
+}
+
+fn cmd_login(token: Option<String>, no_register: bool, status: bool, print_key_registration: bool, label: &str) {
+    use benchmark_probe::login;
+    if status {
+        println!("{}", login::status_text());
+        if !login::is_logged_in() {
+            exit(1);
+        }
+        return;
+    }
+    if print_key_registration {
+        match login::public_key_pem() {
+            Ok(pem) => print!("{pem}"),
+            Err(e) => {
+                eprintln!("error: {e}");
+                exit(1);
+            }
+        }
+        return;
+    }
+    let Some(token) = token else {
+        eprintln!("error: login needs --token <web-issued-token> (or --status / --print-key-registration)");
+        exit(2);
+    };
+    let mut config = login::load_config();
+    config.token = Some(token);
+    if let Err(e) = login::save_config(&config) {
+        eprintln!("error: {e}");
+        exit(1);
+    }
+    println!("token stored (0600) — login --status shows state; the token is never printed");
+    if no_register {
+        return;
+    }
+    match login::register_signing_key(label) {
+        Ok(key_id) => {
+            config.signing_key_id = Some(key_id.clone());
+            if let Err(e) = login::save_config(&config) {
+                eprintln!("error: {e}");
+                exit(1);
+            }
+            println!("public signing key registered: {key_id}");
+        }
+        Err(e) => {
+            eprintln!("error: {e}");
+            eprintln!("token stays stored; re-run login (or fix the API) to register the key");
+            exit(1);
+        }
     }
 }
 
@@ -728,13 +799,18 @@ fn submit_report(
     signature: &str,
 ) -> Result<(), i32> {
     let base_url = std::env::var(API_URL_ENV_VAR).unwrap_or_else(|_| DEFAULT_API_URL.to_string());
-    let api_token = match std::env::var(API_TOKEN_ENV_VAR) {
-        Ok(token) => Some(token),
-        Err(_) if cli.settle_claim_id.is_none() => None,
-        Err(_) => {
+    // S42: env wins (legacy behavior); the login config file is the fallback.
+    let api_token = match std::env::var(API_TOKEN_ENV_VAR)
+        .ok()
+        .filter(|t| !t.is_empty())
+        .or_else(|| benchmark_probe::login::load_config().token)
+    {
+        Some(token) => Some(token),
+        None if cli.settle_claim_id.is_none() => None,
+        None => {
             eprintln!(
                 "error: --settle-claim requires an API token; set {API_TOKEN_ENV_VAR} \
-                 to an agent token (POST /v1/auth/tokens)"
+                 or run `benchmark-probe login --token ...` (POST /v1/auth/tokens)"
             );
             return Err(1);
         }

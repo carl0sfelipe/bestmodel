@@ -3,6 +3,7 @@ pub mod comfyui_adapter;
 pub mod detect_runtime_installations;
 pub mod execute_benchmark_scenario;
 pub mod lab_recorder;
+pub mod login;
 pub mod parse_runtime_output;
 pub mod plan_candidates;
 pub mod report_lab;

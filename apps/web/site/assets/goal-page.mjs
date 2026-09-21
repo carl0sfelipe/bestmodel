@@ -678,18 +678,6 @@ function wireButtons() {
     if (t) { t.scrollIntoView({ behavior: "smooth", block: "center" }); const r = t.getBoundingClientRect(); setTimeout(() => openPopoverFor("intent", r), 500); }
   });
 
-  document.getElementById("cpBtn").addEventListener("click", async () => {
-    const cmd = document.getElementById("installCmd").textContent;
-    try {
-      await navigator.clipboard.writeText(cmd);
-      const cp = document.getElementById("cpBtn");
-      cp.textContent = "copied";
-      cp.classList.add("done");
-      setTimeout(() => { cp.textContent = "copy"; cp.classList.remove("done"); }, 1600);
-    } catch {
-      document.getElementById("cpBtn").textContent = "copy failed";
-    }
-  });
 }
 
 function renderFooter() {

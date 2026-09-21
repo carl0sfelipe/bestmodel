@@ -1074,19 +1074,6 @@ async function boot() {
     });
   });
 
-  document.getElementById("cpBtn").addEventListener("click", async () => {
-    const cmd = document.getElementById("installCmd").textContent;
-    try {
-      await navigator.clipboard.writeText(cmd);
-      const cp = document.getElementById("cpBtn");
-      cp.textContent = "copied ✓";
-      cp.classList.add("done");
-      setTimeout(() => { cp.textContent = "copy"; cp.classList.remove("done"); }, 1800);
-    } catch {
-      toast("Copy failed");
-    }
-    haptic();
-  });
 
   renderFooter();
   render();

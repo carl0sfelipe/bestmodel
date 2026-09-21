@@ -91,27 +91,6 @@ export function fitLabel(fitClass) {
   return FIT_LABELS[fitClass] ?? { text: "no data yet", cssClass: "fit-none" };
 }
 
-export function copyButton(text) {
-  // CONTRATO §7.3: the `curl -sSf canirun.it/sh | sh` install block stays
-  // hidden until the domain and installer exist ([A DEFINIR]).
-  const hidden = /^curl\s+-sSf\s+canirun\.it\//.test(text);
-  const cp = el("button", { class: "cp" }, "copy");
-  cp.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      cp.textContent = "copied";
-      cp.classList.add("done");
-      setTimeout(() => { cp.textContent = "copy"; cp.classList.remove("done"); }, 2000);
-    } catch {
-      cp.textContent = "copy failed";
-    }
-  });
-  return el("div", { class: "install", hidden }, [
-    el("span", { class: "prompt" }, "$"),
-    el("span", null, text),
-    cp,
-  ]);
-}
 
 export function attributionFooter(stats) {
   const date = stats?.snapshotAt ? String(stats.snapshotAt).slice(0, 10) : "no snapshot date";

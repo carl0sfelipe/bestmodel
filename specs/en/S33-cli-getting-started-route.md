@@ -76,7 +76,7 @@ App up: `cd apps/web-next && pnpm install && pnpm build && pnpm start &`.
 3. Unshipped subcommands are quarantined, not runnable: `curl -s http://localhost:3000/cli | grep -iq 'not shipped\|in construction'`
 4. Nav points to it: `grep -q '"/cli"' apps/web-next/app/layout.tsx`
 5. Agent twin (needs S32): `curl -s "http://localhost:3000/cli?as=agent" | grep -q 'data-view="agent"'`
-6. Phantom installer is gone: `! grep -rn 'canirun.it/sh' apps/web/`
+6. Phantom installer is gone from every shipped surface: `! grep -rn 'canirun.it/sh' apps/web/site/ apps/web/console/ apps/web-next/` (amendment 2026-09-21: `apps/web/prototypes/` is never deployed and outside this story's diff scope, so it stays as-is — S36 freezes it with the rest of the archive).
 7. Contract keeps the honest line: `grep -q 'no one-line installer yet' apps/web/site/llms.txt`
 8. Contract lists the new route: `grep -q '/cli' apps/web/site/llms.txt`
 

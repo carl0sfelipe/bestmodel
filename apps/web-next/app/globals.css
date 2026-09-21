@@ -395,3 +395,9 @@ button{background:transparent}
 .view-toggle a{padding:5px 11px;border-radius:999px;text-decoration:none;color:var(--muted)}
 .view-toggle a[aria-pressed="true"]{background:var(--amber-soft);color:var(--amber)}
 .view-toggle a:hover{color:var(--ink)}
+
+/* /cli getting-started (S33) — the guide IS docs/agent-quickstart.md */
+.cli-note{background:var(--surface);border:1px dashed var(--amber);border-radius:12px;padding:16px 18px;font:13px var(--body);color:var(--muted);max-width:76ch;margin-bottom:22px}
+.cli-note strong{color:var(--amber)}
+.cli-note code{font:12px var(--mono);color:var(--ink)}
+.cli-doc pre{font:12.5px/1.7 var(--mono);color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:24px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-width:100%}

@@ -18,6 +18,11 @@ const API_ORIGIN =
   (process.env.NODE_ENV === "development" ? "http://127.0.0.1:8010" : null);
 
 const nextConfig: NextConfig = {
+  // /cli renders docs/agent-quickstart.md at request time (S33: one source of
+  // truth); tracing ships the file with the server bundle on Vercel.
+  outputFileTracingIncludes: {
+    "/cli": ["../docs/agent-quickstart.md"],
+  },
   async rewrites() {
     if (!API_ORIGIN) return [];
     return [{ source: "/v1/:path*", destination: `${API_ORIGIN}/v1/:path*` }];

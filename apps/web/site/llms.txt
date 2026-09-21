@@ -21,12 +21,15 @@ git clone https://github.com/carl0sfelipe/bestmodel.git
 cd bestmodel
 ```
 
-Agent runbook from this clone (offline, no keys):
+Human first step (S33): /cli — the rendered getting-started, twin at
+/cli?as=agent. Its single source is the agent runbook from this clone
+(offline, no keys):
 [docs/agent-quickstart.md](https://github.com/carl0sfelipe/bestmodel/blob/main/docs/agent-quickstart.md)
 — build the two Rust CLIs, detect your hardware, rank the best models for
 it against the in-repo pool snapshot, run the probe. Self-check in one
-command: `make agent-smoke`. Humans: README.md. There is no one-line
-installer yet.
+command: `make agent-smoke`. Runnable today: benchmark-probe and its `lab`
+subcommand. plan / report / contribute are specified (L01) but NOT shipped
+— never invoke them. There is no one-line installer yet.
 
 ## Honesty ladder
 

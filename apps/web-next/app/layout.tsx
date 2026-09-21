@@ -23,6 +23,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <header className="site-nav">
           <Link className="brand" href="/">$bestmodel.run</Link>
           <nav>
+            <Link href="/cli">Get started</Link>
             <Link href="/claims">The wall</Link>
             <Link href="/submit">Capture</Link>
             <Link href="/wall">Pool</Link>

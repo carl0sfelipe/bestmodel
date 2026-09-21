@@ -1,6 +1,8 @@
-import { basisOf, loadDerived, metricOf } from "../../lib/engine";
+import { basisOf, formatNumber, loadDerived, metricOf } from "../../lib/engine";
+import { currentView } from "../../lib/view-server";
+import AgentView from "../_components/agent-view";
 
-export default function CloudAnchorsPage() {
+export default async function CloudAnchorsPage() {
   const { models, pool, hardware } = loadDerived();
   const modelBySlug = new Map(models.map((model) => [model.slug, model]));
   const hardwareByKey = new Map(hardware.map((rig) => [rig.key, rig]));
@@ -11,6 +13,28 @@ export default function CloudAnchorsPage() {
     .filter((cell) => cloudKeys.has(cell.rigKey))
     .map((cell) => ({ cell, model: modelBySlug.get(cell.modelSlug), rig: hardwareByKey.get(cell.rigKey) }))
     .filter((anchor) => anchor.model && anchor.rig);
+
+  if ((await currentView()) === "agent") {
+    const lines = anchors.map(({ cell, model, rig }) => {
+      const metric = metricOf(cell);
+      const value = metric ? `${formatNumber(metric.value)} ${metric.unit}` : `${formatNumber(cell.tokSOutMedian)} tok/s`;
+      return `  ${(rig?.key ?? cell.rigKey).padEnd(30)} | ${(model?.slug ?? "").padEnd(38)} | ${cell.bits != null ? `${cell.bits}-bit` : cell.precision ?? "-"} | ${basisOf(cell).padEnd(8)} | ${value.padEnd(14)} | n=${cell.n}`;
+    });
+    return (
+      <AgentView>
+        {[
+          "bestmodel.run / cloud anchors — agent view",
+          "",
+          "Measured runs on rented GPUs (modal), outside the community hardware",
+          "pool, anchoring the scale. Honesty ladder: measured > reported >",
+          "extrapolated > formula > no data yet.",
+          "",
+          "  rig | model | quant | basis | value | n",
+          ...lines,
+        ].join("\n")}
+      </AgentView>
+    );
+  }
 
   return (
     <main>

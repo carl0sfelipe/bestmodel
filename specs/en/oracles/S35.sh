@@ -21,7 +21,7 @@ done
 curl -s "$BASE/claims?as=agent" | grep -q '<pre' || fail "3 (agent twin renders <pre>)"
 # 4. a dynamic route twin renders a real record — pick the first model slug
 #    from the /wall twin's data lines (column 2), then load /m/<slug>?as=agent
-slug="$(curl -s "$BASE/wall?as=agent" | grep -E '^  [a-z0-9]' | head -1 | cut -d'|' -f2 | tr -d ' ')"
+slug="$(curl -s "$BASE/wall?as=agent" | grep -E '\| n=[0-9]+$' | head -1 | cut -d'|' -f2 | tr -d ' ')"
 [ -n "$slug" ] || fail "4a (wall twin exposes a model slug)"
 curl -s "$BASE/m/$slug?as=agent" | grep -q 'data-view="agent"' || fail "4b (/m/$slug?as=agent renders agent twin)"
 # 5. contract lists routes with their twins

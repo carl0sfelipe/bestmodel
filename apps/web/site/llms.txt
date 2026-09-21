@@ -31,6 +31,28 @@ command: `make agent-smoke`. Runnable today: benchmark-probe and its `lab`
 subcommand. plan / report / contribute are specified (L01) but NOT shipped
 — never invoke them. There is no one-line installer yet.
 
+## Routes (www.bestmodel.run — web-next; every route resolves ?as=human|agent server-side)
+
+| route | default view | agent twin |
+|---|---|---|
+| / | human cinematic tour | /?as=agent — honesty ladder + pool snapshot |
+| /cli | getting-started (rendered from docs/agent-quickstart.md) | /cli?as=agent — raw verified guide |
+| /claims | the wall: captured claims, live client | /claims?as=agent — REST pointers |
+| /submit | capture a run | /submit?as=agent — capture flow + catalog ids |
+| /wall | measured pool | /wall?as=agent — top-60 cell table |
+| /hardware | reference rigs | /hardware?as=agent — rig table |
+| /m/{slug} | model answer | /m/{slug}?as=agent — cell table |
+| /profile/{handle} | contributor profile | /profile/{handle}?as=agent — record pointers |
+| /claim/{id} | claim detail | /claim/{id}?as=agent — record pointers |
+| /cloud-anchors | rented-GPU anchor runs | /cloud-anchors?as=agent — anchor table |
+| /track-record | trust ladder | /track-record?as=agent — ladder text |
+| /mural | moderation entry | /mural?as=agent — report grounds |
+| /console | capture console (static app) | exempt — its agent surface is the REST API |
+
+View resolver precedence (mirrors the contract in this file): ?as=/?view= →
+saved bm_view cookie → agent UA → search-crawler UA maps to human → human.
+Auto-detection is never persisted.
+
 ## Honesty ladder
 
 1. measured — median of many community runs on the exact rig and quantization

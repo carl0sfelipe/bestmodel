@@ -4,6 +4,11 @@
  *   register/sign in (passkey) -> browse claims -> vote -> post a claim
  *   -> see the settle command + share card.
  *
+ * S34: the console reads as a small social network — a persistent identity
+ * (handle · points · tier), claim cards with author → profile, basis and
+ * provenance, a profile view with follow/unfollow, and notifications.
+ * Every endpoint called here already ships; nothing new on the backend.
+ *
  * API base is configurable for deployments:
  *   <script> window.BESTMODEL_API = "https://api.bestmodel.run"; </script>
  */
@@ -50,22 +55,159 @@ function renderSession() {
   if (token()) {
     // S31: one human, one account — link GitHub / Hugging Face to THIS account
     // instead of letting a provider login create a suffixed twin.
-    area.innerHTML = `<span id="linked-identities" class="muted"></span>
-      <button id="btn-link-github" class="linkish" title="link your GitHub identity to this account">link GitHub</button>
+    area.innerHTML = `<button id="btn-link-github" class="linkish" title="link your GitHub identity to this account">link GitHub</button>
       <button id="btn-link-huggingface" class="linkish" title="link your Hugging Face identity to this account">link HF</button>
       <button id="btn-signout" class="linkish">sign out</button>`;
     $("#btn-signout").onclick = () => {
       localStorage.removeItem(TOKEN_KEY);
+      CURRENT_HANDLE = null;
+      renderIdentity();
       renderSession();
       show("auth");
     };
     $("#btn-link-github").onclick = () => startOauthLink("github");
     $("#btn-link-huggingface").onclick = () => startOauthLink("huggingface");
-    loadLinkedIdentities().catch(() => {});
+    loadIdentity().catch(() => {});
   } else {
     area.innerHTML = `<button data-view="auth">sign in</button>`;
     area.querySelector("[data-view]").onclick = () => show("auth");
   }
+}
+
+/* ---------- identity strip (S34) ---------- */
+
+let CURRENT_HANDLE = null;
+let LINKED_PROVIDERS = [];
+
+function renderIdentity(profile) {
+  const strip = $("#identity-strip");
+  if (!token() || !profile) {
+    strip.hidden = true;
+    strip.innerHTML = "";
+    return;
+  }
+  const points = profile.reputation?.points ?? 0;
+  const tier = profile.reputation?.tier ?? "unranked";
+  const linked = LINKED_PROVIDERS.map((a) => `${a.provider === "huggingface" ? "hf" : a.provider}: ${a.login}`).join(" · ");
+  const has = new Set(LINKED_PROVIDERS.map((a) => a.provider));
+  strip.innerHTML = `
+    <button class="linkish me" data-profile="${escapeHtml(profile.handle)}" title="open your profile">@${escapeHtml(profile.handle)}</button>
+    ${linked ? `<span class="muted identities">${escapeHtml(linked)}</span>` : ""}
+    <span class="pts" title="reputation points">${points} pts</span>
+    <span class="badge tier" title="trust tier">${escapeHtml(tier)}</span>
+    <button id="btn-notifications" class="linkish" title="notifications">bell<span id="notification-count" hidden></span></button>`;
+  strip.hidden = false;
+  for (const button of strip.querySelectorAll("[data-profile]")) {
+    button.onclick = () => openProfile(button.dataset.profile);
+  }
+  $("#btn-notifications").onclick = () => {
+    show("notifications");
+    loadNotifications().catch(() => {});
+  };
+  const gh = $("#btn-link-github"), hf = $("#btn-link-huggingface");
+  if (gh) gh.hidden = has.has("github");
+  if (hf) hf.hidden = has.has("huggingface");
+  refreshNotificationCount().catch(() => {});
+}
+
+async function loadIdentity() {
+  // The session token does not carry the handle client-side; the accounts
+  // endpoint returns it (with or without linked providers).
+  const accounts = await api("/v1/auth/oauth/accounts");
+  CURRENT_HANDLE = accounts.handle ?? null;
+  LINKED_PROVIDERS = accounts.accounts ?? [];
+  if (!CURRENT_HANDLE) return;
+  const profile = await api(`/v1/users/${encodeURIComponent(CURRENT_HANDLE)}`);
+  renderIdentity(profile);
+}
+
+/* ---------- notifications (S34, existing S18 endpoints) ---------- */
+
+async function refreshNotificationCount() {
+  const count = $("#notification-count");
+  if (!count || !token()) return;
+  const items = await api("/v1/notifications");
+  const unread = items.filter((item) => !item.read_at).length;
+  count.hidden = unread === 0;
+  count.textContent = unread > 0 ? String(unread) : "";
+}
+
+async function loadNotifications() {
+  const list = $("#notification-list");
+  list.innerHTML = "";
+  const items = await api("/v1/notifications");
+  if (!items.length) {
+    list.innerHTML = `<li class="muted">nothing yet — follow people and vote to make the wall move</li>`;
+    return;
+  }
+  for (const item of items) {
+    const li = document.createElement("li");
+    li.className = item.read_at ? "notification read" : "notification unread";
+    const payload = item.payload ?? {};
+    li.innerHTML = `
+      <div class="claim-head">
+        <span class="badge kind">${escapeHtml(item.kind ?? "event")}</span>
+        <span class="muted">${escapeHtml((item.created_at ?? "").slice(0, 10))}</span>
+      </div>
+      <div>${escapeHtml(typeof payload === "object" ? JSON.stringify(payload) : String(payload ?? ""))}</div>
+      ${item.read_at ? "" : `<button class="linkish mark-read">mark read</button>`}`;
+    const button = li.querySelector(".mark-read");
+    if (button) {
+      button.onclick = async () => {
+        await api(`/v1/notifications/${encodeURIComponent(item.id)}/read`, { method: "POST" });
+        await loadNotifications();
+        await refreshNotificationCount().catch(() => {});
+      };
+    }
+    list.append(li);
+  }
+}
+
+/* ---------- profile view (S34, existing S14/S17 endpoints) ---------- */
+
+async function openProfile(handle) {
+  const profile = await api(`/v1/users/${encodeURIComponent(handle)}`);
+  const reputation = profile.reputation ?? { points: 0, tier: "unranked" };
+  const follow = profile.follow ?? {};
+  const rigs = profile.rigs ?? [];
+  const isMe = handle === CURRENT_HANDLE;
+  $("#profile-body").innerHTML = `
+    <div class="profile-head">
+      <h1>@${escapeHtml(profile.handle)}</h1>
+      <span class="badge tier">${escapeHtml(reputation.tier)}</span>
+    </div>
+    <p class="profile-pts"><strong>${reputation.points}</strong> reputation points · tier <strong>${escapeHtml(reputation.tier)}</strong></p>
+    <p class="muted">${follow.follower_count ?? 0} followers · ${follow.following_count ?? 0} following</p>
+    ${isMe ? "" : `<div class="vote-row"><button id="btn-follow" class="${follow.viewer_is_following ? "down" : "up"}">${follow.viewer_is_following ? "unfollow" : "follow"}</button></div>`}
+    <h2>Rigs</h2>
+    <ul class="rig-list">${rigs.length ? rigs.map((rig) => `<li><strong>${escapeHtml(rig.nickname ?? rig.slug ?? "?")}</strong> <span class="muted">${escapeHtml(rig.slug ?? "")}</span></li>`).join("") : `<li class="muted">no public rigs yet</li>`}</ul>
+    <h2>Recent claims</h2>
+    <ul id="profile-claims" class="claim-list"><li class="muted">loading…</li></ul>`;
+  const followButton = $("#btn-follow");
+  if (followButton) {
+    followButton.onclick = async () => {
+      await api(`/v1/users/${encodeURIComponent(handle)}/follow`, {
+        method: follow.viewer_is_following ? "DELETE" : "POST",
+      });
+      await openProfile(handle);
+    };
+  }
+  // The user's recent claims come from the existing claims list, filtered by
+  // handle — no new endpoint (S34 contract).
+  try {
+    const claims = await api("/v1/claims?scope=global&sort=recent");
+    const mine = claims.filter((claim) => (claim.claimant_handle ?? claim.handle) === handle).slice(0, 10);
+    const list = $("#profile-claims");
+    list.innerHTML = "";
+    if (!mine.length) {
+      list.innerHTML = `<li class="muted">no claims on the wall yet</li>`;
+    } else {
+      for (const claim of mine) list.append(renderClaimRow(claim));
+    }
+  } catch {
+    /* profile still renders without the claims feed */
+  }
+  show("profile");
 }
 
 /* ---------- passkey ceremonies ---------- */
@@ -166,6 +308,7 @@ async function loadFeed() {
     // personalized typed feed: claims with tallies + account-attributed runs
     const items = await api(`/v1/feed?scope=following&sort=${sort === "strongest" ? "trending" : sort}`);
     for (const item of items) list.append(item.type === "claim" ? renderClaimRow(item, true) : renderRunRow(item));
+    $("#feed-summary").textContent = `${items.length} events from people you follow`;
     return;
   }
 
@@ -173,21 +316,49 @@ async function loadFeed() {
   if (status) query.set("status", status);
   const claims = await api(`/v1/claims?${query}`);
   for (const claim of claims) list.append(renderClaimRow(claim));
+  $("#feed-summary").textContent = `${claims.length} claims on the global wall`;
+}
+
+// The basis of a claim's number, in honesty-ladder vocabulary: a settled claim
+// was proven by a signed run (measured); everything else is still a claim.
+function claimBasis(claim) {
+  if (claim.status === "settled_verified") return "measured";
+  if (claim.status === "refuted") return "refuted";
+  return "claimed";
+}
+
+function priorLine(claim) {
+  const prior = claim.prior_snapshot?.pool?.p50_decode_tok_s;
+  if (prior) return `prior: measured ${fmt(prior)} tok/s median`;
+  const roofline = claim.prior_snapshot?.roofline?.expected_decode_tok_s;
+  if (roofline) return `prior: formula ${fmt(roofline)} tok/s expected`;
+  return "prior: no data yet";
+}
+
+function authorHandle(claim) {
+  return claim.claimant_handle ?? claim.handle ?? null;
 }
 
 function renderClaimRow(claim, fromFeed = false) {
-  const handle = claim.handle ?? "?";
+  const handle = authorHandle(claim);
   const metrics = claim.claimed_metrics ?? {};
-  const tally = claim.tally ?? { margin: 0, voter_count: 0 };
+  const tally = claim.tally ?? { margin: 0, voter_count: 0, plausible_count: 0, impossible_count: 0 };
   const li = document.createElement("li");
   li.dataset.claimId = claim.id;
   li.innerHTML = `
     <div class="claim-head">
-      <strong>@${escapeHtml(handle)}</strong>
+      ${handle ? `<button class="linkish author" data-profile="${escapeHtml(handle)}">@${escapeHtml(handle)}</button>` : `<span class="muted">unattributed</span>`}
       <span class="badge ${claim.status}">${claim.status}</span>
     </div>
-    <div>${escapeHtml(claim.model_release_id ?? "")} · ${fmt(metrics.decode_tok_s)} tok/s claimed</div>
-    <div class="muted">margin ${fmt(tally.margin)} · ${tally.voter_count} votes</div>`;
+    <div class="claim-number">${escapeHtml(claim.model_release_id ?? "")} · <strong>${fmt(metrics.decode_tok_s)} tok/s</strong> <span class="badge basis-${claimBasis(claim)}">${claimBasis(claim)}</span></div>
+    <div class="muted provenance">${escapeHtml(priorLine(claim))}${claim.source_url ? ` · <a href="${escapeHtml(claim.source_url)}" rel="noopener" target="_blank">source</a>` : claim.source ? ` · via ${escapeHtml(claim.source)}` : ""}</div>
+    <div class="tally muted">▲ ${tally.plausible_count ?? 0} · ▼ ${tally.impossible_count ?? 0} · margin ${fmt(tally.margin)} · ${tally.voter_count} votes</div>`;
+  for (const button of li.querySelectorAll("[data-profile]")) {
+    button.onclick = (event) => {
+      event.stopPropagation();
+      openProfile(button.dataset.profile);
+    };
+  }
   li.onclick = () => openDetail(claim.id);
   return li;
 }
@@ -199,7 +370,7 @@ function renderRunRow(run) {
       <strong>verified run</strong>
       <span class="badge settled_verified">measured</span>
     </div>
-    <div>${escapeHtml(run.model_release_id ?? "")} · ${fmt(run.decode_tok_s)} tok/s</div>`;
+    <div class="claim-number">${escapeHtml(run.model_release_id ?? "")} · <strong>${fmt(run.decode_tok_s)} tok/s</strong> <span class="badge basis-measured">measured</span></div>`;
   return li;
 }
 
@@ -213,10 +384,14 @@ async function openDetail(claimId) {
     : claim.prior_snapshot?.roofline
       ? `formula ${fmt(claim.prior_snapshot.roofline.expected_decode_tok_s)} tok/s expected`
       : "no data yet";
+  const handle = authorHandle(claim);
   $("#detail-body").innerHTML = `
-    <h1>@${escapeHtml(claim.handle ?? "?")} · ${escapeHtml(claim.model_release_id)}</h1>
-    <p><strong>${fmt(claim.claimed_metrics.decode_tok_s)} tok/s</strong> claimed — engine says: ${escapeHtml(prior)}</p>
-    <p class="muted">${claim.tally.plausible_count} up / ${claim.tally.impossible_count} down · margin ${fmt(claim.tally.margin)} · ${claim.status}</p>`;
+    <h1>${handle ? `@<button class="linkish" data-profile="${escapeHtml(handle)}">${escapeHtml(handle)}</button> · ` : ""}${escapeHtml(claim.model_release_id)}</h1>
+    <p><strong>${fmt(claim.claimed_metrics.decode_tok_s)} tok/s</strong> <span class="badge basis-${claimBasis(claim)}">${claimBasis(claim)}</span> claimed — engine says: ${escapeHtml(prior)}</p>
+    <p class="muted">${claim.tally.plausible_count} up / ${claim.tally.impossible_count} down · margin ${fmt(claim.tally.margin)} · ${claim.status}${claim.source_url ? ` · <a href="${escapeHtml(claim.source_url)}" rel="noopener" target="_blank">source</a>` : ""}</p>`;
+  for (const button of $("#detail-body").querySelectorAll("[data-profile]")) {
+    button.onclick = () => openProfile(button.dataset.profile);
+  }
   $("#vote-row").hidden = !token() || claim.status !== "open";
   $("#report-row").hidden = !token();
   $("#form-report").hidden = true;
@@ -257,6 +432,7 @@ async function submitClaim(event) {
     }
     if (form.get("context_tokens")) payload.context_tokens = Number(form.get("context_tokens"));
     if (form.get("note")) payload.note = form.get("note");
+    if (form.get("source_url")) payload.source_url = form.get("source_url");
     const claim = await api("/v1/claims", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -382,20 +558,6 @@ async function startOauthLink(provider) {
   location.href = (await response.json()).authorize_url;
 }
 
-async function loadLinkedIdentities() {
-  const el = $("#linked-identities");
-  if (!el) return;
-  const response = await api("/v1/auth/oauth/accounts");
-  if (!response.ok) return;
-  const data = await response.json();
-  const parts = data.accounts.map((a) => `${a.provider}: ${a.login}`);
-  el.textContent = data.handle + (parts.length ? ` · ${parts.join(" · ")}` : "");
-  const has = new Set(data.accounts.map((a) => a.provider));
-  const gh = $("#btn-link-github"), hf = $("#btn-link-huggingface");
-  if (gh) gh.hidden = has.has("github");
-  if (hf) hf.hidden = has.has("huggingface");
-}
-
 function captureOauthFragment() {
   const params = new URLSearchParams(location.hash.slice(1));
   const accessToken = params.get("auth_token");
@@ -438,4 +600,7 @@ for (const [selector, provider] of [
 captureOauthFragment();
 renderSession();
 show(token() ? "feed" : "auth");
-if (token()) loadFeed().catch(() => {});
+if (token()) {
+  loadFeed().catch(() => {});
+  loadIdentity().catch(() => {});
+}

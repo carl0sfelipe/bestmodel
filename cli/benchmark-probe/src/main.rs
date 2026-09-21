@@ -141,6 +141,15 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
+    /// Ranked model candidates for a GPU from catalog SOTA + predictors (S39)
+    Plan {
+        /// Rig id from the hardware snapshot (e.g. rtx-3090-24gb)
+        #[arg(long)]
+        gpu: String,
+        /// Emit the stable machine object instead of the text table
+        #[arg(long)]
+        json: bool,
+    },
 }
 
 /// Lab invocation as parsed by clap (same defaults the manual parser had).
@@ -158,6 +167,7 @@ fn main() {
         Some(Command::Lab { stub, trials, seed, out, json }) => {
             cmd_lab(LabConfig { stub, trials, seed, out_root: out, json });
         }
+        Some(Command::Plan { gpu, json }) => cmd_plan(&gpu, json),
         None => match build_cli_args(&cli) {
             Ok(args) => {
                 if let Err(code) = run(&args) {
@@ -217,6 +227,28 @@ fn build_cli_args(cli: &Cli) -> Result<CliArgs, String> {
         model_release_id: cli.model_release_id.clone(),
         quantization_profile_id: cli.quantization_profile_id.clone(),
     })
+}
+
+fn cmd_plan(gpu: &str, json: bool) {
+    const LIMIT: usize = 12;
+    match benchmark_probe::plan_candidates::plan(gpu, LIMIT) {
+        Ok(outcome) => {
+            if json {
+                println!("{}", serde_json::to_string_pretty(&outcome).expect("serialize plan"));
+            } else {
+                println!("plan for {} (task: decode_tok_s) — every row declares its basis", outcome.gpu);
+                println!("  {:<44} {:<14} {:>10}  {}", "model", "quant", "expected", "basis");
+                for c in &outcome.candidates {
+                    println!("  {:<44} {:<14} {:>8.1}  {}", c.model_release_id, c.quant, c.expected, c.basis);
+                }
+                println!("honesty ladder: measured > reported > extrapolated > formula > no data yet.");
+            }
+        }
+        Err(e) => {
+            eprintln!("error: {}", e.message);
+            exit(3);
+        }
+    }
 }
 
 fn run(cli: &CliArgs) -> Result<(), i32> {

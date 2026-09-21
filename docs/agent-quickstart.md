@@ -100,6 +100,19 @@ canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s \
 - Exit code 3 = no data at all for that GPU: the honest answer is "be
   the first to publish a signed run", not a guess.
 
+## 2b. Plan: what SOTA should run here (catalog + predictors)
+
+```bash
+benchmark-probe plan --gpu rtx-3090-24gb
+benchmark-probe plan --gpu rtx-3090-24gb --json
+```
+
+Ranks catalog models for the rig through the honesty ladder: `measured`
+(pool median on this rig, n>=3) > `reported` > `extrapolated`
+(bandwidth-scaled from a measured cell) > `formula` (roofline). Every row
+declares its basis; a GPU outside the snapshot exits 3 with the closest
+known rig ids — never a guess.
+
 ## 3. Tune the serving flags (TPE lab — SIM by design)
 
 ```bash

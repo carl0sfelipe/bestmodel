@@ -35,6 +35,12 @@ commit time); L01+ is the active frontier.
 | S40-cli-report-command | PLANNED | `report` — measured-vs-predicted table, `--json`/`--markdown` |
 | S41-cli-contribute-command | PLANNED | `contribute` — contract 0.9.0 signed upload, A3 consent, `--no-upload` |
 | S42-cli-login-and-signing-key | PLANNED | `login` + per-user signing-key registration (S23-CLI, existing endpoints) |
+| L06-human-craft-web | PLANNED (2026-09-21) | human-craft pass epic + fingerprint (hallmark + no-ai-slop); stories S43–S47 |
+| S43-design-system-and-home-craft | PLANNED | locked `design.md`/tokens + `/` home (Workbench + ecosystem diagram) |
+| S44-cli-page-craft | PLANNED | `/cli` human view (Long Document / Step Sequence) |
+| S45-wall-page-craft | PLANNED | `/wall` human view (Tabular Spec-Sheet) |
+| S46-claims-page-craft | PLANNED | `/claims` human view (Feed / Stat-Led) |
+| S47-copy-slop-gate | PLANNED | repo-wide no-ai-slop CI gate + remaining-routes token adoption |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

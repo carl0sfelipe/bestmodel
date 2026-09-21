@@ -267,3 +267,22 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   `bestmodel.run/install.sh`) is future work — no install script exists to host
   yet, so V1 documents the from-source build only. Until it exists, the site
   must not render an install one-liner (D4 removed the phantom `canirun.it/sh`).
+
+## L06 (2026-09-21): human craft pass — de-slop the human view of web-next
+
+- Escalation (owner): the human default view of web-next still reads as
+  AI-generated. Fable applied hallmark (design) + no-ai-slop (copy) and returned
+  a decision record + fingerprint + spec cluster
+  (`specs/en/L06-human-craft-web.md`; stories S43–S47). Human view only; the
+  `?as=` contract and agent twins (L04 S32/S35) are untouched.
+- **Fingerprint**: one locked design system (`design.md`/tokens), a distinct
+  hallmark macrostructure per page (Workbench `/`, Long Document `/cli`, Tabular
+  Spec-Sheet `/wall`, Feed `/claims`); terminal DNA + JetBrains Mono kept; the
+  hand-built ecosystem diagram reinstated on home.
+- **Backlog line (D1/S47)**: full macrostructure hand-craft of the 8 non-core
+  routes (`/hardware`, `/track-record`, `/mural`, `/cloud-anchors`, `/submit`,
+  `/profile`, `/m`, `/claim`) is deferred; S47 only de-slops their copy and
+  makes them adopt the locked tokens.
+- **Backlog line (D5)**: a tuned OKLCH custom repaint is an optional hallmark
+  depth if the terminal palette still reads generic after the structural + copy
+  fixes — not mandated.

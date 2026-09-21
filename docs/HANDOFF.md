@@ -269,6 +269,40 @@ line) · D3 GitHub Release binaries (S38) · D4 crates.io stays blocked on A11
 (S42, existing endpoints) · D9 reject universal `--dry-run` · D10 honesty/
 phantom guard on every doc/spec touch.
 
+## Human craft pass 2026-09-21 (Fable Clarify → Plan)
+
+Escalation (owner): the human default view of web-next still reads as
+AI-generated ("I, a human, still find it strange"). Fable absorbed
+`nutlope/hallmark` (design) + `petergyang/no-ai-slop` (copy) and returned a
+decision record + design fingerprint + spec cluster
+(`specs/en/L06-human-craft-web.md`; stories S43–S47). **Human default view of
+web-next only** — the `?as=` contract, middleware, and agent twins (L04 S32/S35)
+are untouched; Next.js stays; console stays static; zero backend.
+
+Diagnosis (verified): all 13 routes share one macrostructure (`page-head` =
+amber uppercase kicker + `<br/>`-split `<h1>` + two buttons, then a `.card`/
+`.wall-row` grid at 14px) and one palette/type (`#0B0C0E` + `#E0A458`, Inter
+Tight + JetBrains Mono) — the on-distribution default. The craft DNA was
+flattened, not missing: the frozen archive (`apps/web/site/`) still holds the
+hand-built ecosystem diagram, the `$bestmodel.run` mark, the reader twin, and
+journey.js's "else: ask — do not guess".
+
+Fingerprint: one locked design system (`design.md`/tokens for coherence) + a
+distinct hallmark macrostructure per page (variety): Workbench `/`, Long
+Document `/cli`, Tabular Spec-Sheet `/wall`, Feed `/claims`. Keep the terminal
+DNA + JetBrains Mono + amber; reinstate the ecosystem diagram on home; move
+nav/footer off the N1a/Ft3 AI fingerprints. A custom OKLCH repaint is optional,
+not mandated.
+
+Decisions: D1 rework the 4 human-core routes now, remaining 8 inherit tokens
+(hand-craft = backlog line) · D2 one system, macrostructure per page · D3
+rewrite copy with no-ai-slop, honesty intact (grep ban-list gate) · D4
+reinstate the hand-built ecosystem diagram on `/` · D5 keep the terminal palette
+(custom repaint optional) · D6 reject framework change / agent-twin redesign /
+heavy motion · D7 `llms.txt` updated in the same cut · D8 keep L04 (S32–S36)
+oracles green, amend-by-declaration where copy moves (house pattern
+S33-c3/S36-c2).
+
 Story map & order:
 
 | Story | Title | Depends on |
@@ -286,3 +320,22 @@ contract; contract 0.9.1 is a separate deferred line); web L04 is out (only
 coupling: `/cli` S33 un-quarantines a subcommand when it lands). This updates
 HANDOFF §8 item 2 (per-user signing keys → S42) and item 4 (L01 A1–A6 → ruled
 above).
+
+Story map & order:
+
+| Story | Title | Depends on |
+|---|---|---|
+| S43 | Design system + `/` home (Workbench + ecosystem diagram) | — |
+| S44 | `/cli` (Long Document / Step Sequence) | L04 S33, S43 |
+| S45 | `/wall` (Tabular Spec-Sheet) | S43 |
+| S46 | `/claims` (Feed / Stat-Led) | S43 |
+| S47 | Repo-wide no-ai-slop CI gate + remaining-routes token adoption | S43 |
+
+Parallel lanes: `{S47}` ∥ `{S43 → {S44, S45, S46}}`. What ZCode runs from
+hallmark: `hallmark study` on the archive+READMEs (extract DNA) for S43, then
+`hallmark redesign` per route within the Next.js boundary (each PR records the
+pre-emit six-axis critique + confirms macrostructure diversification), and
+`hallmark audit` repo-wide for S47's punch list. Copy gates are grep-mechanical;
+design gates (macrostructure/rhythm/restraint) are the documented self-critique
+in each PR. Guardrails: honesty ladder intact (no fabricated warmth/metrics),
+the `?as=` twins stay green, `llms.txt` updated on any contractual copy change.

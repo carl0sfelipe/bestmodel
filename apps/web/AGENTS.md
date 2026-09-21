@@ -1,5 +1,12 @@
 # apps/web/ — Map
 
+> ARCHIVED (2026-09-21, L04 D5/S36): `site/` is a frozen visual reference —
+> it is NOT deployed anywhere. The published GitHub Pages output is a redirect
+> to the canonical host `www.bestmodel.run` (web-next), which now owns the
+> `?as=` dual view. The console (`console/`) is the one live surface here.
+> Do not build new site features in this tree.
+
+
 Executable prompt pack (pre-plan) for the public bestmodel website: the three
 design prototypes in `prototypes/` wired to real community data harvested
 from localmaxxing's public API. No product code exists until the executor

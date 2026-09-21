@@ -1,9 +1,9 @@
 name: pages
 
-# GitHub Pages deployment of the static site (apps/web/site + derived data
-# + console). Mirrors the Vercel build (apps/web/vercel.json) so both hosts
-# serve identical content; Pages auto-deploys on every push to main.
-# Custom-domain cutover (owner, one DNS record): see docs/en/deploy.md.
+# GitHub Pages deployment (S36): Pages no longer publishes the divergent
+# static site. apps/web/site is a frozen archive; the published output is a
+# redirect surface to the canonical host, www.bestmodel.run (index + 404
+# catch-all, path preserved via the ?p= hint). Retired 2026-09-21 (L04 D5).
 
 on:
   push:
@@ -33,17 +33,38 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build publish directory (mirrors vercel.json buildCommand)
+      - name: Build redirect surface (canonical host: www.bestmodel.run)
         run: |
           set -euo pipefail
           mkdir -p publish
-          cp -r apps/web/site/. publish/
-          mkdir -p publish/data
-          cp -r apps/web/data/derived publish/data/derived
-          cp -r apps/web/data/seed publish/data/seed
-          mkdir -p publish/console
-          cp -r apps/web/console/. publish/console/
-          cp apps/web/console/config.js publish/config.js
+          cat > publish/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=https://www.bestmodel.run/">
+          <link rel="canonical" href="https://www.bestmodel.run/">
+          <title>bestmodel.run</title>
+          </head>
+          <body>
+          <p>This address is retired. The canonical site is <a href="https://www.bestmodel.run/">https://www.bestmodel.run</a>.</p>
+          </body>
+          </html>
+          HTML
+          cat > publish/404.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=https://www.bestmodel.run/">
+          <link rel="canonical" href="https://www.bestmodel.run/">
+          <title>bestmodel.run</title>
+          </head>
+          <body>
+          <p>Page moved. The canonical site is <a href="https://www.bestmodel.run/">https://www.bestmodel.run</a>.</p>
+          </body>
+          </html>
+          HTML
           touch publish/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

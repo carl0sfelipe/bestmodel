@@ -8,8 +8,9 @@ cd "$ROOT" || exit 2
 
 # 1. the Pages build emits a redirect, not divergent content
 grep -rqi 'http-equiv="refresh".*www\.bestmodel\.run\|url=https://www\.bestmodel\.run' apps/web/site/ .github/workflows/ || fail "1 (Pages publishes a redirect)"
-# 2. canonical link is present
-grep -rqi 'rel="canonical"[^>]*bestmodel\.run' apps/web/site/ || fail "2 (canonical link present)"
+# 2. canonical link is present (in the archive or in the Pages workflow that
+#    generates the served redirect surface — amendment in the spec)
+grep -rqi 'rel="canonical"[^>]*bestmodel\.run' apps/web/site/ .github/workflows/ || fail "2 (canonical link present)"
 # 3. apps/web/site is documented as archived
 grep -qi 'archive\|frozen' apps/web/AGENTS.md || fail "3 (apps/web/AGENTS.md marks the archive)"
 # 4. contract no longer routes humans to Pages-only tours

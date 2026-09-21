@@ -5,8 +5,8 @@
 > LICENSE: AGPL-3.0 for apps/**, MIT for packages/** and cli/**.
 
 This file is the agent surface for the deployed site. Humans get the
-cinematic tour at index.html?as=human (desktop), hardware.html?as=human,
-or m/index.html?as=human (mobile). If a page asked who is reading, it did
+cinematic tour at /?as=human (desktop) or /hardware?as=human. If a page
+asked who is reading, it did
 not have enough deterministic signal to guess.
 
 Core principle: number honesty. Every displayed number declares its basis:
@@ -79,9 +79,9 @@ Frozen snapshot counts — not live, not throughput.
 
 ## Human tours
 
-- index.html?as=human — I have a goal (desktop, min 1024px)
-- hardware.html?as=human — I have hardware
-- m/index.html?as=human — mobile
+- /?as=human — I have a goal (desktop, min 1024px)
+- /hardware?as=human — I have hardware
+- /m?as=human — mobile
 - console/ — passkey console (not a tour)
 
 ## Read next

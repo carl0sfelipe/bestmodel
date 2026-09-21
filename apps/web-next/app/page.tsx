@@ -1,4 +1,6 @@
 import { basisOf, loadDerived, metricOf, topRigs } from "../lib/engine";
+import { currentView } from "../lib/view-server";
+import AgentView from "./_components/agent-view";
 import HomeClient, { type AnswerIndex, type RigOption } from "./home-client";
 
 /** How many rigs the selector offers — the same cutoff the wall's rig filter uses. */
@@ -6,7 +8,7 @@ const RIG_LIMIT = 24;
 /** How many models a single answer shows. */
 const ANSWER_LIMIT = 6;
 
-export default function HomePage() {
+export default async function HomePage() {
   const { models, pool, hardware, stats } = loadDerived();
   const byModel = new Map(models.map((model) => [model.slug, model]));
   const rigLabel = new Map(hardware.map((rig) => [rig.key, rig.label]));
@@ -61,6 +63,39 @@ export default function HomePage() {
     label: rig.label,
     runCount: rig.runCount ?? 0,
   }));
+
+  // Agent twin (S32): the honesty ladder and the pool totals as text — the
+  // same snapshot the human hero renders, never a different dataset.
+  if ((await currentView()) === "agent") {
+    const t = stats.totals;
+    const snapshot = stats.snapshotAt.slice(0, 10);
+    return (
+      <AgentView>
+        {[
+          "bestmodel.run — what do you want to run?",
+          "An honest compatibility engine for local AI, built from community pool measurements.",
+          "",
+          "Honesty ladder: measured > reported > extrapolated > formula > no data yet.",
+          "A cell without a source class never renders. Numbers are never rounded in the flattering direction.",
+          "",
+          `Pool snapshot ${snapshot}:`,
+          `  runs    ${t.runs.toLocaleString("en-US")}`,
+          `  models  ${t.models.toLocaleString("en-US")}`,
+          `  rigs    ${t.rigs.toLocaleString("en-US")}`,
+          "",
+          "Answers the pool can give (human view renders them interactively):",
+          "  can it run?      /hardware — feasibility from bandwidth and VRAM rules",
+          "  how fast?        /wall — every community cell with its basis and n",
+          "  is it worth it?  /track-record — trust earned by verified acts",
+          "",
+          "Machine surfaces:",
+          "  agent twins      append ?as=agent to any route",
+          "  contract         /llms.txt",
+          "  CLI quickstart   docs/agent-quickstart.md in the repo (git clone, no key)",
+        ].join("\n")}
+      </AgentView>
+    );
+  }
 
   return (
     <HomeClient

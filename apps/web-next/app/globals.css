@@ -387,3 +387,11 @@ button{background:transparent}
    of their own — strongest community claims from other rigs, dashed border
    on purpose so it never merges with this rig's basis ladder. */
 .verdict-claims{margin-top:14px;padding:10px 0 2px 14px;border-left:2px dashed var(--hair)}
+
+/* agent/TUI twin (S32) — deterministic monospace reading of a route */
+.agent-view{padding:40px 0 24px}
+.agent-view pre{font:12.5px/1.65 var(--mono);color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:22px;overflow-x:auto;white-space:pre;max-width:100%}
+.view-toggle{display:inline-flex;gap:2px;border:1px solid var(--hair);border-radius:999px;padding:2px;font:11px var(--mono)}
+.view-toggle a{padding:5px 11px;border-radius:999px;text-decoration:none;color:var(--muted)}
+.view-toggle a[aria-pressed="true"]{background:var(--amber-soft);color:var(--amber)}
+.view-toggle a:hover{color:var(--ink)}

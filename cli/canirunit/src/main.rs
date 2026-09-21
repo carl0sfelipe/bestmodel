@@ -3,27 +3,75 @@ use std::process::exit;
 
 use canirunit::transfer::GpuTransferSpec;
 use canirunit::{closest_rig_ids, rig_ids, runs_from_pool, suggest_with_transfer, PoolFile, RunEntry};
+use clap::{Parser, Subcommand};
 
-const VERSION: &str = env!("CARGO_PKG_VERSION");
+// S37: clap tree over the existing rigs/suggest subcommands, identical flags.
+#[derive(Debug, Parser)]
+#[command(
+    name = "canirunit",
+    version,
+    propagate_version = true,
+    arg_required_else_help = true,
+    about = "Suggest the best model for a GPU from measured runs (deterministic, no LLM).",
+    after_help = "--runs accepts either a leaderboard run-entry export (JSON array) or the in-repo derived pool snapshot apps/web/data/derived/pool.json ({snapshotAt, cells} — entries load as source_class=harvested).
+'rigs' lists the GPU ids the corpus actually knows (this is how you map detected hardware, e.g. 'NVIDIA GeForce RTX 3090' -> rtx-3090-24gb).
+
+TASK METRICS:
+    decode_tok_s       LLM decode throughput (higher is better)
+    seconds_per_clip   video clip wall time (lower is better)
+    frames_per_s       video frames per second (higher is better)
+
+--gpus <specs.json> enables cross-hardware transfer when the GPU has no runs (same_arch_family / roofline_transfer, always derived); see gpu_transfer_specs.json for the format.
+
+SEE ALSO:
+    benchmark-probe - measure your hardware and capture signed runs.
+
+EXIT CODES:
+    0 suggestions produced · 2 usage error · 3 no runs for this GPU (match_class unknown)"
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Debug, Subcommand)]
+enum Command {
+    /// Rank models for a GPU from the measured corpus
+    Suggest {
+        /// GPU / rig model id (e.g. rtx-3090-24gb)
+        #[arg(long)]
+        gpu: String,
+        /// Metric: decode_tok_s, seconds_per_clip or frames_per_s
+        #[arg(long)]
+        task: String,
+        /// Runs JSON: run-entry array or derived pool snapshot
+        #[arg(long)]
+        runs: String,
+        /// GPU transfer specs (enables cross-hardware transfer)
+        #[arg(long)]
+        gpus: Option<String>,
+    },
+    /// List the rig ids the corpus actually knows
+    Rigs {
+        /// Runs JSON: run-entry array or derived pool snapshot
+        #[arg(long)]
+        runs: String,
+        /// Substring filter on rig ids
+        #[arg(long)]
+        filter: Option<String>,
+    },
+}
 
 fn main() {
-    let raw_args: Vec<String> = std::env::args().skip(1).collect();
-    match parse_args(&raw_args) {
-        Ok(None) => {
-            print_usage();
-            exit(0);
+    let cli = Cli::parse();
+    let mode = match cli.command {
+        Command::Suggest { gpu, task, runs, gpus } => {
+            Mode::Suggest { gpu, task, runs_path: runs, gpus_path: gpus }
         }
-        Ok(Some(mode)) => {
-            if let Err(code) = run(mode) {
-                exit(code);
-            }
-        }
-        Err(message) => {
-            eprintln!("error: {message}");
-            eprintln!();
-            print_usage();
-            exit(2);
-        }
+        Command::Rigs { runs, filter } => Mode::Rigs { runs_path: runs, filter },
+    };
+    if let Err(code) = run(mode) {
+        exit(code);
     }
 }
 
@@ -135,92 +183,4 @@ fn load_runs(runs_path: &str) -> Result<(Vec<RunEntry>, Option<(String, usize)>)
             Ok((runs_from_pool(&pool), Some((snapshot, count))))
         }
     }
-}
-
-fn parse_args(raw_args: &[String]) -> Result<Option<Mode>, String> {
-    let mut mode: Option<&str> = None;
-    let mut gpu: Option<String> = None;
-    let mut task: Option<String> = None;
-    let mut runs_path: Option<String> = None;
-    let mut gpus_path: Option<String> = None;
-    let mut filter: Option<String> = None;
-
-    let mut index = 0;
-    while index < raw_args.len() {
-        let raw = &raw_args[index];
-        if raw == "suggest" || raw == "rigs" {
-            mode = Some(raw);
-            index += 1;
-            continue;
-        }
-        if raw == "--help" || raw == "-h" {
-            return Ok(None);
-        }
-        let (flag, inline_value) = match raw.split_once('=') {
-            Some((name, value)) => (name.to_string(), Some(value.to_string())),
-            None => (raw.clone(), None),
-        };
-        let take_value = |index: &mut usize| -> Result<String, String> {
-            if let Some(value) = inline_value.clone() {
-                return Ok(value);
-            }
-            *index += 1;
-            raw_args
-                .get(*index)
-                .cloned()
-                .ok_or_else(|| format!("missing value for '{flag}'"))
-        };
-        match flag.as_str() {
-            "--gpu" => gpu = Some(take_value(&mut index)?),
-            "--task" => task = Some(take_value(&mut index)?),
-            "--runs" => runs_path = Some(take_value(&mut index)?),
-            "--gpus" => gpus_path = Some(take_value(&mut index)?),
-            "--filter" => filter = Some(take_value(&mut index)?),
-            other => return Err(format!("unknown argument '{other}'")),
-        }
-        index += 1;
-    }
-
-    let runs_path = runs_path
-        .ok_or_else(|| "missing required argument '--runs <runs.json>'".to_string())?;
-
-    match mode.unwrap_or("suggest") {
-        "rigs" => Ok(Some(Mode::Rigs { runs_path, filter })),
-        _ => {
-            let gpu =
-                gpu.ok_or_else(|| "missing required argument '--gpu <gpu_model_id>'".to_string())?;
-            let task = task.ok_or_else(|| {
-                "missing required argument '--task <metric>' (decode_tok_s, seconds_per_clip, frames_per_s)".to_string()
-            })?;
-            Ok(Some(Mode::Suggest { gpu, task, runs_path, gpus_path }))
-        }
-    }
-}
-
-fn print_usage() {
-    println!("canirunit {VERSION}");
-    println!();
-    println!("Suggest the best model for a GPU from measured runs (deterministic, no LLM).");
-    println!();
-    println!("USAGE:");
-    println!("    canirunit suggest --gpu <gpu_model_id> --task <metric> --runs <runs.json> [--gpus gpu_transfer_specs.json]");
-    println!("    canirunit rigs --runs <runs.json> [--filter <substring>]");
-    println!();
-    println!("    --runs accepts either a leaderboard run-entry export (JSON array)");
-    println!("    or the in-repo derived pool snapshot apps/web/data/derived/pool.json");
-    println!("    ({{snapshotAt, cells}} — entries load as source_class=harvested).");
-    println!("    'rigs' lists the GPU ids the corpus actually knows (this is how you");
-    println!("    map detected hardware, e.g. 'NVIDIA GeForce RTX 3090' -> rtx-3090-24gb).");
-    println!();
-    println!("TASK METRICS:");
-    println!("    decode_tok_s       LLM decode throughput (higher is better)");
-    println!("    seconds_per_clip   video clip wall time (lower is better)");
-    println!("    frames_per_s       video frames per second (higher is better)");
-    println!();
-    println!("    --gpus <specs.json>  Enable cross-hardware transfer when the GPU has no");
-    println!("                        runs (same_arch_family / roofline_transfer, always derived);");
-    println!("                        see gpu_transfer_specs.json for the format");
-    println!();
-    println!("EXIT CODES:");
-    println!("    0 suggestions produced; 3 no runs for this GPU (match_class unknown)");
 }

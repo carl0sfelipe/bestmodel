@@ -19,6 +19,7 @@ path = "src/main.rs"
 # was recoverable). Swap in the original tree when it resurfaces; the
 # goal remains publishing it as a git/registry dep (backlog A11).
 argos-opt = { path = "../../third_party/argos-opt" }
+clap = { version = "4", features = ["derive"] }
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

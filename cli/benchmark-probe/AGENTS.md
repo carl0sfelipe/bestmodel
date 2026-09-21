@@ -7,7 +7,7 @@ user output + machine-readable artifacts.
 
 | Module | Content |
 |---|---|
-| `main.rs` | arg parsing; **first subcommand `lab` (L03A) dispatched before the legacy flag parser** — everything else uses legacy flags unchanged |
+| `main.rs` | **clap parser (S37)**: `--version`/`-V`, uniform `--help`/errors, subcommand tree (`lab`); legacy validation messages re-emitted post-parse (pinned by tests/cli_smoke.rs) |
 | `lib.rs` | exposes modules + `Runtime` enum for integration tests |
 | `tuning_search.rs` | L03A: llama.cpp serving space (frozen dim order: ngl, ctx, threads, kv_cache, flash_attn), TPE `run_lab` via **argos-opt** (vendored at `third_party/argos-opt` — clean-room reconstruction of the lost tree `31feea6`, owner-authorized 2026-09-18; replace with the original tree when it resurfaces, then publish as git/registry dep per backlog A11), deterministic SIM `stub_objective` (every output SIM-marked, never a real claim) |
 | `lab_recorder.rs` | L01 slice: `experiments/<label>/{meta.json,index.jsonl,best.json}` — append-only, one JSON line per trial, null = failed trial; dirs immutable once created |
@@ -25,6 +25,11 @@ Key flags: `--runtime mock|llama_cpp|ollama`, `--output <path>` (writes report
 reported engine, e.g. mock rehearsals), `--artifact`, `--sign`, `--upload`.
 Env: `BENCHMARK_PROBE_KEY_PATH` (default ~/.config/benchmark-probe/ed25519.pem),
 `BENCHMARK_PROBE_API_URL` (default http://localhost:8000).
+
+Exit codes: `0` success · `2` usage error (bad flag, missing required
+argument, invalid value, `lab` without `--stub`) · `1` runtime failure
+(engine missing/failed, lab IO error) · `3` honest-no-data (canirunit side:
+unknown GPU).
 
 Future = CLI v2 Local Lab (spec specs/en/L01-cli-v2-local-lab.md): plan → lab →
 report → contribute commands; borrow llama-optimus/throughput-lab/picchio

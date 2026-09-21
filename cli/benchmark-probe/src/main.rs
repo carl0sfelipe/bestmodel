@@ -17,6 +17,7 @@ use benchmark_probe::upload_benchmark_report::{
     fetch_challenge_nonce, upload_benchmark_report, ArtifactUpload, UploadRequest,
 };
 use benchmark_probe::{collect_system_topology, detect_runtime_installations, Runtime};
+use clap::{Parser, Subcommand};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const DEFAULT_MODEL: &str = "default-model";
@@ -46,31 +47,176 @@ struct CliArgs {
     quantization_profile_id: Option<String>,
 }
 
+// S37: clap is the parser (uniform --help/--version, subcommand tree for
+// lab + the L05 commands). The legacy validation MESSAGES are re-emitted
+// post-parse so pinned smoke tests keep their exact stderr contract.
+#[derive(Debug, Parser)]
+#[command(
+    name = "benchmark-probe",
+    version,
+    propagate_version = true,
+    about = "Local LLM hardware benchmark probe: detects system topology, detects installed runtimes, runs a standardized benchmark scenario, and prints plain-text metrics.",
+    after_help = "ENVIRONMENT:\n    BENCHMARK_PROBE_KEY_PATH   Ed25519 key path (default: ~/.config/benchmark-probe/ed25519.pem)\n    BENCHMARK_PROBE_API_URL    Submission API base URL (default: http://localhost:8000)\n    BENCHMARK_PROBE_API_TOKEN  Account bearer token (agent token) - required by --settle-claim\n\nEXAMPLES:\n    benchmark-probe --runtime mock\n    benchmark-probe --runtime mock --sign\n    benchmark-probe --runtime llama_cpp --model qwen2.5-coder-32b-q4_k_m.gguf --upload\n    benchmark-probe --runtime mock --upload --settle-claim 7d1e... # prove your claim\n    benchmark-probe --runtime ollama --model qwen2.5-coder:32b\n    benchmark-probe --runtime comfyui --scenario '{\"model\":\"wan22-i2v-flf2v\",\"width\":1280,\"height\":720,\"frames\":81,\"steps\":20,\"cfg\":3.5,\"shift\":5.0,\"seed\":42,\"first_image\":\"in/first.png\",\"last_image\":\"in/last.png\"}' --recipe recipes/wan22-flf2v-720p-81f-v1.json --workflow-out /tmp/wan22.json\n\nSEE ALSO:\n    canirunit - offline pool query: best-model suggestions from measured runs.\n\nEXIT CODES:\n    0 success · 2 usage error · 1 runtime failure"
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Option<Command>,
+
+    /// Runtime to benchmark: llama_cpp, ollama, comfyui, or mock (comfyui also requires --scenario and --recipe)
+    #[arg(long)]
+    runtime: Option<String>,
+    /// Model name or GGUF path
+    #[arg(long, default_value = DEFAULT_MODEL)]
+    model: String,
+    /// Prompt (prefill) token count
+    #[arg(long, default_value_t = 4096)]
+    prompt_tokens: u32,
+    /// Tokens to generate
+    #[arg(long, default_value_t = 512)]
+    generated_tokens: u32,
+    /// Prefill batch size
+    #[arg(long, default_value_t = 1)]
+    batch_size: u32,
+    /// Context window size
+    #[arg(long, default_value_t = 8192)]
+    context_tokens: u32,
+    /// Attach a file as an upload artifact (repeatable)
+    #[arg(long = "artifact")]
+    artifact_paths: Vec<PathBuf>,
+    /// Write the signed report files (report, .digest, .signature, .artifact_0.txt)
+    #[arg(long = "output")]
+    output_path: Option<PathBuf>,
+    /// Override the runtime declared in the report (e.g. llama_cpp)
+    #[arg(long = "report-runtime")]
+    report_runtime: Option<String>,
+    /// Sign the report with the local Ed25519 key
+    #[arg(long)]
+    sign: bool,
+    /// Sign and upload the report to the Submission API
+    #[arg(long)]
+    upload: bool,
+    /// (comfyui) Video scenario JSON inline, or '-' to read stdin
+    #[arg(long)]
+    scenario: Option<String>,
+    /// (comfyui) Recipe manifest with the workflow template
+    #[arg(long)]
+    recipe: Option<PathBuf>,
+    /// (comfyui) Write the materialized workflow JSON to this path
+    #[arg(long = "workflow-out")]
+    workflow_out: Option<PathBuf>,
+    /// (comfyui) Run the workflow headlessly and measure the clip
+    #[arg(long)]
+    execute: bool,
+    /// Print an equivalent, re-runnable command line and exit
+    #[arg(long = "print-command")]
+    print_command: bool,
+    /// Settle one of your open claims with this run (requires --upload and a token)
+    #[arg(long = "settle-claim")]
+    settle_claim_id: Option<String>,
+    /// Catalog model binding override (e.g. model-qwen3-8b)
+    #[arg(long = "model-release-id")]
+    model_release_id: Option<String>,
+    /// Catalog quantization binding override (e.g. q-gguf-q4-k-m)
+    #[arg(long = "quantization-profile-id")]
+    quantization_profile_id: Option<String>,
+}
+
+#[derive(Debug, Subcommand)]
+enum Command {
+    /// TPE search over the llama.cpp serving space (L03A: --stub only, SIM)
+    Lab {
+        /// required in L03A: deterministic SIMULATED measurements
+        #[arg(long)]
+        stub: bool,
+        /// search budget
+        #[arg(long, default_value_t = 60)]
+        trials: usize,
+        /// RNG seed
+        #[arg(long, default_value_t = 42)]
+        seed: u64,
+        /// labs root directory
+        #[arg(long, default_value = "experiments")]
+        out: PathBuf,
+        /// machine-readable best.json on stdout
+        #[arg(long)]
+        json: bool,
+    },
+}
+
+/// Lab invocation as parsed by clap (same defaults the manual parser had).
+struct LabConfig {
+    stub: bool,
+    trials: usize,
+    seed: u64,
+    out_root: PathBuf,
+    json: bool,
+}
+
 fn main() {
-    let raw_args: Vec<String> = std::env::args().skip(1).collect();
-    // L03A: `lab` is the first subcommand; everything else keeps the
-    // legacy flag parser untouched.
-    if raw_args.first().map(|s| s.as_str()) == Some("lab") {
-        cmd_lab(&raw_args[1..]);
-        return;
-    }
-    match parse_args(&raw_args) {
-        Ok(None) => {
-            print_usage();
-            exit(0);
+    let cli = Cli::parse();
+    match cli.command {
+        Some(Command::Lab { stub, trials, seed, out, json }) => {
+            cmd_lab(LabConfig { stub, trials, seed, out_root: out, json });
         }
-        Ok(Some(cli)) => {
-            if let Err(code) = run(&cli) {
-                exit(code);
+        None => match build_cli_args(&cli) {
+            Ok(args) => {
+                if let Err(code) = run(&args) {
+                    exit(code);
+                }
             }
-        }
-        Err(message) => {
-            eprintln!("error: {message}");
-            eprintln!();
-            print_usage();
-            exit(2);
-        }
+            Err(message) => {
+                eprintln!("error: {message}");
+                eprintln!();
+                print_usage();
+                exit(2);
+            }
+        },
     }
+}
+
+/// Reproduces the legacy parser's validation order and exact messages
+/// (pinned by tests/cli_smoke.rs) on top of the clap-parsed values.
+fn build_cli_args(cli: &Cli) -> Result<CliArgs, String> {
+    let runtime = parse_runtime(
+        cli.runtime
+            .as_deref()
+            .ok_or_else(|| "missing required argument '--runtime <llama_cpp|ollama|comfyui|mock>'".to_string())?,
+    )?;
+    if let Runtime::ComfyUi = runtime {
+        cli.scenario.as_ref().ok_or_else(|| {
+            "missing required argument '--scenario <json|->' for --runtime comfyui".to_string()
+        })?;
+        cli.recipe.as_ref().ok_or_else(|| {
+            "missing required argument '--recipe <path>' for --runtime comfyui".to_string()
+        })?;
+    }
+    if cli.settle_claim_id.is_some() && !cli.upload {
+        return Err(
+            "--settle-claim requires --upload (the run must be submitted to settle the claim)"
+                .to_string(),
+        );
+    }
+    Ok(CliArgs {
+        runtime,
+        model: cli.model.clone(),
+        prompt_tokens: cli.prompt_tokens,
+        generated_tokens: cli.generated_tokens,
+        batch_size: cli.batch_size,
+        context_tokens: cli.context_tokens,
+        artifact_paths: cli.artifact_paths.clone(),
+        output_path: cli.output_path.clone(),
+        report_runtime: cli.report_runtime.clone(),
+        sign: cli.sign,
+        upload: cli.upload,
+        scenario: cli.scenario.clone(),
+        recipe: cli.recipe.clone(),
+        workflow_out: cli.workflow_out.clone(),
+        execute: cli.execute,
+        print_command: cli.print_command,
+        settle_claim_id: cli.settle_claim_id.clone(),
+        model_release_id: cli.model_release_id.clone(),
+        quantization_profile_id: cli.quantization_profile_id.clone(),
+    })
 }
 
 fn run(cli: &CliArgs) -> Result<(), i32> {
@@ -579,120 +725,6 @@ fn submit_report(
     Ok(())
 }
 
-fn parse_args(raw_args: &[String]) -> Result<Option<CliArgs>, String> {
-    let mut runtime: Option<Runtime> = None;
-    let mut model = String::from(DEFAULT_MODEL);
-    let mut prompt_tokens = 4096u32;
-    let mut generated_tokens = 512u32;
-    let mut batch_size = 1u32;
-    let mut context_tokens = 8192u32;
-    let mut artifact_paths: Vec<PathBuf> = Vec::new();
-    let mut output_path: Option<PathBuf> = None;
-    let mut report_runtime: Option<String> = None;
-    let mut sign = false;
-    let mut upload = false;
-    let mut scenario: Option<String> = None;
-    let mut recipe: Option<PathBuf> = None;
-    let mut workflow_out: Option<PathBuf> = None;
-    let mut execute = false;
-    let mut print_command = false;
-    let mut settle_claim_id: Option<String> = None;
-    let mut model_release_id: Option<String> = None;
-    let mut quantization_profile_id: Option<String> = None;
-
-    let mut index = 0;
-    while index < raw_args.len() {
-        let raw = &raw_args[index];
-        if raw == "--help" || raw == "-h" {
-            return Ok(None);
-        }
-        let (flag, inline_value) = match raw.split_once('=') {
-            Some((name, value)) => (name.to_string(), Some(value.to_string())),
-            None => (raw.clone(), None),
-        };
-        if !flag.starts_with("--") {
-            return Err(format!("unexpected argument '{raw}'"));
-        }
-
-        let take_value = |index: &mut usize| -> Result<String, String> {
-            if let Some(value) = inline_value.clone() {
-                return Ok(value);
-            }
-            *index += 1;
-            raw_args
-                .get(*index)
-                .cloned()
-                .ok_or_else(|| format!("missing value for '{flag}'"))
-        };
-
-        match flag.as_str() {
-            "--runtime" => {
-                let value = take_value(&mut index)?;
-                runtime = Some(parse_runtime(&value)?);
-            }
-            "--model" => model = take_value(&mut index)?,
-            "--prompt-tokens" => prompt_tokens = parse_u32(&flag, &take_value(&mut index)?)?,
-            "--generated-tokens" => generated_tokens = parse_u32(&flag, &take_value(&mut index)?)?,
-            "--batch-size" => batch_size = parse_u32(&flag, &take_value(&mut index)?)?,
-            "--context-tokens" => context_tokens = parse_u32(&flag, &take_value(&mut index)?)?,
-            "--artifact" => artifact_paths.push(PathBuf::from(take_value(&mut index)?)),
-            "--output" => output_path = Some(PathBuf::from(take_value(&mut index)?)),
-            "--report-runtime" => report_runtime = Some(take_value(&mut index)?),
-            "--scenario" => scenario = Some(take_value(&mut index)?),
-            "--recipe" => recipe = Some(PathBuf::from(take_value(&mut index)?)),
-            "--workflow-out" => workflow_out = Some(PathBuf::from(take_value(&mut index)?)),
-            "--execute" => execute = true,
-            "--print-command" => print_command = true,
-            "--settle-claim" => settle_claim_id = Some(take_value(&mut index)?),
-            "--model-release-id" => model_release_id = Some(take_value(&mut index)?),
-            "--quantization-profile-id" => quantization_profile_id = Some(take_value(&mut index)?),
-            "--sign" => sign = true,
-            "--upload" => upload = true,
-            other => return Err(format!("unknown argument '{other}'")),
-        }
-        index += 1;
-    }
-
-    let runtime = runtime.ok_or_else(|| {
-        "missing required argument '--runtime <llama_cpp|ollama|comfyui|mock>'".to_string()
-    })?;
-    if let Runtime::ComfyUi = runtime {
-        scenario.as_ref().ok_or_else(|| {
-            "missing required argument '--scenario <json|->' for --runtime comfyui".to_string()
-        })?;
-        recipe.as_ref().ok_or_else(|| {
-            "missing required argument '--recipe <path>' for --runtime comfyui".to_string()
-        })?;
-    }
-    if settle_claim_id.is_some() && !upload {
-        return Err(
-            "--settle-claim requires --upload (the run must be submitted to settle the claim)"
-                .to_string(),
-        );
-    }
-    Ok(Some(CliArgs {
-        runtime,
-        model,
-        prompt_tokens,
-        generated_tokens,
-        batch_size,
-        context_tokens,
-        artifact_paths,
-        output_path,
-        report_runtime,
-        sign,
-        upload,
-        scenario,
-        recipe,
-        workflow_out,
-        execute,
-        print_command,
-        settle_claim_id,
-        model_release_id,
-        quantization_profile_id,
-    }))
-}
-
 fn parse_runtime(value: &str) -> Result<Runtime, String> {
     match value {
         "llama_cpp" => Ok(Runtime::LlamaCpp),
@@ -703,12 +735,6 @@ fn parse_runtime(value: &str) -> Result<Runtime, String> {
             "invalid value for '--runtime': '{other}' (expected one of: llama_cpp, ollama, comfyui, mock)"
         )),
     }
-}
-
-fn parse_u32(flag: &str, value: &str) -> Result<u32, String> {
-    value
-        .parse::<u32>()
-        .map_err(|_| format!("invalid value for '{flag}': '{value}' (expected a positive integer)"))
 }
 
 fn print_topology(topology: &collect_system_topology::SystemTopology) {
@@ -849,8 +875,8 @@ mod tests {
             .split(' ')
             .map(|quoted| unquote_token(quoted))
             .collect();
-        let reparsed = parse_args(&tokens[1..]).expect("reparsed");
-        let cli = reparsed.expect("some cli");
+        let clap_cli = Cli::try_parse_from(&tokens).expect("reparsed through clap");
+        let cli = build_cli_args(&clap_cli).expect("validated");
         assert!(matches!(cli.runtime, Runtime::Ollama));
         assert_eq!(cli.model, "qwen2.5-coder:32b");
         assert_eq!(cli.prompt_tokens, 4096);
@@ -884,10 +910,10 @@ mod tests {
 
     #[test]
     fn print_command_flag_parses_without_other_flags() {
-        let parsed = parse_args(&args(&["--runtime", "mock", "--print-command"]))
-            .expect("parsed")
-            .expect("some cli");
-        assert!(parsed.print_command);
+        let clap_cli = Cli::try_parse_from(args(&["benchmark-probe", "--runtime", "mock", "--print-command"]))
+            .expect("parsed");
+        assert!(clap_cli.print_command);
+        assert_eq!(clap_cli.runtime.as_deref(), Some("mock"));
     }
 
     /// Minimal inverse of `shell_quote` for round-trip assertions above.
@@ -902,62 +928,8 @@ mod tests {
 
 // ── L03A: `lab` — TPE search over llama.cpp serving flags (stub proof) ──
 
-fn lab_usage() {
-    println!(
-        "usage: benchmark-probe lab --stub [--trials N] [--seed N] [--out DIR] [--json]\n\n\
-         Runs the intelligent (TPE) search over the llama.cpp serving space.\n\
-         --stub   required in L03A: deterministic SIMULATED measurements\n\
-         --trials search budget (default 60)\n\
-         --seed   RNG seed (default 42)\n\
-         --out    labs root directory (default experiments/)\n\
-         --json   machine-readable best.json on stdout"
-    );
-}
-
-fn cmd_lab(args: &[String]) {
-    let mut stub = false;
-    let mut trials: usize = 60;
-    let mut seed: u64 = 42;
-    let mut out_root = PathBuf::from("experiments");
-    let mut json = false;
-    let mut i = 0;
-    while i < args.len() {
-        match args[i].as_str() {
-            "--stub" => stub = true,
-            "--trials" => {
-                i += 1;
-                trials = args.get(i).and_then(|v| v.parse().ok()).unwrap_or_else(|| {
-                    eprintln!("lab: --trials needs a number");
-                    exit(2);
-                });
-            }
-            "--seed" => {
-                i += 1;
-                seed = args.get(i).and_then(|v| v.parse().ok()).unwrap_or_else(|| {
-                    eprintln!("lab: --seed needs a number");
-                    exit(2);
-                });
-            }
-            "--out" => {
-                i += 1;
-                out_root = args.get(i).map(PathBuf::from).unwrap_or_else(|| {
-                    eprintln!("lab: --out needs a directory");
-                    exit(2);
-                });
-            }
-            "--json" => json = true,
-            "--help" | "-h" => {
-                lab_usage();
-                exit(0);
-            }
-            other => {
-                eprintln!("lab: unknown flag {other}");
-                lab_usage();
-                exit(2);
-            }
-        }
-        i += 1;
-    }
+fn cmd_lab(cfg: LabConfig) {
+    let LabConfig { stub, trials, seed, out_root, json } = cfg;
     if !stub {
         eprintln!("lab: only --stub is available in L03A — the real objective lands when the owner brings the 3090 up (SIM)");
         exit(2);

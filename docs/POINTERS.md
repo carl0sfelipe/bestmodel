@@ -49,6 +49,7 @@ STALE (do not treat as prod):
 
 | Path | Why stale |
 |---|---|
+| `docs/direction-2026-09-19.md` § D4 item 3 | Superseded by `docs/direction-2026-09-21.md` D4/D8 (catalog, not the PR #11 hand-edit). The rest of v3 still binds |
 | `docs/architecture.md` | 2026-08 graph: no web-next, no OAuth, no Omarchy, no S23 dual-path |
 | `docs/en/deploy.md` | Still beelink + Vercel `/v1` rewrite + Pages as DNS cutover |
 | `README.md` “What's here” / `apps/web` | Prod front is `apps/web-next` |
@@ -71,9 +72,20 @@ the executor to implement the record in the same turn. Do not invent cells.
 | 4 | OPEN | `docs/handoffs/2026-09-21-3d-gen-intent.md` | rig3d dump; `image-to-3d` root; do not submit | whole |
 | 5 | OPEN | `docs/direction-2026-08-29.md` | D1 chronic cause, D2.5 modality registry | D1–D2 only |
 | 6 | OPEN | `docs/direction-2026-09-19.md` | v3 D4 hand-edit of PR #11 is the line under review | D4 + order row 7 |
+| 7 | OPEN | `docs/direction-2026-09-21.md` | Plan output for this escalation. S37 implements it | whole |
 
 SKIP: application source, except the paths named in the escalation §2.
 SKIP: `docs/ESCALACAO-FABLE-2026-09-19.md` (already decided; do not re-litigate D1–D7).
+
+---
+
+## Job: add-intent
+
+| Verb | Path | One line |
+|---|---|---|
+| OPEN | `packages/intent-catalog/AGENTS.md` | the only edit that adds an intent |
+| OPEN | `specs/en/S37-intent-catalog.md` | acceptance commands |
+| SKIP | `docs/direction-2026-09-19.md` § D4 item 3 | superseded by `docs/direction-2026-09-21.md` |
 
 ---
 

@@ -10,7 +10,8 @@ English.
 | `FABLE-BRIEF-2026-09-19.md` | Pacote mínimo para o Fable (arquitetura atual + auditoria 48h). Começa aqui numa escalada. | Job `fable-escalation`, after POINTERS |
 | `ESCALACAO-FABLE-2026-09-19.md` | Pedido D1–D7 (Omarchy + OAuth); Fable decide, não implementa | Escalada estratégica 19/09 |
 | `HANDOFF-OMARCHY-2026-09-18.md` | Retrato de prod no desktop Omarchy (substitui o HANDOFF do beelink) | Estado da máquina |
-| `direction-2026-09-19.md` | Fable v3 decision record (D1–D7 sized + execution order + H5–H12) | Before executing anything post-incident |
+| `direction-2026-09-19.md` | Fable v3 decision record (D1–D7 sized + execution order + H5–H12). D4 item 3 superseded by the 2026-09-21 record | Before executing anything post-incident |
+| `direction-2026-09-21.md` | Fable decision: one intent catalog (S37). v3 D4 item 3 no longer binds | Before adding an intent |
 | `ESCALACAO-FABLE-2026-09-21.md` | Clarify: one way to add an intent (music + image-to-3d). Fable decides, executor implements the record | Job `fable-escalation-2026-09-21` |
 | `handoffs/2026-09-21-music-intent.md` | Dump of draft PR #11. Not implementation | That escalation only |
 | `handoffs/2026-09-21-3d-gen-intent.md` | Dump of the rig3d image-to-3d session. Not implementation; do not submit | That escalation only |

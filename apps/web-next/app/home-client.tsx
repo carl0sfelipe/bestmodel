@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { INTENTS, isMultimodal } from "@/lib/intents";
 
 export type Answer = {
   name: string;
@@ -16,17 +17,6 @@ export type Answer = {
 };
 export type AnswerIndex = Record<string, Answer[]>;
 export type RigOption = { key: string; label: string; runCount: number };
-
-/** The six from the approved prototype. Only text has pool data; the rest are
-    visible and honestly disabled rather than quietly dropped. */
-const INTENTS = [
-  { id: "chat", name: "Chat", glyph: "▭", desc: "text generation · reasoning", category: "chat" },
-  { id: "code", name: "Code", glyph: "<", desc: "completion · refactor", category: "code" },
-  { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: "image" },
-  { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: "audio" },
-  { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: "video" },
-  { id: "vision", name: "Vision", glyph: "◉", desc: "image understanding", category: null },
-] as const;
 
 const BITS = [4, 5, 6, 8, 16] as const;
 
@@ -105,7 +95,7 @@ export default function HomeClient({
   const [context, setContext] = useState<number>(0);
 
   const category = INTENTS.find((item) => item.id === intent)?.category ?? null;
-  const multimodal = category === "image" || category === "audio" || category === "video";
+  const multimodal = isMultimodal(intent);
 
   // Which quantizations this rig + intent actually has cells for. Unavailable
   // ones stay visible but disabled — the absence is information.

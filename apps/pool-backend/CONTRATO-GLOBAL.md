@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS lm_model(
   slug TEXT PRIMARY KEY, hf_id TEXT NOT NULL, display_name TEXT NOT NULL,
   family TEXT, params_b REAL, active_params_b REAL,
   is_moe INTEGER NOT NULL DEFAULT 0,
-  category TEXT NOT NULL CHECK(category IN ('chat','code')),
+  category TEXT NOT NULL CHECK(category IN ('chat','code','image','audio','music','video','image-to-3d')),
   eval_score REAL, raw_json TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS lm_rig(
   key TEXT PRIMARY KEY, label TEXT NOT NULL, hw_class TEXT NOT NULL,
@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS plausibility_flag(
   verdict TEXT NOT NULL CHECK(verdict IN ('ok','suspicious','impossible','exempt')),
   reason TEXT NOT NULL, computed_at TEXT NOT NULL);
 ```
+
+Storable `lm_model.category` values come from `packages/intent-catalog/catalog.json` (`category_check_sql()`). This CHECK line must match that string. Vision is listed in the catalog and is not storable. `lm_run.tok_s_out` stays `NOT NULL`; music and image-to-3d are categories, not runs.
 
 Regras de identidade (rigKey, slug, category, quant->bits, seed de
 bandwidth): EXATAMENTE as do contrato web §4 e §6. Os campos

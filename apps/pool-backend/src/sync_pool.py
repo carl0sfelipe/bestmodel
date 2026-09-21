@@ -20,6 +20,7 @@ import httpx
 
 from src.config import API_BASE, DB_PATH, THROTTLE_MS, USER_AGENT
 from src.db import connect, migrate
+from src.intents import classify
 
 SPEED_TEST_LIMIT = 100
 MODELS_LIMIT = 200
@@ -190,8 +191,9 @@ def seed_bandwidth(identity: dict, hw_class: str) -> float | None:
     return BANDWIDTH_SEED_GBS[matches[0]]
 
 
-def model_category(display_name: str) -> str:
-    return "code" if re.search(r"coder|starcoder|codestral|code", display_name, re.I) else "chat"
+def model_category(display_name: str, hf_id: str = "") -> str:
+    """Classify via the intent catalog. File order is match precedence."""
+    return classify(display_name, hf_id)
 
 
 def _compact(raw: dict) -> str:
@@ -224,7 +226,7 @@ def model_row_from_catalog(raw: dict) -> dict:
         "params_b": _real_or_none(raw.get("params")),
         "active_params_b": _real_or_none(raw.get("activeParams")),
         "is_moe": 1 if raw.get("isMoE") else 0,
-        "category": model_category(raw["displayName"]),
+        "category": model_category(raw["displayName"], raw.get("hfId") or ""),
         "eval_score": _eval_score_value(raw),
         "raw_json": _compact(raw),
     }
@@ -241,7 +243,7 @@ def model_row_from_run_model(run_model: dict) -> dict:
         "params_b": _real_or_none(run_model.get("params")),
         "active_params_b": None,
         "is_moe": 0,
-        "category": model_category(display),
+        "category": model_category(display, run_model.get("hfId") or ""),
         "eval_score": None,
         "raw_json": _compact(run_model),
     }

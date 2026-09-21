@@ -192,3 +192,57 @@ Validações rápidas de sanidade: `make gate` (e2e completo), `uv run pytest ap
 ---
 
 *Última atualização deste documento: pós-S22 (`083b29e`), 233 testes verdes, 551 claims em produção.*
+
+---
+
+## Redesign 2026-09-21 (Fable Clarify → Plan; web surface only)
+
+Escalation: owner reported a critical failure — the site has no first step for
+the CLI; the console is ugly and does not feel like a social network; every page
+should offer a human view and an agent/TUI view. Fable returned a decision
+record + right-sized spec cluster (`specs/en/L04-web-redesign-dual-view.md`);
+ZCode implements via llms.surf, one PR per story, mechanical oracle per story.
+Out of scope (unchanged in this HANDOFF): D4 per-user signing keys, C2 duels,
+bestmodel-cloud.
+
+Decisions (full text in L04):
+
+- **D1 (epic → S32)**: `?as=human|agent` becomes a native, server-resolved
+  contract in web-next (middleware + helper, UA fallback, human default). Kills
+  the "dual view only in the non-prod Pages copy" divergence.
+- **D2 (epic → S34)**: console redesigned into a social surface (identity header
+  · feed cards with handle/basis/provenance · recognition) over endpoints that
+  already ship — no new backend. Kills the utilitarian, identity-less console.
+- **D3 (story → S33)**: add a `/cli` getting-started route sourced from the
+  verified `docs/agent-quickstart.md`, documenting only shipped subcommands
+  (`benchmark-probe`, `lab`); `plan`/`report`/`contribute` quarantined as "not
+  shipped". Kills the `/cli` 404 dead-end.
+- **D4 (folded into S33)**: delete the phantom `curl … canirun.it/sh` installer
+  slot; keep "no one-line installer yet". Kills the fake installer.
+- **D5 (story → S36)**: retire the GitHub Pages divergence — redirect to
+  `www.bestmodel.run`, freeze `apps/web/site` as archive. Kills the second
+  source of truth.
+- **D6 (backlog line)**: a real hosted installer is future work, not V1.
+- **D7 (rejection)**: duels / DMs / real-time / new points mechanics are out of
+  console V1 (no data; C2 stays in HANDOFF).
+- **D8 (story → S35)**: the agent/TUI twin covers ALL prod routes; per-route
+  work parallelizes after S32.
+- **D9 (contract)**: any route/view change updates `apps/web/site/llms.txt` in
+  the same cut.
+
+Spec map & order for ZCode dispatch:
+
+| Story | Title | Depends on |
+|---|---|---|
+| S32 | Server-resolved `?as=` dual view (mechanism + `/`, `/wall`) | — |
+| S33 | `/cli` route + nav + kill phantom installer + `llms.txt` | S32 |
+| S34 | Console as a social surface (existing APIs only) | — |
+| S35 | Agent/TUI twin rollout across remaining routes | S32 |
+| S36 | Retire the Pages divergence (redirect + freeze) | S35 |
+
+Parallel lanes: `{S34}` ∥ `{S32 → S33, S32 → S35 → S36}`. Each story carries a
+mechanical oracle (`specs/en/oracles/S3x.sh`, red→green via route status /
+`curl | grep` / source `grep`). Guardrails: web surface only — a diff touching
+`apps/public-api/`, `apps/intake-worker/`, `infra/migrations/` or `kernel/` is
+out of contract; new copy obeys the honesty ladder and documents no CLI
+subcommand not dispatched in `cli/benchmark-probe/src/main.rs`.

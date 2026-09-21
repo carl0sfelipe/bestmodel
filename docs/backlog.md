@@ -236,3 +236,14 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   submit com source_url, perfil) permanece em
   llms.surf/docs/go-live/PROMPT-CLAUDE-DESIGN-S29-REDE-DE-CAPTURA.md
   para quando o dono quiser a camada dinâmica da rede.
+
+## L04 (2026-09-21): web redesign — dual view + CLI getting-started + social console
+
+- Escalation (owner): site has no first step for the CLI; console is not a
+  social network; every page should have a human view and an agent/TUI view.
+  Decision record + spec cluster in `specs/en/L04-web-redesign-dual-view.md`
+  (stories S32–S36). Web surface only.
+- **Backlog line (D6)**: a real hosted one-line installer (e.g.
+  `bestmodel.run/install.sh`) is future work — no install script exists to host
+  yet, so V1 documents the from-source build only. Until it exists, the site
+  must not render an install one-liner (D4 removed the phantom `canirun.it/sh`).

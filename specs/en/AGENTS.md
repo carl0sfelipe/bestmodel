@@ -22,6 +22,12 @@ commit time); L01+ is the active frontier.
 | L01-cli-v2-local-lab | PLANNED (Phase 1) | stories L01–L07 inside |
 | L02-social-platform | PLANNED (Phase 1) | stories S13–S18 inside |
 | L03-engine-unification | DONE (U0–U6, 2026-08-28) | engine port complete: domain schema+kernels (U1), migrations 0011/0012 (U2), comfyui adapter (U3), reported/transparency API (U4), canirunit CLI + harvester (U5); engine lineage frozen as archive |
+| L04-web-redesign-dual-view | PLANNED (2026-09-21) | web redesign epic + decision record; stories S32–S36 |
+| S32-web-dual-view-mechanism | PLANNED | server-resolved `?as=` dual view (mechanism + `/` and `/wall` twins) |
+| S33-cli-getting-started-route | PLANNED | `/cli` route + nav + kill phantom installer + `llms.txt` |
+| S34-console-social-surface | PLANNED | console restyled into a social surface over existing endpoints |
+| S35-agent-twin-rollout | PLANNED | agent/TUI twin across the remaining prod routes |
+| S36-retire-pages-divergence | PLANNED | redirect + freeze the GitHub Pages copy |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

@@ -1,0 +1,60 @@
+/* tokens.css — the locked system (S43). Single source of truth for every
+   color/type/space/motion value in web-next (see design.md). globals.css and
+   every page rule reference these by name — never a raw value (gate 48).
+   Historical short names are kept verbatim so shipped rules do not break;
+   new tokens follow the category prefixes declared in design.md. */
+:root{
+  /* color */
+  --bg:#0B0C0E;
+  --surface:#121417;
+  --surface-2:#181B20;
+  --surface-3:#1F2328;
+  --hair:rgba(255,255,255,.08);
+  --hair-strong:rgba(255,255,255,.16);
+  --ink:#EDEEF0;
+  --muted:#8B9096;
+  --dim:#4A4F57;
+  --amber:#E0A458;
+  --amber-soft:rgba(224,164,88,.08);
+  --amber-line:rgba(224,164,88,.28);
+  --green:#9BC4A9;
+  --green-line:rgba(155,196,169,.32);
+  --red:#D67B7B;
+  --red-line:rgba(214,123,123,.32);
+  --focus:var(--amber);
+  --focus-on-accent:var(--bg);
+
+  /* font */
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --display:'Inter Tight','Inter',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+
+  /* space (4px scale) */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+  --space-8:64px;
+  --field-h:44px;
+
+  /* text (mono sizes; display sizes stay per-macrostructure by design) */
+  --text-xs:10px;
+  --text-s:11px;
+  --text-m:12px;
+  --text-l:13px;
+
+  /* ease + duration (reduced-motion collapses these globally) */
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
+  --dur-fast:140ms;
+  --dur-base:240ms;
+  --dur-slow:560ms;
+
+  /* radius */
+  --radius-s:8px;
+  --radius-m:12px;
+  --radius-p:999px;
+}

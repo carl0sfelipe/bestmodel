@@ -70,6 +70,10 @@ workaround": do not hardcode a fake cell/handle/stat into the page). Do not
 inline raw colour/font values — reference locked tokens by name. Do not touch
 the `?as=` agent branch, the middleware, or the twins. Do not weaken the L04
 S32 home oracle.
+- Gate clause: do not invent a number, metric, handle or copy beyond the ones
+  listed in Verified data; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stubbed success or a fake badge as a
+  workaround — implement the real capability.
 
 ## Verified data (2026-09-21)
 
@@ -98,8 +102,12 @@ App up: `cd apps/web-next && pnpm install && pnpm build && pnpm start &`
 - comando: cd apps/web-next && pnpm install && pnpm build && pnpm start & sleep 8; U=http://localhost:3000; test -f design.md && test -f tokens.css && curl -s "$U/?as=human" | grep -q 'data-view="human"' && curl -s "$U/?as=agent" | grep -q 'data-view="agent"' && ! (curl -s "$U/" | tr '\n' ' ' | grep -Eiq '<h[12][^>]*>[^<]*<br') && ! (curl -s "$U/" | grep -Eiwq 'delve|leverage|robust|seamless|elevate|supercharge|harness|unlock|realm|tapestry|paradigm') && curl -s "$U/" | grep -Eq 'measured|reported|no data yet'
 - exit esperado: 0 — the home serves a human view with the locked system, no
   slop copy, basis intact, and the L04 twin still green. Before the rework the
-  same command fails at the `<br/>` headline check (the home/`page-head` pattern
-  still ships it) — the clean red state.
+  same command fails at the `test -f design.md`/`tokens.css` check (the locked
+  system does not exist yet). Amendment note: the home today splits its
+  headlines with italic `<em>`, not a literal `<br/>` (gate 38a is the red
+  pattern here), and ships the per-word stagger reveal and the generic 3-card
+  stats grid this story retires — the red state is the missing system files,
+  not a `<br/>` grep.
 
 ## Documented hallmark self-critique (implementer fills in the PR — no mechanical oracle)
 

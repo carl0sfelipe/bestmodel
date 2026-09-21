@@ -38,7 +38,9 @@ const CONTEXTS = [
   { value: 32768, label: "32k" },
 ] as const;
 
-/** Reveals a section once it enters the viewport, like the prod narrative. */
+/** Reveals a section once it enters the viewport — a plain reduced-motion-safe
+    fade. The per-word stagger reveal retired with the S43 craft pass (L06 D6:
+    it read as a template tell, and it delayed the answer for no reason). */
 function useReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [on, setOn] = useState(false);
@@ -66,16 +68,47 @@ function useReveal<T extends HTMLElement>() {
   return { ref, on };
 }
 
-function Words({ text }: { text: string }) {
+/** The hand-built ecosystem diagram, reinstated from the frozen archive
+    (S43 / L06 D4) and redrawn to what ships today: every node below is a real
+    component of this repo — community pool (data/derived), the Rust CLI loop
+    (lab · plan · report · contribute), signed Ed25519 capture (/submit +
+    intake), the REST API (apps/public-api), the agent twins (?as=agent +
+    llms.txt) and the roofline predictors (packages/roofline-kernel). No
+    planned or invented nodes appear. */
+function Ecosystem() {
+  const nodes: Array<{
+    x: number;
+    y: number;
+    r?: number;
+    name: string;
+    sub: string;
+    lx: number;
+    ly: number;
+    anchor: "start" | "middle" | "end";
+  }> = [
+    { x: 140, y: 100, name: "community pool", sub: "measured cells", lx: 140, ly: 48, anchor: "middle" },
+    { x: 680, y: 90, name: "Rust CLI", sub: "lab · plan · report · contribute", lx: 680, ly: 38, anchor: "middle" },
+    { x: 720, y: 320, name: "REST API", sub: "api.bestmodel.run/v1", lx: 728, ly: 372, anchor: "end" },
+    { x: 540, y: 400, name: "predictors", sub: "roofline kernel", lx: 540, ly: 440, anchor: "middle" },
+    { x: 240, y: 410, name: "agent twins", sub: "?as=agent · llms.txt", lx: 240, ly: 440, anchor: "middle" },
+    { x: 80, y: 290, name: "signed capture", sub: "Ed25519 runs · /submit", lx: 72, ly: 340, anchor: "start" },
+  ];
   return (
-    <>
-      {text.split(" ").map((word, i) => (
-        <span className="w" key={`${word}-${i}`}>
-          {word}
-          {i < text.split(" ").length - 1 ? " " : ""}
-        </span>
+    <svg className="eco-svg" viewBox="0 0 800 460" role="img" aria-label="Diagram of the bestmodel.run loop: community pool, Rust CLI, REST API, roofline predictors, agent twins and signed capture, all feeding the engine.">
+      {nodes.map((node) => (
+        <line key={`ln-${node.name}`} className="eco-line" x1="400" y1="225" x2={node.x} y2={node.y} />
       ))}
-    </>
+      <circle className="eco-node center" cx="400" cy="225" r="46" />
+      <text className="eco-core-lbl" x="400" y="222" textAnchor="middle">bestmodel.run</text>
+      <text className="eco-sub" x="400" y="240" textAnchor="middle">engine</text>
+      {nodes.map((node) => (
+        <g key={`nd-${node.name}`}>
+          <circle className="eco-node" cx={node.x} cy={node.y} r="26" />
+          <text className="eco-lbl" x={node.lx} y={node.ly} textAnchor={node.anchor}>{node.name}</text>
+          <text className="eco-sub" x={node.lx} y={node.ly + 15} textAnchor={node.anchor}>{node.sub}</text>
+        </g>
+      ))}
+    </svg>
   );
 }
 
@@ -94,10 +127,9 @@ export default function HomeClient({
   totals: { runs: number; models: number; rigs: number };
   snapshotAt: string;
 }) {
-  const hero = useReveal<HTMLElement>();
-  const picker = useReveal<HTMLElement>();
-  const scale = useReveal<HTMLElement>();
-  const honesty = useReveal<HTMLElement>();
+  const bench = useReveal<HTMLElement>();
+  const ladder = useReveal<HTMLElement>();
+  const eco = useReveal<HTMLElement>();
 
   const [intent, setIntent] = useState<string>("chat");
   const [rig, setRig] = useState<string>(rigs[0]?.key ?? "");
@@ -158,19 +190,22 @@ export default function HomeClient({
 
   return (
     <main>
-      {/* ---------------------------------------------------------- scene 01 */}
-      <section className={`scene lead scene-reveal${picker.on ? " on" : ""}`} ref={picker.ref}>
-        <p className="overline">01 — the question</p>
-        <h1 className="scene-head">
-          <Words text="What do you" />
-          <em>
-            <Words text=" want to run?" />
-          </em>
-        </h1>
-        <p className="scene-sub">
+      {/* --------------------------------------------- workbench (the hero) */}
+      <section className={`bench scene-reveal${bench.on ? " on" : ""}`} ref={bench.ref}>
+        <p className="bench-frame">
+          <span className="t">$ bestmodel.run — workbench</span>
+          <span>pool snapshot {snapshotAt.slice(0, 10)}</span>
+          <span>
+            {totals.runs.toLocaleString("en-US")} runs · {totals.models.toLocaleString("en-US")}{" "}
+            models · {totals.rigs.toLocaleString("en-US")} rigs
+          </span>
+          <span>every number declares its basis</span>
+        </p>
+        <h1 className="bench-head">What do you want to run?</h1>
+        <p className="bench-sub">
           Intent, machine, quantization and context are four separate decisions, so they get four
-          separate controls. Nothing is fused, and nothing is estimated — if the pool has never
-          tested a combination, it says so.
+          separate controls. Nothing is fused and nothing is estimated — a combination the pool
+          has never tested says so.
         </p>
 
         <div className="mad">
@@ -185,13 +220,13 @@ export default function HomeClient({
                   type="button"
                   className="opt"
                   aria-pressed={intent === item.id}
-                   disabled={item.id === "vision"}
-                   title={item.id === "vision" ? "no community data yet" : item.desc}
+                  disabled={item.id === "vision"}
+                  title={item.id === "vision" ? "no community data yet" : item.desc}
                   onClick={() => setIntent(item.id)}
                 >
                   <span aria-hidden="true">{item.glyph}</span>
                   {item.name}
-                   {item.id === "vision" && <span className="why">no data</span>}
+                  {item.id === "vision" && <span className="why">no data</span>}
                 </button>
               ))}
             </div>
@@ -229,7 +264,7 @@ export default function HomeClient({
                     type="button"
                     className="opt"
                     aria-pressed={bits === bit}
-                   disabled={!has}
+                    disabled={!has}
                     title={has ? undefined : "no tested cell at this quantization"}
                     onClick={() => setBits(bit)}
                   >
@@ -346,72 +381,19 @@ export default function HomeClient({
             </>
           )}
         </div>
-      </section>
 
-      {/* ---------------------------------------------------------- scene 02 */}
-      <section className={`scene scene-reveal${hero.on ? " on" : ""}`} ref={hero.ref}>
-        <p className="overline">02 — the answer</p>
-        <h2 className="scene-head">
-          <Words text="Your machine already" />
-          <em>
-            <Words text=" has an answer." />
-          </em>
-        </h2>
-        <p className="scene-sub">
-          You just asked it. What came back is not a spec-sheet estimate — it is what{" "}
-          {totals.runs.toLocaleString("en-US")} community runs on real hardware actually recorded,
-          with the basis printed beside every number.
+        <p className="bench-source">
+          The verdict above is the pool answering, live from {totals.runs.toLocaleString("en-US")}{" "}
+          community runs on real hardware. Frozen snapshot {snapshotAt.slice(0, 10)} — basis printed
+          beside every number, ranking provisional.{" "}
+          <Link href="/wall">Read the pool yourself</Link> or{" "}
+          <Link href="/hardware">start from hardware</Link>.
         </p>
-        <div className="actions">
-          <Link className="btn primary" href="/claims">
-            See the wall
-          </Link>
-          <Link className="btn" href="/hardware">
-            Start from hardware
-          </Link>
-        </div>
       </section>
 
-      {/* ---------------------------------------------------------- scene 03 */}
-      <section className={`scene scene-reveal${scale.on ? " on" : ""}`} ref={scale.ref}>
-        <p className="overline">03 — the pool</p>
-        <h2 className="scene-head">
-          <Words text="Measured beats" />
-          <em>
-            <Words text=" reported." />
-          </em>
-        </h2>
-        <p className="scene-sub">
-          A cell becomes <em>measured</em> at three runs. Below that it stays visibly{" "}
-          <em>reported</em>, and a combination nobody has tested renders as no data yet rather than
-          as a plausible-looking estimate.
-        </p>
-        <div className="stats-grid">
-          <div className="card">
-            <div className="stat-value">{totals.runs.toLocaleString("en-US")}</div>
-            <div className="stat-label">runs in the pool</div>
-          </div>
-          <div className="card">
-            <div className="stat-value">{totals.models.toLocaleString("en-US")}</div>
-            <div className="stat-label">models indexed</div>
-          </div>
-          <div className="card">
-            <div className="stat-value">{totals.rigs.toLocaleString("en-US")}</div>
-            <div className="stat-label">reference rigs</div>
-          </div>
-        </div>
-        <p className="note">Frozen snapshot {snapshotAt.slice(0, 10)} — not live throughput.</p>
-      </section>
-
-      {/* ---------------------------------------------------------- scene 04 */}
-      <section className={`scene scene-reveal${honesty.on ? " on" : ""}`} ref={honesty.ref}>
-        <p className="overline">04 — the ladder</p>
-        <h2 className="scene-head">
-          <Words text="Every number" />
-          <em>
-            <Words text=" declares its basis." />
-          </em>
-        </h2>
+      {/* ------------------------------------------------------ the ladder */}
+      <section className={`scene scene-reveal${ladder.on ? " on" : ""}`} ref={ladder.ref}>
+        <h2 className="craft-head">Every number declares its basis</h2>
         <div className="term">
           <div>
             <span className="p">$</span> basis --explain
@@ -438,10 +420,20 @@ export default function HomeClient({
           <Link className="btn primary" href="/submit">
             Capture a run
           </Link>
-          <Link className="btn" href="/wall">
-            Read the pool
+          <Link className="btn" href="/claims">
+            See the wall
           </Link>
         </div>
+      </section>
+
+      {/* ------------------------------------------- the loop (hand-drawn) */}
+      <section className={`scene scene-reveal${eco.on ? " on" : ""}`} ref={eco.ref}>
+        <h2 className="craft-head">The loop that feeds the engine</h2>
+        <p className="craft-sub">
+          Nothing on this diagram is planned — every node is a component that ships in the repo
+          today, and the engine is only as honest as the loop that feeds it.
+        </p>
+        <Ecosystem />
       </section>
     </main>
   );

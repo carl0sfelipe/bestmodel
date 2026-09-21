@@ -12,33 +12,42 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#0B0C0E" };
 
-// "The wall" now names the capture feed at /claims — the social surface.
-// The measured pool keeps its route at /wall and is labelled "Pool", which is
-// what it has always actually been. Route, content and metadata are unchanged.
+// Chrome per design.md (S43): a mono masthead (brand + one-line tagline, then
+// an index row) instead of the N1a single-row fingerprint, and a statement
+// footer — the honesty ladder as a sentence — instead of a link farm.
+// "The wall" names the capture feed at /claims; the measured pool is "Pool".
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const view = await currentView();
   return (
     <html lang="en" data-view={view}>
       <body>
-        <header className="site-nav">
-          <Link className="brand" href="/">$bestmodel.run</Link>
-          <nav>
-            <Link href="/cli">Get started</Link>
-            <Link href="/claims">The wall</Link>
-            <Link href="/submit">Capture</Link>
-            <Link href="/wall">Pool</Link>
-            <Link href="/hardware">Hardware</Link>
-            <Link href="/cloud-anchors">Cloud anchors</Link>
-            <Link href="/track-record">Track record</Link>
-            <Link href="/mural">Mural</Link>
-            <Link href="/console">Console</Link>
+        <header className="site-nav masthead">
+          <div className="mast-top">
+            <Link className="brand" href="/">$ bestmodel.run</Link>
+            <p className="mast-tag">an honest compatibility engine for local AI</p>
+            <ViewToggle view={view} />
+          </div>
+          <nav className="mast-index" aria-label="Site index">
+            <Link href="/cli">get started</Link>
+            <Link href="/claims">the wall</Link>
+            <Link href="/submit">capture</Link>
+            <Link href="/wall">pool</Link>
+            <Link href="/hardware">hardware</Link>
+            <Link href="/cloud-anchors">cloud anchors</Link>
+            <Link href="/track-record">track record</Link>
+            <Link href="/mural">mural</Link>
+            <Link href="/console">console</Link>
           </nav>
-          <ViewToggle view={view} />
         </header>
         {children}
-        <footer>
-          <span>bestmodel.run</span>
-          <span>community pool data · every number declares its basis</span>
+        <footer className="statement">
+          <p className="statement-line">
+            $ bestmodel.run — measured &gt; reported &gt; extrapolated &gt; formula &gt; no data yet.
+          </p>
+          <p className="statement-note">
+            Every number on this site declares its basis. The pool is a frozen snapshot, not live
+            throughput.
+          </p>
         </footer>
       </body>
     </html>

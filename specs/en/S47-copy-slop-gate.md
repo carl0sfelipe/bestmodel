@@ -42,6 +42,10 @@ inline ignore to fake a pass (anti-phantom). The analogue of "never use
 grep instead of rewriting it. The gate greps source, so it must not be defeated by moving
 slop into a data file it does not scan — extend the scan instead. Reference S43
 tokens by name.
+- Gate clause: do not invent a number, metric or copy beyond the ones listed in
+  Verified data; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stubbed success or a fake badge as a
+  workaround — implement the real capability.
 
 ## Verified data (2026-09-21)
 

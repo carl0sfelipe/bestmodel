@@ -178,11 +178,7 @@ export default function SubmitClient({ labels }: { labels: ModelLabel[] }) {
     <main>
       <section className="page-head">
         <p className="kicker">bestmodel.run / capture</p>
-        <h1>
-          Bring the number in
-          <br />
-          from the wild.
-        </h1>
+        <h1>Bring the number in from the wild</h1>
         <p>
           Two ways in, and they are not the same claim. One is something you saw someone else post;
           the other is something you ran. Pick the honest one.

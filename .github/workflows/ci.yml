@@ -41,3 +41,12 @@ jobs:
       # that directory's README). It is NOT the crates.io "optimizer"
       # crate and must never be swapped for it (incident 2026-09-18).
       - run: cargo test --workspace
+
+  # no-ai-slop copy gate (S47, L06): every banned pattern in web-next copy
+  # fails CI. Rewrite the copy — never suppress the gate.
+  web-slop-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - run: bash apps/web-next/scripts/slop-gate.sh

@@ -22,6 +22,12 @@ commit time); L01+ is the active frontier.
 | L01-cli-v2-local-lab | PLANNED (Phase 1) | stories L01–L07 inside |
 | L02-social-platform | PLANNED (Phase 1) | stories S13–S18 inside |
 | L03-engine-unification | DONE (U0–U6, 2026-08-28) | engine port complete: domain schema+kernels (U1), migrations 0011/0012 (U2), comfyui adapter (U3), reported/transparency API (U4), canirunit CLI + harvester (U5); engine lineage frozen as archive |
+| L06-human-craft-web | PLANNED (2026-09-21) | human-craft pass epic + fingerprint (hallmark + no-ai-slop); stories S43–S47 |
+| S43-design-system-and-home-craft | PLANNED | locked `design.md`/tokens + `/` home (Workbench + ecosystem diagram) |
+| S44-cli-page-craft | PLANNED | `/cli` human view (Long Document / Step Sequence) |
+| S45-wall-page-craft | PLANNED | `/wall` human view (Tabular Spec-Sheet) |
+| S46-claims-page-craft | PLANNED | `/claims` human view (Feed / Stat-Led) |
+| S47-copy-slop-gate | PLANNED | repo-wide no-ai-slop CI gate + remaining-routes token adoption |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

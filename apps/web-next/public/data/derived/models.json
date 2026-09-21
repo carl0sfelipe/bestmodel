@@ -13634,6 +13634,24 @@
    "isMoE": false,
    "sourceClass": "owner_measured",
    "runCount": 5
+  },
+  {
+   "slug": "facebook-musicgen-medium",
+   "displayName": "MusicGen Medium",
+   "category": "music",
+   "sourceClass": "owner_measured",
+   "family": "musicgen",
+   "runCount": 3,
+   "hfId": "facebook/musicgen-medium"
+  },
+  {
+   "slug": "facebook-musicgen-small",
+   "displayName": "MusicGen Small",
+   "category": "music",
+   "sourceClass": "owner_measured",
+   "family": "musicgen",
+   "runCount": 3,
+   "hfId": "facebook/musicgen-small"
   }
  ]
 }

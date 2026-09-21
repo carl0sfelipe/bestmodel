@@ -1,6 +1,7 @@
 // Single oracle runner: node scripts/check.mjs <target>
 // Each session adds its target and appends it to DELIVERED (contract §8).
 import { readFile } from "node:fs/promises";
+import { MODEL_CATEGORIES, isMultimodalCategory } from "./category.mjs";
 
 const DELIVERED = ["raw", "derived", "engine", "uikit", "page:hardware", "page:goal", "page:mobile", "seo", "s24-badges"];
 
@@ -58,7 +59,26 @@ async function checkDerived() {
 
   requireKeys(rigs[0], ["key", "label", "hwClass", "memGb", "gpuCount", "bandwidthGBs", "runCount"], "rigs[0]");
   requireKeys(models[0], ["slug", "hfId", "displayName", "paramsB", "isMoE", "category", "runCount", "medianTokS", "vramMeasuredGb"], "models[0]");
-  requireKeys(cells[0], ["rigKey", "modelSlug", "bits", "n", "tokSOutMedian", "engines"], "cells[0]");
+  requireKeys(cells[0], ["rigKey", "modelSlug", "n"], "cells[0]");
+  for (const model of models) {
+    if (!MODEL_CATEGORIES.includes(model.category)) {
+      fail(`model ${model.slug}: category ${JSON.stringify(model.category)} not in ${MODEL_CATEGORIES.join(",")}`);
+    }
+  }
+  const textCell = cells.find((c) => !isMultimodalCategory(c.category));
+  if (textCell) {
+    requireKeys(textCell, ["bits", "tokSOutMedian", "engines"], "text cell");
+  }
+  for (const cell of cells) {
+    if (!isMultimodalCategory(cell.category)) continue;
+    if (cell.tokSOutMedian != null) {
+      fail(`multimodal cell ${cell.modelSlug} must not carry tokSOutMedian`);
+    }
+    const audioLike = cell.category === "audio" || cell.category === "music";
+    if (audioLike && cell.audioXReal == null && cell.rtf == null) {
+      fail(`audio-modality cell ${cell.modelSlug} missing audioXReal/rtf`);
+    }
+  }
 
   const seed = JSON.parse(await readFile("data/seed/bandwidth.json", "utf8"));
   const allowed = new Set(Object.values(seed));

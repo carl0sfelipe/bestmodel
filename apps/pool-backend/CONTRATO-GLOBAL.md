@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS lm_model(
   slug TEXT PRIMARY KEY, hf_id TEXT NOT NULL, display_name TEXT NOT NULL,
   family TEXT, params_b REAL, active_params_b REAL,
   is_moe INTEGER NOT NULL DEFAULT 0,
-  category TEXT NOT NULL CHECK(category IN ('chat','code')),
+  category TEXT NOT NULL CHECK(category IN ('chat','code','image','audio','music','video')),
   eval_score REAL, raw_json TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS lm_rig(
   key TEXT PRIMARY KEY, label TEXT NOT NULL, hw_class TEXT NOT NULL,
@@ -83,6 +83,24 @@ CREATE TABLE IF NOT EXISTS plausibility_flag(
   verdict TEXT NOT NULL CHECK(verdict IN ('ok','suspicious','impossible','exempt')),
   reason TEXT NOT NULL, computed_at TEXT NOT NULL);
 ```
+
+Category is the **user intent**. Physical modality is derived from it
+(not a second column):
+
+| intent (`category`) | modality | examples |
+|---|---|---|
+| `chat`, `code` | text | LLM decode |
+| `image` | image | diffusion |
+| `audio` | audio | Whisper STT, AudioGen SFX |
+| `music` | audio | MusicGen, MAGNeT, JASCO, ACE-Step, YuE, DiffRhythm, Stable Audio |
+| `video` | video | animation |
+
+`music` is **not** a third LLM intent beside chat/code. It is the
+text-to-music / song-gen intent of the existing audio modality. Whisper
+stays `audio`. Music cells use the multimodal metric path (RTF /
+×realtime / wall / peak VRAM / durationS), never `decode_tok_s`.
+`GET /v1/models?category=` accepts every value in the CHECK; unknown
+values 422.
 
 Regras de identidade (rigKey, slug, category, quant->bits, seed de
 bandwidth): EXATAMENTE as do contrato web §4 e §6. Os campos
@@ -132,6 +150,7 @@ adequado.
 GET /healthz                       -> {"ok": true, "runs": N, "lastSyncAt": iso|null}
 GET /v1/rigs                       -> {rigs: Rig[]}            # schema web §4
 GET /v1/models?category=           -> {models: DerivedModel[]} # schema web §4
+                                     # category ∈ chat|code|image|audio|music|video
 GET /v1/plausibility/summary       -> {total, ok, suspicious, impossible, exempt,
                                        worst: [{runId, modelSlug, rigKey, ratio}] (top 10 ratio)}
 GET /v1/match/hardware-to-models?rig_key=&bits=4&k=10

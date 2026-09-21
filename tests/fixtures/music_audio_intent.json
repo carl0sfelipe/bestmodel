@@ -1,0 +1,54 @@
+{
+  "note": "TEST FIXTURE / STUB — not a pool measurement. Numbers are placeholders (1.0) so they cannot be confused with measured Modal runs. MusicGen A10G JSON in uploads/ is shape reference only and is not copied here.",
+  "sourceClass": "fixture_stub",
+  "models": [
+    {
+      "slug": "whisper-large-v3",
+      "hfId": "openai/whisper-large-v3",
+      "displayName": "Whisper Large v3",
+      "family": "Whisper",
+      "category": "audio",
+      "modality": "audio",
+      "intent": "stt",
+      "sourceClass": "fixture_stub"
+    },
+    {
+      "slug": "facebook-musicgen-small",
+      "hfId": "facebook/musicgen-small",
+      "displayName": "MusicGen Small",
+      "family": "MusicGen",
+      "category": "music",
+      "modality": "audio",
+      "intent": "text-to-music",
+      "sourceClass": "fixture_stub"
+    }
+  ],
+  "cells": [
+    {
+      "rigKey": "fixture-l4-24gb",
+      "modelSlug": "whisper-large-v3",
+      "category": "audio",
+      "pipeline": "whisper-large-v3",
+      "precision": "fp16",
+      "audioXReal": 1.0,
+      "peakVramGb": 1.0,
+      "n": 1,
+      "durationS": 10,
+      "sourceClass": "fixture_stub",
+      "note": "stub STT cell — audioXReal path, not decode_tok_s"
+    },
+    {
+      "rigKey": "fixture-a10-24gb",
+      "modelSlug": "facebook-musicgen-small",
+      "category": "music",
+      "pipeline": "facebook-musicgen-small",
+      "precision": "fp16",
+      "rtf": 1.0,
+      "peakVramGb": 1.0,
+      "n": 1,
+      "durationS": 10,
+      "sourceClass": "fixture_stub",
+      "note": "stub music cell — RTF / ×realtime / peak VRAM, not decode_tok_s"
+    }
+  ]
+}

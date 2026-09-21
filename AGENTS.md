@@ -99,5 +99,8 @@ goal vs hardware switcher (`.journey-btn[data-journey]`).
   import (551 owner-approved claims live in prod, community-votable) +
   catalog expansion 57→76 models / 23→29 GPUs from HF configs.
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
-  `specs/en/L02-social-platform.md`; backlog tracks B/C.
+  `specs/en/L02-social-platform.md`; backlog tracks B/C. Pool category
+  `music` is the text-to-music intent of the audio modality (Whisper stays
+  `audio`; MusicGen-class models classify as `music`; cells use RTF/×real,
+  not decode_tok_s).
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).

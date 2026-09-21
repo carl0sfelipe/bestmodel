@@ -21,7 +21,7 @@ for path in sys.argv[1:]:
         (text_rows if r.get("kind") == "text" else mm_rows).append(r)
 
 def metric_key(r):
-    for k in ("imagesPerSec", "audioXReal", "videoFramesPerSec"):
+    for k in ("imagesPerSec", "audioXReal", "rtf", "videoFramesPerSec"):
         if r.get(k) is not None:
             return k
     return None
@@ -83,6 +83,9 @@ pool["cells"].extend(mm_cells)
 pool["snapshotAt"] = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime())
 
 # ---------- modelos novos ----------
+# Whisper stays category=audio (STT). MusicGen / MAGNeT / JASCO / ACE-Step
+# belong as category=music (audio modality, RTF/×real cells). Do not insert
+# music models here without a measured JSONL — never invent pool numbers.
 new_models = {
     "whisper-large-v3": {
         "hfId": "openai/whisper-large-v3", "displayName": "Whisper Large v3",
@@ -150,5 +153,5 @@ print(f"ingest anchors ok: +{len(mm_cells)} células "
 for c in mm_cells:
     mk = metric_key(c) if c.get("category") else None
     val = c.get(mk) if mk else c.get("tokSOutMedian")
-    unit = {"imagesPerSec": "img/s", "audioXReal": "xreal"}.get(mk, "tok/s out")
+    unit = {"imagesPerSec": "img/s", "audioXReal": "xreal", "rtf": "RTF"}.get(mk, "tok/s out")
     print(f"  {c['rigKey']:10s} {c['modelSlug']:42s} n={c['n']} {val} {unit}")

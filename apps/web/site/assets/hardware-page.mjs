@@ -9,13 +9,15 @@ import { usableMemGb, fitClass, estimateTokS, vramNeededGb, claimFor } from "./e
 // This journey fixes 4-bit quantization (spec S5 — no quant switcher here).
 const BITS = 4;
 
-// Pillar config. Only chat and code have real community data (CONTRATO §4);
-// the rest stay disabled until the pool covers them (§7.6).
+// Pillar config. Chat/code are text LLM intents. Audio is STT/TTS/SFX;
+// music is the text-to-music intent of the same audio modality (CONTRATO §4).
+// Disabled pillars stay listed until that pool slice has community cells.
 const PILLARS = [
   { id: "chat", name: "Chat", icon: "▭", desc: "text generation · chat · reasoning", enabled: true },
   { id: "code", name: "Code", icon: "<", desc: "code completion · reasoning", enabled: true },
   { id: "image", name: "Image gen", icon: "▦", desc: "text → image · diffusion", enabled: false },
   { id: "audio", name: "Audio", icon: "∿", desc: "speech-to-text · text-to-speech", enabled: false },
+  { id: "music", name: "Music", icon: "♩", desc: "text → music · song gen", enabled: false },
   { id: "video", name: "Video", icon: "▶", desc: "video generation · animation", enabled: false },
   { id: "vision", name: "Vision", icon: "◉", desc: "image understanding · VLMs", enabled: false },
 ];

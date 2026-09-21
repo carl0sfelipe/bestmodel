@@ -24683,6 +24683,32 @@
    "engines": [
     "llama.cpp"
    ]
+  },
+  {
+   "rigKey": "a10-24gb",
+   "modelSlug": "facebook-musicgen-medium",
+   "category": "music",
+   "pipeline": "facebook-musicgen-medium",
+   "rtf": 1.7351,
+   "peakVramGb": 8.615,
+   "n": 3,
+   "hw": "NVIDIA A10, 23028 MiB (modal.com)",
+   "durationS": 9.94,
+   "wallS": 17.246,
+   "samples": 318080
+  },
+  {
+   "rigKey": "a10-24gb",
+   "modelSlug": "facebook-musicgen-small",
+   "category": "music",
+   "pipeline": "facebook-musicgen-small",
+   "rtf": 0.8922,
+   "peakVramGb": 2.593,
+   "n": 3,
+   "hw": "NVIDIA A10, 23028 MiB (modal.com)",
+   "durationS": 9.94,
+   "wallS": 8.869,
+   "samples": 318080
   }
  ]
 }

@@ -127,3 +127,13 @@ Future: CLI v2 lab modules per `specs/en/L01-cli-v2-local-lab.md`.
    worker dimension-group check (6-dim per §12.4) — both must stay consistent.
 5. All cross-boundary serialization points (jsonb, Decimal, redis bytes, PEM) are
    bug magnets — see findings F8.
+
+### Pool intents vs modalities
+
+`lm_model.category` / derived `models[].category` is the **user intent**.
+Physical modality is derived: `chat`/`code` → text; `audio` and `music` →
+audio waveform; `image` → image; `video` → video. `music` is the
+text-to-music intent of the existing audio modality (Whisper STT stays
+`audio`). Music/audio cells use RTF / ×realtime / peak VRAM, never
+`decode_tok_s`. Taxonomy: `apps/pool-backend/src/category.py` and
+`apps/web/scripts/category.mjs` (keep in lockstep).

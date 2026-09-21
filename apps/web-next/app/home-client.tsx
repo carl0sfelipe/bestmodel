@@ -288,9 +288,18 @@ export default function HomeClient({
               {claims.length > 0 && (
                 <div className="verdict-claims">
                   <p className="verdict-meta">
-                    <strong>claim · unvalidated</strong> — same intent measured on other rigs in the
-                    community pool (orientation only, never this machine&apos;s number · via
-                    localmaxxing community pool):
+                    {claims.every((row) => row.basis === "measured") ? (
+                      <>
+                        <strong>measured on other rigs</strong> — not this machine&apos;s number.
+                        Same intent, already measured elsewhere:
+                      </>
+                    ) : (
+                      <>
+                        <strong>claim · unvalidated</strong> — same intent measured on other rigs in the
+                        community pool (orientation only, never this machine&apos;s number · via
+                        localmaxxing community pool):
+                      </>
+                    )}
                   </p>
                   {claims.map((row) => (
                     <div className="verdict-row" key={row.slug}>

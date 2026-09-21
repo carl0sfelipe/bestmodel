@@ -1665,6 +1665,15 @@
    "gpuCount": 1,
    "bandwidthGBs": 300,
    "runCount": 16
+  },
+  {
+   "key": "a10-24gb",
+   "label": "NVIDIA A10 (modal)",
+   "hwClass": "DISCRETE_GPU",
+   "memGb": 22.06,
+   "gpuCount": 1,
+   "bandwidthGBs": null,
+   "runCount": 6
   }
  ]
 }

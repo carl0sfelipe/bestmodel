@@ -1,7 +1,8 @@
 """Music intent nested under the audio modality.
 
-Honesty: fixture numbers are labeled stubs (1.0). Classification uses names
-only — never copies measured Modal cells into the pool.
+The fixture in tests/fixtures is a labeled stub (1.0). Measured MusicGen
+cells come only from the retained Modal reps in
+apps/web-next/data/anchors/music-a10g.jsonl.
 """
 
 from __future__ import annotations
@@ -149,6 +150,37 @@ def test_sqlite_rebuild_widens_legacy_chat_code_check():
     assert rows["wh"] == "audio"
     assert rows["llama"] == "chat"
     conn.close()
+
+
+def test_measured_a10_music_cells_keep_source_reps():
+    """The six retained Modal reps. Medians are of those reps, not new numbers."""
+    import statistics
+
+    path = ROOT / "apps/web-next/data/anchors/music-a10g.jsonl"
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    assert len(rows) == 6
+    assert {row["category"] for row in rows} == {"music"}
+    assert all("tokSOut" not in row and "decode_tok_s" not in row for row in rows)
+    by_pipe: dict[str, list] = {}
+    for row in rows:
+        by_pipe.setdefault(row["pipeline"], []).append(row)
+    small = by_pipe["facebook-musicgen-small"]
+    medium = by_pipe["facebook-musicgen-medium"]
+    assert round(statistics.median([row["rtf"] for row in small]), 4) == 0.8922
+    assert round(statistics.median([row["peakVramGb"] for row in small]), 4) == 2.593
+    assert round(statistics.median([row["rtf"] for row in medium]), 4) == 1.7351
+    assert round(statistics.median([row["peakVramGb"] for row in medium]), 4) == 8.615
+    pool = json.loads((ROOT / "apps/web-next/public/data/derived/pool.json").read_text(encoding="utf-8"))
+    music = [cell for cell in pool["cells"] if cell.get("category") == "music"]
+    assert len(music) == 2
+    by_slug = {cell["modelSlug"]: cell for cell in music}
+    assert by_slug["facebook-musicgen-small"]["rtf"] == 0.8922
+    assert by_slug["facebook-musicgen-small"]["n"] == 3
+    assert "tokSOutMedian" not in by_slug["facebook-musicgen-small"]
+    assert by_slug["facebook-musicgen-medium"]["peakVramGb"] == 8.615
+    whisper = next(cell for cell in pool["cells"] if cell.get("modelSlug") == "whisper-large-v3")
+    assert whisper["category"] == "audio"
+    assert whisper["audioXReal"] == 4.82
 
 
 def test_fixture_shows_music_cell_distinct_from_whisper_audio():

@@ -36,6 +36,9 @@ route with its `?as=agent` twin.
   full twin.
 - Diff limited to `apps/web-next/**` and `apps/web/site/llms.txt`.
 
+- Ghost ban: never use declare const, stub modules or TODO shims as a workaround — import the real symbol and render the real data.
+
+- Do not invent a number, a community metric, a route or a CLI subcommand beyond what this spec lists; missing data renders as "no data yet", never a guess.
 ## Verified data
 
 - Route inventory from `apps/web-next/app/` (2026-09-21): `claim/[id]`,
@@ -65,10 +68,11 @@ App up: `cd apps/web-next && pnpm install && pnpm build && pnpm start &`.
 4. A dynamic route twin renders a real record (pick any live slug from `/m?as=agent`): `curl -s "http://localhost:3000/m/$(curl -s 'http://localhost:3000/wall?as=agent' | grep -oE '[a-z0-9-]+' | head -1)?as=agent" | grep -q 'data-view="agent"'`
 5. Contract lists routes: `grep -qi '^## Routes\|Routes' apps/web/site/llms.txt` and `grep -q '?as=agent' apps/web/site/llms.txt`
 
-## Oracle
+## Oráculo
 
-- command: `bash specs/en/oracles/S35.sh` (runs acceptance 1–5 across the route
-  list; fails on the first missing twin).
+- comando: bash specs/en/oracles/S35.sh
+- The script runs acceptance 1-5 across the route list and fails on the first
+  missing twin.
 - expected exit: `0`. Red state before impl: criterion 1 prints `MISS …` for
   the uncovered routes.
 

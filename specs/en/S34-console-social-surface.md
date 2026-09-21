@@ -58,6 +58,9 @@ passkey app; only presentation and wiring change.
 - Console is exempt from the `?as=` twin: it is an authenticated interactive
   app; its agent surface is the REST API declared in `llms.txt`.
 
+- Ghost ban: never use declare const, stub modules or TODO shims as a workaround — import the real symbol and render the real data.
+
+- Do not invent a number, a community metric, a route or a CLI subcommand beyond what this spec lists; missing data renders as "no data yet", never a guess.
 ## Verified data (endpoints that already exist — 2026-09-21)
 
 - `GET /v1/users/{handle}` → handle, reputation{points,tier}, rigs[], follow
@@ -80,10 +83,10 @@ passkey app; only presentation and wiring change.
 7. No backend touched: `git diff --name-only main -- apps/public-api apps/intake-worker infra | grep -q . ; test $? -ne 0`
 8. No unknown endpoint introduced: `! grep -oE '/v1/[a-z/_{}-]+' apps/web/console/console.js | sort -u | grep -vE '^/v1/(auth|feed|claims|users|notifications|run-claims|cards)'`
 
-## Oracle
+## Oráculo
 
-- command: `bash specs/en/oracles/S34.sh` (runs acceptance 1–8; fails on first
-  miss).
+- comando: bash specs/en/oracles/S34.sh
+- The script runs acceptance 1-8 and fails on the first miss.
 - expected exit: `0`. Red state before impl: criterion 1 fails (console.js has
   no `/v1/users/` call today).
 

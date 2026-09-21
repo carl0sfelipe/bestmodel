@@ -42,6 +42,9 @@ the web-next `/?as=human` routes.
 - The redirect target is `www.bestmodel.run` (the canonical prod host per the
   verified surface map).
 
+- Ghost ban: never use declare const, stub modules or TODO shims as a workaround — import the real symbol and render the real data.
+
+- Do not invent a number, a community metric, a route or a CLI subcommand beyond what this spec lists; missing data renders as "no data yet", never a guess.
 ## Verified data
 
 - Two browser surfaces exist today: `www.bestmodel.run` (web-next, prod) and
@@ -61,10 +64,10 @@ the web-next `/?as=human` routes.
    `! grep -q 'index.html?as=human' apps/web/site/llms.txt`
 5. Contract points humans at web-next: `grep -q '/?as=human\|/hardware?as=human' apps/web/site/llms.txt`
 
-## Oracle
+## Oráculo
 
-- command: `bash specs/en/oracles/S36.sh` (runs acceptance 1–5; fails on first
-  miss).
+- comando: bash specs/en/oracles/S36.sh
+- The script runs acceptance 1-5 and fails on the first miss.
 - expected exit: `0`. Red state before impl: criterion 4 fails (the Pages tour
   links are still in `llms.txt`).
 

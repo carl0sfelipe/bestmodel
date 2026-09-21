@@ -54,6 +54,9 @@ from the site's navigation, promising only what the binary does today
   the three `apps/web/site/*.html` files, their dead installer JS, and
   `apps/web/site/llms.txt`.
 
+- Ghost ban: never use declare const, stub modules or TODO shims as a workaround — import the real symbol and render the real data.
+
+- Do not invent a number, a community metric, a route or a CLI subcommand beyond what this spec lists; missing data renders as "no data yet", never a guess.
 ## Verified data
 
 - `docs/agent-quickstart.md` was executed on a clean checkout 2026-09-18 and
@@ -77,10 +80,10 @@ App up: `cd apps/web-next && pnpm install && pnpm build && pnpm start &`.
 7. Contract keeps the honest line: `grep -q 'no one-line installer yet' apps/web/site/llms.txt`
 8. Contract lists the new route: `grep -q '/cli' apps/web/site/llms.txt`
 
-## Oracle
+## Oráculo
 
-- command: `bash specs/en/oracles/S33.sh` (runs acceptance 1–8; fails on first
-  miss).
+- comando: bash specs/en/oracles/S33.sh
+- The script runs acceptance 1-8 and fails on the first miss.
 - expected exit: `0`. Red state before impl: criterion 1 returns `404`.
 
 ## Dependencies / out of scope

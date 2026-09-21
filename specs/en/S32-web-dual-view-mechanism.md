@@ -65,6 +65,8 @@ to the rest.
 - Diff stays inside `apps/web-next/**` (plus the `AGENT_UA` copy). No
   backend/API/migration changes.
 
+- Ghost ban: never use declare const, stub modules or TODO shims as a workaround — import the real symbol and render the real data.
+
 ## Verified data
 
 - `apps/web-next/app/layout.tsx` renders the nav and `<html lang="en">` today —
@@ -88,10 +90,11 @@ Bring the app up once: `cd apps/web-next && pnpm install && pnpm build && pnpm s
 7. Resolver + middleware exist: `test -f apps/web-next/lib/view.ts && test -f apps/web-next/middleware.ts`
 8. Toggle is in the layout: `grep -q 'view-toggle\|ViewToggle' apps/web-next/app/layout.tsx`
 
-## Oracle
+## Oráculo
 
-- command: `bash specs/en/oracles/S32.sh` (a script committed with this story
-  running acceptance 1–8 in sequence; exits non-zero on the first failure).
+- comando: bash specs/en/oracles/S32.sh
+- The script runs acceptance 1-8 in sequence and exits non-zero on the first
+  failure. It is committed with this story.
 - expected exit: `0`. Before implementation the same script exits non-zero
   (criterion 2 fails: no `data-view="agent"`) — that is the red state.
 

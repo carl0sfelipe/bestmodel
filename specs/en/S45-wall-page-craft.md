@@ -35,6 +35,10 @@ render (honesty ladder). Never fake data behind a stub that reports success
 (anti-phantom; the analogue of "never use `declare const` as a workaround": do
 not seed a fake row to fill the table). Reference S43 tokens by name. Do not
 touch the `?as=` twin (L04 S32 `/wall` twin oracle must stay green).
+- Gate clause: do not invent a number, metric or copy beyond the ones listed in
+  Verified data; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stubbed success or a fake badge as a
+  workaround — implement the real capability.
 
 ## Verified data (2026-09-21)
 

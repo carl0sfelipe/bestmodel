@@ -1,12 +1,13 @@
 import { Suspense } from "react";
-import { basisOf, formatNumber, joinCells, metricOf } from "../../lib/engine";
+import { basisOf, formatNumber, joinCells, loadDerived, metricOf } from "../../lib/engine";
 import { currentView } from "../../lib/view-server";
 import AgentView from "../_components/agent-view";
 import WallClient from "./wall-client";
 
-export const metadata = { title: "The wall", description: "Every community benchmark cell with its provenance: measured or reported." };
+export const metadata = { title: "The pool", description: "Every community benchmark cell with its provenance: measured or reported." };
 
 export default async function WallPage() {
+  const snapshot = loadDerived().stats.snapshotAt.slice(0, 10);
   // Agent twin (S32): the same cells the human view renders by default
   // (sort: fastest decode, top 60) as a fixed-column text table. A
   // re-presentation of one dataset, never a different query.
@@ -40,5 +41,20 @@ export default async function WallPage() {
       </AgentView>
     );
   }
-  return <main><section className="page-head"><p className="kicker">bestmodel.run / the wall</p><h1>What the community<br />actually measures.</h1><p>Every row is a real cell from the community pool. Cells carry their run count and their basis, and ranking is provisional.</p><div className="actions"><a className="btn primary" href="/console">capture or correct a number -&gt;</a></div></section><Suspense fallback={<p className="summary">reading the pool...</p>}><WallClient /></Suspense></main>;
+  // Tabular Spec-Sheet (S45): the data table is the page — the hero is one
+  // honest frame line with the snapshot date, nothing above the data.
+  return (
+    <main>
+      <section className="sheet-head">
+        <h1>The pool, cell by cell</h1>
+        <p className="sheet-frame">
+          pool snapshot {snapshot} · every row is a real community cell with its basis and run
+          count · ranking provisional · a signed run outranks any claim
+        </p>
+      </section>
+      <Suspense fallback={<p className="summary">reading the pool...</p>}>
+        <WallClient />
+      </Suspense>
+    </main>
+  );
 }

@@ -35,6 +35,10 @@ exists (honesty ladder). Never fake a feed entry behind a stub that reports
 success (anti-phantom; the analogue of "never use `declare const` as a
 workaround": do not seed a fake claim to fill the feed). Reference S43 tokens by
 name. Do not touch the `?as=` twin or the console app.
+- Gate clause: do not invent a number, metric, handle or copy beyond the ones
+  listed in Verified data; missing data renders as "no data yet".
+- Gate clause: never use declare const, a stubbed success or a fake badge as a
+  workaround — implement the real capability.
 
 ## Verified data (2026-09-21)
 

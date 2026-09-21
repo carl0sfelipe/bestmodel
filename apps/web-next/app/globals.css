@@ -446,3 +446,56 @@ footer.statement{display:block}
 .eco-svg .eco-lbl{font:12px var(--mono);fill:var(--ink)}
 .eco-svg .eco-core-lbl{font:13px var(--mono);fill:var(--ink)}
 .eco-svg .eco-sub{font:var(--text-m) var(--mono);fill:var(--dim)}
+
+/* ============================================================================
+   S44 — /cli as a Long Document / Step Sequence on the locked system.
+   Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4
+   The page IS the runbook: a document header with the source line, the guide
+   body as one real <pre> (hairline border only — no browser bar, no
+   traffic-light dots, no fake terminal window, gate 47), and a quiet action
+   row at the end. No marketing hero. D10 inverse holds: the guide documents
+   the whole dispatched loop. Responsive checked at 320/375/414/768.
+   ========================================================================= */
+.runbook{max-width:880px;margin:0 auto;padding:clamp(36px,7vw,72px) 0 var(--space-8)}
+.runbook-head h1{font:600 clamp(28px,5.5vw,48px)/1.08 var(--display);letter-spacing:-.03em}
+.runbook-src{font:var(--text-s)/1.8 var(--mono);color:var(--muted);margin-top:var(--space-3);max-width:70ch}
+.runbook-src code{color:var(--amber)}
+.runbook-body{margin-top:var(--space-5);font:12.5px/1.75 var(--mono);color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:var(--radius-m);padding:clamp(16px,4vw,28px);overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.runbook-foot{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-5)}
+
+/* ============================================================================
+   S45 — /wall as a Tabular Spec-Sheet on the locked system.
+   Hallmark · pre-emit critique: P4 H4 E5 S4 R5 V4
+   The data table is the page: the hero shrinks to one honest frame line with
+   the snapshot date, and every cell renders as a row — rank, model, rig,
+   basis, value, n, ctx, bits — the same fields the agent twin prints. No
+   poetic headline, no card grid. Basis badge on every row (honesty ladder);
+   ranking stays labelled provisional. Grid tracks minmax(0,1fr) where gridded
+   (gate 50); the table scrolls in its own container at 320–768px.
+   ========================================================================= */
+.sheet-head{padding:clamp(32px,6vw,60px) 0 0}
+.sheet-head h1{font:600 clamp(26px,5vw,44px)/1.08 var(--display);letter-spacing:-.03em}
+.sheet-frame{font:var(--text-s)/1.8 var(--mono);color:var(--muted);margin-top:var(--space-3);max-width:80ch}
+.sheet-wrap{overflow-x:auto;border:1px solid var(--hair);border-radius:var(--radius-m);background:var(--surface);margin-top:var(--space-2)}
+table.sheet{min-width:760px}
+.sheet th{position:sticky;top:0}
+.sheet-model{font:600 14px var(--display);white-space:normal;min-width:180px}
+.sheet-cat{display:block;font:var(--text-xs) var(--mono);color:var(--dim);text-transform:none;letter-spacing:0;margin-top:2px}
+.sheet-rig{white-space:normal;min-width:140px}
+.sheet-val{font:500 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.sheet-n{font-variant-numeric:tabular-nums}
+@media (max-width:760px){.sheet-wrap{margin-inline:0;border-radius:0}}
+
+/* ============================================================================
+   S46 — /claims as a Feed / Stat-Led stream on the locked system.
+   Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4
+   The feed IS the page: one honest frame line, then the claim cards the
+   client already renders (handle · number + basis badge · provenance source
+   chip · community tally). Structurally distinct from the pool spec-sheet
+   (rows vs stream) and from the home workbench (instrument vs feed). No
+   marketing hero, no two-button scene. Responsive 320/375/414/768.
+   ========================================================================= */
+.feed-head{padding:clamp(32px,6vw,60px) 0 0}
+.feed-head h1{font:600 clamp(26px,5vw,44px)/1.08 var(--display);letter-spacing:-.03em}
+.feed-frame{font:var(--text-s)/1.8 var(--mono);color:var(--muted);margin-top:var(--space-3);max-width:80ch}
+.feed-frame a{color:var(--muted)}

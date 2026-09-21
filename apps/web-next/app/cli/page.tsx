@@ -40,8 +40,10 @@ export default async function CliPage() {
           "bestmodel.run / cli — getting started (agent twin)",
           "",
           "Single source of truth: docs/agent-quickstart.md (executed clean on 2026-09-18).",
-          "Runnable today: cargo build from source · benchmark-probe · benchmark-probe lab · make agent-smoke.",
-          "plan / report / contribute: not shipped yet — never invoke them.",
+          "Runnable today: cargo build from source · benchmark-probe (detect, estimate) ·",
+          "lab · plan · report · contribute · login · make agent-smoke.",
+          "The whole documented loop dispatches in the binary (D10) — never invoke a",
+          "subcommand this page does not document.",
           "",
           guide,
         ].join("\n")}
@@ -50,25 +52,20 @@ export default async function CliPage() {
   }
   return (
     <main>
-      <section className="page-head">
-        <p className="kicker">bestmodel.run / get started</p>
-        <h1>From clone to<br />measured numbers.</h1>
-        <p>
-          The whole CLI story in one honest guide: build from source, read the
-          hardware you are on, rank the best models for it against the pool,
-          then measure it yourself. No API key, no token, no installer —
-          there is no one-line installer yet.
-        </p>
-        <div className="actions">
-          <a className="btn primary" href="https://github.com/carl0sfelipe/bestmodel">clone the repo -&gt;</a>
+      <article className="runbook">
+        <header className="runbook-head">
+          <h1>From clone to measured numbers</h1>
+          <p className="runbook-src">
+            source of truth: <code>docs/agent-quickstart.md</code> in the repo — executed clean on
+            2026-09-18, rendered here verbatim. No installer and no API key: build from source.
+          </p>
+        </header>
+        <pre className="runbook-body">{guide}</pre>
+        <footer className="runbook-foot">
+          <a className="btn primary" href="https://github.com/carl0sfelipe/bestmodel">clone the repo</a>
           <a className="btn" href="/wall?as=human">see what the pool already measures</a>
-        </div>
-      </section>
-      <section className="section">
-        <article className="cli-doc">
-          <pre>{guide}</pre>
-        </article>
-      </section>
+        </footer>
+      </article>
     </main>
   );
 }

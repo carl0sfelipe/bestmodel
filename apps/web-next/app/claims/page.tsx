@@ -36,26 +36,14 @@ export default async function ClaimsPage() {
   }
   return (
     <main>
-      <section className="page-head">
-        <p className="kicker">bestmodel.run / the wall</p>
-        <h1>
-          Every number gets a home
-          <br />
-          and a source.
-        </h1>
-        <p>
-          Benchmark claims live scattered across Reddit, X, GitHub and blog posts — numbers with
-          nobody behind them. Captured here, each one keeps the link it came from, collects
-          community verdicts, and can be settled for good by an Ed25519-signed run.
+      <section className="feed-head">
+        <h1>Claims from the wild</h1>
+        <p className="feed-frame">
+          benchmark numbers captured from Reddit, X, GitHub and blog posts — each one keeps the
+          link it came from, collects community verdicts, and can be settled by an
+          Ed25519-signed run ·{" "}
+          <Link href="/submit">capture one</Link> · <Link href="/wall">the measured pool</Link>
         </p>
-        <div className="actions">
-          <Link className="btn primary" href="/submit">
-            Capture a run
-          </Link>
-          <Link className="btn" href="/wall">
-            Browse the measured pool
-          </Link>
-        </div>
       </section>
 
       <ClaimsClient />

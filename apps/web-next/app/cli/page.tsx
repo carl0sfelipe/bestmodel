@@ -65,13 +65,6 @@ export default async function CliPage() {
         </div>
       </section>
       <section className="section">
-        <div className="cli-note">
-          <strong>Not shipped yet:</strong> <code>contribute</code> (the CLI v2
-          lab loop&apos;s upload leg) is specified in{" "}
-          <a href="https://github.com/carl0sfelipe/bestmodel/blob/main/specs/en/L01-cli-v2-local-lab.md">L01</a>{" "}
-          but not in the binary you can build today. The commands below only
-          document what runs — never invoke a subcommand this page does not show.
-        </div>
         <article className="cli-doc">
           <pre>{guide}</pre>
         </article>

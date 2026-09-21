@@ -180,6 +180,19 @@ enum Command {
         #[arg(long, default_value = "benchmark-probe-cli")]
         label: String,
     },
+    /// Turn the best lab cell into a signed contract-0.9.0 report (S41)
+    Contribute {
+        /// Lab label under experiments/ (default: latest finished)
+        #[arg(long)]
+        label: Option<String>,
+        /// Local bundle only: no network call, no upload (also records the
+        /// A3 opt-out — sharing stays off until you contribute again)
+        #[arg(long = "no-upload")]
+        no_upload: bool,
+        /// Where the signed bundle is written (default: contribute-out)
+        #[arg(long = "output-dir", default_value = "contribute-out")]
+        output_dir: PathBuf,
+    },
 }
 
 /// Lab invocation as parsed by clap (same defaults the manual parser had).
@@ -201,6 +214,9 @@ fn main() {
         Some(Command::Report { label, json, markdown }) => cmd_report(label.as_deref(), json, markdown),
         Some(Command::Login { token, no_register, status, print_key_registration, label }) => {
             cmd_login(token, no_register, status, print_key_registration, &label);
+        }
+        Some(Command::Contribute { label, no_upload, output_dir }) => {
+            cmd_contribute(label.as_deref(), no_upload, &output_dir);
         }
         None => match build_cli_args(&cli) {
             Ok(args) => {
@@ -349,6 +365,131 @@ fn cmd_login(token: Option<String>, no_register: bool, status: bool, print_key_r
         Err(e) => {
             eprintln!("error: {e}");
             eprintln!("token stays stored; re-run login (or fix the API) to register the key");
+            exit(1);
+        }
+    }
+}
+
+fn cmd_contribute(label: Option<&str>, no_upload: bool, output_dir: &PathBuf) {
+    use benchmark_probe::contribute_lab;
+    use benchmark_probe::login;
+    use benchmark_probe::sign_submission_payload::{
+        canonicalize_report, load_or_create_signing_key, payload_digest, resolve_key_path,
+        sign_payload_digest,
+    };
+
+    let (report, cell) = match contribute_lab::select_best(label) {
+        Ok(pair) => pair,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(2);
+        }
+    };
+
+    // A3 consent — opt-out transparent: visible, pre-checked (sharing is the
+    // default), one step to opt out (--no-upload), always honored, stored.
+    let mut config = login::load_config();
+    let mut upload = !no_upload;
+    if no_upload {
+        config.consent_share_runs = Some(false);
+    } else if config.consent_share_runs == Some(false) {
+        eprintln!("consent: opted out (stored) — writing the local bundle only");
+        upload = false;
+    } else {
+        println!("consent: sharing lab runs improves predictions for everyone (pre-checked default).");
+        println!("opt out any time with --no-upload; nothing is uploaded without this notice.");
+        config.consent_share_runs = Some(true);
+    }
+    if let Err(e) = login::save_config(&config) {
+        eprintln!("error: {e}");
+        exit(1);
+    }
+
+    // SIM cells are never uploaded: the stub objective is a simulator, not a
+    // measurement. The local bundle stays available via --no-upload.
+    if upload && report.simulation {
+        eprintln!(
+            "error: lab {} is a SIM (stub) run — SIM cells are never uploaded; \
+             use --no-upload for the local signed bundle",
+            report.label
+        );
+        exit(2);
+    }
+
+    let topology = collect_system_topology::collect_system_topology();
+    let fingerprint = format!("{}|{}|{}", topology.cpu_model, topology.os_name, topology.gpus.first().map(|g| g.name.clone()).unwrap_or_default());
+    let (payload, evidence) = contribute_lab::build_cell_report(&cell, &report.label, report.simulation, &fingerprint);
+    let canonical = match canonicalize_report(&payload) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(1);
+        }
+    };
+    let digest = payload_digest(&canonical);
+    let signing_key = match load_or_create_signing_key(&resolve_key_path()) {
+        Ok(k) => k,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(1);
+        }
+    };
+    let signature = sign_payload_digest(&signing_key, &digest);
+
+    if let Err(e) = std::fs::create_dir_all(output_dir) {
+        eprintln!("error: create {}: {e}", output_dir.display());
+        exit(1);
+    }
+    let bundle_path = output_dir.join(format!("contribute-{}", payload.run_id));
+    let report_path = bundle_path.with_extension("json");
+    if let Err(code) = write_report_files(&report_path, &canonical, &digest, &signature, &evidence) {
+        exit(code);
+    }
+    println!("signed bundle: {} (schema {}, runtime {})", report_path.display(), payload.schema_version, payload.runtime);
+
+    if !upload {
+        println!("no-upload: no network call was made");
+        return;
+    }
+
+    // Real-lab upload path (no shipped lab produces this yet — A2 owner-blocked):
+    // existing intake, per-user key attached when registered.
+    let Some(token) = login::effective_token() else {
+        eprintln!("error: upload needs an account token — login --token ... first (or --no-upload)");
+        exit(1);
+    };
+    let nonce = match fetch_challenge_nonce(&login::api_url()) {
+        Ok(n) => n,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(1);
+        }
+    };
+    let request = UploadRequest {
+        report_json: canonical,
+        payload_digest: digest,
+        signature,
+        challenge_nonce: nonce,
+        client_version: VERSION.to_string(),
+        artifacts: vec![ArtifactUpload {
+            bytes: evidence.clone().into_bytes(),
+        }],
+        settle_claim_id: None,
+        model_release_id: None,
+        quantization_profile_id: None,
+        api_token: Some(token),
+        signature_key_id: config.signing_key_id,
+    };
+    match upload_benchmark_report(&login::api_url(), &request) {
+        Ok(outcome) if outcome.status_code == 202 || outcome.status_code == 201 => {
+            println!("upload accepted (HTTP {}): run {:?} — the server decides validation, the CLI does not", outcome.status_code, outcome.run_id);
+        }
+        Ok(outcome) => {
+            eprintln!("error: upload returned HTTP {} — nothing fabricated; inspect and retry", outcome.status_code);
+            exit(1);
+        }
+        Err(e) => {
+            eprintln!("error: {e}");
             exit(1);
         }
     }
@@ -843,6 +984,7 @@ fn submit_report(
         model_release_id: cli.model_release_id.clone(),
         quantization_profile_id: cli.quantization_profile_id.clone(),
         api_token,
+        signature_key_id: benchmark_probe::login::load_config().signing_key_id,
     };
     let outcome = upload_benchmark_report(&base_url, &request).map_err(|err| {
         eprintln!("error: {err}");

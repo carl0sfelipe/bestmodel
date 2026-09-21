@@ -32,6 +32,9 @@ pub struct UploadRequest {
     pub quantization_profile_id: Option<String>,
     /// Bearer token from the account's agent tokens (S13).
     pub api_token: Option<String>,
+    /// S42: per-user signing key registered via login — attaches the run to
+    /// the account (API's opt-in path; None keeps the legacy global key).
+    pub signature_key_id: Option<String>,
 }
 
 pub struct UploadOutcome {
@@ -103,6 +106,9 @@ fn build_multipart_form(request: &UploadRequest) -> Form {
         .part("client_version", Part::text(request.client_version.clone()));
     if let Some(claim_id) = &request.settle_claim_id {
         form = form.part("settle_claim_id", Part::text(claim_id.clone()));
+    }
+    if let Some(key_id) = &request.signature_key_id {
+        form = form.part("signature_key_id", Part::text(key_id.clone()));
     }
     if let Some(model_release_id) = &request.model_release_id {
         form = form.part("model_release_id", Part::text(model_release_id.clone()));

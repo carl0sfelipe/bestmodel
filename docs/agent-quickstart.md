@@ -155,6 +155,19 @@ benchmark-probe --runtime ollama --model qwen3:8b
 `--runtime mock` always works (what CI uses). Real numbers only come
 from a real runtime.
 
+## 4b. Contribute + login (closing the loop)
+
+```bash
+benchmark-probe login --token <web-issued-token>   # 0600 config + public key registration
+benchmark-probe contribute --no-upload             # signed 0.9.0 bundle, no network
+benchmark-probe contribute                          # upload path (SIM cells are refused)
+```
+
+`contribute` turns the best lab cell into a signed contract-0.9.0 report.
+Consent is opt-out transparent (A3): sharing is the pre-checked default,
+`--no-upload` is one step and always honored. SIM/stub cells are NEVER
+uploaded — the deterministic simulator is not a measurement.
+
 ## 5. Publishing (owner-only — skip)
 
 `--sign`/`--upload` need an Ed25519 key and an API token that only the

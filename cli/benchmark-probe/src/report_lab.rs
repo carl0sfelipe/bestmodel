@@ -20,8 +20,6 @@ pub const DEFAULT_LAB_ROOT: &str = "experiments";
 
 #[derive(Debug, Deserialize)]
 struct IndexLine {
-    #[serde(default)]
-    trial: usize,
     params: Vec<Value>,
     #[serde(default)]
     value: Option<f64>,

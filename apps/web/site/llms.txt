@@ -27,9 +27,9 @@ Human first step (S33): /cli — the rendered getting-started, twin at
 [docs/agent-quickstart.md](https://github.com/carl0sfelipe/bestmodel/blob/main/docs/agent-quickstart.md)
 — build the two Rust CLIs, detect your hardware, rank the best models for
 it against the in-repo pool snapshot, run the probe. Self-check in one
-command: `make agent-smoke`. Runnable today: benchmark-probe, `lab`, `plan`, and `report`
-(measured-vs-predicted over a lab dir). contribute is specified (L01) but
-NOT shipped — never invoke it. There is no one-line installer yet.
+command: `make agent-smoke`. Runnable today: the whole loop — benchmark-probe `lab`, `plan`, `report`,
+`contribute` (signed 0.9.0 bundle; SIM cells never uploaded) and `login`
+(token 0600 + public signing-key registration). There is no one-line installer yet.
 
 ## Routes (www.bestmodel.run — web-next; every route resolves ?as=human|agent server-side)
 

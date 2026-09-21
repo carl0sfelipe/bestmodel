@@ -1,4 +1,5 @@
 pub mod collect_system_topology;
+pub mod contribute_lab;
 pub mod comfyui_adapter;
 pub mod detect_runtime_installations;
 pub mod execute_benchmark_scenario;

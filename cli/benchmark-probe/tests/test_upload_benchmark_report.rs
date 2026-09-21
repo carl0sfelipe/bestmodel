@@ -147,6 +147,7 @@ fn sample_request(nonce: &str) -> UploadRequest {
         model_release_id: None,
         quantization_profile_id: None,
         api_token: None,
+        signature_key_id: None,
     }
 }
 
@@ -154,6 +155,7 @@ fn settled_request(nonce: &str, claim_id: &str, token: &str) -> UploadRequest {
     UploadRequest {
         settle_claim_id: Some(claim_id.to_string()),
         api_token: Some(token.to_string()),
+        signature_key_id: None,
         ..sample_request(nonce)
     }
 }

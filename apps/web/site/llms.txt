@@ -81,7 +81,7 @@ Frozen snapshot counts — not live, not throughput.
 
 - /?as=human — I have a goal (desktop, min 1024px)
 - /hardware?as=human — I have hardware
-- /m?as=human — mobile
+- mobile: no separate route — the canonical pages are responsive
 - console/ — passkey console (not a tour)
 
 ## Read next

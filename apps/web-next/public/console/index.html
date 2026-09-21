@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>bestmodel · console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="console.css">
 </head>
 <body>
@@ -13,6 +16,7 @@
     <a href="/llms.txt">llms.txt</a>
     <button data-view="feed" class="active">feed</button>
     <button data-view="claim">claim</button>
+    <span id="identity-strip" class="identity" hidden></span>
     <span id="session-area"></span>
   </nav>
 </header>
@@ -41,7 +45,7 @@
   <!-- FEED -->
   <section id="view-feed" class="card" hidden>
     <div class="row">
-      <h1>Claims</h1>
+      <h1>The wall</h1>
       <select id="feed-scope">
         <option value="global">global</option>
         <option value="following">following</option>
@@ -59,7 +63,21 @@
       </select>
       <button id="btn-refresh">refresh</button>
     </div>
+    <p class="summary muted" id="feed-summary"></p>
     <ul id="claim-list" class="claim-list"></ul>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="view-profile" class="card" hidden>
+    <button class="linkish" data-view="feed">&larr; back to the wall</button>
+    <div id="profile-body"></div>
+  </section>
+
+  <!-- NOTIFICATIONS -->
+  <section id="view-notifications" class="card" hidden>
+    <button class="linkish" data-view="feed">&larr; back to the wall</button>
+    <h1>Notifications</h1>
+    <ul id="notification-list" class="claim-list"></ul>
   </section>
 
   <!-- CLAIM DETAIL -->
@@ -110,6 +128,7 @@
       <label>gpu model id <input name="gpu_model_id" placeholder="optional — unlocks engine prior"></label>
       <label>context tokens <input name="context_tokens" type="number" min="1" placeholder="optional"></label>
       <label>note <input name="note" maxlength="2000" placeholder="optional color"></label>
+      <label>source url <input name="source_url" type="url" placeholder="optional — where the run was found (S29)"></label>
       <button type="submit">post claim</button>
     </form>
     <pre id="claim-status" class="status" hidden></pre>

@@ -27,16 +27,16 @@ This instance. After this card: decide D1–D7; do not write code.
 | # | Verb | Path | One line | Budget |
 |---|---|---|---|---|
 | 1 | OPEN | `docs/POINTERS.md` | This card | this job only |
-| 2 | OPEN | `docs/FABLE-BRIEF-2026-09-19.md` | Architecture now + 48h audit + compressed facts | whole |
-| 3 | OPEN | `docs/ESCALACAO-FABLE-2026-09-19.md` | Verify / Learn / H1–H4 / **D1–D7** / response shape | whole |
-| 4 | OPEN | `docs/HANDOFF-OMARCHY-2026-09-18.md` | Prod machine as of restore | whole (short) |
+| 2 | SKIP | `docs/FABLE-BRIEF-2026-09-19.md` | withdrawn from the public tree (ops/escalation) |
+| 3 | SKIP | `docs/ESCALACAO-FABLE-2026-09-19.md` | withdrawn from the public tree (ops/escalation) |
+| 4 | SKIP | `docs/HANDOFF-OMARCHY-2026-09-18.md` | withdrawn from the public tree (ops handoff) |
 | 5 | OPEN | `docs/direction-2026-08-29.md` | Your v2 record; still binding where it does not conflict | whole |
 | 5b | OPEN | `docs/direction-2026-09-19.md` | v3 record (this escalation's answer) — next escalation starts from here | whole |
 | 6 | OPEN | `docs/backlog.md` | Tracks + owner dials | header, B, C, 30/08 dials, S28 — not A1–A11 line by line |
 
 SKIP unless D1–D7 names them:
 
-- `docs/findings.md` · `docs/research-2026-08.md` · `docs/HANDOFF-2026-08-28.md`
+- `docs/findings.md` · `docs/research-2026-08.md` · ops handoffs (withdrawn from this tree)
 - `specs/en/L01-cli-v2-local-lab.md` · `specs/en/L02-social-platform.md` · `specs/engine-epics/**`
 - application source
 
@@ -69,8 +69,8 @@ escalation.
 | OPEN | `docs/direction-2026-09-19.md` | current record: order table + sizes; H6 check before owner enrols a passkey |
 | OPEN | the spec Fable/owner named | acceptance commands live there |
 | OPEN | nearest `AGENTS.md` to the files you will touch | edit-site checklist |
-| OPEN | `docs/HANDOFF-OMARCHY-2026-09-18.md` | only if the change is prod/ops |
-| SKIP | `docs/ESCALACAO-FABLE-*.md` | already decided |
+| SKIP | `docs/HANDOFF-OMARCHY-2026-09-18.md` | withdrawn from the public tree |
+| SKIP | `docs/ESCALACAO-FABLE-*.md` | withdrawn from the public tree |
 | SKIP | `docs/research-2026-08.md` | not an execute input |
 
 ---
@@ -79,7 +79,7 @@ escalation.
 
 | Verb | Path | One line |
 |---|---|---|
-| OPEN | `docs/HANDOFF-OMARCHY-2026-09-18.md` | current host |
+| SKIP | `docs/HANDOFF-OMARCHY-2026-09-18.md` | withdrawn from the public tree |
 | OPEN | `deploy/docker-compose.omarchy.yml` | PGDATA + tunnel override (untracked until owner reviews) |
 | SKIP | `docs/en/deploy.md` | STALE host and front topology |
 | SKIP | `deploy/systemd/*` in git | live units are under `~/.config/systemd/user/` |

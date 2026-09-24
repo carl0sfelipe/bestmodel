@@ -13,6 +13,7 @@ English.
 | `backlog.md` | Canonical roadmap: tracks A (Local Lab), B (claims/votes), C (virality), D (diffusion) | Before proposing new work |
 | `research-2026-08.md` | Competitive landscape teardown + tooling research | Before building CLI v2 / social features |
 | `agent-quickstart.md` | Cold-start runbook: build, detect hardware, rank models offline, run the probe | First action on a fresh machine/checkout |
+| `measurements/2026-09-23-audio-pt-br-3090.md` | Owner-measured Whisper turbo on this 3090 (FLEURS pt_br) | Before answering Audio × rtx-3090-24gb |
 | `en/submission-tiers.md` | Two-tier reporting design (verified + claimed) | Contract/reporting work |
 
 Rules:

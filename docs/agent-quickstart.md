@@ -100,6 +100,17 @@ canirunit suggest --gpu rtx-3090-24gb --task decode_tok_s \
 - Exit code 3 = no data at all for that GPU: the honest answer is "be
   the first to publish a signed run", not a guess.
 
+Audio / Portuguese transcription is a different question from
+`decode_tok_s`. On 2026-09-23 the workbench intent Audio on
+`rtx-3090-24gb` was empty; `suggest --task seconds_per_clip` is video,
+not ASR. This checkout appends Whisper Large v3 Turbo at **39.22×real**
+(n=3, measured, FLEURS `pt_br`) — card
+`docs/measurements/2026-09-23-audio-pt-br-3090.md`. Do not answer from
+the L4 Whisper claim (4.82×real, no language). WER 0.04 is reported
+(n=1), not a pool field. `plan` still ranks chat only. Native
+leave-running audio bench is `specs/en/L07-native-audio-bench.md`
+(not built).
+
 ## 2b. Plan: what SOTA should run here (catalog + predictors)
 
 ```bash

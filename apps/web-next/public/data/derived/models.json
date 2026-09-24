@@ -13634,6 +13634,17 @@
    "isMoE": false,
    "sourceClass": "owner_measured",
    "runCount": 5
+  },
+  {
+   "slug": "whisper-large-v3-turbo",
+   "hfId": "openai/whisper-large-v3-turbo",
+   "displayName": "Whisper Large v3 Turbo",
+   "family": "Whisper",
+   "paramsB": 0.81,
+   "category": "audio",
+   "isMoE": false,
+   "sourceClass": "owner_measured",
+   "runCount": 3
   }
  ]
 }

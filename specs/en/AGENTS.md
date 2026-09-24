@@ -41,6 +41,7 @@ commit time); L01+ is the active frontier.
 | S45-wall-page-craft | PLANNED | `/wall` human view (Tabular Spec-Sheet) |
 | S46-claims-page-craft | PLANNED | `/claims` human view (Feed / Stat-Led) |
 | S47-copy-slop-gate | PLANNED | repo-wide no-ai-slop CI gate + remaining-routes token adoption |
+| L07-native-audio-bench | PLANNED (2026-09-23) | leave-running audio recipes; `audio_xreal` + language WER; stories not opened |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an

@@ -286,3 +286,15 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
 - **Backlog line (D5)**: a tuned OKLCH custom repaint is an optional hallmark
   depth if the terminal palette still reads generic after the structural + copy
   fixes — not mandated.
+
+## L07 (2026-09-23): native leave-running audio bench
+
+- Dogfood: workbench `Audio × rtx-3090-24gb` was empty; Portuguese WER is
+  not a pool field; `seconds_per_clip` is video. Side measurement closed
+  the speed hole only (Whisper turbo 39.22×real, n=3) —
+  `docs/measurements/2026-09-23-audio-pt-br-3090.md`.
+- Epic (stories **not** opened): `specs/en/L07-native-audio-bench.md`.
+  Recipe as the unit; `audio_xreal` (not `seconds_per_clip`); WER+language
+  on the contract; `--until` overnight loop; gamify **empty**
+  `(rig × language × recipe)` via existing A3 points.
+- Finding: F15.

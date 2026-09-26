@@ -88,8 +88,12 @@ escalation.
 
 ## Job: cold-start (any agent, public clone)
 
-Unchanged: `docs/agent-quickstart.md`. That path is for *running the
-probe*, not for strategy.
+| Verb | Path | One line |
+|---|---|---|
+| OPEN | `docs/agent-quickstart.md` | probe + honesty ladder (not strategy) |
+| OPEN | `docs/measurements/2026-09-23-audio-pt-br-3090.md` | Audio × this 3090: 39.22×real measured |
+| SKIP | `specs/en/L07-native-audio-bench.md` | native audio bench cut list — not built |
+| SKIP | withdrawn incident/handoff paths | left the public tree in 592af53 |
 
 ---
 

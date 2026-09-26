@@ -1307,5 +1307,39 @@
     "experts_per_token": null,
     "max_context_tokens": 302400,
     "released_at": "2025-07-25"
+  },
+  {
+    "id": "model-qwen3-8-27b",
+    "family": "qwen-3.8",
+    "release_name": "Qwen3.8-27B",
+    "architecture": "dense",
+    "parameter_count_billion": 27.78,
+    "active_parameter_count_billion": null,
+    "num_layers": null,
+    "hidden_size": null,
+    "num_attention_heads": null,
+    "num_kv_heads": null,
+    "head_dim": null,
+    "expert_count": null,
+    "experts_per_token": null,
+    "max_context_tokens": 262144,
+    "released_at": "2026-08-13"
+  },
+  {
+    "id": "model-ternary-bonsai-2-27b",
+    "family": "bonsai",
+    "release_name": "Ternary Bonsai 2 27B",
+    "architecture": "dense",
+    "parameter_count_billion": 27.3,
+    "active_parameter_count_billion": null,
+    "num_layers": null,
+    "hidden_size": null,
+    "num_attention_heads": null,
+    "num_kv_heads": null,
+    "head_dim": null,
+    "expert_count": null,
+    "experts_per_token": null,
+    "max_context_tokens": 262144,
+    "released_at": "2026-07-15"
   }
 ]

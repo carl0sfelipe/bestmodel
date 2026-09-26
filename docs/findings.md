@@ -114,3 +114,17 @@ Seed em `sync_pool.BANDWIDTH_SEED_GBS` cobria 11 SKUs; 555X/RX 570 adicionados
 
 Relato completo da sessão: `docs/findings-mbp15-1-2026-09-13.md`.
 Runs: `apps/pool-backend/local-runs/mbp15-1-2026-09-13.json`.
+
+## F15 — Audio on a 3090 was empty; language WER is not in the contract (OPEN — L07)
+
+2026-09-23 dogfood: workbench `Audio × rtx-3090-24gb` = no data.
+`canirunit suggest --task seconds_per_clip` exits 3 (video metric).
+`plan` is chat-only. The snapshot's only audio cell is Whisper Large v3
+on `l4-24gb` at 4.82×real, n=5, **no language**. Answering Portuguese
+from that cell is a critical honesty bug.
+
+Owner measurement on this 3090 (FLEURS `pt_br` test, faster-whisper
+turbo): `audioXReal` median **39.22** (n=3, measured);
+WER **0.04** (n=1, reported). Card:
+`docs/measurements/2026-09-23-audio-pt-br-3090.md`. Native leave-running
+path + `audio_xreal` task + WER field: `specs/en/L07-native-audio-bench.md`.

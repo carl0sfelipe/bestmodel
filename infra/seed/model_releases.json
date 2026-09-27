@@ -1358,5 +1358,22 @@
     "experts_per_token": null,
     "max_context_tokens": 16384,
     "released_at": "2025-11-18"
+  },
+  {
+    "id": "model-cogvideox-5b",
+    "family": "cogvideox",
+    "release_name": "CogVideoX-5B",
+    "architecture": "dense",
+    "parameter_count_billion": 5.0,
+    "active_parameter_count_billion": null,
+    "num_layers": 30,
+    "hidden_size": 4096,
+    "num_attention_heads": 48,
+    "num_kv_heads": 48,
+    "head_dim": 128,
+    "expert_count": null,
+    "experts_per_token": null,
+    "max_context_tokens": 226,
+    "released_at": "2024-08-04"
   }
 ]

@@ -78,6 +78,11 @@ pub fn upload_benchmark_report(
         .map_err(|err| format!("submission request to {url} failed: {err}"))?;
     let status_code = response.status().as_u16();
     if !response.status().is_success() {
+        // Observabilidade: o corpo traz o `detail` da rejeição — sem ele o
+        // operador não tem como corrigir (dogfood 2026-09-26: 400 opaco na
+        // primeira célula de vídeo).
+        let body_text = response.text().unwrap_or_default();
+        eprintln!("submission rejected body: {body_text}");
         return Ok(UploadOutcome {
             status_code,
             run_id: None,

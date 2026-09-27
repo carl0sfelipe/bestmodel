@@ -308,6 +308,13 @@ pub fn detect_comfy_cli() -> Option<String> {
         .map(str::trim)
         .find(|line| !line.is_empty())
         .unwrap_or("unknown");
+    // comfy-cli >= 1.19 imprime envelope JSON: extrai data.version para o
+    // runtime_version ficar dentro do contrato (string curta, não o envelope).
+    if let Ok(v) = serde_json::from_str::<serde_json::Value>(line) {
+        if let Some(ver) = v.get("data").and_then(|d| d.get("version")).and_then(|x| x.as_str()) {
+            return Some(format!("comfy-cli-{ver}"));
+        }
+    }
     Some(line.to_string())
 }
 

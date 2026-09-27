@@ -1341,5 +1341,22 @@
     "experts_per_token": null,
     "max_context_tokens": 262144,
     "released_at": "2026-07-15"
+  },
+  {
+    "id": "model-hunyuanvideo-1-5",
+    "family": "hunyuanvideo",
+    "release_name": "HunyuanVideo 1.5",
+    "architecture": "dense",
+    "parameter_count_billion": 8.3,
+    "active_parameter_count_billion": null,
+    "num_layers": 54,
+    "hidden_size": 2048,
+    "num_attention_heads": 16,
+    "num_kv_heads": 16,
+    "head_dim": 128,
+    "expert_count": null,
+    "experts_per_token": null,
+    "max_context_tokens": 16384,
+    "released_at": "2025-11-18"
   }
 ]

@@ -1,0 +1,20 @@
+{
+  "recipe_id": "hv15-720p-t2v-v1",
+  "runtime": "comfyui",
+  "model_release": "hunyuanvideo-1-5",
+  "comfyui_min_version": "0.3.48",
+  "workflow_template": "workflows/hv15-720p-t2v-api.json.tpl",
+  "provenance": "graf convertido do template oficial video_hunyuan_video_1.5_720p_t2v.json (comfy-cli --print-prompt) com placeholders; sem SR 1080p — unidade medida e o T2V base 720p",
+  "sources": [
+    "https://huggingface.co/Comfy-Org/HunyuanVideo_1.5_repackaged",
+    "https://huggingface.co/tencent/HunyuanVideo-1.5"
+  ],
+  "defaults": {
+    "width": 1280,
+    "height": 720,
+    "frames": 121,
+    "steps": 20,
+    "cfg": 6.0,
+    "shift": 7.0
+  }
+}

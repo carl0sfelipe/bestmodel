@@ -568,7 +568,7 @@ fn run(cli: &CliArgs) -> Result<(), i32> {
         print_signature_block(&canonical, &digest, &signature, &key_path);
     }
     if cli.upload {
-        submit_report(cli, &canonical, &digest, &signature)?;
+        submit_report(cli, &canonical, &digest, &signature, None)?;
     }
     Ok(())
 }
@@ -672,7 +672,13 @@ fn run_comfy_plan(
         print_signature_block(&canonical, &digest, &signature, &key_path);
     }
     if cli.upload {
-        submit_report(cli, &canonical, &digest, &signature)?;
+        submit_report(
+            cli,
+            &canonical,
+            &digest,
+            &signature,
+            Some(&format!("model-{}", plan.model_release)),
+        )?;
     }
     Ok(())
 }
@@ -938,6 +944,7 @@ fn submit_report(
     canonical: &str,
     digest: &str,
     signature: &str,
+    model_release_override: Option<&str>,
 ) -> Result<(), i32> {
     let base_url = std::env::var(API_URL_ENV_VAR).unwrap_or_else(|_| DEFAULT_API_URL.to_string());
     // S42: env wins (legacy behavior); the login config file is the fallback.
@@ -981,7 +988,10 @@ fn submit_report(
         client_version: VERSION.to_string(),
         artifacts,
         settle_claim_id: cli.settle_claim_id.clone(),
-        model_release_id: cli.model_release_id.clone(),
+        model_release_id: cli
+            .model_release_id
+            .clone()
+            .or_else(|| model_release_override.map(str::to_string)),
         quantization_profile_id: cli.quantization_profile_id.clone(),
         api_token,
         signature_key_id: benchmark_probe::login::load_config().signing_key_id,

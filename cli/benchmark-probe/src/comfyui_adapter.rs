@@ -25,8 +25,10 @@ pub struct ComfyScenario {
     #[serde(default = "default_shift")]
     pub shift: f64,
     pub seed: u64,
-    pub first_image: String,
-    pub last_image: String,
+    #[serde(default)]
+    pub first_image: Option<String>,
+    #[serde(default)]
+    pub last_image: Option<String>,
     #[serde(default)]
     pub prompt: String,
 }
@@ -119,11 +121,19 @@ fn substitutions(scenario: &ComfyScenario) -> Vec<(String, String)> {
         ("__SEED__".to_string(), scenario.seed.to_string()),
         (
             "__FIRST_IMAGE__".to_string(),
-            escape_json_string(&scenario.first_image),
+            scenario
+                .first_image
+                .as_deref()
+                .map(escape_json_string)
+                .unwrap_or_else(|| "null".to_string()),
         ),
         (
             "__LAST_IMAGE__".to_string(),
-            escape_json_string(&scenario.last_image),
+            scenario
+                .last_image
+                .as_deref()
+                .map(escape_json_string)
+                .unwrap_or_else(|| "null".to_string()),
         ),
         (
             "__PROMPT__".to_string(),
@@ -184,13 +194,17 @@ fn validate_scenario(scenario: &ComfyScenario) -> Result<(), ComfyPlanError> {
             scenario.frames
         )));
     }
-    for (label, image) in [("first_image", &scenario.first_image), ("last_image", &scenario.last_image)] {
+    for (label, image) in [
+        ("first_image", scenario.first_image.as_deref()),
+        ("last_image", scenario.last_image.as_deref()),
+    ] {
+        let Some(image) = image else { continue }; // T2V não tem imagens
         if image.trim().is_empty() {
             return Err(ComfyPlanError::InvalidScenario(format!(
                 "'{label}' must not be empty"
             )));
         }
-        if Path::new(image.as_str()).is_absolute() {
+        if Path::new(image).is_absolute() {
             return Err(ComfyPlanError::InvalidScenario(format!(
                 "'{label}' must be a relative path inside the ComfyUI input directory (got '{image}')"
             )));
@@ -348,7 +362,8 @@ pub fn print_plan(plan: &ComfyPlan, workflow_out: Option<&Path>, comfy_cli: Opti
     );
     println!(
         "Images: first={} last={}",
-        scenario.first_image, scenario.last_image
+        scenario.first_image.as_deref().unwrap_or("-"),
+        scenario.last_image.as_deref().unwrap_or("-")
     );
     match comfy_cli {
         Some(version) => println!("comfy CLI on PATH: {version}"),

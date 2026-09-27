@@ -75,7 +75,7 @@
  "128": {
   "inputs": {
    "scheduler": "simple",
-   "steps": "__STEPS__",
+   "steps": __STEPS__,
    "denoise": 1,
    "model": [
     "12",
@@ -89,7 +89,7 @@
  },
  "129": {
   "inputs": {
-   "noise_seed": "__SEED__"
+   "noise_seed": __SEED__
   },
   "class_type": "RandomNoise",
   "_meta": {
@@ -107,7 +107,7 @@
  },
  "131": {
   "inputs": {
-   "cfg": "__CFG__",
+   "cfg": __CFG__,
    "model": [
     "132",
     0
@@ -200,9 +200,9 @@
  },
  "124": {
   "inputs": {
-   "width": "__WIDTH__",
-   "height": "__HEIGHT__",
-   "length": "__LENGTH__",
+   "width": __WIDTH__,
+   "height": __HEIGHT__,
+   "length": __FRAMES__,
    "batch_size": 1
   },
   "class_type": "EmptyHunyuanVideo15Latent",

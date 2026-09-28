@@ -7,10 +7,11 @@ export const MIN_RUNS_MEASURED = 3;
 
 export type Model = (typeof modelsData.models)[number];
 export type Cell = (typeof poolData.cells)[number] & {
-  category?: "image" | "audio" | "video";
+  category?: "image" | "audio" | "video" | "image-to-3d";
   imagesPerSec?: number;
   audioXReal?: number;
   videoFramesPerSec?: number;
+  secPerAsset?: number;
   steps?: number;
   resolution?: string;
   durationS?: number;
@@ -28,10 +29,11 @@ export function basisOf(cell: Pick<Cell, "n">) {
   return cell.n >= MIN_RUNS_MEASURED ? "measured" : "reported";
 }
 
-export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; videoFramesPerSec?: number | null; [k: string]: unknown }) {
+export function metricOf(cell: { n: number; modelSlug: string; rigKey: string; category?: string; imagesPerSec?: number | null; audioXReal?: number | null; videoFramesPerSec?: number | null; secPerAsset?: number | null; [k: string]: unknown }) {
   if (cell.category === "image" && cell.imagesPerSec != null) return { value: cell.imagesPerSec, unit: "img/s", label: "images" };
   if (cell.category === "audio" && cell.audioXReal != null) return { value: cell.audioXReal, unit: "×real", label: "realtime" };
   if (cell.category === "video" && cell.videoFramesPerSec != null) return { value: cell.videoFramesPerSec, unit: "f/s", label: "frames" };
+  if (cell.category === "image-to-3d" && cell.secPerAsset != null) return { value: cell.secPerAsset, unit: "s/asset", label: "sec/asset" };
   return null;
 }
 

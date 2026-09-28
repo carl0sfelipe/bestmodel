@@ -17,12 +17,13 @@ export type Answer = {
 export type AnswerIndex = Record<string, Answer[]>;
 export type RigOption = { key: string; label: string; runCount: number };
 
-/** The six from the approved prototype. Only text has pool data; the rest are
-    visible and honestly disabled rather than quietly dropped. */
+/** Text intents read the pool. Image, audio, video and vision stay listed with
+    no cells. image-to-3d is its own category (sec/asset, not tokens/s). */
 const INTENTS = [
   { id: "chat", name: "Chat", glyph: "▭", desc: "text generation · reasoning", category: "chat" },
   { id: "code", name: "Code", glyph: "<", desc: "completion · refactor", category: "code" },
   { id: "image", name: "Image gen", glyph: "▦", desc: "text → image", category: "image" },
+  { id: "image-to-3d", name: "Image → 3D", glyph: "◇", desc: "photo → mesh · sec/asset", category: "image-to-3d" },
   { id: "audio", name: "Audio", glyph: "∿", desc: "speech ↔ text", category: "audio" },
   { id: "video", name: "Video", glyph: "▶", desc: "generation · animation", category: "video" },
   { id: "vision", name: "Vision", glyph: "◉", desc: "image understanding", category: null },
@@ -137,7 +138,8 @@ export default function HomeClient({
   const [context, setContext] = useState<number>(0);
 
   const category = INTENTS.find((item) => item.id === intent)?.category ?? null;
-  const multimodal = category === "image" || category === "audio" || category === "video";
+  const multimodal =
+    category === "image" || category === "audio" || category === "video" || category === "image-to-3d";
 
   // Which quantizations this rig + intent actually has cells for. Unavailable
   // ones stay visible but disabled — the absence is information.

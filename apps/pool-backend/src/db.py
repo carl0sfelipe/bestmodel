@@ -15,7 +15,7 @@ DDL_STATEMENTS = [
   slug TEXT PRIMARY KEY, hf_id TEXT NOT NULL, display_name TEXT NOT NULL,
   family TEXT, params_b REAL, active_params_b REAL,
   is_moe INTEGER NOT NULL DEFAULT 0,
-  category TEXT NOT NULL CHECK(category IN ('chat','code')),
+  category TEXT NOT NULL CHECK(category IN ('chat','code','image-to-3d')),
   eval_score REAL, raw_json TEXT NOT NULL)""",
     """CREATE TABLE IF NOT EXISTS lm_rig(
   key TEXT PRIMARY KEY, label TEXT NOT NULL, hw_class TEXT NOT NULL,
@@ -51,8 +51,31 @@ def connect(db_path: str = DB_PATH) -> sqlite3.Connection:
     return conn
 
 
+def _accept_image_to_3d(conn: sqlite3.Connection) -> None:
+    """CREATE IF NOT EXISTS does not alter an existing CHECK. Rebuild lm_model
+    when a database created before image-to-3d still rejects that category."""
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='lm_model'"
+    ).fetchone()
+    if row is None or "image-to-3d" in (row["sql"] or ""):
+        return
+    cols = (
+        "slug, hf_id, display_name, family, params_b, active_params_b, "
+        "is_moe, category, eval_score, raw_json"
+    )
+    conn.execute("PRAGMA foreign_keys=OFF")
+    conn.execute("ALTER TABLE lm_model RENAME TO lm_model_pre_image_to_3d")
+    conn.execute(DDL_STATEMENTS[1])
+    conn.execute(
+        f"INSERT INTO lm_model ({cols}) SELECT {cols} FROM lm_model_pre_image_to_3d"
+    )
+    conn.execute("DROP TABLE lm_model_pre_image_to_3d")
+    conn.execute("PRAGMA foreign_keys=ON")
+
+
 def migrate(conn: sqlite3.Connection) -> None:
     """Apply the contract §4 DDL exactly; idempotent by construction."""
     for statement in DDL_STATEMENTS:
         conn.execute(statement)
+    _accept_image_to_3d(conn)
     conn.commit()

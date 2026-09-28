@@ -121,7 +121,7 @@ def list_models(category: str | None = None) -> dict:
     finally:
         conn.close()
     if category is not None:
-        if category not in ("chat", "code"):
+        if category not in ("chat", "code", "image-to-3d"):
             return _json_error(422, f"invalid category {category!r}")
         models = [model for model in models if model["category"] == category]
     return {"models": models}

@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
   // truth); tracing ships the file with the server bundle on Vercel.
   outputFileTracingIncludes: {
     "/cli": ["../docs/agent-quickstart.md"],
+    "/blog": ["./content/blog/**/*.mdx"],
+    "/blog/[slug]": ["./content/blog/**/*.mdx"],
   },
   async rewrites() {
     if (!API_ORIGIN) return [];

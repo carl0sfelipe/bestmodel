@@ -37,6 +37,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <Link href="/track-record">track record</Link>
             <Link href="/mural">mural</Link>
             <Link href="/console">console</Link>
+            <Link href="/blog">blog</Link>
           </nav>
         </header>
         {children}

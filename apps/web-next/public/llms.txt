@@ -47,6 +47,8 @@ command: `make agent-smoke`. Runnable today: the whole loop — benchmark-probe 
 | /cloud-anchors | rented-GPU anchor runs | /cloud-anchors?as=agent — anchor table |
 | /track-record | trust ladder | /track-record?as=agent — ladder text |
 | /mural | moderation entry | /mural?as=agent — report grounds |
+| /blog | dated post index | /blog?as=agent — title, date, description list |
+| /blog/{slug} | article (markdown) | /blog/{slug}?as=agent — plain post text |
 | /console | capture console (static app) | exempt — its agent surface is the REST API |
 
 View resolver precedence (mirrors the contract in this file): ?as=/?view= →

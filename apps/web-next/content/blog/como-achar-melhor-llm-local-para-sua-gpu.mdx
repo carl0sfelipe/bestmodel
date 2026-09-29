@@ -1,0 +1,98 @@
+---
+title: "Como achar em 5 minutos o melhor LLM local para a sua GPU no bestmodel.run"
+slug: "como-achar-em-5-minutos-o-melhor-llm-local-para-a-sua-gpu-no-bestmodel-run"
+date: "2026-09-29"
+author: "Carlos Felipe"
+description: "Aprenda a achar o melhor LLM local para a sua GPU em 5 minutos no bestmodel.run: encontre seu rig, veja rankings tok/s e envie medições."
+tags:
+  - "LLM local"
+  - "GPU"
+  - "inferência local"
+  - "bestmodel.run"
+keywords:
+  - "melhor llm local para minha gpu"
+  - "qual modelo roda na minha placa"
+  - "tok/s"
+  - "medições de LLM local"
+canonical: "https://bestmodel.run/blog/como-achar-em-5-minutos-o-melhor-llm-local-para-a-sua-gpu-no-bestmodel-run"
+---
+
+# Como achar em 5 minutos o melhor LLM local para a sua GPU no bestmodel.run
+
+Se você já tentou rodar um LLM local e ficou travado na pergunta "qual modelo roda na minha placa?", este tutorial é para você. A maioria tenta adivinhar: olha a VRAM, escolhe um modelo, baixa uma quantização e torce. O problema é que "melhor" não é só o maior modelo que cabe: é a combinação de modelo, quantização, engine e hardware que define a velocidade útil.
+
+O bestmodel.run existe para responder exatamente isso: que modelo de IA roda na sua máquina, a que velocidade e se vale a pena. Em vez de promessas genéricas, ele usa medições assinadas da comunidade. Isso significa que você pode olhar dados reais de rigs parecidos com o seu, comparar tok/s e decidir com menos chute.
+
+Neste guia, você faz o caminho em 5 minutos: achar seu rig, ver o ranking, abrir a página do modelo, entender formato e engine e enviar sua medição.
+
+## Passo 1: ache o seu rig em `/hardware`
+
+O primeiro passo é encontrar a sua máquina ou GPU no bestmodel.run. Acesse `/hardware`. Ali, o site lista rigs — ou seja, combinações de GPU e máquina — com um slug. Um slug é o nome curto usado na URL. Por exemplo, uma RTX 3090 de 24 GB pode aparecer como `rtx-3090-24gb`.
+
+Procure pelo slug que mais se parece com o seu hardware. Se você não encontrar exatamente o seu rig, não precisa desistir: quando o rig não existe, o site sugere os 10 slugs mais parecidos. Use essa lista para escolher a configuração mais próxima da sua. O objetivo é ter uma base de medições confiável para começar.
+
+## Passo 2: veja o ranking em `/wall?rig=<slug>`
+
+Depois de escolher o slug, abra `/wall?rig=<slug>`. Por exemplo, se o seu rig for `rtx-3090-24gb`, a URL fica `/wall?rig=rtx-3090-24gb`.
+
+Essa página mostra o ranking de modelos medidos naquela GPU, em tok/s. Você vê o que já foi medido e como se comporta. Por padrão, o site esconde modelos minúsculos, menores que 1B, e modelos "de brinquedo". Isso ajuda a focar em modelos que realmente podem ser úteis para uso local.
+
+Use essa página para responder perguntas práticas:
+
+- Quais modelos já têm medições para essa GPU?
+- Qual modelo entrega mais tok/s?
+- Existe um modelo menor que é muito mais rápido e ainda atende à sua necessidade?
+- Um modelo grande está lento demais para o seu uso?
+
+O ponto importante: o ranking mostra velocidade medida, não apenas "este modelo é melhor". Para muitos usuários, a diferença entre uma velocidade baixa e uma velocidade alta muda a experiência: um modelo mais rápido pode ser mais útil do que um maior que demora minutos.
+
+## Passo 3: abra a página do modelo em `/m/<slug-do-modelo>`
+
+Quando você encontrar um modelo interessante no ranking, abra a página dele em `/m/<slug-do-modelo>`. A página do modelo mostra as medições associadas a ele. É ali que você vê mais detalhes do comportamento do modelo.
+
+Se você digitar um slug errado, o site sugere os modelos parecidos. Por exemplo, se você tentar `/m/gemma-4-12b-it`, o site pode sugerir `google-gemma-4-12b-it`. Isso é útil porque nomes mudam, prefixos aparecem e quantizações variam. Use a sugestão para chegar à página correta.
+
+Ao abrir a página do modelo, procure entender:
+
+- O modelo tem medições para o seu rig ou para rigs parecidos?
+- A velocidade varia conforme o formato ou engine?
+- Há medições suficientes para confiar na comparação?
+- O modelo parece bom para o seu caso de uso, ou é apenas popular?
+
+Se a página mostrar poucas medições, trate o resultado com cautela. Se mostrar várias medições de comunidade, você tem uma base mais sólida para decidir.
+
+## Passo 4: formato e engine mudam tudo
+
+Muitas pessoas escolhem o modelo e param por aí. Mas, em LLM local, formato e engine podem mudar drasticamente a velocidade: o mesmo modelo pode ser lento em uma configuração e rápido em outra.
+
+Um exemplo real medido numa RTX 3090 mostra isso bem. O Qwen 3.8 27B em GGUF Q5, usando llama.cpp, teve 23 tok/s. O mesmo modelo em EXL3 + DFlash2, usando exllamav3, ficou na faixa de ~70–100 tok/s. A diferença muda a experiência de "aguenta para testes" para "dá para usar com conforto".
+
+Outro exemplo: Gemma 4 12B W4A16, usando vLLM, teve 66,5 tok/s com 1 pedido. Isso mostra que modelos menores nem sempre são a única opção: se a GPU aguenta, um 12B pode entregar velocidade interessante conforme formato e engine.
+
+Ao comparar modelos, não olhe apenas o nome: veja modelo, quantização, engine e tok/s. Se duas linhas parecem iguais, mas uma usa GGUF Q5 e outra usa EXL3 + DFlash2, a velocidade pode ser muito diferente. A pergunta certa não é só "qual modelo roda na minha placa?", mas "qual combinação de modelo, formato e engine roda bem na minha placa?".
+
+## Passo 5: envie a sua medição em `/submit`
+
+O bestmodel.run fica melhor com medições da comunidade. Se você rodou um modelo local, acesse `/submit` e envie a sua: isso ajuda pessoas com GPUs parecidas.
+
+Esse passo é importante quando o rig não tem muitas medições. Onde não há medição para a sua GPU, o site só estima por fórmula. Trate como estimativa: útil para começar, mas não substitui medição real. Se você consegue medir, enviar o dado torna a informação mais confiável.
+
+Enviar uma medição também ajuda a entender seu hardware: você pode descobrir que uma engine é melhor para a sua GPU, que uma quantização muda a velocidade ou que um modelo promissor não atende à sua necessidade.
+
+## Dica: use `?as=agent` para pedir ao seu assistente
+
+Qualquer página aceita `?as=agent` para uma versão em texto voltada a agentes e LLMs. Se você usa um assistente, pode pedir a ele para ler `/wall?rig=rtx-3090-24gb&as=agent` ou uma página de modelo com `?as=agent`.
+
+Isso é útil para automatizar comparações: listar modelos mais rápidos para um rig, resumir medições ou comparar configurações. A versão em texto facilita a leitura por agentes.
+
+## CTA: faça o teste agora
+
+Se você quer parar de chutar e descobrir o melhor LLM local para a sua GPU, siga este fluxo:
+
+1. Acesse `/hardware` e encontre o slug do seu rig.
+2. Abra `/wall?rig=<slug>` e veja o ranking de modelos medidos.
+3. Escolha um modelo e abra `/m/<slug-do-modelo>` para ver as medições.
+4. Compare formato, quantização e engine, porque a velocidade muda muito.
+5. Se você tiver uma medição própria, envie em `/submit`.
+
+O bestmodel.run não promete o modelo perfeito para todo mundo. Ele oferece dados medidos pela comunidade para você responder: que modelo roda na sua máquina, a que velocidade e se vale a pena. Se sua GPU não tem medições suficientes, envie a sua. Assim, a próxima pessoa terá uma resposta mais próxima da realidade.

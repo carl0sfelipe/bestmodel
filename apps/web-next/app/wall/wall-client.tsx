@@ -2,13 +2,14 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { basisOf, formatContext, formatNumber, joinCells, loadDerived, metricOf, topRigs } from "../../lib/engine";
+import { filterWallRows } from "../../lib/wall-filter";
 
 export default function WallClient() {
   const query = useSearchParams();
   const [rig, setRig] = useState(query.get("rig") ?? "all");
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState(query.get("category") ?? "all");
   const [sort, setSort] = useState("toks");
-  const rows = joinCells().filter((row) => rig === "all" || row.cell.rigKey === rig).filter((row) => category === "all" || row.model.category === category).sort((a, b) => sort === "runs" ? b.cell.n - a.cell.n : sort === "context" ? (b.cell.maxContextTested ?? 0) - (a.cell.maxContextTested ?? 0) : (metricOf(b.cell)?.value ?? b.cell.tokSOutMedian ?? -1) - (metricOf(a.cell)?.value ?? a.cell.tokSOutMedian ?? -1)).slice(0, 60);
+  const rows = filterWallRows(joinCells(), { rig, category }).sort((a, b) => sort === "runs" ? b.cell.n - a.cell.n : sort === "context" ? (b.cell.maxContextTested ?? 0) - (a.cell.maxContextTested ?? 0) : (metricOf(b.cell)?.value ?? b.cell.tokSOutMedian ?? -1) - (metricOf(a.cell)?.value ?? a.cell.tokSOutMedian ?? -1)).slice(0, 60);
   const categories = [...new Set(loadDerived().models.map((model) => model.category))];
   // Tabular Spec-Sheet (S45): one row per cell, every column on screen — the
   // same fields the agent twin prints (rig | model | basis | value | n), plus

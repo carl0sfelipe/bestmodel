@@ -1,14 +1,78 @@
-import { notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { basisOf, formatContext, formatNumber, loadDerived, metricOf } from "../../../lib/engine";
+import { exactSuffixMatches, sugerirSlugs } from "../../../lib/sugerir-slugs";
 import { currentView } from "../../../lib/view-server";
 import AgentView from "../../_components/agent-view";
 
 export function generateStaticParams() { return loadDerived().models.map((model) => ({ slug: model.slug })); }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const { slug } = await params; const model = loadDerived().models.find((item) => item.slug === slug); return { title: model?.displayName ?? "Model", description: model ? `${model.displayName} community pool results by reference rig.` : "Model results." }; }
+function searchQuery(params: Record<string, string | string[] | undefined>): string {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    const item = Array.isArray(value) ? value[0] : value;
+    if (item) query.set(key, item);
+  }
+  const text = query.toString();
+  return text ? `?${text}` : "";
+}
 
-export default async function ModelPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params; const data = loadDerived(); const model = data.models.find((item) => item.slug === slug); if (!model) notFound(); const cells = data.pool.filter((cell) => cell.modelSlug === model.slug); const runs = cells.reduce((total, cell) => total + cell.n, 0); const median = model.medianTokS;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = loadDerived();
+  const model = data.models.find((item) => item.slug === slug);
+  if (model) return { title: model.displayName ?? "Model", description: `${model.displayName} community pool results by reference rig.` };
+  const slugs = data.models.map((item) => item.slug);
+  const exact = exactSuffixMatches(slug, slugs);
+  if (exact.length === 1) {
+    const target = data.models.find((item) => item.slug === exact[0]);
+    return { title: target?.displayName ?? exact[0], robots: { index: false } };
+  }
+  return { title: "Model not found", description: "No catalog entry for this slug.", robots: { index: false } };
+}
+
+export default async function ModelPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const { slug } = await params; const data = loadDerived(); const model = data.models.find((item) => item.slug === slug);
+  if (!model) {
+    const slugs = data.models.map((item) => item.slug);
+    const exact = exactSuffixMatches(slug, slugs);
+    if (exact.length === 1) permanentRedirect(`/m/${exact[0]}${searchQuery(await searchParams)}`);
+    const suggestions = sugerirSlugs(slug, slugs, 5);
+    if ((await currentView()) === "agent") {
+      return (
+        <AgentView>
+          {[
+            "bestmodel.run / model — not found (agent view)",
+            "",
+            `slug "${slug}" is not in the catalog.`,
+            "",
+            "closest slugs:",
+            ...suggestions.map((item) => `  /m/${item}`),
+          ].join("\n")}
+        </AgentView>
+      );
+    }
+    return (
+      <main>
+        <section className="page-head">
+          <p className="kicker">404</p>
+          <h1>Model not found</h1>
+          <p>No catalog entry for {slug}. Closest matches:</p>
+          <div className="actions">
+            {suggestions.map((item) => (
+              <a key={item} className="btn" href={`/m/${item}`}>{item}</a>
+            ))}
+          </div>
+        </section>
+      </main>
+    );
+  }
+  const cells = data.pool.filter((cell) => cell.modelSlug === model.slug); const runs = cells.reduce((total, cell) => total + cell.n, 0); const median = model.medianTokS;
   const bestMetricCell = cells.map((cell) => ({ cell, metric: metricOf(cell) })).filter(({ metric }) => metric).sort((a, b) => (b.metric!.value) - (a.metric!.value))[0];
   if ((await currentView()) === "agent") {
     const answer = median != null ? `${formatNumber(median)} tok/s (model median)` : bestMetricCell ? `${formatNumber(bestMetricCell.metric!.value)} ${bestMetricCell.metric!.unit} (best measured cell: ${bestMetricCell.cell.rigKey})` : "No data yet";

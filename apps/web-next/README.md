@@ -20,6 +20,11 @@ Build the production app with `npm run build`, then serve it with `npm run start
 - `/track-record` contributor trust ladder
 - `/mural` SAMPLE-only social preview
 - `/console` entry point to the copied static console
+- `/blog` dated index of `content/blog/*.mdx`; `/blog/[slug]` is the article
 - `/llms.txt` agent surface
 
 The UI is mobile-first and keeps wide data tables inside horizontal overflow containers. No Tailwind, icon package, or UI kit is used.
+
+## Blog
+
+Posts are markdown files with YAML frontmatter (`title`, `slug`, `date`, `description`) in `content/blog/*.mdx`. This app does not compile MDX: `gray-matter` splits frontmatter from the body and `marked` renders the body as HTML. JSX components inside a post are not supported.

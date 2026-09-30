@@ -1,0 +1,85 @@
+---
+title: "Gemma 4 12B em produção na RTX 3090: 66,5 tok/s medidos no bestmodel.run"
+slug: "gemma-4-12b-producao-rtx-3090"
+date: "2026-09-30"
+author: "Carlos Felipe"
+description: "Medição de produção do Gemma 4 12B W4A16 numa RTX 3090 24 GB: 66,5 tok/s com 1 requisição, 485,7 tok/s com 8 simultâneas, TTFT, VRAM e o que não foi validado."
+tags:
+  - "LLM local"
+  - "GPU"
+  - "inferência local"
+  - "bestmodel.run"
+keywords:
+  - "gemma 4 12b"
+  - "rtx 3090"
+  - "tok/s"
+  - "W4A16"
+  - "medições de LLM local"
+canonical: "https://bestmodel.run/blog/gemma-4-12b-producao-rtx-3090"
+---
+
+# Gemma 4 12B em produção na RTX 3090: 66,5 tok/s medidos no bestmodel.run
+
+O guia [Como achar em 5 minutos o melhor LLM local para a sua GPU no bestmodel.run](/blog/como-achar-em-5-minutos-o-melhor-llm-local-para-a-sua-gpu-no-bestmodel-run) já citou um número deste rig: Gemma 4 12B W4A16, com vLLM, teve 66,5 tok/s com 1 pedido. Este post publica o resto da medição de produção — throughput com 8 requisições simultâneas, TTFT, VRAM, temperatura, KV cache, multimodal e o que **não** foi validado.
+
+A data da implantação é 2026-09-28, no rig `rtx-3090-24gb`. Diferente de uma célula de benchmark isolada, o número existe porque o serviço estava em produção em `https://gemma.bestmodel.run/v1`. O checkpoint é o QAT W4A16 oficial `google/gemma-4-12B-it-qat-w4a16-ct`, rodando em vLLM 0.30, contexto 32k, streaming, `max_tokens` 200 e prompt PT-BR de ~25 tokens. O harness é o `report/perf_test.py` do repo da missão.
+
+## O que foi medido
+
+Throughput de decode e TTFT no serviço real:
+
+| Cenário | Decode | TTFT |
+|---|---|---|
+| 1 requisição | **66,5 tok/s** | 253 ms |
+| 8 simultâneas | **485,7 tok/s** total (≈61 tok/s cada) | 126 / 224 / 225 ms (min/med/max) |
+
+VRAM 22 842/24 576 MiB · 45 °C em carga · KV cache 167 544 tokens (5,1× a 32k).
+
+Com uma requisição, o decode fica em 66,5 tok/s e o TTFT em 253 ms. Com oito simultâneas, o total sobe para 485,7 tok/s (≈61 tok/s cada) e o TTFT fica em 126 / 224 / 225 ms (min/med/max). A placa usa 22 842 de 24 576 MiB, fica a 45 °C em carga e o KV cache cabe 167 544 tokens, 5,1× o contexto de 32k.
+
+Esses números não são uma média nova nem uma extrapolação: são os dois cenários medidos, batch 1 e batch 8.
+
+## Por que W4A16 e não FP8 na 3090
+
+FP8 online (`--quantization fp8`) crasha. O vLLM 0.30 despacha o GEMM para `cutlass_scaled_mm_sm80_epilogue` (w8a8 SM80), que não suporta as formas do Gemma 4 — head_dim 256/512 híbrido. Ampere não tem tensor core FP8. O caminho "FP8 pesos via Marlin" não existe para este modelo nesta versão.
+
+O QAT W4A16 oficial do Google cabe: 8,28 GiB de pesos, kernels Marlin maduros em Ampere e qualidade de treino quantização-consciente, superior a PTQ/AWQ. Por isso a produção nesta 3090 usa W4A16, não FP8.
+
+## Multimodal verificado (não assumido)
+
+A medição também passou por imagem e áudio no mesmo serviço. O que foi verificado:
+
+- Imagem (`image_url` em base64): o modelo leu OCR exato de 3 linhas num PNG gerado localmente.
+- Áudio via chat (`input_audio`): um clipe humano FLEURS `pt_br` de 17,8 s saiu com transcrição quase idêntica à referência do TSV. As diffs foram "Bieber"→"Biber" e "20"→"vinte".
+- `POST /v1/audio/transcriptions` **não existe** no vLLM 0.30 (404).
+- Voz robótica (espeak-ng) é rejeitada pelo modelo — qualidade de áudio importa.
+
+Isso é verificação pontual, não um benchmark multimodal completo. A próxima seção diz o que ficou de fora.
+
+## O que não foi validado
+
+bestmodel.run publica o que foi medido e o que não foi. Desta corrida:
+
+- Os números de **decode** são só com batch 1 e 8. Não houve varredura de batch maior. A 3090 satura em ~485 tok/s com 8 — não extrapolar linearmente.
+- Áudio de reunião ou telefonia **não foi validado**. Só houve read speech do FLEURS.
+- WER formal do Gemma 4 ASR não foi medido aqui. A passagem do FLEURS foi 1 clipe, qualitativa. Não cite isso como número de WER.
+
+Se alguém afirmar "Gemma 4 12B faz X tok/s na 3090" sem dizer batch, engine e quantização, o número não é este. Se alguém citar WER ou áudio de reunião a partir desta medição, está inventando.
+
+## Como ver no bestmodel.run
+
+O caminho é o mesmo do guia de 5 minutos. Em `/hardware`, o slug deste rig é `rtx-3090-24gb`. Em `/wall?rig=rtx-3090-24gb` você vê o ranking medido naquela GPU. A página do modelo costuma viver em `/m/google-gemma-4-12b-it`; se você tentar `/m/gemma-4-12b-it`, o site pode sugerir o slug com o prefixo do dono.
+
+Qualquer página aceita `?as=agent` para uma versão em texto voltada a agentes. Se você rodou a mesma combinação — ou outra — em hardware parecido, envie a medição em `/submit`. Onde não há medição, o site só estima por fórmula.
+
+## CTA: leia o número, não a extrapolação
+
+Se você quer saber o que o Gemma 4 12B W4A16 entrega nesta RTX 3090 em produção, estes são os fatos medidos:
+
+1. 1 requisição: 66,5 tok/s e TTFT 253 ms.
+2. 8 simultâneas: 485,7 tok/s no total (≈61 tok/s cada) e TTFT 126 / 224 / 225 ms.
+3. VRAM 22 842/24 576 MiB, 45 °C em carga, KV cache 167 544 tokens (5,1× a 32k).
+4. W4A16, não FP8: o caminho FP8 crasha neste modelo nesta versão do vLLM nesta Ampere.
+5. Imagem e um clipe FLEURS `pt_br` foram verificados; reunião, telefonia e WER formal não.
+
+O bestmodel.run não promete o modelo perfeito para todo mundo. Ele publica medições com o cenário à vista. Se a sua GPU não tem medições suficientes, envie a sua em `/submit`. Assim, a próxima pessoa lê um número medido, não uma média inventada.

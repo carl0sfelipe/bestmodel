@@ -7,6 +7,7 @@ matches carrying feasibility and expected performance metrics.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from benchmark_scenario import BenchmarkScenario
@@ -19,6 +20,8 @@ from roofline_kernel import estimate_context_limit, estimate_vram_footprint
 
 from src.dependencies.database_session_provider import DatabaseSession
 from src.schemas.hardware_match_request import HardwareMatchRequest
+
+logger = logging.getLogger(__name__)
 
 BATCH_SIZE = 1
 TTFT_PROMPT_TOKENS = 8192
@@ -41,7 +44,16 @@ def query_hardware_matches(
     for model_row in session.fetch_models_by_family(request.target_model_family):
         for quant_row in session.fetch_quantization_profiles():
             for runtime_row in session.fetch_inference_runtimes():
-                match = _evaluate_match(hardware, model_row, quant_row, runtime_row, capacity_mib, request)
+                try:
+                    match = _evaluate_match(
+                        hardware, model_row, quant_row, runtime_row, capacity_mib, request
+                    )
+                except ValueError:
+                    logger.warning(
+                        "skipping hardware match candidate model_id=%s",
+                        model_row["id"],
+                    )
+                    continue
                 matches.append(match)
     matches.sort(key=lambda match: _sort_key(match, request.priority))
     return {"matches": matches[:MAX_MATCHES]}

@@ -67,3 +67,50 @@ def test_rejects_invalid_request_payload(client):
         json=_request(target_context_tokens=0),
     )
     assert response.status_code == 422
+
+
+def _release(**overrides):
+    row = {
+        "id": "model-ok-dense",
+        "family": "fixture-moe-gap",
+        "release_name": "Ok-Dense",
+        "architecture": "dense",
+        "parameter_count_billion": 7.0,
+        "active_parameter_count_billion": None,
+        "num_layers": 32,
+        "hidden_size": 4096,
+        "num_attention_heads": 32,
+        "num_kv_heads": 8,
+        "head_dim": 128,
+        "expert_count": None,
+        "experts_per_token": None,
+        "max_context_tokens": 8192,
+        "released_at": "2026-01-01",
+    }
+    row.update(overrides)
+    return row
+
+
+def test_skips_moe_missing_active_params_and_returns_dense(client, database, caplog):
+    database._models.extend(
+        [
+            _release(
+                id="model-broken-moe",
+                release_name="Broken-MoE",
+                architecture="moe",
+                parameter_count_billion=26.0,
+                expert_count=128,
+            ),
+            _release(),
+        ]
+    )
+    with caplog.at_level("WARNING"):
+        response = client.post(
+            "/v1/match/hardware-to-models",
+            json=_request(target_model_family="fixture-moe-gap", gpu_count=1),
+        )
+    assert response.status_code == 200
+    model_ids = {match["model_release_id"] for match in response.json()["matches"]}
+    assert "model-ok-dense" in model_ids
+    assert "model-broken-moe" not in model_ids
+    assert "model-broken-moe" in caplog.text

@@ -60,3 +60,14 @@
     3. 587fd14 — flow leaderboard também POST nesses dois buracos; ainda 4 passaram.
   - make test no host: 348 passed; 9 failed PermissionError em artifacts/ (ambiente,
     settle/social) — não introduzido por estes commits. Testes de match/prefill/decode: 44 passed.
+- 2026-10-01 19:26:50 -0300 — RESOLVIDO [A DEFINIR] do front: apps/web-next é o front de produção na Vercel
+  (docs/direction-2026-09-19.md D5, PR #10 do dono; docs/POINTERS.md:54). apps/web = console legado/preview.
+  Fonte: loop autônomo 2026-10-01 (LOG ~/Work/autonomous-dev/LOG.md).
+- 2026-10-01 19:52 -03 — e2e_gate contra bestmodel-dev (zcode/cursor-grok-4.6-xhigh-fast, d167165):
+  - Wrapper `deploy/scripts/e2e-gate-dev.sh`: docker exec bestmodel-dev-api-1 com
+    BM_GATE_ATTACH=1; DATABASE_URL herdada (postgres:5432/bestmodel_dev), nunca impressa.
+  - `bash deploy/scripts/e2e-gate-dev.sh` → EXIT 0 GATE RESULT: PASS
+    (postgres ready; migrate.py; gpu_model=29; model_release=78; cross join; nonce 200).
+  - `bash infra/scripts/flow-bestmodel.sh dev` → 4/4 (sem regressão). Oráculo exit 0.
+  - SKIPs de attach (não vermelhos): seed/POST mock no pool compartilhado; toolchain
+    host (make test/cargo/CLI/VRAM) fora da imagem runtime. Prod StartedAt inalterado.

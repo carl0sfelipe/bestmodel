@@ -1,0 +1,42 @@
+# Override para os ambientes NÃO-produção (dev e stag) do bestmodel, no mesmo host da prod.
+# Isolamento: projeto compose próprio (bestmodel-dev / bestmodel-stag — o `name: bestmodel-prod`
+# do base file é sobrescrito pelo -p), volumes em /data/bestmodel/nonprod/<env>, nenhuma porta
+# publicada, segredos próprios em /data/bestmodel/nonprod/<env>/compose.env (nunca deploy/.env
+# de prod — só os NOMES das variáveis são os mesmos). Chaves OAuth de terceiros FALSAS.
+#
+#   BM_ENV=dev docker compose -p bestmodel-dev \
+#     -f deploy/docker-compose.prod.yml -f deploy/docker-compose.nonprod.yml \
+#     --env-file /data/bestmodel/nonprod/dev/compose.env up -d --build
+#
+# edge (caddy 80/443) e tunnel (cloudflared) ficam desligados: o ingresso é o portão `gate`
+# com basic auth + noindex, igual ao orbe.
+
+services:
+  caddy:
+    profiles: ["desligado"]
+
+  cloudflared:
+    profiles: ["desligado"]
+
+  postgres:
+    # timescaledb-ha exige PGDATA no bind (mesma razão do override omarchy)
+    environment:
+      PGDATA: /var/lib/postgresql/data
+    volumes: !override
+      - /data/bestmodel/nonprod/${BM_ENV:?BM_ENV}/postgres:/var/lib/postgresql/data
+
+  api:
+    # sem ports no base file — segue sem porta publicada
+
+  worker: {}
+
+  # Portão: basic auth + noindex na frente da api (a api exige chaves falsas de OAuth,
+  # login não funciona em nonprod de qualquer forma). Sem porta publicada: acesso só pela
+  # rede interna do projeto (docker exec / túnel futuro do Carlos).
+  gate:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    volumes:
+      - /data/bestmodel/nonprod/${BM_ENV:?BM_ENV}/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - api

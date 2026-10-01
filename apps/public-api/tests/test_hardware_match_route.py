@@ -91,6 +91,20 @@ def _release(**overrides):
     return row
 
 
+def test_gpu_missing_fp16_tflops_returns_200_not_500(client):
+    # Seed row gpu-gtx-1080-ti has null fp16_tflops. hardware-to-models
+    # used to ZeroDivisionError in TTFT (API 500).
+    response = client.post(
+        "/v1/match/hardware-to-models",
+        json=_request(gpu_model_ids=["gpu-gtx-1080-ti"], gpu_count=1),
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert "matches" in body
+    for match in body["matches"]:
+        assert set(match.keys()) == EXPECTED_FIELDS
+
+
 def test_skips_moe_missing_active_params_and_returns_dense(client, database, caplog):
     database._models.extend(
         [

@@ -87,6 +87,8 @@ def estimate_prefill_tokens_per_second(
     ``prefill = C_eff / F_token``. Raises ``ValueError`` when a prompt token
     costs no (or negative) FLOPs.
     """
+    if hardware.fp16_tflops is None or hardware.fp16_tflops <= 0:
+        raise ValueError(f"gpu {hardware.id} has no fp16_tflops spec")
     effective_flops = derive_effective_flops(hardware, quant, scenario)
     flops_per_prompt_token = derive_prefill_flops_per_token(model, scenario)
     if flops_per_prompt_token <= 0:
@@ -111,4 +113,8 @@ def estimate_ttft(
     prefill_tokens_per_second = estimate_prefill_tokens_per_second(
         hardware, model, quant, scenario
     )
+    if prefill_tokens_per_second <= 0:
+        raise ValueError(
+            f"prefill_tokens_per_second={prefill_tokens_per_second}, expected > 0"
+        )
     return scenario.prompt_tokens / prefill_tokens_per_second + O_LATENCY_SECONDS

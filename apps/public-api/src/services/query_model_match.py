@@ -177,7 +177,7 @@ def _config_payload(
 
 
 def _gpu_spec(row: dict[str, Any], gpu_count: int, capacity_mib: int) -> GpuSpec:
-    flops = float(row["fp16_tflops"]) * gpu_count if row.get("fp16_tflops") else 0.0
+    flops = float(row["fp16_tflops"]) * gpu_count if row.get("fp16_tflops") else None
     return GpuSpec(
         id=row["id"],
         vendor=row["vendor"],

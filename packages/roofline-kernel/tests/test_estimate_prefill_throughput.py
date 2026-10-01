@@ -18,6 +18,7 @@ from estimate_prefill_throughput import (
     estimate_prefill_tokens_per_second,
     estimate_ttft,
 )
+from gpu_spec import GpuSpec
 from hardware_fixtures import A100_80GB, H100_80GB, RTX_4090
 
 
@@ -162,3 +163,24 @@ def test_rejects_empty_prompt():
         ValueError, match=r"flops_per_prompt_token=0\.0, expected > 0 FLOPs"
     ):
         estimate_ttft(A100_80GB, model, quant, scenario)
+
+
+def test_rejects_gpu_without_fp16_tflops_spec():
+    # Seed row gpu-gtx-1080-ti: bandwidth present, fp16_tflops null.
+    # Prefill used to return 0.0 and TTFT then ZeroDivisionError (API 500).
+    hardware = GpuSpec(
+        id="gpu-gtx-1080-ti",
+        vendor="NVIDIA",
+        marketing_name="NVIDIA GeForce GTX 1080 Ti",
+        vram_mib=11264,
+        memory_bandwidth_gib_s=484.0,
+        fp16_tflops=None,
+        int8_tops=None,
+        tdp_watt=250,
+    )
+    with pytest.raises(ValueError, match="gpu-gtx-1080-ti has no fp16_tflops spec"):
+        estimate_prefill_tokens_per_second(
+            hardware, _dense_model(), _fp16_quant(), _scenario()
+        )
+    with pytest.raises(ValueError, match="gpu-gtx-1080-ti has no fp16_tflops spec"):
+        estimate_ttft(hardware, _dense_model(), _fp16_quant(), _scenario())

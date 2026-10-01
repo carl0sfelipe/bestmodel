@@ -74,7 +74,8 @@ def _combined_gpu_spec(
 ) -> GpuSpec:
     first = gpus[0]
     bandwidth = gpu_count * sum(float(row["memory_bandwidth_gib_s"]) for row in gpus)
-    flops = gpu_count * sum(float(row["fp16_tflops"]) for row in gpus if row.get("fp16_tflops"))
+    flops_parts = [float(row["fp16_tflops"]) for row in gpus if row.get("fp16_tflops")]
+    flops = gpu_count * sum(flops_parts) if flops_parts else None
     return GpuSpec(
         id=first["id"],
         vendor=first["vendor"],

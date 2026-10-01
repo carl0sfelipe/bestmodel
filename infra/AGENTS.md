@@ -11,7 +11,7 @@ migrations, seed data, operational scripts, the integration gate.
 | `seed/*.json` + `seed/load_seed.py` | seed catalogs; `make seed`; extend JSON + re-run (idempotent) |
 | `scripts/migrate.py` | versioned runner (`meta.schema_migrations`) |
 | `scripts/check_host_ports.py` | guard: fail if compose would publish reserved ports |
-| `scripts/e2e_gate.sh` | the Phase 0 gate (driven by `make gate`); also the reference for local end-to-end runs |
+| `scripts/e2e_gate.sh` | the Phase 0 gate (driven by `make gate`); also the reference for local end-to-end runs. `BM_GATE_ATTACH=1` attaches to an already-running instance (used by `deploy/scripts/e2e-gate-dev.sh`) |
 | `scripts/import_lab_export.py` | historical one-off: ingested the owner's 3090 lab zip (do not extend; superseded by CLI v2) |
 | `ci/github-actions.yml` + `.github/workflows/ci.yml` | CI running `make test` |
 

@@ -1,13 +1,29 @@
 #!/usr/bin/env bash
 # Phase 0 integration gate: infra -> data -> tests -> CLI -> API -> worker -> leaderboard.
 # Prints a command-by-command checklist and exits non-zero on any failure.
+#
+# Default (`make gate`): local lab stack on localhost:5434/6380 + ephemeral API/worker.
+# BM_GATE_ATTACH=1: same count/migrate/nonce assertions against an already-running
+# instance. DATABASE_URL and REDIS_URL must already be set (never printed). API at
+# BM_GATE_API_BASE. BM_GATE_WORKDIR overrides cd when the script is copied to /tmp.
+# Host-toolchain and isolated-key upload legs are skipped in attach mode (not
+# applicable on a runtime image / shared pool). Thresholds are unchanged.
 set -u
 
-cd "$(dirname "$0")/../.."
+if [ -n "${BM_GATE_WORKDIR:-}" ]; then
+  cd "$BM_GATE_WORKDIR"
+else
+  cd "$(dirname "$0")/../.."
+fi
+
+ATTACH=0
+[ "${BM_GATE_ATTACH:-}" = "1" ] && ATTACH=1
+
 WORK="$(mktemp -d)"
 API_PORT=8012
-export DATABASE_URL="postgresql://bestmodel:bestmodel@localhost:5434/bestmodel"
-export REDIS_URL="redis://localhost:6380/0"
+API_BASE="${BM_GATE_API_BASE:-http://127.0.0.1:${API_PORT}}"
+export DATABASE_URL="${DATABASE_URL:-postgresql://bestmodel:bestmodel@localhost:5434/bestmodel}"
+export REDIS_URL="${REDIS_URL:-redis://localhost:6380/0}"
 export ARTIFACT_VAULT_DIR="$WORK/artifacts"
 export BENCHMARK_PROBE_KEY_PATH="$WORK/gate-key.pem"
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -16,34 +32,60 @@ FAILED=0
 pass() { echo "PASS  $1"; }
 fail() { echo "FAIL  $1"; FAILED=1; }
 check_exit() { if [ "$1" -eq 0 ]; then pass "$2"; else fail "$2"; fi }
-pg() { docker compose -f infra/docker/docker-compose.yml exec -T postgres psql -U bestmodel -d bestmodel -Atc "$1"; }
+pg() {
+  if [ "$ATTACH" -eq 1 ]; then
+    python -c "
+import os, sys
+import psycopg
+sql = sys.argv[1]
+with psycopg.connect(os.environ['DATABASE_URL']) as conn:
+    row = conn.execute(sql).fetchone()
+    print('' if row is None or row[0] is None else row[0])
+" "$1"
+  else
+    docker compose -f infra/docker/docker-compose.yml exec -T postgres psql -U bestmodel -d bestmodel -Atc "$1"
+  fi
+}
 
 API_PID=""
 WORKER_PID=""
-# Kill leftovers from interrupted gate runs: stale workers/API would steal
-# stream messages or the port.
-pkill -f "src.worker" 2>/dev/null || true
-lsof -nP -iTCP:"$API_PORT" -sTCP:LISTEN -t 2>/dev/null | xargs kill 2>/dev/null || true
-sleep 1
 cleanup() {
   [ -n "$API_PID" ] && kill "$API_PID" 2>/dev/null
   [ -n "$WORKER_PID" ] && kill "$WORKER_PID" 2>/dev/null
 }
 trap cleanup EXIT
 
+if [ "$ATTACH" -eq 0 ]; then
+  # Kill leftovers from interrupted gate runs: stale workers/API would steal
+  # stream messages or the port.
+  pkill -f "src.worker" 2>/dev/null || true
+  lsof -nP -iTCP:"$API_PORT" -sTCP:LISTEN -t 2>/dev/null | xargs kill 2>/dev/null || true
+  sleep 1
+fi
+
 echo "=== 1. Infrastructure ==="
-docker compose -f infra/docker/docker-compose.yml up -d postgres redis >/dev/null 2>&1
-READY=1
-for _ in $(seq 1 45); do
-  if docker compose -f infra/docker/docker-compose.yml exec -T postgres pg_isready -U bestmodel -d bestmodel >/dev/null 2>&1; then READY=0; break; fi
-  sleep 2
-done
-check_exit "$READY" "docker compose up -d (postgres ready on 5434)"
-docker compose -f infra/docker/docker-compose.yml up -d minio meilisearch >/dev/null 2>&1 || true
+if [ "$ATTACH" -eq 1 ]; then
+  python -c "import os, psycopg; psycopg.connect(os.environ['DATABASE_URL']).close()"
+  check_exit "$?" "postgres ready via DATABASE_URL (BM_GATE_ATTACH)"
+else
+  docker compose -f infra/docker/docker-compose.yml up -d postgres redis >/dev/null 2>&1
+  READY=1
+  for _ in $(seq 1 45); do
+    if docker compose -f infra/docker/docker-compose.yml exec -T postgres pg_isready -U bestmodel -d bestmodel >/dev/null 2>&1; then READY=0; break; fi
+    sleep 2
+  done
+  check_exit "$READY" "docker compose up -d (postgres ready on 5434)"
+  docker compose -f infra/docker/docker-compose.yml up -d minio meilisearch >/dev/null 2>&1 || true
+fi
 
 echo "=== 2. Migrations and seed ==="
-make migrate >/dev/null 2>&1; check_exit "$?" "make migrate (exit 0)"
-make seed >/dev/null 2>&1; check_exit "$?" "make seed (exit 0)"
+if [ "$ATTACH" -eq 1 ]; then
+  python infra/scripts/migrate.py >/dev/null 2>&1; check_exit "$?" "migrate.py (exit 0)"
+  echo "SKIP  load_seed.py (BM_GATE_ATTACH: shared instance; count assertions only)"
+else
+  make migrate >/dev/null 2>&1; check_exit "$?" "make migrate (exit 0)"
+  make seed >/dev/null 2>&1; check_exit "$?" "make seed (exit 0)"
+fi
 GPU_COUNT=$(pg "SELECT count(*) FROM gpu_model;")
 MODEL_COUNT=$(pg "SELECT count(*) FROM model_release;")
 [ "${GPU_COUNT:-0}" -ge 20 ] && pass "gpu_model count >= 20 (got $GPU_COUNT)" || fail "gpu_model count >= 20 (got ${GPU_COUNT:-0})"
@@ -51,6 +93,29 @@ MODEL_COUNT=$(pg "SELECT count(*) FROM model_release;")
 CROSS=$(pg "SELECT count(*) FROM model_release m CROSS JOIN gpu_model g LIMIT 1;")
 [ "${CROSS:-0}" -ge 1 ] && pass "model x gpu cross query returns rows" || fail "model x gpu cross query"
 
+if [ "$ATTACH" -eq 1 ]; then
+  echo "=== 3. Test suites ==="
+  echo "SKIP  make test (BM_GATE_ATTACH: tests/ and pytest are not in the runtime image)"
+  echo "SKIP  cargo test (BM_GATE_ATTACH: Rust toolchain is not in the runtime image)"
+  echo "=== 4. CLI report generation ==="
+  echo "SKIP  cargo build benchmark-probe (BM_GATE_ATTACH: cli/ is not in the runtime image)"
+  echo "=== 5. API and worker ==="
+  python -c "
+import sys, urllib.request
+base = sys.argv[1].rstrip('/')
+sys.exit(0 if urllib.request.urlopen(base + '/v1/submissions/nonce', timeout=5).status == 200 else 1)
+" "$API_BASE"
+  check_exit "$?" "existing API nonce ready ($API_BASE)"
+  echo "SKIP  intake worker start (BM_GATE_ATTACH: worker is a sibling container)"
+  echo "=== 6. Upload and leaderboard ==="
+  echo "SKIP  POST /v1/submissions (BM_GATE_ATTACH: isolated gate key is not the instance key; mock upload would write the shared pool)"
+  echo "=== 6b. Video leg ==="
+  echo "SKIP  video mock upload (BM_GATE_ATTACH: same signing/pool reason as section 6)"
+  echo "=== D4 ==="
+  echo "SKIP  D4 AGENTS.md sweep (BM_GATE_ATTACH: runtime image omits cli/benchmark-probe)"
+  echo "=== 7. Exit criteria ==="
+  echo "SKIP  VRAM harness (BM_GATE_ATTACH: tests/ is not in the runtime image)"
+else
 echo "=== 3. Test suites ==="
 make test >/dev/null 2>&1; check_exit "$?" "make test (pytest green)"
 (cd cli/benchmark-probe && cargo test --quiet >/dev/null 2>&1); check_exit "$?" "cargo test (green)"
@@ -228,6 +293,7 @@ uv run python -m tests.regression.vram_error_harness | tail -3
 check_exit "${PIPESTATUS[0]}" "VRAM prediction P50 < 10%"
 echo "NOTE  10-machine criterion: re-run step 4 on each internal machine:"
 echo "      cd cli/benchmark-probe && cargo run -- --runtime mock --output benchmark-report.json"
+fi
 
 echo
 if [ "$FAILED" -eq 0 ]; then echo "GATE RESULT: PASS"; else echo "GATE RESULT: FAIL"; fi

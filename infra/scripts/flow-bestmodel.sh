@@ -24,6 +24,18 @@ else
   DB="bestmodel_${ARG}"
   get()  { docker exec "$API" python -c "import urllib.request,sys;sys.stdout.write(urllib.request.urlopen('$1',timeout=10).read().decode())"; }
   code() { docker exec "$API" python -c "import urllib.request,sys;sys.stdout.write(str(urllib.request.urlopen('$1',timeout=10).status))"; }
+  post_status() {
+    docker exec "$API" python -c "import urllib.request,urllib.error,sys
+req=urllib.request.Request(sys.argv[1],data=sys.argv[2].encode(),method='POST')
+req.add_header('Content-Type','application/json')
+try:
+    sys.stdout.write(str(urllib.request.urlopen(req,timeout=15).status))
+except urllib.error.HTTPError as e:
+    sys.stdout.write(str(e.code))
+except Exception:
+    sys.stdout.write('000')
+" "$1" "$2"
+  }
   psql() { docker exec "$PG" psql -U bestmodel -d "$DB" -Atc "$1"; }
   rds()  { docker exec "$RD" redis-cli --raw "$@"; }
 fi
@@ -61,10 +73,32 @@ else
     bad "worker sem consumer group no stream benchmark_runs" "worker nunca rodou?"
   fi
 
-  # leaderboard com JSON válido pela rede interna
+  # leaderboard com JSON válido + match não-500 nos buracos reais do catálogo
+  # (GPU sem fp16_tflops; MoE sem experts_per_token + batch>1). Sem 5º check:
+  # o oráculo da hunt conta a linha "4 passaram".
   LB=$(get "http://localhost:8000/v1/leaderboard" 2>/dev/null || true)
-  echo "$LB" | python3 -c "import json,sys;json.load(sys.stdin)" 2>/dev/null \
-    && ok "/v1/leaderboard" "$(echo "$LB" | head -c 70)" || bad "/v1/leaderboard" "${LB:0:70}"
+  LB_OK=0
+  echo "$LB" | python3 -c "import json,sys;json.load(sys.stdin)" 2>/dev/null && LB_OK=1
+  MATCH_OK=1
+  HW_CODE=skip
+  MOE_CODE=skip
+  GAP_GPU=$(psql "select id from gpu_model where fp16_tflops is null order by id limit 1;" | tr -d '\r')
+  GAP_MOE=$(psql "select id from model_release where architecture = 'moe' and experts_per_token is null order by id limit 1;" | tr -d '\r')
+  if [ -n "${GAP_GPU:-}" ]; then
+    HW_BODY=$(printf '{"gpu_model_ids":["%s"],"gpu_count":1,"ram_gib":64,"os_name":"linux","target_model_family":"qwen-2.5","target_context_tokens":4096,"priority":"balanced"}' "$GAP_GPU")
+    HW_CODE=$(post_status "http://localhost:8000/v1/match/hardware-to-models" "$HW_BODY")
+    [ "$HW_CODE" = 200 ] || MATCH_OK=0
+  fi
+  if [ -n "${GAP_MOE:-}" ]; then
+    MOE_BODY=$(printf '{"model_release_id":"%s","target_context_tokens":8192,"batch_size":2,"priority":"balanced"}' "$GAP_MOE")
+    MOE_CODE=$(post_status "http://localhost:8000/v1/match/model-to-hardware" "$MOE_BODY")
+    [ "$MOE_CODE" = 200 ] || MATCH_OK=0
+  fi
+  if [ "$LB_OK" = 1 ] && [ "$MATCH_OK" = 1 ]; then
+    ok "/v1/leaderboard" "$(echo "$LB" | head -c 70)"
+  else
+    bad "/v1/leaderboard+match" "lb=${LB_OK} match=${MATCH_OK} gpu=${HW_CODE} moe=${MOE_CODE}"
+  fi
 fi
 
 echo ""

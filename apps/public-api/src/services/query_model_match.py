@@ -7,6 +7,7 @@ cost-efficient configurations tagged by role.
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from benchmark_scenario import BenchmarkScenario
@@ -19,6 +20,8 @@ from roofline_kernel import estimate_context_limit, estimate_vram_footprint
 
 from src.dependencies.database_session_provider import DatabaseSession
 from src.schemas.model_match_request import ModelMatchRequest
+
+logger = logging.getLogger(__name__)
 
 MAX_GPU_COUNT = 8
 ETA_PACK = 1.05
@@ -49,7 +52,15 @@ def _collect_candidates(
         for gpu_count in range(1, MAX_GPU_COUNT + 1):
             for quant_row in session.fetch_quantization_profiles():
                 for runtime_row in session.fetch_inference_runtimes():
-                    config = _evaluate_config(model_row, gpu_row, gpu_count, quant_row, runtime_row, request)
+                    try:
+                        config = _evaluate_config(model_row, gpu_row, gpu_count, quant_row, runtime_row, request)
+                    except ValueError:
+                        logger.warning(
+                            "skipping model match candidate model_id=%s gpu_id=%s",
+                            model_row["id"],
+                            gpu_row["id"],
+                        )
+                        continue
                     if config["feasible"]:
                         candidates.append(config)
     return candidates

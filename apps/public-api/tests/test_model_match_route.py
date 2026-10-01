@@ -62,3 +62,51 @@ def test_impossible_context_returns_empty_configs(client):
 def test_rejects_invalid_request_payload(client):
     response = client.post("/v1/match/model-to-hardware", json=_request(batch_size=0))
     assert response.status_code == 422
+
+
+def test_seed_moe_missing_experts_per_token_batch_returns_200(client):
+    # Live catalog hole: model-gemma-4-26b-a4b-it is MoE with experts_per_token
+    # null. batch_size>1 used to TypeError inside decode (API 500).
+    response = client.post(
+        "/v1/match/model-to-hardware",
+        json=_request(
+            model_release_id="model-gemma-4-26b-a4b-it",
+            target_context_tokens=8192,
+            batch_size=2,
+        ),
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert "configs" in body
+    for config in body["configs"]:
+        assert EXPECTED_FIELDS <= set(config.keys())
+        assert config["feasible"] is True
+        assert config["expected_decode_tok_s"] > 0
+
+
+def test_moe_missing_active_params_returns_empty_not_500(client, database):
+    database._models.append(
+        {
+            "id": "model-broken-moe",
+            "family": "fixture-moe-gap",
+            "release_name": "Broken-MoE",
+            "architecture": "moe",
+            "parameter_count_billion": 26.0,
+            "active_parameter_count_billion": None,
+            "num_layers": 32,
+            "hidden_size": 4096,
+            "num_attention_heads": 32,
+            "num_kv_heads": 8,
+            "head_dim": 128,
+            "expert_count": 128,
+            "experts_per_token": None,
+            "max_context_tokens": 8192,
+            "released_at": "2026-01-01",
+        }
+    )
+    response = client.post(
+        "/v1/match/model-to-hardware",
+        json=_request(model_release_id="model-broken-moe", batch_size=1),
+    )
+    assert response.status_code == 200
+    assert response.json() == {"configs": []}

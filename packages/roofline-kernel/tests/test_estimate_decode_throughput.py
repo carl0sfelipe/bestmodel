@@ -200,6 +200,31 @@ def test_moe_decode_uses_distinct_experts_for_batch():
     assert batched > single
 
 
+def test_moe_missing_experts_per_token_still_decodes_batched():
+    # Seed row model-gemma-4-26b-a4b-it: MoE with active weights, no routing factor.
+    # Batched decode used to TypeError on `None * batch_size`.
+    model = ModelArch(
+        id="model-gemma-4-26b-a4b-it",
+        family="gemma",
+        release_name="gemma-4-26b-a4b-it",
+        architecture=ModelArchitecture.moe,
+        parameter_count_billion=25.81,
+        active_parameter_count_billion=4.0,
+        num_layers=30,
+        hidden_size=2816,
+        num_attention_heads=16,
+        num_kv_heads=8,
+        head_dim=256,
+        expert_count=128,
+        experts_per_token=None,
+        max_context_tokens=262144,
+    )
+    tok_s = estimate_decode_tokens_per_second(
+        A100_80GB, model, _fp16_quant(), _scenario(batch_size=2, context_tokens=8192)
+    )
+    assert tok_s > 0.0
+
+
 def test_rejects_non_positive_bytes_per_step():
     model = _dense_model(parameter_count_billion=-2.0)
     quant = _fp16_quant()

@@ -10,5 +10,8 @@ No product code exists until the executor sessions run.
   (`CONTRATO-GLOBAL.md`, `ESTADO.md`, `PROMPT-EXECUTOR.md`) is not in this
   public tree.
 - Own uv project + SQLite by design — deliberately NOT wired to the Phase-0
-  Postgres/Redis/gate; do not touch apps/, packages/, infra/.
+  Postgres/Redis/gate. Do not import `apps/` or `packages/`.
+- Intent categories are read by path from `packages/intent-catalog/catalog.json`
+  (`BESTMODEL_INTENT_CATALOG` overrides). Adding an intent is a catalog row,
+  not an edit here.
 - Shared-machine port rules apply (see CONTRATO §3); only port 8790.

@@ -49,12 +49,23 @@ STALE (do not treat as prod):
 
 | Path | Why stale |
 |---|---|
+| `docs/direction-2026-09-19.md` § D4 item 3 | Superseded by `docs/direction-2026-09-21.md` D4/D8 (catalog, not the PR #11 hand-edit). The rest of v3 still binds |
 | `docs/architecture.md` | 2026-08 graph: no web-next, no OAuth, no Omarchy, no S23 dual-path |
 | `docs/en/deploy.md` | Still beelink + Vercel `/v1` rewrite + Pages as DNS cutover |
 | `README.md` “What's here” / `apps/web` | Prod front is `apps/web-next` |
 | `docs/backlog.md` heading **S30** | That S30 is mural (31/08). OAuth on 19/09 reused the id |
 | `deploy/systemd/bestmodel-backup.service` in git | Path `/home/beelink/...`. Live units: `~/.config/systemd/user/` |
 | Root `AGENTS.md` “read order” of 7 files | That dump is the anti-pattern this catalog exists to stop |
+
+---
+
+## Job: add-intent
+
+| Verb | Path | One line |
+|---|---|---|
+| OPEN | `packages/intent-catalog/AGENTS.md` | the only edit that adds an intent |
+| OPEN | `specs/en/S37-intent-catalog.md` | acceptance commands |
+| SKIP | `docs/direction-2026-09-19.md` § D4 item 3 | superseded by `docs/direction-2026-09-21.md` |
 
 ---
 

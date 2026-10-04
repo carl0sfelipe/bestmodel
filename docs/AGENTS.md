@@ -8,6 +8,7 @@ English.
 |---|---|---|
 | `POINTERS.md` | Job cards: OPEN / SKIP / STALE. Read-side catalog (v0). | Before any other docs file — pick a job, follow only that card |
 | `direction-2026-09-19.md` | Fable v3 decision record (D1–D7 sized + execution order + H5–H12) | Before executing anything post-incident |
+| `direction-2026-09-21.md` | Fable decision: one intent catalog (S37). v3 D4 item 3 no longer binds | Before adding an intent |
 | `architecture.md` | Module dependency graph + code review notes (**stale** em web-next/OAuth/Omarchy — usar `direction-2026-09-19.md`) | Before cross-package changes |
 | `findings.md` | Numbered calibration findings (F1–F8) + open decisions | Before touching predictors, thresholds, contracts |
 | `backlog.md` | Canonical roadmap: tracks A (Local Lab), B (claims/votes), C (virality), D (diffusion) | Before proposing new work |

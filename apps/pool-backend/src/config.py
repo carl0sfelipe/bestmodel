@@ -1,5 +1,14 @@
+import os
+
 API_PORT = 8790
 DB_PATH = "data/lmpool.sqlite3"
+
+
+def resolve_db_path() -> str:
+    """SQLite path. BESTMODEL_POOL_DB overrides DB_PATH for tests."""
+    return os.environ.get("BESTMODEL_POOL_DB", DB_PATH)
+
+
 API_BASE = "https://www.localmaxxing.com/api"
 THROTTLE_MS = 350
 USER_AGENT = "bestmodel-backend-sync/0.1"

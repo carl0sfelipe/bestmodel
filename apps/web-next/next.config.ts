@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const appDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(appDir, "../..");
 
 /**
  * The app calls the API through lib/social.ts, whose base is
@@ -25,6 +30,10 @@ const nextConfig: NextConfig = {
     "/blog": ["./content/blog/**/*.mdx"],
     "/blog/[slug]": ["./content/blog/**/*.mdx"],
   },
+  // The intent catalog lives at the repo root, outside this app. Trace it;
+  // do not copy catalog.json into the app.
+  outputFileTracingRoot: repoRoot,
+  turbopack: { root: repoRoot },
   async rewrites() {
     if (!API_ORIGIN) return [];
     return [{ source: "/v1/:path*", destination: `${API_ORIGIN}/v1/:path*` }];

@@ -101,3 +101,7 @@ goal vs hardware switcher (`.journey-btn[data-journey]`).
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
   `specs/en/L02-social-platform.md`; backlog tracks B/C.
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).
+  **S37:** intent catalog (`packages/intent-catalog/catalog.json`) is the
+  only category list. v3 D4 item 3 (hand-edit PR #11) is superseded by
+  `docs/direction-2026-09-21.md`. Music and image-to-3d are intents with no
+  measured cells.

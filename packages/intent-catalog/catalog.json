@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "fallbackIntent": "chat",
+  "modalities": ["text", "image", "audio", "video", "3d"],
+  "intents": [
+    {
+      "id": "chat",
+      "name": "Chat",
+      "glyph": "▭",
+      "desc": "text generation · reasoning",
+      "modality": "text",
+      "storable": true,
+      "metric": {"field": "tokSOutMedian", "unit": "tok/s", "label": "decode", "higherIsBetter": true},
+      "forbiddenFields": [],
+      "classify": null
+    },
+    {
+      "id": "code",
+      "name": "Code",
+      "glyph": "<",
+      "desc": "completion · refactor",
+      "modality": "text",
+      "storable": true,
+      "metric": {"field": "tokSOutMedian", "unit": "tok/s", "label": "decode", "higherIsBetter": true},
+      "forbiddenFields": [],
+      "classify": "coder|starcoder|codestral|code"
+    },
+    {
+      "id": "image",
+      "name": "Image gen",
+      "glyph": "▦",
+      "desc": "text → image",
+      "modality": "image",
+      "storable": true,
+      "metric": {"field": "imagesPerSec", "unit": "img/s", "label": "images", "higherIsBetter": true},
+      "forbiddenFields": ["tokSOutMedian"],
+      "classify": null
+    },
+    {
+      "id": "audio",
+      "name": "Audio",
+      "glyph": "∿",
+      "desc": "speech ↔ text",
+      "modality": "audio",
+      "storable": true,
+      "metric": {"field": "audioXReal", "unit": "×real", "label": "realtime", "higherIsBetter": true},
+      "forbiddenFields": ["tokSOutMedian"],
+      "classify": "whisper|wav2vec|audiogen|speech-to-text|\\bstt\\b|\\btts\\b"
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "glyph": "♩",
+      "desc": "text → music · song gen",
+      "modality": "audio",
+      "storable": true,
+      "metric": {"field": "audioXReal", "unit": "×real", "label": "realtime", "higherIsBetter": true},
+      "forbiddenFields": ["tokSOutMedian"],
+      "classify": "musicgen|magnet|jasco|ace-?step|\\byue2?\\b|diffrhythm|stable audio|text-?to-?music|text2music"
+    },
+    {
+      "id": "video",
+      "name": "Video",
+      "glyph": "▶",
+      "desc": "generation · animation",
+      "modality": "video",
+      "storable": true,
+      "metric": {"field": "videoFramesPerSec", "unit": "f/s", "label": "frames", "higherIsBetter": true},
+      "forbiddenFields": ["tokSOutMedian"],
+      "classify": null
+    },
+    {
+      "id": "image-to-3d",
+      "name": "Image → 3D",
+      "glyph": "◈",
+      "desc": "image → 3D asset",
+      "modality": "3d",
+      "storable": true,
+      "metric": {"field": "secPerAsset", "unit": "s/asset", "label": "per asset", "higherIsBetter": false},
+      "forbiddenFields": ["tokSOutMedian"],
+      "classify": null
+    },
+    {
+      "id": "vision",
+      "name": "Vision",
+      "glyph": "◉",
+      "desc": "image understanding",
+      "modality": "text",
+      "storable": false,
+      "metric": {"field": "tokSOutMedian", "unit": "tok/s", "label": "decode", "higherIsBetter": true},
+      "forbiddenFields": [],
+      "classify": null
+    }
+  ]
+}

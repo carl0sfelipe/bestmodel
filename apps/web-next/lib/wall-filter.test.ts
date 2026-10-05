@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { filterWallRows, unknownRig } from "./wall-filter.ts";
+import { formatRigMiss, filterWallRows, isDefaultRankingExcluded, unknownRig } from "./wall-filter.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -36,7 +36,34 @@ describe("filterWallRows", () => {
     assert.ok(filtered.every((row) => !/tinystories|tiny-stories/i.test(`${row.model.slug} ${row.model.displayName} ${row.model.hfId}`)));
   });
 
-  test("unknown rig is a miss with 10 similar slugs", () => {
+  test("default ranking excludes toy-marked and moved-repo models", () => {
+    assert.equal(
+      isDefaultRankingExcluded({
+        slug: "delphi-suite-stories-llama2-50k",
+        category: "chat",
+        paramsB: null,
+        displayName: "stories-llama2-50k",
+        hfId: "delphi-suite/stories-llama2-50k",
+      }),
+      true,
+    );
+    assert.equal(
+      isDefaultRankingExcluded({
+        slug: "ggml-org-models-moved",
+        category: "chat",
+        paramsB: null,
+        displayName: "models-moved",
+        hfId: "ggml-org/models-moved",
+      }),
+      true,
+    );
+    assert.equal(
+      isDefaultRankingExcluded({ slug: "qwen-qwen3-8-27b", category: "chat", paramsB: 27 }),
+      false,
+    );
+  });
+
+  test("unknown rig is a miss with English wording and 10 similar rig keys", () => {
     const { hardwareKeys } = loadRows();
     const missing = unknownRig("rtx-3090-99tb", hardwareKeys);
     assert.ok(missing);
@@ -44,6 +71,11 @@ describe("filterWallRows", () => {
     assert.equal(missing.similar.length, 10);
     assert.ok(missing.similar.every((key) => hardwareKeys.includes(key)));
     assert.ok(missing.similar.some((key) => key.includes("3090")));
+    const lines = formatRigMiss(missing);
+    assert.equal(lines[0], "bestmodel.run / pool — agent view");
+    assert.equal(lines[2], "rig not found: rtx-3090-99tb");
+    assert.equal(lines[4], "Closest rig keys:");
+    assert.equal(lines[5], "  " + missing.similar[0]);
     assert.equal(unknownRig("rtx-3090-24gb", hardwareKeys), null);
   });
 });

@@ -8,6 +8,9 @@ OBJETIVO: fix three defects in apps/web-next found on 2026-10-05 by calling http
 - `apps/web/data/derived/models.json`: `delphi-suite-stories-llama2-50k` and `ggml-org-models-moved` have `category: "chat"`, `paramsB: null`. They top the default /wall ranking (36,715 and 16,740 tok/s) even though the agent view says "Default ranking excludes <1B and toy/tinystories".
 - Tests run with `node --experimental-strip-types --test lib/**/*.test.ts` from `apps/web-next` (no install needed).
 
+Nao invente numero, prazo ou fonte alem dos listados.
+NUNCA use declare const como workaround — importe de verdade.
+
 ## PROIBIDO
 - push, deploy, editing anything outside `apps/web-next/`.
 - Changing the honesty ladder text or any number.

@@ -11,4 +11,5 @@ dependencies = [
     "python-multipart>=0.0.9",
     "cryptography>=43",
     "redis>=5",
+    "webauthn>=2.2,<3",
 ]

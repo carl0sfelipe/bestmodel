@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
     return [{ source: "/v1/:path*", destination: `${API_ORIGIN}/v1/:path*` }];
   },
   async redirects() {
-    return FRIENDLY_REDIRECTS;
+    return [...FRIENDLY_REDIRECTS];
   },
 };
 

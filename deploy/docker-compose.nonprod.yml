@@ -30,9 +30,34 @@ services:
 
   worker: {}
 
+  # web-next: the site. Base target is the built image (runner, revision-stamped)
+  # used by stag; dev overrides the target to devlive (next dev over a bind mount)
+  # via deploy/docker-compose.devlive.yml. API_ORIGIN is read by next.config.ts at
+  # build time (the /v1/* rewrite is baked into .next) and matches the gate routing.
+  web:
+    build:
+      context: ..
+      dockerfile: infra/docker/web-next.Dockerfile
+      target: runner
+      args:
+        REVISION: ${WEB_REVISION:-unknown}
+    environment:
+      API_ORIGIN: http://api:8000
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/llms.txt"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
   # Portão: basic auth + noindex na frente da api (a api exige chaves falsas de OAuth,
   # login não funciona em nonprod de qualquer forma). Sem porta publicada: acesso só pela
   # rede interna do projeto (docker exec / túnel futuro do Carlos).
+  # Routing (Caddyfile template in deploy/nonprod/init-env.sh): /v1/* -> api:8000,
+  # everything else -> web:3000.
   gate:
     image: caddy:2-alpine
     restart: unless-stopped
@@ -40,3 +65,4 @@ services:
       - /data/bestmodel/nonprod/${BM_ENV:?BM_ENV}/Caddyfile:/etc/caddy/Caddyfile:ro
     depends_on:
       - api
+      - web

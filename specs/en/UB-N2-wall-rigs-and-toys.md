@@ -31,10 +31,10 @@ NUNCA use declare const como workaround — importe de verdade.
    - `isDefaultRankingExcluded` is true for the two models above (use their real fields) and false for `{slug:"qwen-qwen3-8-27b", category:"chat", paramsB:27}`.
    - The unknown-rig test asserts the English wording via a pure helper you extract: `formatRigMiss(miss): string[]` in `lib/wall-filter.ts`, used by the page.
 
-VERIFICACAO: cd apps/web-next && node --experimental-strip-types --test lib/**/*.test.ts && ! grep -rn "não encontrado\|sugerir\|parecidos" app lib
+VERIFICACAO: cd apps/web-next && node --experimental-strip-types --test lib/**/*.test.ts && ! grep -rnE "não encontrado|sugerir|parecidos" app lib
 
 ## Oraculo
-- comando: cd apps/web-next && node --experimental-strip-types --test lib/*.test.ts && ! grep -rqn "não encontrado\|sugerir\|parecidos" app lib && grep -q "suggestRigs" lib/suggest-slugs.ts && grep -q "Closest rig keys" lib/wall-filter.ts
+- comando: cd apps/web-next && node --experimental-strip-types --test lib/*.test.ts && ! grep -rqnE "não encontrado|sugerir|parecidos" app lib && grep -q "suggestRigs" lib/suggest-slugs.ts && grep -q "Closest rig keys" lib/wall-filter.ts
 - exit esperado: 0
 
 ## Barra

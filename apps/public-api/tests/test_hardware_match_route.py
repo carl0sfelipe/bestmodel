@@ -35,7 +35,7 @@ def test_returns_matches_with_section_9_4_fields(client):
     response = client.post("/v1/match/hardware-to-models", json=_request())
     assert response.status_code == 200
     body = response.json()
-    assert "matches" in body
+    assert set(body.keys()) == {"matches"}
     assert len(body["matches"]) > 0
     for match in body["matches"]:
         assert set(match.keys()) == EXPECTED_FIELDS
@@ -49,7 +49,22 @@ def test_unknown_gpu_ids_return_empty_matches(client):
         json=_request(gpu_model_ids=["gpu-does-not-exist"]),
     )
     assert response.status_code == 200
-    assert response.json() == {"matches": []}
+    body = response.json()
+    assert body["matches"] == []
+    assert body["reason"] == "unknown_gpu_model_ids"
+    assert "gpu-does-not-exist" in body["unknown_gpu_model_ids"]
+    assert len(body["valid_gpu_model_ids"]) > 0
+
+
+def test_unknown_gpu_ids_prefer_shared_tokens(client):
+    response = client.post(
+        "/v1/match/hardware-to-models",
+        json=_request(gpu_model_ids=["gpu-a100"]),
+    )
+    body = response.json()
+    assert body["reason"] == "unknown_gpu_model_ids"
+    assert body["unknown_gpu_model_ids"] == ["gpu-a100"]
+    assert body["valid_gpu_model_ids"][:2] == ["gpu-a100-40gb", "gpu-a100-80gb"]
 
 
 def test_unknown_family_returns_empty_matches(client):
@@ -58,7 +73,21 @@ def test_unknown_family_returns_empty_matches(client):
         json=_request(target_model_family="no-such-family"),
     )
     assert response.status_code == 200
-    assert response.json() == {"matches": []}
+    body = response.json()
+    assert body["matches"] == []
+    assert body["reason"] == "unknown_model_family"
+    assert "qwen-2.5-coder" in body["valid_model_families"]
+
+
+def test_unknown_family_lists_closest_families(client):
+    response = client.post(
+        "/v1/match/hardware-to-models",
+        json=_request(target_model_family="qwen"),
+    )
+    body = response.json()
+    assert body["reason"] == "unknown_model_family"
+    assert "qwen-2.5-coder" in body["closest_model_families"]
+    assert len(body["closest_model_families"]) <= 5
 
 
 def test_rejects_invalid_request_payload(client):
@@ -110,7 +139,43 @@ def test_skips_moe_missing_active_params_and_returns_dense(client, database, cap
             json=_request(target_model_family="fixture-moe-gap", gpu_count=1),
         )
     assert response.status_code == 200
-    model_ids = {match["model_release_id"] for match in response.json()["matches"]}
+    body = response.json()
+    assert set(body.keys()) == {"matches"}
+    model_ids = {match["model_release_id"] for match in body["matches"]}
     assert "model-ok-dense" in model_ids
     assert "model-broken-moe" not in model_ids
     assert "model-broken-moe" in caplog.text
+
+
+def test_no_feasible_candidate_explains_empty_answer(client, database):
+    database._models.extend(
+        [
+            _release(
+                id="model-broken-moe-1",
+                family="fixture-all-broken",
+                release_name="Broken-MoE-1",
+                architecture="moe",
+                parameter_count_billion=26.0,
+                expert_count=128,
+            ),
+            _release(
+                id="model-broken-moe-2",
+                family="fixture-all-broken",
+                release_name="Broken-MoE-2",
+                architecture="moe",
+                parameter_count_billion=32.0,
+                expert_count=128,
+            ),
+        ]
+    )
+    response = client.post(
+        "/v1/match/hardware-to-models",
+        json=_request(target_model_family="fixture-all-broken", gpu_count=1),
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["matches"] == []
+    assert body["reason"] == "no_feasible_candidate"
+    assert body["skipped_candidates"] == 2 * len(
+        database.fetch_quantization_profiles()
+    ) * len(database.fetch_inference_runtimes())

@@ -8,6 +8,7 @@ matches carrying feasibility and expected performance metrics.
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 from benchmark_scenario import BenchmarkScenario
@@ -29,34 +30,116 @@ ETA_PACK = 1.05
 DEFAULT_QUALITY_RETENTION = 1.0
 TRUST_SCORE_PLACEHOLDER = 0.5
 MAX_MATCHES = 100
+MAX_HINT_IDS = 50
+MAX_CLOSEST_FAMILIES = 5
+_GENERIC_ID_TOKENS = frozenset({"gpu"})
 
 
 def query_hardware_matches(
     session: DatabaseSession, request: HardwareMatchRequest
 ) -> dict[str, Any]:
-    """Return matches for the requested hardware and model family."""
+    """Return matches for the requested hardware and model family.
+
+    When the result is empty, the payload carries a machine-readable
+    reason plus hints so an agent can recover in one call.
+    """
     gpus = session.fetch_gpus_by_ids(request.gpu_model_ids)
-    if not gpus:
-        return {"matches": []}
-    capacity_mib = _total_vram_capacity_mib(gpus, request.gpu_count)
-    hardware = _combined_gpu_spec(gpus, request.gpu_count, capacity_mib)
+    model_rows = session.fetch_models_by_family(request.target_model_family)
     matches = []
-    for model_row in session.fetch_models_by_family(request.target_model_family):
-        for quant_row in session.fetch_quantization_profiles():
-            for runtime_row in session.fetch_inference_runtimes():
-                try:
-                    match = _evaluate_match(
-                        hardware, model_row, quant_row, runtime_row, capacity_mib, request
-                    )
-                except ValueError:
-                    logger.warning(
-                        "skipping hardware match candidate model_id=%s",
-                        model_row["id"],
-                    )
-                    continue
-                matches.append(match)
+    skipped = 0
+    if gpus:
+        capacity_mib = _total_vram_capacity_mib(gpus, request.gpu_count)
+        hardware = _combined_gpu_spec(gpus, request.gpu_count, capacity_mib)
+        for model_row in model_rows:
+            for quant_row in session.fetch_quantization_profiles():
+                for runtime_row in session.fetch_inference_runtimes():
+                    try:
+                        match = _evaluate_match(
+                            hardware, model_row, quant_row, runtime_row, capacity_mib, request
+                        )
+                    except ValueError:
+                        logger.warning(
+                            "skipping hardware match candidate model_id=%s",
+                            model_row["id"],
+                        )
+                        skipped += 1
+                        continue
+                    matches.append(match)
     matches.sort(key=lambda match: _sort_key(match, request.priority))
-    return {"matches": matches[:MAX_MATCHES]}
+    top = matches[:MAX_MATCHES]
+    if top:
+        return {"matches": top}
+    known_ids = {row["id"] for row in gpus}
+    unknown = sorted({gpu_id for gpu_id in request.gpu_model_ids if gpu_id not in known_ids})
+    if unknown:
+        return _unknown_gpu_payload(session, unknown)
+    if not model_rows:
+        return _unknown_family_payload(session, request.target_model_family)
+    return _no_feasible_payload(skipped)
+
+
+def _unknown_gpu_payload(session: DatabaseSession, unknown_ids: list[str]) -> dict[str, Any]:
+    return {
+        "matches": [],
+        "reason": "unknown_gpu_model_ids",
+        "detail": "Some requested gpu_model_ids are not in the GPU catalog.",
+        "unknown_gpu_model_ids": unknown_ids,
+        "valid_gpu_model_ids": _ranked_gpu_ids(session, unknown_ids),
+    }
+
+
+def _unknown_family_payload(session: DatabaseSession, family: str) -> dict[str, Any]:
+    families = sorted({row["family"] for row in session.fetch_all_models()})
+    return {
+        "matches": [],
+        "reason": "unknown_model_family",
+        "detail": "No model release in the catalog has the requested family.",
+        "valid_model_families": families[:MAX_HINT_IDS],
+        "closest_model_families": _closest_families(families, family),
+    }
+
+
+def _no_feasible_payload(skipped: int) -> dict[str, Any]:
+    detail = (
+        "Every candidate for this model family raised an error during evaluation."
+        if skipped
+        else "No candidate could be built for this model family and hardware."
+    )
+    return {
+        "matches": [],
+        "reason": "no_feasible_candidate",
+        "detail": detail,
+        "skipped_candidates": skipped,
+    }
+
+
+def _id_tokens(value: str) -> set[str]:
+    return {
+        token
+        for token in re.split(r"[^a-z0-9]+", value.lower())
+        if token and token not in _GENERIC_ID_TOKENS
+    }
+
+
+def _ranked_gpu_ids(session: DatabaseSession, unknown_ids: list[str]) -> list[str]:
+    all_ids = sorted(row["id"] for row in session.fetch_all_gpus())
+    wanted: set[str] = set()
+    for unknown_id in unknown_ids:
+        wanted |= _id_tokens(unknown_id)
+
+    def rank(gpu_id: str) -> int:
+        shared = _id_tokens(gpu_id) & wanted
+        return max((len(token) for token in shared), default=0)
+
+    return sorted(all_ids, key=lambda gpu_id: (-rank(gpu_id), gpu_id))[:MAX_HINT_IDS]
+
+
+def _closest_families(families: list[str], requested: str) -> list[str]:
+    return [
+        family for family in families if requested in family or family in requested
+    ][
+        :MAX_CLOSEST_FAMILIES
+    ]
 
 
 def _sort_key(match: dict[str, Any], priority: str) -> tuple[Any, ...]:

@@ -1,6 +1,6 @@
 import { permanentRedirect } from "next/navigation";
 import { basisOf, formatContext, formatNumber, loadDerived, metricOf } from "../../../lib/engine";
-import { exactSuffixMatches, sugerirSlugs } from "../../../lib/sugerir-slugs";
+import { exactSuffixMatches, suggestSlugs } from "../../../lib/suggest-slugs";
 import { currentView } from "../../../lib/view-server";
 import AgentView from "../../_components/agent-view";
 
@@ -42,7 +42,7 @@ export default async function ModelPage({
     const slugs = data.models.map((item) => item.slug);
     const exact = exactSuffixMatches(slug, slugs);
     if (exact.length === 1) permanentRedirect(`/m/${exact[0]}${searchQuery(await searchParams)}`);
-    const suggestions = sugerirSlugs(slug, slugs, 5);
+    const suggestions = suggestSlugs(slug, slugs, 5);
     if ((await currentView()) === "agent") {
       return (
         <AgentView>

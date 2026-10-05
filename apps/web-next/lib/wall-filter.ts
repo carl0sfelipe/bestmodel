@@ -1,8 +1,8 @@
 // wall-filter.ts — shared pool filter for the human wall and the agent twin.
 // Pure: filter before sort. Default ranking drops toys / <1B models; an
-// unknown rig is a structured miss (similar slugs), not an empty top-60.
+// unknown rig is a structured miss (closest rig keys), not an empty top-60.
 
-import { sugerirSlugs } from "./sugerir-slugs.ts";
+import { suggestRigs } from "./suggest-slugs.ts";
 
 export const DEFAULT_RANKING_MIN_PARAMS_B = 1;
 
@@ -29,8 +29,13 @@ export function normalizeWallToken(value: string | null | undefined): string {
 
 export function isToyOrTinyMarked(model: WallFilterRow["model"]): boolean {
   if (model.category === "toy") return true;
-  const hay = [model.slug, model.displayName ?? "", model.hfId ?? ""].join(" ").toLowerCase();
+  const hay = [model.slug, model.displayName ?? "", model.hfId ?? ""]
+    .join(" ")
+    .toLowerCase()
+    .replace(/[/.]+/g, "-");
   if (hay.includes("tinystories") || hay.includes("tiny-stories")) return true;
+  if (/(^|-)stories-|-stories($|-)/.test(hay)) return true;
+  if (typeof model.hfId === "string" && model.hfId.toLowerCase().endsWith("/models-moved")) return true;
   return /(^|[^a-z])toy([^a-z]|$)/.test(hay);
 }
 
@@ -50,12 +55,25 @@ export function filterWallRows<T extends WallFilterRow>(rows: readonly T[], filt
   });
 }
 
+export type RigMiss = { queried: string; similar: string[] };
+
+export function formatRigMiss(miss: RigMiss): string[] {
+  return [
+    "bestmodel.run / pool — agent view",
+    "",
+    `rig not found: ${miss.queried}`,
+    "",
+    "Closest rig keys:",
+    ...miss.similar.map((key) => `  ${key}`),
+  ];
+}
+
 export function unknownRig(
   rig: string | null | undefined,
   knownKeys: readonly string[],
-): { queried: string; similar: string[] } | null {
+): RigMiss | null {
   const key = normalizeWallToken(rig);
   if (key === "all") return null;
   if (knownKeys.some((item) => item.toLowerCase() === key)) return null;
-  return { queried: key, similar: sugerirSlugs(key, knownKeys, 10) };
+  return { queried: key, similar: suggestRigs(key, knownKeys, 10) };
 }

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { basisOf, formatNumber, joinCells, loadDerived, metricOf } from "../../lib/engine";
 import { currentView } from "../../lib/view-server";
-import { filterWallRows, normalizeWallToken, unknownRig } from "../../lib/wall-filter";
+import { filterWallRows, formatRigMiss, normalizeWallToken, unknownRig } from "../../lib/wall-filter";
 import AgentView from "../_components/agent-view";
 import WallClient from "./wall-client";
 
@@ -28,16 +28,7 @@ export default async function WallPage({
     const missing = unknownRig(rig, loadDerived().hardware.map((item) => item.key));
     if (missing) {
       return (
-        <AgentView>
-          {[
-            "bestmodel.run / pool — agent view",
-            "",
-            `rig não encontrado: ${missing.queried}`,
-            "",
-            "10 slugs de rig mais parecidos:",
-            ...missing.similar.map((key) => `  ${key}`),
-          ].join("\n")}
-        </AgentView>
+        <AgentView>{formatRigMiss(missing).join("\n")}</AgentView>
       );
     }
     const rows = filterWallRows(joinCells(), { rig, category })

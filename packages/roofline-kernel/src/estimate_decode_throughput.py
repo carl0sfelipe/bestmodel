@@ -124,7 +124,14 @@ def _decode_weight_bytes_per_step(
         return _active_parameter_count_billion(model) * 1e9 * bytes_per_weight
     if model.architecture == ModelArchitecture.moe and model.expert_count:
         shared, expert_size = _shared_and_expert_params_billion(model)
-        distinct_experts = min(model.expert_count, model.experts_per_token * batch_size)
+        # Without experts_per_token the routed-union size is unknown — same
+        # convention as _shared_and_expert_params_billion: expert-saturated,
+        # so the batch reads the full expert set once (never invent a routing
+        # factor; never multiply None).
+        if model.experts_per_token is None:
+            distinct_experts = model.expert_count
+        else:
+            distinct_experts = min(model.expert_count, model.experts_per_token * batch_size)
         shared_bytes = shared * 1e9 * bytes_per_weight
         experts_bytes = distinct_experts * expert_size * 1e9 * bytes_per_weight
         return shared_bytes + experts_bytes

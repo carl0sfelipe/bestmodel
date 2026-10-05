@@ -1,0 +1,68 @@
+# Override para os ambientes NÃO-produção (dev e stag) do bestmodel, no mesmo host da prod.
+# Isolamento: projeto compose próprio (bestmodel-dev / bestmodel-stag — o `name: bestmodel-prod`
+# do base file é sobrescrito pelo -p), volumes em /data/bestmodel/nonprod/<env>, nenhuma porta
+# publicada, segredos próprios em /data/bestmodel/nonprod/<env>/compose.env (nunca deploy/.env
+# de prod — só os NOMES das variáveis são os mesmos). Chaves OAuth de terceiros FALSAS.
+#
+#   BM_ENV=dev docker compose -p bestmodel-dev \
+#     -f deploy/docker-compose.prod.yml -f deploy/docker-compose.nonprod.yml \
+#     --env-file /data/bestmodel/nonprod/dev/compose.env up -d --build
+#
+# edge (caddy 80/443) e tunnel (cloudflared) ficam desligados: o ingresso é o portão `gate`
+# com basic auth + noindex, igual ao orbe.
+
+services:
+  caddy:
+    profiles: ["desligado"]
+
+  cloudflared:
+    profiles: ["desligado"]
+
+  postgres:
+    # timescaledb-ha exige PGDATA no bind (mesma razão do override omarchy)
+    environment:
+      PGDATA: /var/lib/postgresql/data
+    volumes: !override
+      - /data/bestmodel/nonprod/${BM_ENV:?BM_ENV}/postgres:/var/lib/postgresql/data
+
+  api:
+    # sem ports no base file — segue sem porta publicada
+
+  worker: {}
+
+  # web-next: the site. Base target is the built image (runner, revision-stamped)
+  # used by stag; dev overrides the target to devlive (next dev over a bind mount)
+  # via deploy/docker-compose.devlive.yml. API_ORIGIN is read by next.config.ts at
+  # build time (the /v1/* rewrite is baked into .next) and matches the gate routing.
+  web:
+    build:
+      context: ..
+      dockerfile: infra/docker/web-next.Dockerfile
+      target: runner
+      args:
+        REVISION: ${WEB_REVISION:-unknown}
+    environment:
+      API_ORIGIN: http://api:8000
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/llms.txt"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # Portão: basic auth + noindex na frente da api (a api exige chaves falsas de OAuth,
+  # login não funciona em nonprod de qualquer forma). Sem porta publicada: acesso só pela
+  # rede interna do projeto (docker exec / túnel futuro do Carlos).
+  # Routing (Caddyfile template in deploy/nonprod/init-env.sh): /v1/* -> api:8000,
+  # everything else -> web:3000.
+  gate:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    volumes:
+      - /data/bestmodel/nonprod/${BM_ENV:?BM_ENV}/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - api
+      - web

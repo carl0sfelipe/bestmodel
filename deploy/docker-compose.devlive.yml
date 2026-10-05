@@ -1,0 +1,24 @@
+# Dev-only overlay: run web-next as `next dev` over a read-only bind mount of
+# the repo at /repo, so edits show up in seconds. Apply AFTER
+# docker-compose.nonprod.yml:
+#
+#   BM_ENV=dev docker compose -p bestmodel-dev \
+#     -f deploy/docker-compose.prod.yml \
+#     -f deploy/docker-compose.nonprod.yml \
+#     -f deploy/docker-compose.devlive.yml \
+#     --env-file /data/bestmodel/nonprod/dev/compose.env \
+#     up -d --build web
+#
+# node_modules is an anonymous volume seeded from the image install, so the
+# read-only bind mount never shadows it; .next is an anonymous write cache.
+# After a lockfile change, remove the web container (docker compose down web)
+# so the anonymous node_modules volume is re-seeded from the new image.
+
+services:
+  web:
+    build:
+      target: devlive
+    volumes:
+      - ..:/repo:ro
+      - /repo/apps/web-next/node_modules
+      - /repo/apps/web-next/.next

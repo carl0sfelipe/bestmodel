@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { FRIENDLY_REDIRECTS } from "./lib/friendly-redirects";
 
 const appDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(appDir, "../..");
@@ -37,6 +38,9 @@ const nextConfig: NextConfig = {
   async rewrites() {
     if (!API_ORIGIN) return [];
     return [{ source: "/v1/:path*", destination: `${API_ORIGIN}/v1/:path*` }];
+  },
+  async redirects() {
+    return [...FRIENDLY_REDIRECTS];
   },
 };
 

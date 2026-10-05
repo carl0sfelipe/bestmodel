@@ -61,11 +61,11 @@ Auto-detection is never persisted.
 4. formula — a published VRAM rule when no measurement exists yet
 5. no data yet — we say so instead of inventing a number
 
-## Snapshot totals (apps/web/data/derived/stats.json, 2026-08-13)
+## Snapshot totals (apps/web/data/derived/stats.json, 2026-09-18)
 
-- runs: 4849
-- models: 527
-- rigs: 147
+- runs: 8230
+- models: 686
+- rigs: 184
 
 Frozen snapshot counts — not live, not throughput.
 

@@ -47,3 +47,12 @@ call to the documented host, and every answer row declares its confidence.
 1. Route contract: `uv run pytest -q apps/public-api/tests/test_model_pick_route.py`
 2. Suite green: `make test`
 3. E2E: `make gate`
+
+## Amendment 2026-10-08 — Q2: 8 concurrent requests in v1 (owner decision)
+
+Each pick carries `perf_concurrency_8 = {metric, value, concurrency: 8, vram_peak_gib, confidence}`.
+`value` is filled only when the pool cell has both `tokSOutC8Median` (aggregate decode at 8 slots)
+and `peakVramGbC8Median` (peak VRAM at 8 slots, since the KV cache grows with slots) and that peak fits `vram_gib`.
+Otherwise `value: null, confidence: "no data yet"`. Its confidence never exceeds the pick's.
+Today no cell has 8-slot data, so every pick answers `no data yet`. Ornith's 32k/8 measurement
+enters only through the signed flow (Q3).

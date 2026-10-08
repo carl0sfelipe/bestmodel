@@ -37,6 +37,12 @@ _CELL_METRICS = {
     "tokSOutMedian": ("tokSOutMedian", "decode_tok_s"),
 }
 
+# Q2 (owner, 2026-10-08): 8 concurrent requests in v1. A cell carries it only
+# when 8 slots were measured: aggregate decode and the peak VRAM at 8 slots
+# (KV cache grows with slots, so the 1-slot peak does not prove it fits).
+_C8_FIELDS = {"tokSOutMedian": ("tokSOutC8Median", "peakVramGbC8Median")}
+CONCURRENCY = 8
+
 
 class PickError(ValueError):
     """Invalid request; the message lists the valid values."""
@@ -98,7 +104,9 @@ def _picks(cells, models, category, metric, vram_gib, gpu) -> list[dict[str, Any
         # Unknown peak VRAM cannot be shown to fit; a missing metric is not a pick.
         if peak is None or value is None or peak > vram_gib:
             continue
-        picks.append(_pick(cell, model, peak, metric_name, value))
+        pick = _pick(cell, model, peak, metric_name, value)
+        pick["perf_concurrency_8"] = _perf_c8(cell, metric["field"], metric_name, vram_gib, pick["confidence"])
+        picks.append(pick)
     picks.sort(key=_rank)
     return picks
 
@@ -127,6 +135,19 @@ def _pick(cell, model, peak, metric_name, value) -> dict[str, Any]:
             "source": f"/m/{model['slug']}?as=agent",
         },
     }
+
+
+def _perf_c8(cell, metric_field, metric_name, vram_gib, confidence) -> dict[str, Any]:
+    out: dict[str, Any] = {"metric": metric_name, "value": None, "concurrency": CONCURRENCY,
+                           "vram_peak_gib": None, "confidence": "no data yet"}
+    fields = _C8_FIELDS.get(metric_field)
+    if fields is None:
+        return out
+    value, peak = cell.get(fields[0]), cell.get(fields[1])
+    # Without the 8-slot peak there is no proof it fits; over budget is not offered.
+    if value is None or peak is None or peak > vram_gib:
+        return out
+    return out | {"value": value, "vram_peak_gib": peak, "confidence": confidence}
 
 
 def _quality(model: dict[str, Any]) -> dict[str, Any]:

@@ -18,6 +18,8 @@ RUN uv sync --frozen
 COPY packages/ packages/
 COPY apps/public-api/ apps/public-api/
 COPY apps/intake-worker/ apps/intake-worker/
+# S49: /v1/pick reads the published pool snapshot.
+COPY apps/web/data/derived/ apps/web/data/derived/
 # migrations + seed are applied from inside the container on first boot
 COPY infra/migrations/ infra/migrations/
 COPY infra/seed/ infra/seed/

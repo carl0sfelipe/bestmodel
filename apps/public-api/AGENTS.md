@@ -8,6 +8,7 @@ from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PAT
 |---|---|
 | `routes/hardware_match_route.py` | `POST /v1/match/hardware-to-models` (§9.4 contract, field names frozen) |
 | `routes/model_match_route.py` | `POST /v1/match/model-to-hardware` (minimum/recommended/cost_efficient roles) |
+| `routes/model_pick_route.py` | `GET /v1/pick` best model per intent/VRAM over the pool snapshot (S49, contract model-pick-v1; env `BESTMODEL_POOL_SNAPSHOT_DIR`) |
 | `routes/benchmark_submission_route.py` | `POST /v1/submissions` (multipart) + `GET /v1/submissions/nonce` |
 | `routes/leaderboard_route.py` | `GET /v1/leaderboard` with hardware/model/runtime/quant/context filters |
 | `routes/auth_route.py` | `/v1/auth/passkey/{register,login}/{options,verify}` + `/v1/auth/tokens` CRUD (S13) |

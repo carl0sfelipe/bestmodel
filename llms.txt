@@ -144,3 +144,17 @@ Live bestmodel.run stays on the frozen snapshot until this ships.
 
 AGPL-3.0 for apps/** (network-copyleft), MIT for packages/** and cli/**
 (permissive engine/tools).
+
+## API (host: https://api.bestmodel.run — the www host serves pages only)
+
+- GET /v1/pick?intent=chat|image.generate|vision|audio&vram_gib=24&gpu=rtx-3090-24gb
+  — best model per intent that fits the VRAM (contract model-pick-v1). Ranked by
+  confidence, then pool eval score, then speed. Pool cells are community
+  reports: confidence is "reported", never "measured". An intent without
+  cells answers picks: [] with confidence_floor "no data yet".
+  Example: curl -sS 'https://api.bestmodel.run/v1/pick?intent=chat&vram_gib=24&gpu=rtx-3090-24gb'
+- POST /v1/match/hardware-to-models — roofline estimates, every row source_class "derived"
+- POST /v1/match/model-to-hardware — roofline estimates, every row source_class "derived"
+- GET /v1/transparency/sources
+- GET /v1/leaderboard — every entry carries a source_class
+- POST /v1/submissions (+ GET /v1/submissions/nonce) — signed intake

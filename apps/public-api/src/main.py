@@ -29,6 +29,7 @@ from src.routes import (
     health_route,
     leaderboard_route,
     model_match_route,
+    model_pick_route,
     oauth_route,
     reported_submission_route,
     report_route,
@@ -72,6 +73,7 @@ def create_app() -> FastAPI:
     app.include_router(health_route.router)
     app.include_router(hardware_match_route.router)
     app.include_router(model_match_route.router)
+    app.include_router(model_pick_route.router)
     app.include_router(leaderboard_route.router)
     app.include_router(benchmark_submission_route.router)
     app.include_router(contributor_route.router)

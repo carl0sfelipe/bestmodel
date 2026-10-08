@@ -20,7 +20,7 @@ from env vars (e.g. `DATABASE_URL`, `REDIS_URL`, `TRUSTED_ED25519_PUBLIC_KEY_PAT
 | `services/rate_limit_policy.py` | reputation-scaled ceilings: claims 2–50/24h, votes 5–250/h (L0→L4); enforced in claim create + vote services |
 | `services/render_claim_card.py` / `render_run_badge.py` | deterministic SVG/markdown renderers; XML-escape everything user-controlled; golden-file gate for the card template |
 | `services/submit_benchmark_run.py` | intake pipeline: schema → digest → signature (Ed25519, env `TRUSTED_ED25519_PUBLIC_KEY_PATH`) → artifact digests → dedupe → insert → enqueue |
-| `services/query_hardware_match.py` / `query_model_match.py` | match logic over catalog + roofline kernel |
+| `services/query_hardware_match.py` / `query_model_match.py` | match logic over catalog + roofline kernel ; every row `source_class=derived`, text-generation engines only via `match_honesty.py` (S48) |
 | `services/query_leaderboard.py` | filters + Decimal→float coercion + recommendation-engine ranking |
 | `services/register_passkey.py` / `authenticate_passkey.py` | WebAuthn ceremonies; challenge store + credential persistence (S13) |
 | `services/auth_common.py` / `manage_auth_tokens.py` | AuthError, token issuance (SHA-256 at rest), agent-token CRUD (S13) |

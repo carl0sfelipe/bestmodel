@@ -20,6 +20,7 @@ from roofline_kernel import estimate_context_limit, estimate_vram_footprint
 
 from src.dependencies.database_session_provider import DatabaseSession
 from src.schemas.hardware_match_request import HardwareMatchRequest
+from src.services.match_honesty import MATCH_SOURCE_CLASS, text_generation_runtimes
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +44,7 @@ def query_hardware_matches(
     matches = []
     for model_row in session.fetch_models_by_family(request.target_model_family):
         for quant_row in session.fetch_quantization_profiles():
-            for runtime_row in session.fetch_inference_runtimes():
+            for runtime_row in text_generation_runtimes(session.fetch_inference_runtimes()):
                 try:
                     match = _evaluate_match(
                         hardware, model_row, quant_row, runtime_row, capacity_mib, request
@@ -172,6 +173,7 @@ def _match_payload(
         "max_context_tokens": context.max_context_tokens,
         "quality_retention_estimate": _quality_retention(quant_row),
         "trust_score": TRUST_SCORE_PLACEHOLDER,
+        "source_class": MATCH_SOURCE_CLASS,
     }
 
 

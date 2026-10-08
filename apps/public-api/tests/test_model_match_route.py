@@ -62,3 +62,11 @@ def test_impossible_context_returns_empty_configs(client):
 def test_rejects_invalid_request_payload(client):
     response = client.post("/v1/match/model-to-hardware", json=_request(batch_size=0))
     assert response.status_code == 422
+
+
+def test_configs_declare_derived_source_class_and_text_runtime(client):
+    # S48: every config is a roofline estimate on a text-generation engine.
+    configs = client.post("/v1/match/model-to-hardware", json=_request()).json()["configs"]
+    assert configs
+    assert {config["source_class"] for config in configs} == {"derived"}
+    assert "comfyui" not in {config["runtime_id"] for config in configs}

@@ -19,6 +19,7 @@ from roofline_kernel import estimate_context_limit, estimate_vram_footprint
 
 from src.dependencies.database_session_provider import DatabaseSession
 from src.schemas.model_match_request import ModelMatchRequest
+from src.services.match_honesty import MATCH_SOURCE_CLASS, text_generation_runtimes
 
 MAX_GPU_COUNT = 8
 ETA_PACK = 1.05
@@ -48,7 +49,7 @@ def _collect_candidates(
     for gpu_row in session.fetch_all_gpus():
         for gpu_count in range(1, MAX_GPU_COUNT + 1):
             for quant_row in session.fetch_quantization_profiles():
-                for runtime_row in session.fetch_inference_runtimes():
+                for runtime_row in text_generation_runtimes(session.fetch_inference_runtimes()):
                     config = _evaluate_config(model_row, gpu_row, gpu_count, quant_row, runtime_row, request)
                     if config["feasible"]:
                         candidates.append(config)
@@ -161,6 +162,7 @@ def _config_payload(
         "expected_decode_tok_s": estimates["decode"],
         "expected_prefill_tok_s": estimates["prefill"],
         "max_context_tokens": context.max_context_tokens,
+        "source_class": MATCH_SOURCE_CLASS,
         "_total_vram_gib": capacity_mib / 1024.0,
     }
 

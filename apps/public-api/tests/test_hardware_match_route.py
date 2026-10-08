@@ -14,6 +14,7 @@ EXPECTED_FIELDS = {
     "max_context_tokens",
     "quality_retention_estimate",
     "trust_score",
+    "source_class",
 }
 
 
@@ -114,3 +115,17 @@ def test_skips_moe_missing_active_params_and_returns_dense(client, database, cap
     assert "model-ok-dense" in model_ids
     assert "model-broken-moe" not in model_ids
     assert "model-broken-moe" in caplog.text
+
+
+def test_every_match_declares_derived_source_class(client):
+    # S48: roofline estimates must never render without a source class.
+    matches = client.post("/v1/match/hardware-to-models", json=_request()).json()["matches"]
+    assert matches
+    assert {match["source_class"] for match in matches} == {"derived"}
+
+
+def test_text_matches_exclude_diffusion_runtime(client):
+    # S48: comfyui serves diffusion; a decode tok/s under it is a meaningless cell.
+    matches = client.post("/v1/match/hardware-to-models", json=_request()).json()["matches"]
+    assert matches
+    assert "comfyui" not in {match["runtime_id"] for match in matches}

@@ -28,13 +28,15 @@ services:
       - redis_data:/data
 
   minio:
-    image: minio/minio
-    command: server /data --console-address ":9001"
+    # minio/minio left Docker Hub (pull access denied); Bitnami's archived
+    # build of the same release. Runs as uid 1001 with its own entrypoint:
+    # no command, data under /bitnami/minio/data, console on 9001.
+    image: bitnamilegacy/minio:2025.4.22
     ports:
       - "9002:9000"
       - "9003:9001"
     volumes:
-      - minio_data:/data
+      - minio_data:/bitnami/minio/data
 
   meilisearch:
     image: getmeili/meilisearch:latest

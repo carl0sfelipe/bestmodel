@@ -10,6 +10,7 @@ export default function WallClient() {
   const [category, setCategory] = useState(query.get("category") ?? "all");
   const [sort, setSort] = useState("toks");
   const rows = filterWallRows(joinCells(), { rig, category }).sort((a, b) => sort === "runs" ? b.cell.n - a.cell.n : sort === "context" ? (b.cell.maxContextTested ?? 0) - (a.cell.maxContextTested ?? 0) : (metricOf(b.cell)?.value ?? b.cell.tokSOutMedian ?? -1) - (metricOf(a.cell)?.value ?? a.cell.tokSOutMedian ?? -1)).slice(0, 60);
+  const showMaintainerOffer = rows.slice(0, 3).some((row) => row.rig?.key === "rtx-3090-24gb");
   const categories = [...new Set(loadDerived().models.map((model) => model.category))];
   // Tabular Spec-Sheet (S45): one row per cell, every column on screen — the
   // same fields the agent twin prints (rig | model | basis | value | n), plus
@@ -48,6 +49,14 @@ export default function WallClient() {
           </tbody>
         </table>
       </div>
+      {showMaintainerOffer ? (
+        <div className="card">
+          <h3>Oferta do mantenedor</h3>
+          <p>RTX 3090 24GB usada e testada, com 5% de desconto na Orbe Live Imports — cupom BESTMODEL5.</p>
+          <p>Divulgação: o mantenedor do bestmodel.run também é dono da Orbe Live Imports.</p>
+          <a className="wall-action" href="https://orbe.live/produtos/gigabyte-rtx-3090-24gb" target="_blank" rel="noopener">Ver a RTX 3090 na Orbe -&gt;</a>
+        </div>
+      ) : null}
       <p className="note">Rows are community cells (medians), ranked provisionally. A signed run outranks any claim.</p>
     </section>
   );

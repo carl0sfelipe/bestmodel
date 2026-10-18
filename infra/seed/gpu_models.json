@@ -432,5 +432,19 @@
     "pcie_lane_width": 8,
     "supports_nvlink": false,
     "released_at": "2022-09-27"
+  },
+  {
+    "id": "gpu-rtx-5050",
+    "vendor": "NVIDIA",
+    "marketing_name": "NVIDIA GeForce RTX 5050",
+    "vram_mib": 8192,
+    "memory_bandwidth_gib_s": 320.0,
+    "fp16_tflops": null,
+    "int8_tops": null,
+    "tdp_watt": 130,
+    "pcie_generation": 5,
+    "pcie_lane_width": 8,
+    "supports_nvlink": false,
+    "released_at": "2025-07-01"
   }
 ]

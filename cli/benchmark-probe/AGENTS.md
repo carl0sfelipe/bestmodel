@@ -13,6 +13,7 @@ user output + machine-readable artifacts.
 | `lab_recorder.rs` | L01 slice: `experiments/<label>/{meta.json,index.jsonl,best.json}` — append-only, one JSON line per trial, null = failed trial; dirs immutable once created |
 | `collect_system_topology.rs` | GPU/CPU/OS fingerprint — macOS via sysctl/system_profiler; **Linux via nvidia-smi + /proc/cpuinfo + /etc/os-release (A4 done 2026-09-18; non-NVIDIA Linux GPUs undetected by design — empty, never invented)** |
 | `detect_runtime_installations.rs` | PATH scan for llama-cli/ollama + versions |
+| `sweet_spot.rs` | `sweetspot` command: per KV type, the largest context with **every layer on the GPU** (`llama-fit-params`, formula), then decode/prefill at 0, ¼, ½, ¾ of it (`llama-bench -d`, measured); recommends the most precise KV type reaching `--min-ctx` + a paste-ready `llama-server` line. Spill is never recommended silently: measured 2026-10-17 on RTX 5050 8 GB + Bonsai 2 27B PTQ1_0, each CPU layer costs ~9 ms/token (x86 PTQ1_0 kernel is SSSE3, compute-bound) |
 | `execute_benchmark_scenario.rs` | scenario → engine run; mock mode built-in |
 | `parse_runtime_output.rs` | engine stdout → Metrics (mirror of packages/runtime-probes logic) |
 | `sign_submission_payload.rs` | report build, canonical JSON, SHA-256 digest, Ed25519 sign; **PKCS8 v1 PEM hand-encoded (decision D6 — don't "modernize" back to crate default)** |

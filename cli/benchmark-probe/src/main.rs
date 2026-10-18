@@ -193,6 +193,36 @@ enum Command {
         #[arg(long = "output-dir", default_value = "contribute-out")]
         output_dir: PathBuf,
     },
+    /// Largest context that keeps every layer on the GPU, measured at several depths (llama.cpp)
+    Sweetspot {
+        /// GGUF model to size
+        #[arg(long)]
+        model: PathBuf,
+        /// Directory holding llama-fit-params and llama-bench (default: llama-bench's dir on PATH)
+        #[arg(long = "llama-bin")]
+        llama_bin: Option<PathBuf>,
+        /// Smallest context you need; picks the most precise KV cache that reaches it
+        #[arg(long = "min-ctx", default_value_t = 32768)]
+        min_ctx: u64,
+        /// KV cache types to try, comma-separated
+        #[arg(long, default_value = "f16,q8_0,q4_0")]
+        kv: String,
+        /// Physical batch size (smaller frees VRAM for context, slows prefill)
+        #[arg(long, default_value_t = 128)]
+        ubatch: u32,
+        /// VRAM margin left free by the fit, in MiB
+        #[arg(long = "fit-margin", default_value_t = 128)]
+        fit_margin: u32,
+        /// CPU threads for llama-bench
+        #[arg(long)]
+        threads: Option<u32>,
+        /// Fit only (seconds): skip the llama-bench depth sweep
+        #[arg(long = "no-measure")]
+        no_measure: bool,
+        /// Stable machine object instead of the text report
+        #[arg(long)]
+        json: bool,
+    },
 }
 
 /// Lab invocation as parsed by clap (same defaults the manual parser had).
@@ -217,6 +247,9 @@ fn main() {
         }
         Some(Command::Contribute { label, no_upload, output_dir }) => {
             cmd_contribute(label.as_deref(), no_upload, &output_dir);
+        }
+        Some(Command::Sweetspot { model, llama_bin, min_ctx, kv, ubatch, fit_margin, threads, no_measure, json }) => {
+            cmd_sweetspot(model, llama_bin, min_ctx, &kv, ubatch, fit_margin, threads, !no_measure, json);
         }
         None => match build_cli_args(&cli) {
             Ok(args) => {
@@ -298,6 +331,49 @@ fn cmd_plan(gpu: &str, json: bool) {
             eprintln!("error: {}", e.message);
             exit(3);
         }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn cmd_sweetspot(
+    model: PathBuf,
+    llama_bin: Option<PathBuf>,
+    min_ctx: u64,
+    kv: &str,
+    ubatch: u32,
+    fit_margin_mib: u32,
+    threads: Option<u32>,
+    measure: bool,
+    json: bool,
+) {
+    use benchmark_probe::sweet_spot;
+    if !model.is_file() {
+        eprintln!("error: model not found: {}", model.display());
+        exit(2);
+    }
+    let bin_dir = match sweet_spot::resolve_bin_dir(llama_bin.as_deref()) {
+        Ok(dir) => dir,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(2);
+        }
+    };
+    let kv_types: Vec<String> = kv.split(',').map(|s| s.trim().to_string()).filter(|s| !s.is_empty()).collect();
+    let run = sweet_spot::SweetSpotRun { model, bin_dir, kv_types, ubatch, fit_margin_mib, min_ctx, threads, measure };
+    let report = match sweet_spot::run(&run) {
+        Ok(r) => r,
+        Err(e) => {
+            eprintln!("error: {e}");
+            exit(1);
+        }
+    };
+    if json {
+        println!("{}", serde_json::to_string_pretty(&report).expect("serialize sweet spot"));
+    } else {
+        print!("{}", sweet_spot::render_text(&report));
+    }
+    if report.recommended.is_none() {
+        exit(3);
     }
 }
 

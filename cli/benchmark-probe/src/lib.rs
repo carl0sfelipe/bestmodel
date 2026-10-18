@@ -9,6 +9,7 @@ pub mod parse_runtime_output;
 pub mod plan_candidates;
 pub mod report_lab;
 pub mod sign_submission_payload;
+pub mod sweet_spot;
 pub mod tuning_search;
 pub mod upload_benchmark_report;
 

@@ -33,6 +33,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <Link href="/submit">capture</Link>
             <Link href="/wall">pool</Link>
             <Link href="/hardware">hardware</Link>
+            <Link href="/planejar">planejar</Link>
             <Link href="/cloud-anchors">cloud anchors</Link>
             <Link href="/track-record">track record</Link>
             <Link href="/mural">mural</Link>

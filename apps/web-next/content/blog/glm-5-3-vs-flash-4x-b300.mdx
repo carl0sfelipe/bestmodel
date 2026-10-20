@@ -1,0 +1,80 @@
+---
+title: "GLM-5.3 cheio vs Flash em 4×B300: quantos tok/s antes de alugar"
+slug: "glm-5-3-vs-flash-4x-b300"
+date: "2026-10-19"
+author: "Carlos Felipe"
+description: "Estimativa modelada (não medida) de decode, memória e TTFT do GLM-5.3 e do GLM-5.3-Flash em 4×B300 com 212k de contexto, por quantização, calibrada em células reais do pool."
+tags:
+  - "GLM"
+  - "B300"
+  - "multi-GPU"
+  - "bestmodel.run"
+keywords:
+  - "glm 5.3"
+  - "glm 5.3 flash"
+  - "b300"
+  - "tok/s"
+  - "fp8"
+  - "nvfp4"
+canonical: "https://bestmodel.run/blog/glm-5-3-vs-flash-4x-b300"
+---
+
+# GLM-5.3 cheio vs Flash em 4×B300: quantos tok/s antes de alugar
+
+A pergunta veio de uma conversa com o Fabio Akita: vale alugar 4×B300 (4 × 288 GB, ~1,1 TB usável) para rodar o GLM-5.3 cheio, ou o GLM-5.3-Flash no mesmo hardware entrega quase tudo, bem mais rápido? Ninguém no pool mediu B300 ainda. Então esta página é **modelada**, não medida — e diz exatamente de onde vem cada número. A versão interativa (troque GPU, quantidade e contexto) está em [/planejar](/planejar).
+
+## Resposta curta
+
+Com 1 usuário, 212k de contexto, sem MTP:
+
+| Modelo | Quant | Cabe em 4×B300? | tok/s (mid, faixa) | com MTP | TTFT 212k |
+|---|---|---|---|---|---|
+| GLM-5.3 cheio | BF16 | **não** (1.516 GB) | – | – | – |
+| GLM-5.3 cheio | FP8 | sim (769 GB) | 112 (84–157) | 220 (133–371) | ~3 s |
+| GLM-5.3 cheio | NVFP4 | sim (434 GB) | 122 (90–177) | 240 (142–420) | ~3 s |
+| GLM-5.3 cheio | EXL3 3,5 bpw | sim (340 GB) | 125 (92–184) | 247 (145–436) | ~3 s |
+| GLM-5.3 cheio | GGUF Q4_K_M (llama.cpp) | sim (467 GB) | 88 (66–104) | 174 (105–247) | ~3 s |
+| Flash | FP8 | sim (324 GB) | 202 (151–288) | 395 (236–677) | ~1,3 s |
+| Flash | NVFP4 | sim (182 GB) | 216 (159–319) | 423 (249–749) | ~1,3 s |
+| Flash | EXL3 3,5 bpw | sim (142 GB) | 221 (161–329) | 432 (253–772) | ~1,3 s |
+| Flash | GGUF Q4_K_M (llama.cpp) | sim (196 GB) | 166 (122–199) | 325 (191–467) | ~1,3 s |
+
+O Flash fica **~1,8× mais rápido** no FP8 e no NVFP4. É bastante, mas é menos do que a razão de parâmetros ativos (40B vs 18B = 2,2×) sugere — e o motivo é a parte interessante.
+
+## Por que não é 2,2×
+
+Em batch 1, cada token gerado lê os pesos ativos uma vez. Em 4×B300 isso é rápido demais para importar: 40B em FP8 são 10 GB por GPU, lidos a ~6 TB/s efetivos — **1,7 ms**. O que domina é o custo fixo de cada camada (lançamento de kernels, all-reduce entre GPUs, roteamento do MoE): algo entre 60 e 130 µs por camada. O GLM-5.3 tem 78 camadas; o Flash, 45. Isso dá 4,7–10 ms contra 2,7–5,9 ms por token.
+
+Ou seja: nesse hardware a diferença de velocidade vem mais da **profundidade** do modelo do que do número de parâmetros ativos. Quantizar mais agressivo (NVFP4, 3,5 bpw) quase não muda nada no cheio: o termo de banda já é pequeno. Quantização agressiva aqui serve para **caber** e sobrar memória para mais usuários, não para ficar mais rápido sozinho.
+
+Duas consequências práticas:
+
+- **MTP/speculative decoding é a alavanca real.** Os dois modelos trazem 1 camada MTP. Com aceite de 1,6–2,4 tokens por passo, praticamente dobra o tok/s — muito mais do que trocar FP8 por NVFP4.
+- **llama.cpp com split por camada é pior aqui.** Só uma GPU lê pesos por vez, então a banda não soma; nas medições do pool ele ainda paga custo por camada parecido com o do vLLM.
+
+## E os 212k de contexto?
+
+Quase não pesam no decode. Os dois modelos usam atenção esparsa (DSA): cada passo lê só os 2.048 tokens mais relevantes, mais as chaves pequenas do indexador. A 212k isso é ~0,6 GB lidos por passo no cheio — 0,03 ms. O KV cache inteiro de 212k cabe em ~10 GB no cheio e ~1,7 GB no Flash (KV em FP8).
+
+O contexto pesa no **TTFT**: processar 212k de prompt leva ~3 s no cheio e ~1,3 s no Flash, assumindo 40% de utilização do FP8 denso.
+
+## De onde vem o número
+
+O modelo é física de banda de memória mais um custo fixo por camada:
+
+`t_token = pesos_ativos / (banda × 0,75 × GPUs) + KV_lido / banda + camadas × custo_por_camada`
+
+O custo por camada foi **calibrado em medições reais**, e o teste do repo garante que a fórmula reproduz cada uma dentro da faixa:
+
+| Âncora | Medido |
+|---|---|
+| GLM-5.2 NVFP4 (mesma base de 78 camadas do 5.3), 4×RTX PRO 6000, vLLM, pool n=3 | 86,8 tok/s |
+| GLM-5.3-Flash ~3 bits, 2×RTX PRO 6000, vLLM, pool n=8 | 149,7 tok/s |
+| GLM-5.3-Flash NVFP4, 8×B200 TP8/EP8, card da Blackfrost | ~165 tok/s |
+| GLM-5.2 GGUF ~Q4, 4×RTX PRO 6000, llama.cpp, pool n=2 | 39,7 tok/s |
+
+Specs: GLM-5.3 com 78 camadas, MLA (kv_lora_rank 512), indexador top-2048, ~753B total / ~40B ativos; GLM-5.3-Flash com 45 camadas (11 DSA + 34 de atenção linear), 320B / 18B; B300 com 288 GB HBM3e, 8 TB/s e 5 PFLOPS FP8 denso.
+
+## O que isto não é
+
+Não é medição. A maior incerteza é justamente o custo por camada em NVLink com TP4 — as âncoras são PCIe e um TP8 em B200. Se você alugar o rig, rode o [console](/console) e envie: a primeira célula medida substitui esta estimativa no pool.

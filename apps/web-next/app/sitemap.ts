@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
     "",
     "/hardware",
+    "/planejar",
     "/wall",
     "/claims",
     "/submit",

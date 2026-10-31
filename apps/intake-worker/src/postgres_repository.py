@@ -100,6 +100,19 @@ class PostgresIntakeRepository:
             cursor.execute(sql, params)
             return int(cursor.fetchone()["peers"])
 
+    def record_anchor(self, run_id: str, digest: str, record_id: str, studio_id: str) -> None:
+        # First anchor wins: a re-anchor sweep must never rewrite evidence.
+        sql = (
+            "INSERT INTO run_anchor (benchmark_run_id, digest, record_id, studio_id) "
+            "VALUES (%(run_id)s, %(digest)s, %(record_id)s, %(studio_id)s) "
+            "ON CONFLICT (benchmark_run_id) DO NOTHING"
+        )
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                sql,
+                {"run_id": run_id, "digest": digest, "record_id": record_id, "studio_id": studio_id},
+            )
+
     def record_trust_assessment(self, run_id: str, assessment: dict[str, float]) -> None:
         sql = (
             "INSERT INTO trust_assessment (benchmark_run_id, environment_completeness, "

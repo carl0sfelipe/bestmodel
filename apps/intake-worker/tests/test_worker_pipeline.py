@@ -20,6 +20,7 @@ class FakeIntakeRepository:
         self.ranking_updates = []
         self.settlement_context = None
         self.settlements = []
+        self.anchors = {}
 
     def find_existing_run_in_group(self, dimension, exclude_run_id, statuses):
         return self.duplicate_exists
@@ -55,6 +56,13 @@ class FakeIntakeRepository:
 
     def fetch_run_payload(self, run_id):
         return None
+
+    def record_anchor(self, run_id, digest, record_id, studio_id):
+        self.anchors[run_id] = {
+            "digest": digest,
+            "record_id": record_id,
+            "studio_id": studio_id,
+        }
 
 
 def with_decode(payload, decode_value):

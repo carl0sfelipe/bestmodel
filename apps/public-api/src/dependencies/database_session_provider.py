@@ -41,6 +41,10 @@ class DatabaseSession(ABC):
         """Return the model_release row for ``model_release_id`` or None."""
 
     @abstractmethod
+    def fetch_run_anchor(self, run_id: str) -> dict[str, Any] | None:
+        """Return the EaaS run_anchor row (digest/record_id) or None."""
+
+    @abstractmethod
     def fetch_quantization_profiles(self) -> list[dict[str, Any]]:
         """Return every quantization_profile row."""
 
@@ -460,6 +464,24 @@ class PostgresSession(DatabaseSession):
 
     def fetch_model_by_id(self, model_release_id: str) -> dict[str, Any] | None:
         return self._fetchone("SELECT * FROM model_release WHERE id = %s", (model_release_id,))
+
+    def fetch_run_anchor(self, run_id: str) -> dict[str, Any] | None:
+        sql = (
+            "SELECT benchmark_run_id, digest, record_id, studio_id, anchored_at "
+            "FROM run_anchor WHERE benchmark_run_id = %(run_id)s"
+        )
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(sql, {"run_id": run_id})
+            row = cursor.fetchone()
+        if row is None:
+            return None
+        return {
+            "run_id": str(row["benchmark_run_id"]),
+            "digest": row["digest"],
+            "record_id": row["record_id"],
+            "studio_id": row["studio_id"],
+            "anchored_at": row["anchored_at"].isoformat() if row["anchored_at"] else None,
+        }
 
     def fetch_quantization_profiles(self) -> list[dict[str, Any]]:
         return self._fetchall("SELECT * FROM quantization_profile ORDER BY id")

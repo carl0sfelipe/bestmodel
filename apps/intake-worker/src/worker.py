@@ -20,6 +20,7 @@ from check_roofline_plausibility import check_roofline_plausibility
 from detect_duplicate_submission import DUPLICATE_REJECTION, detect_duplicate_submission
 from extract_runtime_evidence import extract_runtime_evidence
 from publish_ranking_update import publish_ranking_update
+from anchor_run import anchor_validated_run
 from settle_claims import settle_claims_for_run
 from validate_submission_payload import validate_submission_payload
 from worker_models import DimensionGroup, RunRecord, build_run_record, scenario_is_video
@@ -48,6 +49,7 @@ class IntakeRepository(Protocol):
     def record_trust_assessment(self, run_id: str, assessment: dict[str, float]) -> None: ...
 
     def set_run_status(self, run_id: str, status: str, trust_score: float) -> None: ...
+    def record_anchor(self, run_id: str, digest: str, record_id: str, studio_id: str) -> None: ...
 
     def fetch_settlement_context(self, run_id: str) -> dict[str, Any] | None:
         """Open claim bound to this run: id, claimant, vote margin, points."""
@@ -89,6 +91,13 @@ def process_run(payload: dict[str, Any], repository: IntakeRepository) -> dict[s
     assessment["outlier_flags"] = list(outlier_flags)
     repository.record_trust_assessment(record.run_id, assessment)
     repository.set_run_status(record.run_id, status, assessment["final_score"])
+    if status == "validated":
+        # B1 (pool integrity): digest do payload validado → EaaS. Falha de
+        # âncora NUNCA derruba a validação — o run segue, só fica sem âncora.
+        try:
+            anchor_validated_run(record.run_id, payload, repository)
+        except Exception as exc:  # noqa: BLE001 - rede/config, não domínio
+            print(f"[anchor] run {record.run_id} ficou sem âncora: {exc}")
     settlement = settle_claims_for_run(repository, record.run_id, status)
     publish_ranking_update(repository, record.run_id, status, assessment["final_score"])
     return {

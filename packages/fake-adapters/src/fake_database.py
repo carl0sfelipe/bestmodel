@@ -33,6 +33,7 @@ def _load_seed(filename: str) -> list[dict[str, Any]]:
 
 class FakeDatabase(DatabaseSession):
     def __init__(self) -> None:
+        self.run_anchors: list[dict[str, Any]] = []
         self._gpus = _load_seed("gpu_models.json")
         self._models = _load_seed("model_releases.json")
         self._quants = _load_seed("quantization_profiles.json")
@@ -120,6 +121,12 @@ class FakeDatabase(DatabaseSession):
 
     def fetch_all_gpus(self) -> list[dict[str, Any]]:
         return list(self._gpus)
+
+    def fetch_run_anchor(self, run_id: str) -> dict[str, Any] | None:
+        for anchor in self.run_anchors:
+            if anchor["run_id"] == run_id:
+                return anchor
+        return None
 
     def fetch_models_by_family(self, family: str) -> list[dict[str, Any]]:
         return [row for row in self._models if row["family"] == family]

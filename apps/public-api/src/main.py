@@ -34,6 +34,7 @@ from src.routes import (
     reported_submission_route,
     report_route,
     rig_route,
+    run_anchor_route,
     social_route,
     transparency_route,
     user_route,
@@ -89,6 +90,7 @@ def create_app() -> FastAPI:
     app.include_router(card_route.router)
     app.include_router(social_route.router)  # before user_route: fixed segments first
     app.include_router(user_route.router)
+    app.include_router(run_anchor_route.router)
     return app
 
 

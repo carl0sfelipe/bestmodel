@@ -2,25 +2,40 @@ import type { MetadataRoute } from "next";
 import { listPosts } from "../lib/blog";
 import { loadDerived } from "../lib/engine";
 
+// The pool snapshot date is the only date these pages can honestly claim:
+// the numbers they render are frozen at that moment. The static pages change
+// with every deploy, so they carry the deploy date.
+const POOL_SNAPSHOT = new Date(loadDerived().stats.snapshotAt ?? "2026-09-18T00:00:00.000Z");
+const DEPLOY_DATE = new Date("2026-11-12T00:00:00.000Z");
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://bestmodel.run";
-  const lastModified = new Date("2026-08-30T04:43:50.758Z");
-  const pages = [
-    "",
-    "/hardware",
-    "/planejar",
+  const base = "https://www.bestmodel.run";
+
+  const poolPages = [
+    "/",
     "/wall",
     "/claims",
-    "/submit",
-    "/track-record",
+    "/hardware",
+    "/planejar",
     "/mural",
+    "/submit",
     "/console",
+    "/cloud-anchors",
+    "/track-record",
+    "/transparencia",
+    "/cli",
     "/blog",
-    ...loadDerived().models.map((model) => `/m/${model.slug}`),
-  ].map((path) => ({ url: `${base}${path}`, lastModified }));
+  ].map((path) => ({ url: `${base}${path}`, lastModified: DEPLOY_DATE }));
+
+  const modelPages = loadDerived().models.map((model) => ({
+    url: `${base}/m/${model.slug}`,
+    lastModified: POOL_SNAPSHOT,
+  }));
+
   const posts = listPosts().map((post) => ({
     url: `${base}/blog/${post.slug}`,
     lastModified: new Date(`${post.date}T00:00:00.000Z`),
   }));
-  return [...pages, ...posts];
+
+  return [...poolPages, ...modelPages, ...posts];
 }

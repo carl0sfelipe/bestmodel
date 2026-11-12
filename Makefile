@@ -1,7 +1,14 @@
 .PHONY: test migrate seed check-ports infra-up gate prod-up prod-migrate backup-db agent-smoke
 
+# The suite writes into the artifact vault and the pytest cache. Both are
+# pointed at a repo-local scratch dir so a run never depends on a directory
+# another user (or a container) left behind, and never fails on permissions.
+ARTIFACT_VAULT_DIR ?= $(CURDIR)/.tmp/artifacts
+PYTEST_CACHE_DIR ?= $(CURDIR)/.tmp/pytest-cache
+
 test:
-	uv run pytest -q
+	@mkdir -p $(ARTIFACT_VAULT_DIR) $(PYTEST_CACHE_DIR)
+	ARTIFACT_VAULT_DIR=$(ARTIFACT_VAULT_DIR) uv run pytest -q -o cache_dir=$(PYTEST_CACHE_DIR)
 
 check-ports:
 	uv run python infra/scripts/check_host_ports.py

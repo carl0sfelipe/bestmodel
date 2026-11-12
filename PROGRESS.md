@@ -71,3 +71,37 @@
   - `bash infra/scripts/flow-bestmodel.sh dev` → 4/4 (sem regressão). Oráculo exit 0.
   - SKIPs de attach (não vermelhos): seed/POST mock no pool compartilhado; toolchain
     host (make test/cargo/CLI/VRAM) fora da imagem runtime. Prod StartedAt inalterado.
+
+- 2026-11-12 13:40 -03 — GO-LIVE (branch feat/golive-social, a partir de origin/main):
+  - Pergunta do dono: "fiz com uma IA fraca, o objetivo é uma rede social focada em
+    local LLM, termina e deixa pronto pro go live". Duas decisões do dono:
+    camada social CLÁSSICA por cima das claims; nesta rodada, deploy + polish
+    + publicar o que já existe.
+  - Estado real encontrado (não o que a memória dizia): o site já estava no ar
+    e bem construído (design.md/tokens, gate de copy anti-slop, L04/L06). O
+    que faltava era a camada social e a verdade operacional:
+    · a API de prod estava 12 commits atrás (sem /v1/pick, sem sweetspot, sem
+      rig planner, com 500s de match);
+    · o console social inteiro vivia num arquivo estático fora do app Next —
+      todo CTA de escrita apontava para uma página de uma linha;
+    · /mural era um MOCK: três linhas hardcoded e um formulário que só
+      logava o payload e não transmitia nada;
+    · o stats.json do front (8.230 runs / 686 models / 184 rigs) não batia com
+      os arquivos ao lado (8.246 / 692 / 185) — o site se contradizia;
+    · CI nunca construía o front; `make test` falhava por permissão de
+      artefatos/cache;
+    · o WebAuthn aceitava UMA origem, e o site responde em apex E www.
+  - Entregue: L08 (posts/comments/likes, migration 0018, feed com item `post`,
+    limites por tier, notificações) + o console Next de verdade (login
+    passkey/OAuth, feed público, notificações, perfil) + /mural como fila de
+    moderação real + perfil como ficha de registro (com as capturas da
+    pessoa) + /hardware como índice de máquinas + 404/error próprios +
+    llms.txt/sitemap/nav atualizados + CI constrói o front + snapshot check.
+  - Verificado: make test 402 passed; npm test 17; slop-gate clean; snapshot
+    ok; dev 4/4 e stag 4/4 (flow-bestmodel.sh) com git_sha 2eccd90;
+    e2e_gate PASS; smoke real contra o Postgres do dev (post → comentário →
+    like → feed → recusa de métricas num post); QA de 13 rotas em Chromium
+    375px (200, sem overflow, sem erro de JS).
+  - BUG achado e corrigido no meio do caminho: id de post que não é uuid
+    derrubava o banco (500 em vez de 404).
+  - Snapshots e backends de prod NÃO foram tocados: só leitura até aqui.

@@ -62,10 +62,24 @@ fn vae_decode_progress_is_not_sampler_progress() {
             .replace("__MODEL__", "wan22-i2v-flf2v");
         serde_json::from_str(&raw).expect("materialized workflow valid")
     };
+    // Node ids move when the template is rewired (0410b50); find them by class_type.
+    let ids_of = |class: &str| -> Vec<String> {
+        workflow.as_object().expect("workflow is an object").iter()
+            .filter(|(_, node)| node["class_type"] == class)
+            .map(|(id, _)| id.clone())
+            .collect()
+    };
     let samplers = sampler_node_ids(&workflow);
-    assert!(samplers.contains("8"), "WanFirstLastFrameToVideo is a sampler: {samplers:?}");
-    assert!(!samplers.contains("10"), "VAEDecode must not be a sampler");
-    assert!(!samplers.contains("1"), "UNETLoader must not be a sampler");
+    for id in ids_of("KSamplerAdvanced") {
+        assert!(samplers.contains(&id), "KSamplerAdvanced {id} is a sampler: {samplers:?}");
+    }
+    for class in ["VAEDecode", "UNETLoader"] {
+        let ids = ids_of(class);
+        assert!(!ids.is_empty(), "template has a {class}");
+        for id in ids {
+            assert!(!samplers.contains(&id), "{class} {id} must not be a sampler: {samplers:?}");
+        }
+    }
 }
 
 #[test]

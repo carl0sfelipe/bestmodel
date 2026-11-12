@@ -194,13 +194,39 @@ fn workflow_out_writes_valid_marker_free_json() {
         .as_object()
         .expect("workflow root is an object (API format)");
     assert!(!nodes.is_empty());
-    let sampler = nodes
-        .get("8")
+    // Find the frames by role, not by node id (the template is rewired across ComfyUI
+    // versions, #28): follow the first sampler's latent_image links back to the node that
+    // creates the latent; the requested frame count must be its `length`.
+    let first_sampler = nodes
+        .iter()
+        .filter(|(_, node)| {
+            node.get("class_type")
+                .and_then(|c| c.as_str())
+                .is_some_and(|c| c.starts_with("KSampler"))
+        })
+        .find(|(_, node)| latent_source(node).is_some_and(|src| !is_sampler(nodes, src)))
+        .map(|(id, _)| id.clone())
+        .expect("a sampler whose latent comes from a non-sampler node");
+    let latent_origin = latent_source(&nodes[&first_sampler]).expect("sampler latent_image link");
+    let frames = nodes
+        .get(latent_origin)
         .and_then(|node| node.get("inputs"))
         .and_then(|inputs| inputs.get("length"))
         .and_then(|v| v.as_u64())
-        .expect("sampler length input");
-    assert_eq!(sampler, 81, "frames substitution must land in the sampler node");
+        .expect("latent source of the sampler has a length input");
+    assert_eq!(frames, 81, "frames substitution must land in the latent that feeds the sampler");
+}
+
+fn latent_source(node: &serde_json::Value) -> Option<&str> {
+    node.get("inputs")?.get("latent_image")?.get(0)?.as_str()
+}
+
+fn is_sampler(nodes: &serde_json::Map<String, serde_json::Value>, id: &str) -> bool {
+    nodes
+        .get(id)
+        .and_then(|n| n.get("class_type"))
+        .and_then(|c| c.as_str())
+        .is_some_and(|c| c.starts_with("KSampler"))
 }
 
 #[test]

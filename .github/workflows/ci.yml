@@ -55,6 +55,10 @@ jobs:
         working-directory: apps/web-next
       - run: npm test
         working-directory: apps/web-next
+      # the snapshot must describe itself: stats.json against the files
+      # beside it, or the site contradicts its own numbers
+      - run: node scripts/check-snapshot.mjs
+        working-directory: apps/web-next
       - run: npm run build
         working-directory: apps/web-next
 

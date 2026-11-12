@@ -1,9 +1,9 @@
 {
  "snapshotAt": "2026-09-18T17:08:19.808Z",
  "totals": {
-  "runs": 8230,
-  "models": 686,
-  "rigs": 184
+  "runs": 8246,
+  "models": 692,
+  "rigs": 185
  },
  "topRigs": [
   {
@@ -18,7 +18,7 @@
   },
   {
    "key": "rtx-3060-12gb-x2",
-   "label": "RTX 3060 12GB ×2",
+   "label": "RTX 3060 12GB \u00d72",
    "runCount": 562
   },
   {
@@ -43,7 +43,7 @@
   },
   {
    "key": "radeon-ai-pro-r9700-32gb-x3",
-   "label": "Radeon AI Pro R9700 32GB ×3",
+   "label": "Radeon AI Pro R9700 32GB \u00d73",
    "runCount": 299
   }
  ],

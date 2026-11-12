@@ -49,6 +49,7 @@ command: `make agent-smoke`. There is no one-line installer yet.
 | /cloud-anchors | rented-GPU anchor runs | /cloud-anchors?as=agent — anchor table |
 | /track-record | trust ladder | /track-record?as=agent — ladder text |
 | /mural | moderation desk: the report queue | /mural?as=agent — report grounds |
+| /p/{id} | one post and its answers | /p/{id}?as=agent — post pointers |
 | /transparencia | where every number comes from | /transparencia?as=agent — source list |
 | /console | the account surface: sign in, feed, notifications, profile | exempt — its agent surface is the REST API |
 | /blog | dated post index | /blog?as=agent — title, date, description list |
@@ -69,9 +70,9 @@ Auto-detection is never persisted.
 
 ## Snapshot totals (apps/web-next/public/data/derived/stats.json, 2026-09-18)
 
-- runs: 8230
-- models: 686
-- rigs: 184
+- runs: 8246
+- models: 692
+- rigs: 185
 
 Frozen snapshot counts — not live, not throughput.
 
@@ -114,11 +115,23 @@ Reads are public. Writes need a bearer token: passkey or OAuth at
 - POST /v1/auth/passkey/login/{options,verify} — sign in; returns access_token
 - GET /v1/auth/session — who the bearer token belongs to (auth)
 - GET /v1/auth/oauth/{github,huggingface}/begin|callback — provider sign-in
-- GET /v1/feed?scope=following|global&sort=recent|trending — claims + signed runs
+- GET /v1/feed?scope=following|global&sort=recent|trending — posts, claims, signed runs
 - GET /v1/notifications, POST /v1/notifications/{id}/read (auth)
 - GET /v1/users/{handle} — public profile (reputation, badges, rigs)
 - POST /v1/users/{handle}/follow, DELETE /v1/users/{handle}/follow (auth)
 - POST /v1/rigs, GET|PATCH /v1/rigs/{slug}, POST /v1/rigs/{slug}/bind (auth)
+
+### The classic social layer (posts, answers, likes)
+
+A post carries TEXT only. A measurement belongs in a claim; a post may point
+at one. Deletion is soft (spam only). Comment threads are one level deep.
+
+- POST /v1/posts — { body, kind?: note|question|showcase, claim_id?, rig_slug?, model_release_id? }
+- GET /v1/posts/{id} — one post with its comments and counts
+- DELETE /v1/posts/{id} — author only, soft delete
+- POST /v1/posts/{id}/comments — { body, parent_id? }
+- POST /v1/posts/{id}/likes — toggle → { liked, like_count }
+- POST /v1/comments/{id}/likes — toggle → { liked, like_count }
 
 ### Moderation grounds
 

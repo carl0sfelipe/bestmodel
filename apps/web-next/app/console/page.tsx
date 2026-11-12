@@ -1,3 +1,17 @@
-import Link from "next/link";
-export const metadata = { title: "Console", description: "Static capture console for benchmark claims." };
-export default function ConsolePage() { return <main><section className="hero"><p className="kicker">bestmodel.run / console</p><h1>Capture a run. Make the pool stronger.</h1><p className="lede">The original passkey console is shipped verbatim at <code>/console/index.html</code>. This page keeps the main app navigation intact and points directly to it.</p><div className="actions"><a className="btn primary" href="/console/index.html">open static console -&gt;</a><Link className="btn" href="/wall">return to The wall</Link></div></section><section className="section"><h2>Honesty ladder</h2><p className="section-copy">measured &gt; reported &gt; extrapolated &gt; formula &gt; no data yet. A cell without a source class never renders.</p></section></main>; }
+import type { Metadata } from "next";
+
+import ConsoleClient from "./console-client";
+
+// The console is the no-terminal surface of the capture network: sign in with
+// a passkey, follow rigs and people, read the mixed feed and your
+// notifications. Reads stay public; only writes need the account.
+export const metadata: Metadata = {
+  title: "Console",
+  description:
+    "Sign in with a passkey and follow rigs, read the community feed, and capture your own runs.",
+  robots: { index: true, follow: true },
+};
+
+export default function ConsolePage() {
+  return <ConsoleClient />;
+}

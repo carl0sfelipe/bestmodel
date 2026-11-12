@@ -107,6 +107,31 @@ def finish_passkey_login(
         return _error_response(exc)
 
 
+@router.get("/session")
+def current_session(
+    caller: AuthenticatedCaller = Depends(get_current_user),
+    session: DatabaseSession = Depends(get_database_session),
+) -> Any:
+    """Who the bearer token belongs to.
+
+    The web front keeps its token in localStorage, so the only way it can know
+    whether it is signed in — and as whom — is to ask. The answer carries the
+    reputation tier, because the tier is what the rate limits and the vote
+    weight are scaled by.
+    """
+    reputation = session.fetch_reputation_by_user(caller.user["id"]) or {}
+    return {
+        "handle": caller.user["handle"],
+        "display_name": caller.user.get("display_name"),
+        "token_kind": caller.token.get("kind"),
+        "expires_at": caller.token.get("expires_at"),
+        "reputation": {
+            "points": reputation.get("points", 0),
+            "tier": reputation.get("tier", "L0"),
+        },
+    }
+
+
 @router.post("/tokens")
 def create_token(
     payload: AgentTokenCreateRequest,

@@ -147,6 +147,16 @@ export function getToken(): string | null {
   }
 }
 
+export function setToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (token) window.localStorage.setItem(TOKEN_KEY, token);
+    else window.localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* nothing to do: the session simply does not survive this tab */
+  }
+}
+
 // ------------------------------------------------------------------ fetch
 
 function readDetail(payload: unknown, status: number): string {
@@ -324,6 +334,77 @@ export function getUser(handle: string): Promise<ApiResult<UserProfile>> {
 export function setFollow(handle: string, following: boolean): Promise<ApiResult<unknown>> {
   return request(`/v1/users/${encodeURIComponent(handle)}/follow`, {
     method: following ? "POST" : "DELETE",
+    auth: true,
+  });
+}
+
+// ------------------------------------------------------------------- feed
+
+export type FeedScope = "following" | "global";
+export type FeedSort = "recent" | "trending";
+
+export type FeedClaimItem = {
+  type: "claim";
+  id: string;
+  handle: string | null;
+  status: ClaimStatus;
+  model_release_id: string;
+  claimed_metrics: ClaimedMetrics | null;
+  tally: Tally;
+  created_at: string | null;
+};
+
+export type FeedRunItem = {
+  type: "verified_run";
+  run_id: string;
+  model_release_id: string;
+  decode_tok_s: number | null;
+  submitted_at: string | null;
+};
+
+export type FeedItem = FeedClaimItem | FeedRunItem;
+
+/**
+ * The mixed feed (S17): claims and signed runs in one stream. `scope`
+ * follows the viewer's follow graph; `sort=trending` ranks by community
+ * activity, `recent` is pure time.
+ */
+export function fetchFeed(params: {
+  scope: FeedScope;
+  sort: FeedSort;
+  limit?: number;
+}): Promise<ApiResult<FeedItem[]>> {
+  const query = new URLSearchParams({
+    scope: params.scope,
+    sort: params.sort,
+    limit: String(params.limit ?? 30),
+  });
+  return request<FeedItem[]>(`/v1/feed?${query.toString()}`);
+}
+
+// ----------------------------------------------------------- notifications
+
+export type NotificationKind =
+  | "new_follower"
+  | "claim_settled_verified"
+  | "claim_refuted"
+  | "duel_result";
+
+export type NotificationRow = {
+  id: string;
+  kind: string;
+  payload: Record<string, unknown> | null;
+  read_at: string | null;
+  created_at: string;
+};
+
+export function fetchNotifications(): Promise<ApiResult<NotificationRow[]>> {
+  return request<NotificationRow[]>("/v1/notifications", { auth: true });
+}
+
+export function markNotificationRead(id: string): Promise<ApiResult<unknown>> {
+  return request(`/v1/notifications/${encodeURIComponent(id)}/read`, {
+    method: "POST",
     auth: true,
   });
 }

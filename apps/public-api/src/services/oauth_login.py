@@ -55,6 +55,13 @@ PROVIDERS: dict[str, dict] = {
 # The fragment never reaches any server, but a closed list keeps begin
 # links from being abused as open redirects.
 ALLOWED_REDIRECT_URIS = (
+    # the Next console (the live front) — the fragment token lands here and
+    # is picked up by lib/auth.ts
+    "https://www.bestmodel.run/console",
+    "https://bestmodel.run/console",
+    "http://localhost:3000/console",
+    "http://127.0.0.1:3000/console",
+    # the legacy static console (public/console/index.html)
     "https://www.bestmodel.run/console/index.html",
     "http://localhost:3000/console/index.html",
     "http://127.0.0.1:3000/console/index.html",

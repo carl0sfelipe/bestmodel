@@ -37,6 +37,14 @@ bash "$ROOT/deploy/scripts/backup-db.sh"
 docker tag bestmodel-prod-api:latest "bestmodel-prod-api:rollback-$STAMP"
 # a imagem que passa no stag É a que sobe: retag, nunca rebuild em prod
 docker tag bestmodel-stag-api:latest bestmodel-prod-api:latest
+
+# Migrate BEFORE the swap, with a one-off container on the new image. The
+# API that is up keeps serving the old code while the new schema lands, so
+# no request ever hits code whose tables do not exist yet. The migrations
+# are additive, so the old code keeps working against the new schema.
+echo "aplicando migrações com a imagem nova (o API no ar continua servindo)"
+"${PROD[@]}" run --rm --no-deps --entrypoint sh api -c "cd /app && python infra/scripts/migrate.py"
+
 "${PROD[@]}" up -d --no-build api worker
 
 # smoke com retry (lição do orbe: índice/cache refeito no deploy pode dar falso negativo)

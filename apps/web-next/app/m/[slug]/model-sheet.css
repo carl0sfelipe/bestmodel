@@ -1,0 +1,66 @@
+/* the answer layer of /m/[slug]: what the model does, and where.
+   The answer is a number with its basis, and the rigs are a ladder — the
+   page must never show a number without saying where it came from. */
+
+.ans-answer{
+  margin:var(--space-6) 0;
+  padding:var(--space-5);
+  border:1px solid var(--hair);
+  border-radius:var(--radius-m);
+  background:var(--surface);
+}
+
+.ans-num{
+  font:600 clamp(2rem,5vw,3.2rem)/1.05 var(--display);
+  letter-spacing:-.03em;
+  margin:var(--space-3) 0 var(--space-2);
+}
+.ans-num small{
+  font:500 .9rem/1 var(--mono);
+  color:var(--muted);
+  margin-left:.4rem;
+  letter-spacing:0;
+}
+.ans-num-none{color:var(--muted);font-weight:500}
+
+.ans-meta{
+  display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center;
+  color:var(--muted);font-size:.9rem;margin:0 0 var(--space-4);
+}
+.ans-meta-rig{color:var(--ink);font-weight:600}
+
+.ans-rigs{display:flex;flex-wrap:wrap;gap:var(--space-2);margin:var(--space-4) 0}
+.ans-rig-btn{
+  font:500 13px/1 var(--mono);
+  padding:9px 13px;border-radius:var(--radius-p);
+  border:1px solid var(--hair);background:transparent;color:var(--muted);
+  cursor:pointer;min-height:36px;
+}
+.ans-rig-btn:hover{border-color:var(--amber);color:var(--ink)}
+.ans-rig-btn[aria-pressed="true"]{
+  border-color:var(--amber-line);color:var(--amber);
+  background:var(--amber-soft);
+}
+
+.ans-ladder{
+  list-style:none;margin:0;padding:0;display:grid;gap:1px;
+  background:var(--hair);border:1px solid var(--hair);border-radius:var(--radius-m);
+}
+.ans-rung{
+  display:grid;grid-template-columns:minmax(9rem,1.2fr) minmax(6rem,auto) auto minmax(8rem,1fr);
+  gap:var(--space-3);align-items:center;
+  padding:var(--space-3) var(--space-4);background:var(--surface);
+  font-size:.9rem;
+}
+.ans-rung-rig{color:var(--ink);font-weight:600}
+.ans-rung-val{font-family:var(--mono);font-size:.95rem}
+.ans-rung-none{color:var(--muted);font-family:var(--display);font-style:italic}
+.ans-rung-meta{color:var(--muted);font-size:.82rem;text-align:right}
+
+@media (min-width:721px){
+  .ans-rung-meta{text-align:right}
+}
+@media (max-width:720px){
+  .ans-rung{grid-template-columns:1fr auto;row-gap:var(--space-1)}
+  .ans-rung-meta{grid-column:1 / -1;text-align:left}
+}

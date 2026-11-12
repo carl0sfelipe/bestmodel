@@ -1,19 +1,39 @@
 # Production deployment & migration runbook
 
-Topology: **static site + console on Vercel**, **stateful backend on Docker
-(any host — currently the beelink)**. The split is deliberately boring: the
-frontend is a pure static artifact, and every durable byte on the backend
-lives in a named volume or a bind mount, so moving clouds is data transfer +
-DNS flip, not re-engineering.
+> Supersedes the 2026-08 version of this file (it described a static site on
+> Vercel plus a beelink host; neither is the topology any more). Verified
+> against the running stack on 2026-11-12.
+
+Topology: **Next.js front on Vercel** (`apps/web-next`, deployed from `main`
+by the GitHub integration), **stateful backend on Docker** on the omarchy
+host. Every durable byte on the backend lives in a named volume or a bind
+mount, so moving hosts is data transfer + DNS flip, not re-engineering.
 
 ```text
-browser ──> bestmodel.run (Vercel: site + console)
-                │  /v1/* rewritten (vercel.json) ── no CORS needed in practice
+browser ──> www.bestmodel.run (Vercel: apps/web-next)
+                │  NEXT_PUBLIC_API_BASE=https://api.bestmodel.run
                 ▼
         api.bestmodel.run (Caddy TLS or Cloudflare Tunnel)
                 │
-        beelink docker: api · worker · postgres · redis   ← state lives here
+        docker (omarchy): api · worker · postgres · redis   ← state lives here
 ```
+
+The front calls the API cross-origin, so `CORS_ORIGINS` in `deploy/.env`
+must name every host the front is served from (`https://www.bestmodel.run`,
+`https://bestmodel.run`, the Vercel preview domain). The API is
+cookie-less: auth is `Authorization: Bearer` from `localStorage`, so there
+is no CSRF surface and no session cookie to steal.
+
+## What lives where
+
+| Thing | Where | Note |
+|---|---|---|
+| Front | Vercel, from `main` | `apps/web-next`; `NEXT_PUBLIC_API_BASE` is a Vercel env var |
+| API + worker | `deploy/docker-compose.prod.yml` (+ `docker-compose.omarchy.yml`) | project name `bestmodel-prod` |
+| Postgres | named volume, PGDATA forced to a bind mount by the omarchy override | timescaledb |
+| Redis | named volume | stream `benchmark_runs`, consumer group for the worker |
+| Ed25519 trusted key | `deploy/secrets/trusted_public.pem` (public half, mounted read-only) | the private half never touches this host |
+| Backups | `deploy/scripts/backup-db.sh` → `BACKUP_DIR` | nightly logical dump |
 
 ## First deploy
 
@@ -21,106 +41,103 @@ browser ──> bestmodel.run (Vercel: site + console)
    ```bash
    cp deploy/env.example deploy/.env       # then edit credentials/domains
    mkdir -p deploy/secrets
-   # Ed25519 trusted key: the PUBLIC half verifies CLI signatures at intake.
-   # Generate once; keep the private half wherever the gate/CLI signs.
    openssl genpkey -algorithm ed25519 -out /tmp/gate-key.pem
    openssl pkey -in /tmp/gate-key.pem -pubout -out deploy/secrets/trusted_public.pem
    chmod 600 deploy/.env deploy/secrets/*
    ```
+   `AUTH_EXPECTED_ORIGIN` is a **comma-separated list** of the origins a
+   passkey ceremony may come from — the site answers on the apex and on
+   `www`, and the browser sends the origin of the page it is on. A single
+   value silently breaks sign-in on the other host.
 2. **Edge** — pick one profile:
    - `--profile edge` (Caddy): DNS `A/AAAA api.bestmodel.run -> this host`,
      ports 80/443 open. Certificates are automatic.
-   - `--profile tunnel` (cloudflared): no open ports. Create the tunnel in
-     Cloudflare Zero Trust, set `TUNNEL_TOKEN`, route its hostname to
-     `http://api:8000`.
+   - `--profile tunnel` (cloudflared): no open ports. The tunnel lives in
+     `~/.cloudflared` on the host; the compose profile expects `TUNNEL_TOKEN`.
 3. **Up**
    ```bash
-   docker compose -f deploy/docker-compose.prod.yml --profile edge --env-file deploy/.env up -d --build
-   docker compose -f deploy/docker-compose.prod.yml exec -T api \
-     sh -c "cd /app && uv run python infra/scripts/migrate.py && uv run python infra/scripts/seed/load_seed.py"
+   eval "$(deploy/build-args.sh)"   # bakes the real git_sha into /v1/health
+   docker compose -p bestmodel-prod \
+     -f deploy/docker-compose.prod.yml -f deploy/docker-compose.omarchy.yml \
+     --env-file deploy/.env up -d --build
    ```
-**GitHub Pages (auto-deploy, 2026-09-18).** `.github/workflows/pages.yml`
-publishes `site/` + `data/` + `console/` to Pages on every push to main —
-the same content the Vercel project serves, preview at
-`https://carl0sfelipe.github.io/bestmodel/` (the console talks to
-`https://api.bestmodel.run` directly there; no same-origin rewrite exists
-on Pages). Cutover from Vercel = owner, one record: point
-`www.bestmodel.run` (CNAME) at `carl0sfelipe.github.io`, then add the
-domain in repo Settings → Pages. Until then Vercel keeps serving prod.
 
-4. **Frontend** — import `apps/web/` on Vercel (framework: Other). `vercel.json`
-   publishes `site/` + `console/` and proxies `/v1/*` to
-   `api.bestmodel.run`. Point the domain, done.
+## The safe path: dev → stag → prod
 
-The console talks same-origin (`config.js` sets an empty base); passkeys and
-the honesty ladder work unchanged.
-
-## OAuth sign-in (optional, S30)
-
-The console also offers **Sign in with GitHub / Hugging Face** alongside
-passkeys. Each provider needs an OAuth app owned by you; until both values
-of a pair are set, that provider's `begin` endpoint answers
-`503 oauth provider not configured` and the buttons simply fail gracefully.
-
-1. **GitHub** — <https://github.com/settings/developers> → New OAuth App:
-   - Application name: `bestmodel.run`
-   - Homepage: `https://www.bestmodel.run`
-   - Callback: `https://api.bestmodel.run/v1/auth/oauth/github/callback`
-   - Approval is instant; copy Client ID + generate a Client Secret.
-2. **Hugging Face** — <https://huggingface.co/settings/connected-applications>
-   → New OAuth app, same homepage and callback pattern
-   (`…/v1/auth/oauth/huggingface/callback`). HF may review the app manually.
-3. Put the four values in `deploy/.env` (`GITHUB_CLIENT_ID/SECRET`,
-   `HUGGINGFACE_CLIENT_ID/SECRET`) and recreate the api service.
-
-First login with a provider creates the account (handle = provider login,
-suffixed `-gh`/`-hf` on collision); sessions are the same 12h bearer tokens
-passkeys issue. Linking a provider to an existing passkey account is
-backlog.
-
-## Backups (do this before anything else)
+Never rebuild in prod. The image that passes in stag is the image that goes
+up, retagged — never rebuilt.
 
 ```bash
-chmod +x deploy/scripts/*.sh
-deploy/scripts/backup-db.sh          # also wire it into cron:
-# 10 4 * * * /srv/bestmodel/deploy/scripts/backup-db.sh >> /srv/bestmodel/backups/backup.log 2>&1
+# 1. dev (same host, own project name, no published ports, own secrets)
+bash deploy/nonprod/init-env.sh dev
+eval "$(deploy/build-args.sh)"
+BM_ENV=dev docker compose -p bestmodel-dev \
+  -f deploy/docker-compose.prod.yml -f deploy/docker-compose.nonprod.yml \
+  --env-file /data/bestmodel/nonprod/dev/compose.env up -d --build
+bash deploy/nonprod/restore-db.sh dev      # fresh dump of prod, anonymized
+bash infra/scripts/flow-bestmodel.sh dev   # health, migrations, worker, leaderboard
+
+# 2. stag: the SAME image, retagged
+docker tag bestmodel-dev-api:latest bestmodel-stag-api:latest
+BM_ENV=stag docker compose -p bestmodel-stag \
+  -f deploy/docker-compose.prod.yml -f deploy/docker-compose.nonprod.yml \
+  --env-file /data/bestmodel/nonprod/stag/compose.env up -d
+bash deploy/nonprod/restore-db.sh stag
+bash infra/scripts/flow-bestmodel.sh stag
+
+# 3. prod: dry-run first, then --apply
+bash deploy/promote-prod.sh
+BM_PROMOTE_ALLOW=yes bash deploy/promote-prod.sh --apply
 ```
 
-Artifacts (benchmark evidence files) live in the `artifacts` volume — back up
-that directory with any file sync tool; they are immutable once written.
+`promote-prod.sh --apply` does, in this order: **backup-db → tag the running
+image as `rollback-<stamp>` → run the migrations with a one-off container on
+the new image (the API that is up keeps serving) → swap the api and worker
+→ smoke `/v1/health` six times.** Rollback is one command:
 
-## Migrating to another cloud
+```bash
+docker tag bestmodel-prod-api:rollback-<stamp> bestmodel-prod-api:latest
+docker compose -p bestmodel-prod \
+  -f deploy/docker-compose.prod.yml -f deploy/docker-compose.omarchy.yml \
+  --env-file deploy/.env up -d --no-build api worker
+```
 
-Nothing in the stack knows where it runs (all config via env; no hostnames
-baked into images):
+Migrations are append-only. A migration that a previous release cannot
+survive is a rollback that needs a down-migration — write them that way.
 
-1. On the new host: clone repo, copy `deploy/.env` + `deploy/secrets/`
-2. Restore data:
-   ```bash
-   docker compose -f deploy/docker-compose.prod.yml up -d postgres redis
-   cat backup.sql.gz | gunzip | docker compose -f deploy/docker-compose.prod.yml exec -T postgres \
-     psql -U bestmodel -d bestmodel
-   rsync -a old:/var/lib/docker/volumes/bestmodel-prod_artifacts/ volumes artifacts equivalent
-   ```
-3. `up -d` the rest, flip DNS (`api.bestmodel.run` + Vercel rewrite target).
-4. Old host: `down`. Total downtime = DNS TTL + container start.
+## The front
 
-Scale-up path later: the compose services map 1:1 to containers on a single
-bigger VM first (same volumes), and only after that to managed Postgres /
-k8s — the app never needs code changes for either step.
+The front deploys from `main` (Vercel Git integration). The order matters:
+**promote the API first, then merge the front**, because a front that calls
+an endpoint the running API does not have yet answers "not signed in" to
+everybody.
 
-## Integrating the closed-source inference side (bestmodel-cloud)
+Before merging, the front must be green locally:
 
-Boundary rules already enforced by L02 stay true in production:
+```bash
+cd apps/web-next
+npm ci
+npm test
+node scripts/check-snapshot.mjs   # stats.json against the files beside it
+npm run build
+```
 
-- The proprietary gateway joins as **another compose service**
-  (`profiles: ["cloud"]`) behind the same Caddy/tunnel with its own
-  hostname (e.g. `gw.bestmodel.run`). It shares **nothing** with this stack:
-  own database if it wants one, own secrets, own image registry.
-- Integration is HTTP only: the open platform's opt-in `cloud` module calls
-  the gateway's public API; the gateway may read the **public** API like any
-  client. No shared tables, no shared Redis logical DB (use separate
-  instance or distinct DB indexes).
-- Anything the closed side needs from the open platform must flow through
-  documented public endpoints — that keeps both sides independently
-  migratable, which is the whole point of this layout.
+## Checks after a deploy
+
+```bash
+curl -s https://api.bestmodel.run/v1/health           # git_sha must be the new one
+curl -s https://api.bestmodel.run/v1/leaderboard | head -c 120
+curl -s -o /dev/null -w '%{http_code}\n' https://www.bestmodel.run/console
+docker compose -p bestmodel-prod ... ps
+```
+
+`/v1/health` reports the `git_sha` baked into the image. If it does not
+match the commit you deployed, the wrong image is running.
+
+## What is NOT here
+
+- Managed inference and any pricing: a separate, proprietary codebase. The
+  open platform never requires it, and removing it must leave every social
+  and engine feature working.
+- One-line installer (`bestmodel.run/install.sh`): no install script is
+  hosted yet, so the site must not render one.

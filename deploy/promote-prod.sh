@@ -15,10 +15,16 @@ PROD=(docker compose -p bestmodel-prod -f "$ROOT/deploy/docker-compose.prod.yml"
 echo "HEAD: $(git -C "$ROOT" rev-parse --short HEAD)"
 [ -n "$(git -C "$ROOT" status --porcelain)" ] && { echo "árvore com mudanças não commitadas — commit antes de promover" >&2; exit 2; }
 
+# The api and the worker are two images, and BOTH must be the tested ones.
+# Retagging only the api would leave the worker running yesterday's code.
 DEV_IMG=$(docker inspect -f '{{.Image}}' bestmodel-dev-api-1 2>/dev/null || echo missing)
 STAG_IMG=$(docker inspect -f '{{.Image}}' bestmodel-stag-api-1 2>/dev/null || echo missing)
+DEV_WORKER_IMG=$(docker inspect -f '{{.Image}}' bestmodel-dev-worker-1 2>/dev/null || echo missing)
+STAG_WORKER_IMG=$(docker inspect -f '{{.Image}}' bestmodel-stag-worker-1 2>/dev/null || echo missing)
 [ "$DEV_IMG" = "$STAG_IMG" ] && [ "$DEV_IMG" != missing ] \
   && echo "mesma imagem dev==stag: ${DEV_IMG:0:19}…" || { echo "dev e stag com imagens DIFERENTES (ou fora do ar) — não promove" >&2; exit 3; }
+[ "$DEV_WORKER_IMG" = "$STAG_WORKER_IMG" ] && [ "$DEV_WORKER_IMG" != missing ] \
+  && echo "mesma imagem de worker dev==stag: ${DEV_WORKER_IMG:0:19}…" || { echo "worker dev e stag com imagens DIFERENTES (ou fora do ar) — não promove" >&2; exit 3; }
 STAG_SHA=$(docker exec bestmodel-stag-api-1 python -c "import urllib.request;print(__import__('json').loads(urllib.request.urlopen('http://localhost:8000/v1/health',timeout=5).read())['git_sha'])")
 echo "imagem do stag: git_sha=$STAG_SHA"
 
@@ -35,8 +41,10 @@ fi
 
 bash "$ROOT/deploy/scripts/backup-db.sh"
 docker tag bestmodel-prod-api:latest "bestmodel-prod-api:rollback-$STAMP"
+docker tag bestmodel-prod-worker:latest "bestmodel-prod-worker:rollback-$STAMP"
 # a imagem que passa no stag É a que sobe: retag, nunca rebuild em prod
 docker tag bestmodel-stag-api:latest bestmodel-prod-api:latest
+docker tag bestmodel-stag-worker:latest bestmodel-prod-worker:latest
 
 # Migrate BEFORE the swap, with a one-off container on the new image. The
 # API that is up keeps serving the old code while the new schema lands, so
@@ -59,4 +67,4 @@ if [ "$fail" = 1 ]; then
   echo "SMOKE FALHOU. Rollback: docker tag bestmodel-prod-api:rollback-$STAMP bestmodel-prod-api:latest; ${PROD[*]} up -d --no-build api worker"
   exit 1
 fi
-echo "PROMOÇÃO OK (git_sha=$STAG_SHA). Rollback: bestmodel-prod-api:rollback-$STAMP"
+echo "PROMOÇÃO OK (git_sha=$STAG_SHA). Rollback: docker tag bestmodel-prod-api:rollback-$STAMP bestmodel-prod-api:latest; docker tag bestmodel-prod-worker:rollback-$STAMP bestmodel-prod-worker:latest"

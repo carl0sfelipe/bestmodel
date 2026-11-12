@@ -17,6 +17,20 @@ from typing import Any
 from src.dependencies.database_session_provider import DatabaseSession
 from src.services.auth_common import AuthError, hours_ago_iso, utcnow_iso
 
+
+def _is_uuid(value: str) -> bool:
+    """Whether the id can be a row id at all.
+
+    The ids are uuids. A string that cannot be one would make the database
+    raise (invalid input syntax for type uuid) and answer 500 for what is
+    simply a link that points at nothing.
+    """
+    try:
+        uuid.UUID(str(value))
+    except (ValueError, AttributeError, TypeError):
+        return False
+    return True
+
 POST_KINDS = ("note", "question", "showcase")
 MAX_POST_BODY = 2000
 MAX_COMMENT_BODY = 1000
@@ -62,6 +76,8 @@ def create_post(
 
     claim_id = payload.get("claim_id")
     if claim_id is not None:
+        if not _is_uuid(claim_id):
+            raise AuthError(404, f"unknown claim_id: {claim_id}")
         claim = session.find_run_claim_by_id(claim_id)
         if claim is None:
             raise AuthError(404, f"unknown claim_id: {claim_id}")
@@ -99,6 +115,8 @@ def get_post(
     post_id: str,
     viewer: dict | None = None,
 ) -> dict[str, Any]:
+    if not _is_uuid(post_id):
+        raise AuthError(404, "post not found")
     row = session.find_post_by_id(post_id)
     if row is None or row.get("deleted_at") is not None:
         raise AuthError(404, "post not found")
@@ -124,6 +142,8 @@ def get_post(
 
 
 def delete_post(session: DatabaseSession, caller: dict, post_id: str) -> dict[str, Any]:
+    if not _is_uuid(post_id):
+        raise AuthError(404, "post not found")
     row = session.find_post_by_id(post_id)
     if row is None or row.get("deleted_at") is not None:
         raise AuthError(404, "post not found")
@@ -154,6 +174,8 @@ def add_comment(
     if len(text) > MAX_COMMENT_BODY:
         raise AuthError(400, f"body must be at most {MAX_COMMENT_BODY} characters")
 
+    if not _is_uuid(post_id):
+        raise AuthError(404, "post not found")
     post = session.find_post_by_id(post_id)
     if post is None or post.get("deleted_at") is not None:
         raise AuthError(404, "post not found")
@@ -170,6 +192,8 @@ def add_comment(
 
     resolved_parent = None
     if parent_id:
+        if not _is_uuid(parent_id):
+            raise AuthError(404, f"unknown parent_id: {parent_id}")
         parent = session.find_comment_by_id(parent_id)
         if parent is None or parent.get("deleted_at") is not None:
             raise AuthError(404, f"unknown parent_id: {parent_id}")
@@ -216,6 +240,8 @@ def add_comment(
 
 
 def toggle_post_like(session: DatabaseSession, caller: dict, post_id: str) -> dict[str, Any]:
+    if not _is_uuid(post_id):
+        raise AuthError(404, "post not found")
     post = session.find_post_by_id(post_id)
     if post is None or post.get("deleted_at") is not None:
         raise AuthError(404, "post not found")
@@ -242,6 +268,8 @@ def toggle_post_like(session: DatabaseSession, caller: dict, post_id: str) -> di
 def toggle_comment_like(
     session: DatabaseSession, caller: dict, comment_id: str
 ) -> dict[str, Any]:
+    if not _is_uuid(comment_id):
+        raise AuthError(404, "comment not found")
     comment = session.find_comment_by_id(comment_id)
     if comment is None or comment.get("deleted_at") is not None:
         raise AuthError(404, "comment not found")

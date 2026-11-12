@@ -305,3 +305,15 @@ def test_a_post_never_enters_the_validated_leaderboard(client, database, monkeyp
     _post(client, token, body="I measured 9999 tok/s on my 3090")
     leaderboard = client.get("/v1/leaderboard").text
     assert "9999 tok/s on my 3090" not in leaderboard
+
+
+def test_a_bad_id_is_a_404_not_a_500(client, database, monkeypatch):
+    """A link that points at nothing must not take the database down."""
+    token = make_passkey_session(client, database, monkeypatch, HANDLE_A)
+    for path in ("/v1/posts/nope", "/v1/posts/00000000-0000-0000-0000-000000000000"):
+        response = client.get(path)
+        assert response.status_code == 404, path
+    assert client.post("/v1/posts/nope/likes", headers=_auth(token)).status_code == 404
+    assert (
+        client.post("/v1/comments/nope/likes", headers=_auth(token)).status_code == 404
+    )

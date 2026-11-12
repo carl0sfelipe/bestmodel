@@ -55,6 +55,13 @@ class _WorkerRepository:
     def set_run_status(self, run_id, status, trust_score):
         self.statuses[run_id] = (status, trust_score)
 
+    def fetch_run_hardware_owner(self, run_id):
+        """Nobody owns the machine in these fixtures."""
+        return None
+
+    def award_badge(self, user_id, code):
+        return False
+
     def publish_ranking_update(self, event):
         self.ranking_updates.append(event)
 

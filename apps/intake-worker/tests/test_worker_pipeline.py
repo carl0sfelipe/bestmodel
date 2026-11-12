@@ -20,6 +20,8 @@ class FakeIntakeRepository:
         self.ranking_updates = []
         self.settlement_context = None
         self.settlements = []
+        self.hardware_owner = None
+        self.badges = []
 
     def find_existing_run_in_group(self, dimension, exclude_run_id, statuses):
         return self.duplicate_exists
@@ -55,6 +57,15 @@ class FakeIntakeRepository:
 
     def fetch_run_payload(self, run_id):
         return None
+
+    def fetch_run_hardware_owner(self, run_id):
+        return self.hardware_owner
+
+    def award_badge(self, user_id, code):
+        if (user_id, code) in self.badges:
+            return False
+        self.badges.append((user_id, code))
+        return True
 
 
 def with_decode(payload, decode_value):
@@ -140,3 +151,37 @@ def test_statistical_outlier_is_quarantined():
     outcome = process_run(payload, repository)
     assert outcome["status"] == STATUS_QUARANTINED
     assert outcome["outlier_flags"] == ["statistical_outlier"]
+
+
+def test_a_validated_run_grants_the_first_verified_run_badge():
+    """The badge names the person whose machine the run was measured on."""
+    repository = FakeIntakeRepository()
+    repository.hardware_owner = "user-1"
+
+    result = process_run(load_valid_run(), repository)
+
+    assert result["status"] == STATUS_VALIDATED
+    assert repository.badges == [("user-1", "first_verified_run")]
+    assert result["badge"]["newly_granted"] is True
+
+
+def test_a_fraudulent_run_grants_no_badge():
+    repository = FakeIntakeRepository()
+    repository.hardware_owner = "user-1"
+
+    result = process_run(load_fraudulent_run(), repository)
+
+    assert result["status"] != STATUS_VALIDATED
+    assert repository.badges == []
+    assert result["badge"] is None
+
+
+def test_a_run_on_an_anonymous_machine_grants_nobody_a_badge():
+    repository = FakeIntakeRepository()
+    repository.hardware_owner = None
+
+    result = process_run(load_valid_run(), repository)
+
+    assert result["status"] == STATUS_VALIDATED
+    assert repository.badges == []
+    assert result["badge"] is None

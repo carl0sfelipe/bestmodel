@@ -87,7 +87,13 @@ def test_fake_report_confirm_awards_and_refutes():
         assert exc.value.status_code == 403
 
         result = confirm_report(db, moderator, view["id"])
-        assert result == {"id": view["id"], "status": "confirmed", "awarded": True}
+        assert result == {
+            "id": view["id"],
+            "status": "confirmed",
+            "awarded": True,
+            # the reporter is the one who caught it, so the badge is theirs
+            "badge_granted": True,
+        }
         # mecânica fake pego: claim refutada + report confirmed com awarded_at
         assert db.find_run_claim_by_id(claim["id"])["status"] == "refuted"
         report = db.find_run_report_by_id(view["id"])

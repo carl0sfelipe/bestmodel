@@ -48,19 +48,49 @@ const RUNGS = [
   },
 ] as const;
 
+/**
+ * Which badges the API actually hands out, and which rung each one is.
+ *
+ * The mapping is explicit on purpose. The badge vocabulary is a fixed list
+ * of codes; guessing a rung by looking for a word in the code is how a
+ * profile ends up claiming a level nobody earned.
+ *
+ * `replicator` has no badge at all: reproducing another person's run is not
+ * something the pool records yet, so that rung can never be held.
+ */
+const BADGE_RUNGS: Record<string, string> = {
+  first_verified_run: "contributor",
+  pool_contributor_100h: "contributor",
+  giant_killer: "auditor",
+};
+
+const BADGE_LABEL: Record<string, string> = {
+  first_verified_run: "a validated run on their own machine",
+  pool_contributor_100h: "100 hours contributed to the pool",
+  giant_killer: "a fake caught and confirmed by moderation",
+  claim_settler: "a claim that became verified evidence",
+  rig_collector: "machines described and bound to their runs",
+};
+
 /** A rung counts as held only when a badge from the API names it. No inference. */
 function heldRungs(badges: Badge[] | null | undefined): Set<string> {
   const held = new Set<string>();
   for (const badge of badges ?? []) {
-    for (const value of Object.values(badge ?? {})) {
-      if (typeof value !== "string") continue;
-      const needle = value.toLowerCase();
-      for (const rung of RUNGS) {
-        if (needle.includes(rung.key)) held.add(rung.key);
-      }
-    }
+    const code = typeof badge?.code === "string" ? badge.code : "";
+    const rung = BADGE_RUNGS[code];
+    if (rung) held.add(rung);
   }
   return held;
+}
+
+function badgeList(badges: Badge[] | null | undefined): Array<{ code: string; label: string }> {
+  const seen = new Set<string>();
+  for (const badge of badges ?? []) {
+    const code = typeof badge?.code === "string" ? badge.code : "";
+    if (!code || seen.has(code)) continue;
+    seen.add(code);
+  }
+  return [...seen].map((code) => ({ code, label: BADGE_LABEL[code] ?? code }));
 }
 
 export default function ProfileClient({ handle }: { handle: string }) {
@@ -177,6 +207,7 @@ export default function ProfileClient({ handle }: { handle: string }) {
   }
 
   const held = heldRungs(profile.badges);
+  const badges = badgeList(profile.badges);
   const publicRigs = (profile.rigs ?? []).filter((rig) => rig.is_public);
   const joined = ago(profile.created_at);
   const captureCount = captures?.length ?? 0;
@@ -251,6 +282,18 @@ export default function ProfileClient({ handle }: { handle: string }) {
         <p className="record-note">
           Granted by a verified act; levels are not self-declared and do not decay.
         </p>
+        {badges.length > 0 ? (
+          <ul className="record-badges">
+            {badges.map((badge) => (
+              <li key={badge.code}>
+                <span className="record-badge-code">{badge.code.replace(/_/g, " ")}</span>
+                <span className="record-badge-label">{badge.label}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="record-note">No badge yet. A badge is granted by an act the pool records.</p>
+        )}
         <ol className="rail">
           {RUNGS.map((rung) => {
             const isHeld = held.has(rung.key);

@@ -20,6 +20,7 @@ from check_roofline_plausibility import check_roofline_plausibility
 from detect_duplicate_submission import DUPLICATE_REJECTION, detect_duplicate_submission
 from extract_runtime_evidence import extract_runtime_evidence
 from publish_ranking_update import publish_ranking_update
+from award_badges import award_badges_for_run
 from settle_claims import settle_claims_for_run
 from validate_submission_payload import validate_submission_payload
 from worker_models import DimensionGroup, RunRecord, build_run_record, scenario_is_video
@@ -64,6 +65,14 @@ class IntakeRepository(Protocol):
         """Settle the claim and credit reputation events atomically."""
         ...
 
+    def fetch_run_hardware_owner(self, run_id: str) -> str | None:
+        """The account that owns the machine the run was measured on."""
+        ...
+
+    def award_badge(self, user_id: str, code: str) -> bool:
+        """Grant a badge. Returns True when it was newly granted."""
+        ...
+
     def publish_ranking_update(self, event: dict[str, Any]) -> None: ...
 
     def fetch_run_payload(self, run_id: str) -> dict[str, Any] | None:
@@ -90,6 +99,7 @@ def process_run(payload: dict[str, Any], repository: IntakeRepository) -> dict[s
     repository.record_trust_assessment(record.run_id, assessment)
     repository.set_run_status(record.run_id, status, assessment["final_score"])
     settlement = settle_claims_for_run(repository, record.run_id, status)
+    badge = award_badges_for_run(repository, record.run_id, status)
     publish_ranking_update(repository, record.run_id, status, assessment["final_score"])
     return {
         "run_id": record.run_id,
@@ -98,6 +108,7 @@ def process_run(payload: dict[str, Any], repository: IntakeRepository) -> dict[s
         "outlier_flags": outlier_flags,
         "trust_assessment": assessment,
         "claim_settlement": settlement,
+        "badge": badge,
     }
 
 

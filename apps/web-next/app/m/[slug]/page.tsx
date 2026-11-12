@@ -1,8 +1,11 @@
 import { permanentRedirect } from "next/navigation";
-import { basisOf, formatContext, formatNumber, loadDerived, metricOf } from "../../../lib/engine";
+import { basisOf, formatContext, formatNumber, loadDerived, metricOf, type Cell, type Rig } from "../../../lib/engine";
 import { exactSuffixMatches, sugerirSlugs } from "../../../lib/sugerir-slugs";
 import { currentView } from "../../../lib/view-server";
 import AgentView from "../../_components/agent-view";
+import AnswerSheet from "./answer-sheet";
+import { basisOfRuns, groupByRig, pickVerdict, type SheetRow } from "./sheet";
+import "./model-sheet.css";
 
 export function generateStaticParams() { return loadDerived().models.map((model) => ({ slug: model.slug })); }
 
@@ -28,6 +31,58 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return { title: target?.displayName ?? exact[0], robots: { index: false } };
   }
   return { title: "Model not found", description: "No catalog entry for this slug.", robots: { index: false } };
+}
+
+/**
+ * Flatten the pool cells of one model into the rows the answer sheet reads.
+ *
+ * A cell with no metric is a cell with no metric — not a zero, not an empty
+ * string. The sheet says "no metric for this cell" instead.
+ */
+function buildSheetRows(cells: Cell[], hardware: Rig[]): SheetRow[] {
+  return cells.map((cell) => {
+    const rig = hardware.find((item) => item.key === cell.rigKey);
+    const raw = cell as Record<string, unknown>;
+    // A text model has no image/audio metric: its number IS the decode rate.
+    // A cell that carries neither says so — it never becomes a zero.
+    const intentMetric = metricOf(cell);
+    const decode =
+      typeof raw.tokSOutMedian === "number" && Number.isFinite(raw.tokSOutMedian)
+        ? raw.tokSOutMedian
+        : null;
+    const metric =
+      intentMetric ??
+      (decode != null
+        ? { value: decode, unit: "tok/s", label: "decode", higherIsBetter: true }
+        : null);
+    const bits = typeof raw.bits === "number" ? raw.bits : null;
+    const precision = typeof raw.precision === "string" ? raw.precision : null;
+    const category = typeof raw.category === "string" ? raw.category : null;
+    const quant = bits != null ? `${bits}-bit` : precision ?? category ?? "quant n/a";
+    return {
+      rigKey: cell.rigKey,
+      rigLabel: rig?.label ?? cell.rigKey,
+      hwClass: rig?.hwClass ?? "UNKNOWN",
+      memoryGb: rig?.memGb ?? null,
+      bits,
+      quant,
+      n: cell.n,
+      basis: basisOfRuns(cell.n),
+      metric: metric
+        ? {
+            value: metric.value,
+            unit: metric.unit,
+            label: metric.label,
+            higherIsBetter: metric.higherIsBetter,
+          }
+        : null,
+      noMetric: metric === null,
+      ttftMs: cell.ttftMsMedian ?? null,
+      peakVramGb: cell.peakVramGbMedian ?? cell.peakVramGb ?? null,
+      maxContext: cell.maxContextTested ?? null,
+      engines: Array.isArray(raw.engines) ? (raw.engines as string[]) : [],
+    };
+  });
 }
 
 export default async function ModelPage({
@@ -98,5 +153,9 @@ export default async function ModelPage({
       </AgentView>
     );
   }
-  return <main><section className="model-hero"><p className="kicker">community pool / model answer</p><h1>{model.displayName ?? model.slug}</h1><p>{model.category} · {model.hfId}</p><p className="answer"><strong>{median != null ? `${formatNumber(median)} tok/s` : bestMetricCell ? `${formatNumber(bestMetricCell.metric!.value)} ${bestMetricCell.metric!.unit}` : "No data yet"}</strong>{median != null ? " · model median" : bestMetricCell ? ` · best measured cell (${bestMetricCell.cell.rigKey})` : ""} · {formatNumber(runs, 0)} runs in the model record.</p></section><section className="model-table-wrap"><table><thead><tr><th>Reference rig</th><th>Quantization</th><th>Median result</th><th>Basis</th><th>TTFT (ms)</th><th>Peak VRAM</th><th>Max context</th><th>Engines</th></tr></thead><tbody>{cells.map((cell) => { const rig = data.hardware.find((item) => item.key === cell.rigKey); const metric = metricOf(cell); return <tr key={`${cell.rigKey}-${cell.bits ?? cell.category ?? "x"}`}><td>{rig?.label ?? cell.rigKey}{cell.resolution ? ` · ${cell.resolution}` : ""}</td><td>{cell.bits != null ? `${cell.bits}-bit` : cell.precision ?? "—"}</td><td>{metric ? `${formatNumber(metric.value)} ${metric.unit}` : `${formatNumber(cell.tokSOutMedian)} tok/s`}</td><td><span className={`badge basis-${basisOf(cell)}`}>{basisOf(cell)}</span></td><td>{formatNumber(cell.ttftMsMedian, 0)}</td><td>{formatNumber(cell.peakVramGbMedian ?? cell.peakVramGb)} GB</td><td>{formatContext(cell.maxContextTested)}</td><td>{(cell.engines ?? []).join(", ") || cell.pipeline || "-"}</td></tr>; })}</tbody></table></section><section className="section"><h2>Context tested</h2><p className="section-copy">The table above is the tested context for each exact rig and quantization cell. Empty fields remain empty rather than being filled with an estimate.</p><div className="actions"><a className="btn primary" href="/wall">back to The wall -&gt;</a><a className="btn" href="/console">capture / correct -&gt;</a></div></section></main>;
+  const sheetRows = buildSheetRows(cells, data.hardware);
+  const rigLabels = groupByRig(sheetRows).map((group) => ({ key: group.rigKey, label: group.rigLabel }));
+  const defaultVerdict = pickVerdict(sheetRows, null);
+
+  return <main><section className="model-hero"><p className="kicker">community pool / model answer</p><h1>{model.displayName ?? model.slug}</h1><p>{model.category} · {model.hfId}</p><p className="answer"><strong>{median != null ? `${formatNumber(median)} tok/s` : bestMetricCell ? `${formatNumber(bestMetricCell.metric!.value)} ${bestMetricCell.metric!.unit}` : "No data yet"}</strong>{median != null ? " · model median" : bestMetricCell ? ` · best measured cell (${bestMetricCell.cell.rigKey})` : ""} · {formatNumber(runs, 0)} runs in the model record.</p></section><AnswerSheet rows={sheetRows} rigLabels={rigLabels} /><section className="model-table-wrap"><table><thead><tr><th>Reference rig</th><th>Quantization</th><th>Median result</th><th>Basis</th><th>TTFT (ms)</th><th>Peak VRAM</th><th>Max context</th><th>Engines</th></tr></thead><tbody>{cells.map((cell) => { const rig = data.hardware.find((item) => item.key === cell.rigKey); const metric = metricOf(cell); return <tr key={`${cell.rigKey}-${cell.bits ?? cell.category ?? "x"}`}><td>{rig?.label ?? cell.rigKey}{cell.resolution ? ` · ${cell.resolution}` : ""}</td><td>{cell.bits != null ? `${cell.bits}-bit` : cell.precision ?? "—"}</td><td>{metric ? `${formatNumber(metric.value)} ${metric.unit}` : `${formatNumber(cell.tokSOutMedian)} tok/s`}</td><td><span className={`badge basis-${basisOf(cell)}`}>{basisOf(cell)}</span></td><td>{formatNumber(cell.ttftMsMedian, 0)}</td><td>{formatNumber(cell.peakVramGbMedian ?? cell.peakVramGb)} GB</td><td>{formatContext(cell.maxContextTested)}</td><td>{(cell.engines ?? []).join(", ") || cell.pipeline || "-"}</td></tr>; })}</tbody></table></section><section className="section"><h2>Context tested</h2><p className="section-copy">The table above is the tested context for each exact rig and quantization cell. Empty fields remain empty rather than being filled with an estimate.</p><div className="actions"><a className="btn primary" href="/wall">back to The wall -&gt;</a><a className="btn" href="/console">capture / correct -&gt;</a></div></section></main>;
 }

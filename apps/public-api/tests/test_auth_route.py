@@ -381,3 +381,25 @@ def _login_token_for(client, database, monkeypatch, handle: str) -> str:
     }
     login = client.post("/v1/auth/passkey/login/verify", json={"handle": handle, "credential": credential})
     return login.json()["access_token"]
+
+
+def test_expected_origins_accept_a_list(monkeypatch):
+    """The site answers on the apex and on www; both must verify a ceremony."""
+    from src.dependencies.auth_provider import WebAuthnConfig
+
+    monkeypatch.setenv(
+        "AUTH_EXPECTED_ORIGIN", "https://www.bestmodel.run,https://bestmodel.run"
+    )
+    config = WebAuthnConfig.from_env()
+    assert config.expected_origin == [
+        "https://www.bestmodel.run",
+        "https://bestmodel.run",
+    ]
+
+
+def test_expected_origins_single_value_stays_a_string(monkeypatch):
+    from src.dependencies.auth_provider import WebAuthnConfig
+
+    monkeypatch.setenv("AUTH_EXPECTED_ORIGIN", "http://localhost:8000")
+    config = WebAuthnConfig.from_env()
+    assert config.expected_origin == "http://localhost:8000"

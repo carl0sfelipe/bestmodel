@@ -1,0 +1,284 @@
+/* track-record.css — /track-record, the trust ladder.
+   Macrostructure: a vertical ladder. One rail down the page, four steps
+   hanging from it, read top to bottom. Each step carries the act that
+   earns it, what the pool records when the act happens, and the state of
+   the step itself: live, not yet, or proposed and not built.
+   The proposed step is drawn dashed and dim so the page never shows a
+   level the pool has not conferred. */
+
+.tr-head {
+  padding-bottom: var(--space-6);
+}
+
+.tr-head h1 {
+  max-width: 22ch;
+}
+
+.tr-lede {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 62ch;
+  margin-top: var(--space-4);
+}
+
+.tr-lede b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* the rail and its steps */
+.tr-ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair);
+}
+
+.tr-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.tr-step:last-child {
+  border-bottom: 0;
+}
+
+/* the rail segment that hangs from this step down to the next */
+.tr-step::before {
+  content: "";
+  position: absolute;
+  left: calc(1.2rem - 1px);
+  top: 2.4rem;
+  bottom: -1px;
+  width: 1px;
+  background: var(--hair);
+}
+
+.tr-step:last-child::before {
+  display: none;
+}
+
+.tr-node {
+  position: relative;
+  z-index: 1;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: var(--space-2);
+  justify-self: center;
+  border-radius: var(--radius-p);
+  border: 1px solid var(--hair-strong);
+  background: var(--bg);
+}
+
+.tr-step[data-state="live"] .tr-node {
+  border-color: var(--green-line);
+  background: var(--green);
+}
+
+.tr-step[data-state="not-yet"] .tr-node {
+  border-color: var(--hair-strong);
+  background: var(--bg);
+}
+
+.tr-step[data-state="proposed"] .tr-node {
+  border-style: dashed;
+  border-color: var(--hair-strong);
+  background: var(--bg);
+}
+
+.tr-body {
+  min-width: 0;
+}
+
+.tr-eyebrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.tr-level {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.tr-name {
+  font: 600 1.3125rem/1.25 var(--display);
+  letter-spacing: -0.02em;
+  margin-top: var(--space-2);
+}
+
+.tr-step[data-state="not-yet"] .tr-name,
+.tr-step[data-state="proposed"] .tr-name {
+  color: var(--muted);
+}
+
+.tr-act {
+  font: var(--text-s)/1.6 var(--mono);
+  color: var(--ink);
+  margin-top: var(--space-3);
+}
+
+.tr-blurb {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  margin-top: var(--space-2);
+  max-width: 62ch;
+}
+
+/* what the pool records when the act happens */
+.tr-record {
+  margin-top: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--hair);
+}
+
+.tr-record-k {
+  display: block;
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.tr-record-k2 {
+  margin-top: var(--space-4);
+}
+
+.tr-record p {
+  color: var(--muted);
+  font-size: var(--text-l);
+  line-height: 1.7;
+  margin-top: var(--space-2);
+  max-width: 62ch;
+}
+
+.tr-record p + p {
+  margin-top: var(--space-3);
+}
+
+.tr-record code,
+.tr-src {
+  font: var(--text-s) var(--mono);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.tr-code {
+  font: var(--text-s) var(--mono);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.tr-src {
+  display: block;
+  color: var(--dim);
+  margin-top: var(--space-2);
+}
+
+/* the state of the step */
+.tr-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-p);
+  border: 1px solid currentColor;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.tr-status[data-state="live"] {
+  color: var(--green);
+}
+
+.tr-status[data-state="not-yet"] {
+  color: var(--dim);
+}
+
+.tr-status[data-state="proposed"] {
+  color: var(--amber);
+  border-style: dashed;
+}
+
+.tr-assume {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  max-width: 62ch;
+  margin-top: var(--space-4);
+}
+
+.tr-note {
+  font: var(--text-xs)/1.7 var(--mono);
+  color: var(--dim);
+  margin-top: var(--space-3);
+}
+
+.tr-weight {
+  font: var(--text-s)/1.6 var(--mono);
+  color: var(--ink);
+  margin-top: var(--space-3);
+}
+
+.tr-weight em {
+  font-style: normal;
+  color: var(--dim);
+}
+
+/* the proposed step: dashed edge, dim body, nothing to climb yet */
+.tr-step[data-state="proposed"] {
+  border-bottom-style: dashed;
+}
+
+.tr-step[data-state="proposed"] .tr-blurb,
+.tr-step[data-state="proposed"] .tr-record p {
+  color: var(--dim);
+}
+
+/* closing note */
+.tr-foot {
+  border-top: 1px solid var(--hair);
+}
+
+.tr-foot p {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+.tr-foot p + p {
+  margin-top: var(--space-4);
+}
+
+.tr-foot b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+@media (max-width: 46rem) {
+  .tr-step {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .tr-step::before {
+    left: calc(0.9rem - 1px);
+  }
+
+  .tr-record {
+    padding-left: var(--space-3);
+  }
+}

@@ -1,18 +1,22 @@
 # bestmodel.run
 
-> Open compatibility engine for local AI. Answers "can it run / how fast /
-> is it worth it?" from a signed, validated community measurement pool.
+> Open compatibility engine for local AI — and the community that measures
+> it. Answers "can it run / how fast / is it worth it?" from a signed,
+> validated community measurement pool, and lets people post their own runs,
+> vote on other people's numbers and settle a dispute with a signed run.
 > LICENSE: AGPL-3.0 for apps/**, MIT for packages/** and cli/**.
 
-This file is the agent surface for the deployed site. Humans get the
-cinematic tour at /?as=human (desktop) or /hardware?as=human. If a page
-asked who is reading, it did
-not have enough deterministic signal to guess.
+This file is the agent surface for the deployed site. Humans get the same
+content at /?as=human. Every route resolves ?as=human|agent server-side.
 
 Core principle: number honesty. Every displayed number declares its basis:
 measured (pool median) > reported (1-2 runs) > extrapolated (bandwidth-scaled)
 > formula > no data yet. A cell without a source class never renders.
 Do not invent tok/s.
+
+The community layer obeys the same rule: a claim is a number somebody
+asserted, never a measurement. A claim only becomes measured when an
+Ed25519-signed run settles it.
 
 ## Clone
 
@@ -21,35 +25,36 @@ git clone https://github.com/carl0sfelipe/bestmodel.git
 cd bestmodel
 ```
 
-Human first step (S33): /cli — the rendered getting-started, twin at
-/cli?as=agent. Its single source is the agent runbook from this clone
-(offline, no keys):
+Human first step: /cli — the rendered getting-started, twin at /cli?as=agent.
+Its single source is the agent runbook from this clone (offline, no keys):
 [docs/agent-quickstart.md](https://github.com/carl0sfelipe/bestmodel/blob/main/docs/agent-quickstart.md)
 — build the two Rust CLIs, detect your hardware, rank the best models for
 it against the in-repo pool snapshot, run the probe. Self-check in one
-command: `make agent-smoke`. Runnable today: the whole loop — benchmark-probe `lab`, `plan`, `report`,
-`contribute` (signed 0.9.0 bundle; SIM cells never uploaded) and `login`
-(token 0600 + public signing-key registration). There is no one-line installer yet.
+command: `make agent-smoke`. There is no one-line installer yet.
 
 ## Routes (www.bestmodel.run — web-next; every route resolves ?as=human|agent server-side)
 
 | route | default view | agent twin |
 |---|---|---|
-| / | human cinematic tour | /?as=agent — honesty ladder + pool snapshot |
+| / | workbench: intent × rig × quant × context, live verdict | /?as=agent — honesty ladder + pool snapshot |
 | /cli | getting-started (rendered from docs/agent-quickstart.md) | /cli?as=agent — raw verified guide |
 | /claims | the wall: captured claims, live client | /claims?as=agent — REST pointers |
 | /submit | capture a run | /submit?as=agent — capture flow + catalog ids |
-| /wall | measured pool | /wall?as=agent — top-60 cell table |
+| /wall | measured pool (spec-sheet) | /wall?as=agent — top-60 cell table |
 | /hardware | reference rigs | /hardware?as=agent — rig table |
+| /planejar | rig planner for hardware the pool has no cell for | /planejar?as=agent — planner pointers |
 | /m/{slug} | model answer | /m/{slug}?as=agent — cell table |
 | /profile/{handle} | contributor profile | /profile/{handle}?as=agent — record pointers |
-| /claim/{id} | claim detail | /claim/{id}?as=agent — record pointers |
+| /claim/{id} | claim detail (vote, report, settle) | /claim/{id}?as=agent — record pointers |
 | /cloud-anchors | rented-GPU anchor runs | /cloud-anchors?as=agent — anchor table |
 | /track-record | trust ladder | /track-record?as=agent — ladder text |
-| /mural | moderation entry | /mural?as=agent — report grounds |
+| /mural | moderation desk: the report queue | /mural?as=agent — report grounds |
+| /p/{id} | one post and its answers | /p/{id}?as=agent — post pointers |
+| /transparencia | where every number comes from | /transparencia?as=agent — source list |
+| /console | the account surface: sign in, feed, notifications, profile | exempt — its agent surface is the REST API |
 | /blog | dated post index | /blog?as=agent — title, date, description list |
 | /blog/{slug} | article (markdown) | /blog/{slug}?as=agent — plain post text |
-| /console | capture console (static app) | exempt — its agent surface is the REST API |
+| /em-breve/{slug} | feature that does not exist yet (501) | /em-breve/{slug} — not implemented |
 
 View resolver precedence (mirrors the contract in this file): ?as=/?view= →
 saved bm_view cookie → agent UA → search-crawler UA maps to human → human.
@@ -63,15 +68,20 @@ Auto-detection is never persisted.
 4. formula — a published VRAM rule when no measurement exists yet
 5. no data yet — we say so instead of inventing a number
 
-## Snapshot totals (apps/web/data/derived/stats.json, 2026-08-13)
+## Snapshot totals (apps/web-next/public/data/derived/stats.json, 2026-09-18)
 
-- runs: 4849
-- models: 527
-- rigs: 147
+- runs: 8246
+- models: 692
+- rigs: 185
 
 Frozen snapshot counts — not live, not throughput.
 
 ## API (host: https://api.bestmodel.run — the www host serves pages only)
+
+Reads are public. Writes need a bearer token: passkey or OAuth at
+/console, or POST /v1/auth/tokens for an agent token.
+
+### Engine
 
 - GET /v1/pick?intent=chat|image.generate|vision|audio&vram_gib=24&gpu=rtx-3090-24gb
   — best model per intent that fits the VRAM (contract model-pick-v1). Ranked by
@@ -83,14 +93,59 @@ Frozen snapshot counts — not live, not throughput.
 - POST /v1/match/model-to-hardware — roofline estimates, every row source_class "derived"
 - GET /v1/transparency/sources
 - GET /v1/leaderboard — every entry carries a source_class
+- GET /v1/model-releases, GET /v1/quantization-profiles — the catalog
 - POST /v1/submissions (+ GET /v1/submissions/nonce) — signed intake
+- GET /v1/cards/claims/{id}.svg|.md — share cards
+- GET /v1/badges/runs/{run_id}.svg — embeddable badge
+
+### The capture network (claims, votes, reports)
+
+- GET /v1/claims?status=open|settled_verified|refuted|retracted&sort=recent|controversial|strongest
+- GET /v1/claims/{id}
+- POST /v1/claims — assert a run you measured (auth; rate limit scales with tier)
+- POST /v1/claims/{id}/votes — { verdict: "plausible" | "impossible" } (auth)
+- POST /v1/claims/{id}/retract — the claimant withdraws their own claim (auth)
+- POST /v1/run-claims/{claim_id}/reports — { reason_category, reason_detail? } (auth)
+- GET /v1/reports?status=open|confirmed|dismissed — the moderation queue (moderators only)
+- POST /v1/reports/{id}/confirm, POST /v1/reports/{id}/dismiss (moderators only)
+
+### The social layer (accounts, rigs, feed, notifications)
+
+- POST /v1/auth/passkey/register/{options,verify} — create an account with a passkey
+- POST /v1/auth/passkey/login/{options,verify} — sign in; returns access_token
+- GET /v1/auth/session — who the bearer token belongs to (auth)
+- GET /v1/auth/oauth/{github,huggingface}/begin|callback — provider sign-in
+- GET /v1/feed?scope=following|global&sort=recent|trending — posts, claims, signed runs
+- GET /v1/notifications, POST /v1/notifications/{id}/read (auth)
+- GET /v1/users/{handle} — public profile (reputation, badges, rigs)
+- POST /v1/users/{handle}/follow, DELETE /v1/users/{handle}/follow (auth)
+- POST /v1/rigs, GET|PATCH /v1/rigs/{slug}, POST /v1/rigs/{slug}/bind (auth)
+
+### The classic social layer (posts, answers, likes)
+
+A post carries TEXT only. A measurement belongs in a claim; a post may point
+at one. Deletion is soft (spam only). Comment threads are one level deep.
+
+- POST /v1/posts — { body, kind?: note|question|showcase, claim_id?, rig_slug?, model_release_id? }
+- GET /v1/posts/{id} — one post with its comments and counts
+- DELETE /v1/posts/{id} — author only, soft delete
+- POST /v1/posts/{id}/comments — { body, parent_id? }
+- POST /v1/posts/{id}/likes — toggle → { liked, like_count }
+- POST /v1/comments/{id}/likes — toggle → { liked, like_count }
+
+### Moderation grounds
+
+numbers_unreal · wrong_hardware · wrong_model · duplicate · other
+
+A report never changes the target by itself. A confirmed report marks the
+claim refuted and pays the reporter five points.
 
 ## Human tours
 
 - /?as=human — I have a goal (desktop, min 1024px)
 - /hardware?as=human — I have hardware
 - mobile: no separate route — the canonical pages are responsive
-- console/ — passkey console (not a tour)
+- /console — sign in with a passkey, read the feed, follow rigs and people
 
 ## Read next
 
@@ -106,11 +161,12 @@ Whisper Large v3 cell (4.82×real) is another rig and has no language.
 This tree appends Whisper Large v3 Turbo: **39.22×real** (n=3,
 measured, FLEURS `pt_br`). WER 0.04 is **reported** (n=1) on
 docs/measurements/2026-09-23-audio-pt-br-3090.md — not a pool field.
-Do not invent a WER. Live site stays frozen until deploy.
+Do not invent a WER.
 
 ## Do not
 
 - Invent a tok/s or fill an empty cell
 - Render a number without a source class
 - Treat snapshot totals as live throughput
+- Treat a claim as a measurement before a signed run settles it
 - Answer Portuguese ASR from the L4 speed claim

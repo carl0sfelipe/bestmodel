@@ -101,6 +101,16 @@ def create_run_report(
     }
 
 
+def _grant_badge(session, user_id: str, code: str) -> bool:
+    """Grant a badge once. The same badge twice is the same badge."""
+    try:
+        session.insert_badge({"id": str(uuid.uuid4()), "app_user_id": user_id, "code": code})
+    except Exception:
+        # A badge must never block the moderation decision itself.
+        return False
+    return True
+
+
 def confirm_report(session, caller_user: dict[str, Any], report_id: str) -> dict[str, Any]:
     require_moderator(caller_user)
     report = session.find_run_report_by_id(report_id)
@@ -113,8 +123,18 @@ def confirm_report(session, caller_user: dict[str, Any], report_id: str) -> dict
     session.set_run_report_status(report_id, "confirmed", awarded)
     if report["target_kind"] == "run_claim":
         session.set_run_claim_status(report["run_claim_id"], "refuted")
+    # A confirmed report is a fake caught, and the person who caught it is
+    # the one the badge names.
+    badge_granted = False
+    if report.get("reporter_user_id"):
+        badge_granted = _grant_badge(session, report["reporter_user_id"], "giant_killer")
     session.commit()
-    return {"id": report_id, "status": "confirmed", "awarded": awarded is not None}
+    return {
+        "id": report_id,
+        "status": "confirmed",
+        "awarded": awarded is not None,
+        "badge_granted": badge_granted,
+    }
 
 
 def dismiss_report(session, caller_user: dict[str, Any], report_id: str) -> dict[str, Any]:

@@ -1,0 +1,189 @@
+/* hardware.css — /hardware, the machine catalogue.
+   Macrostructure: a catalogue INDEX of machines. Each entry is a ledger row
+   with an ordinal, two proportional comparisons (the load a machine carried
+   and the breadth of models tried on it), the spec figures, and the measured
+   / reported split of its cells. Rows read top to bottom in the order the
+   reader chose. */
+
+.hw-head {
+  padding-bottom: 30px;
+}
+
+.hw-figs-top {
+  margin-top: 26px;
+}
+
+.hw-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair);
+}
+
+.hw-entry {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-areas: "ord id load spec reach figs";
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.hw-entry > * {
+  min-width: 0;
+}
+
+.hw-ord {
+  grid-area: ord;
+  font: var(--text-s) var(--mono);
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.hw-id {
+  grid-area: id;
+}
+
+.hw-name {
+  font: 600 19px/1.2 var(--display);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.hw-name a {
+  text-decoration: none;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.hw-name a:hover {
+  color: var(--amber);
+}
+
+.hw-key {
+  font: var(--text-xs) var(--mono);
+  color: var(--dim);
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+}
+
+.hw-class {
+  font: var(--text-xs) var(--mono);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.hw-load {
+  grid-area: load;
+}
+
+.hw-spec {
+  grid-area: spec;
+}
+
+.hw-reach {
+  grid-area: reach;
+}
+
+.hw-figure {
+  font: var(--text-s) var(--mono);
+  color: var(--muted);
+}
+
+.hw-figure strong {
+  font: 500 22px/1.2 var(--mono);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.hw-bar {
+  height: 6px;
+  border-radius: var(--radius-p);
+  background: var(--surface-3);
+  overflow: hidden;
+  margin-top: var(--space-2);
+}
+
+.hw-bar i {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-p);
+  background: var(--amber);
+}
+
+.hw-bar.reach i {
+  background: var(--green);
+}
+
+.hw-pct {
+  font: var(--text-xs) var(--mono);
+  color: var(--dim);
+  margin-top: 6px;
+}
+
+.hw-figs {
+  grid-area: figs;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.hw-figs > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--hair);
+  padding-bottom: 3px;
+}
+
+.hw-figs > div:last-child {
+  border-bottom: 0;
+}
+
+.hw-figs dt {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.hw-figs dd {
+  margin: 0;
+  font: var(--text-s) var(--mono);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.hw-note {
+  border-top: 1px solid var(--hair);
+}
+
+@media (max-width: 75rem) {
+  .hw-entry {
+    grid-template-columns: 2.8rem minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "ord id id id"
+      "ord load spec reach"
+      "ord figs figs figs";
+  }
+}
+
+@media (max-width: 46rem) {
+  .hw-entry {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    grid-template-areas:
+      "ord id"
+      "load load"
+      "spec spec"
+      "reach reach"
+      "figs figs";
+    gap: var(--space-3) var(--space-4);
+  }
+}

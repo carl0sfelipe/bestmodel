@@ -132,6 +132,36 @@ class PostgresIntakeRepository:
             )
             connection.commit()
 
+    def fetch_run_hardware_owner(self, run_id: str) -> Optional[str]:
+        """The account that owns the machine this run was measured on.
+
+        The run names a hardware submission, and the submission names the
+        account that owns that machine. When the owner is not an account
+        (an anonymous contributor), there is nobody to grant a badge to and
+        the join returns nothing.
+        """
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT h.owner_account_id FROM benchmark_run r "
+                "JOIN hardware_submission h ON h.id = r.hardware_submission_id "
+                "JOIN app_user u ON u.id = h.owner_account_id "
+                "WHERE r.id = %s",
+                (run_id,),
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
+
+    def award_badge(self, user_id: str, code: str) -> bool:
+        """Grant a badge. The same badge twice is the same badge."""
+        with self._connect() as connection, connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO badge (id, app_user_id, code) "
+                "VALUES (gen_random_uuid(), %s, %s) "
+                "ON CONFLICT (app_user_id, code) DO NOTHING",
+                (user_id, code),
+            )
+            return cursor.rowcount > 0
+
     def publish_ranking_update(self, event: dict[str, Any]) -> None:
         if self._redis is None:
             return
@@ -180,6 +210,13 @@ class PostgresIntakeRepository:
                 "UPDATE user_reputation SET points = %s, tier = %s, updated_at = now() "
                 "WHERE app_user_id = %s",
                 (new_points, new_tier, claimant_id),
+            )
+            # The claim became verified evidence because this person filed it.
+            cursor.execute(
+                "INSERT INTO badge (id, app_user_id, code) "
+                "VALUES (gen_random_uuid(), %s, 'claim_settler') "
+                "ON CONFLICT (app_user_id, code) DO NOTHING",
+                (claimant_id,),
             )
             cursor.execute(
                 "INSERT INTO notification (id, recipient_id, kind, payload) "

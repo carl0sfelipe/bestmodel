@@ -298,3 +298,29 @@ analyzer, instrumentation custom node — S1–S6); platform-side work below.
   on the contract; `--until` overnight loop; gamify **empty**
   `(rig × language × recipe)` via existing A3 points.
 - Finding: F15.
+
+## L08 (2026-11-12): a rede social de verdade sobre o pool — camada clássica
+
+- Escalação (dono): o objetivo do bestmodel.run é uma REDE SOCIAL focada em
+  LLM local, e o que existia era a rede de captura (claims, votos, rigs,
+  follows, notificações) sem a camada clássica — sem posts, sem respostas,
+  sem likes. Decisão: camada clássica POR CIMA das claims, com a claim
+  permanecendo o único lugar onde um número mora.
+- Entregue (branch feat/golive-social):
+  - migration 0018 (post, comment, post_like, comment_like) + kinds de
+    notificação novos (post_commented, post_liked, comment_replied);
+  - API: POST/GET/DELETE /v1/posts, POST /v1/posts/{id}/comments,
+    POST /v1/posts/{id}/likes, POST /v1/comments/{id}/likes; o feed
+    unificado ganha o item `post` (scope e sort inalterados);
+  - front: composer no console, posts no feed, página /p/{id} (a post como
+    documento, as respostas penduradas), /console como rota Next de verdade
+    (login passkey/OAuth, feed, notificações, perfil), /mural como a fila de
+    moderação real (antes: mock que não transmitia nada), /profile como
+    ficha de registro (inclui as capturas da pessoa);
+  - CI constrói o front (antes não construía); `make test` hermético;
+    scripts/check-snapshot.mjs impede o site de contradizer os próprios
+    números (stats.json × os arquivos ao lado).
+- Regra de honestidade que atravessa a camada: um post carrega TEXTO. Um
+  corpo que smuggle métricas é recusado com a mensagem que diz onde o
+  número mora. Limites de post/comentário escalam com o tier, como claims e
+  votos (L0 posta 3/dia, L4 posta 80).

@@ -4,6 +4,7 @@ Items are typed so the console can render one list:
 
 - ``claim``        — a run claim with its live vote tally
 - ``verified_run`` — a validated, account-attributed benchmark run
+- ``post``         — a member's post (L08: the classic social layer)
 
 ``scope=following`` shows only followed accounts (empty graph -> empty feed);
 ``scope=global`` ignores the graph. ``sort=trending`` ranks claims by community
@@ -31,6 +32,7 @@ def build_feed(
     items: list[dict] = []
     items.extend(_claim_items(session, user_ids))
     items.extend(_run_items(session, user_ids))
+    items.extend(_post_items(session, user_ids))
 
     if sort == "trending":
         items.sort(key=lambda item: item["_sort_key"], reverse=True)
@@ -80,4 +82,27 @@ def _run_items(session: DatabaseSession, user_ids: list[str] | None) -> list[dic
             "_sort_key": str(run["submitted_at"]),
         }
         for run in runs
+    ]
+
+
+def _post_items(session: DatabaseSession, user_ids: list[str] | None) -> list[dict]:
+    """Posts (L08). A post carries no numbers, so it has no activity key."""
+    posts = session.list_posts_by_users(user_ids, 100)
+    return [
+        {
+            "type": "post",
+            "id": post["id"],
+            "handle": post.get("author_handle"),
+            "body": post["body"],
+            "post_kind": post.get("kind") or "note",
+            "claim_id": post.get("claim_id"),
+            "rig_slug": post.get("rig_slug"),
+            "model_release_id": post.get("model_release_id"),
+            "comment_count": int(post.get("comment_count") or 0),
+            "like_count": session.count_post_likes(post["id"]),
+            "created_at": post.get("created_at"),
+            "_created": str(post.get("created_at")),
+            "_sort_key": str(post.get("created_at")),
+        }
+        for post in posts
     ]

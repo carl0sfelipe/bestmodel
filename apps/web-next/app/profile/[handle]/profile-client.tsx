@@ -8,8 +8,10 @@ import {
   CONSOLE_HREF,
   getToken,
   getUser,
+  listClaims,
   setFollow,
   type Badge,
+  type Claim,
   type UserProfile,
 } from "../../../lib/social";
 
@@ -46,19 +48,49 @@ const RUNGS = [
   },
 ] as const;
 
+/**
+ * Which badges the API actually hands out, and which rung each one is.
+ *
+ * The mapping is explicit on purpose. The badge vocabulary is a fixed list
+ * of codes; guessing a rung by looking for a word in the code is how a
+ * profile ends up claiming a level nobody earned.
+ *
+ * `replicator` has no badge at all: reproducing another person's run is not
+ * something the pool records yet, so that rung can never be held.
+ */
+const BADGE_RUNGS: Record<string, string> = {
+  first_verified_run: "contributor",
+  pool_contributor_100h: "contributor",
+  giant_killer: "auditor",
+};
+
+const BADGE_LABEL: Record<string, string> = {
+  first_verified_run: "a validated run on their own machine",
+  pool_contributor_100h: "100 hours contributed to the pool",
+  giant_killer: "a fake caught and confirmed by moderation",
+  claim_settler: "a claim that became verified evidence",
+  rig_collector: "machines described and bound to their runs",
+};
+
 /** A rung counts as held only when a badge from the API names it. No inference. */
 function heldRungs(badges: Badge[] | null | undefined): Set<string> {
   const held = new Set<string>();
   for (const badge of badges ?? []) {
-    for (const value of Object.values(badge ?? {})) {
-      if (typeof value !== "string") continue;
-      const needle = value.toLowerCase();
-      for (const rung of RUNGS) {
-        if (needle.includes(rung.key)) held.add(rung.key);
-      }
-    }
+    const code = typeof badge?.code === "string" ? badge.code : "";
+    const rung = BADGE_RUNGS[code];
+    if (rung) held.add(rung);
   }
   return held;
+}
+
+function badgeList(badges: Badge[] | null | undefined): Array<{ code: string; label: string }> {
+  const seen = new Set<string>();
+  for (const badge of badges ?? []) {
+    const code = typeof badge?.code === "string" ? badge.code : "";
+    if (!code || seen.has(code)) continue;
+    seen.add(code);
+  }
+  return [...seen].map((code) => ({ code, label: BADGE_LABEL[code] ?? code }));
 }
 
 export default function ProfileClient({ handle }: { handle: string }) {
@@ -70,6 +102,12 @@ export default function ProfileClient({ handle }: { handle: string }) {
   const [following, setFollowing] = useState(false);
   const [followBusy, setFollowBusy] = useState(false);
   const [followError, setFollowError] = useState<string | null>(null);
+
+  // What this account put on the wall. The API does not serve "claims by
+  // handle", so the client reads the wall and keeps the rows whose claimant
+  // handle matches. Only rows with a real claimant id count as this
+  // person's — imports carry a label that is not an account.
+  const [captures, setCaptures] = useState<Claim[] | null>(null);
 
   useEffect(() => setSignedIn(getToken() != null), []);
 
@@ -89,6 +127,27 @@ export default function ProfileClient({ handle }: { handle: string }) {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    let alive = true;
+    listClaims({ status: "", sort: "recent", limit: 100, offset: 0 })
+      .then((result) => {
+        if (!alive) return;
+        const rows = result.data ?? [];
+        setCaptures(
+          rows.filter(
+            (row) => row.claimant_id != null && row.claimant_handle === handle,
+          ),
+        );
+      })
+      .catch(() => {
+        if (!alive) return;
+        setCaptures([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [handle]);
+
   async function toggleFollow() {
     setFollowBusy(true);
     setFollowError(null);
@@ -107,7 +166,7 @@ export default function ProfileClient({ handle }: { handle: string }) {
     return (
       <main>
         <section className="page-head">
-          <p className="kicker">bestmodel.run / track record</p>
+          <p className="kicker">bestmodel.run / profile</p>
         </section>
         <Skeleton rows={2} />
       </main>
@@ -118,7 +177,7 @@ export default function ProfileClient({ handle }: { handle: string }) {
     return (
       <main>
         <section className="page-head">
-          <p className="kicker">bestmodel.run / track record</p>
+          <p className="kicker">bestmodel.run / profile</p>
         </section>
         <EmptyState
           mark="404"
@@ -138,7 +197,7 @@ export default function ProfileClient({ handle }: { handle: string }) {
     return (
       <main>
         <section className="page-head">
-          <p className="kicker">bestmodel.run / track record</p>
+          <p className="kicker">bestmodel.run / profile</p>
         </section>
         <Banner kind="bad">
           <b>this profile could not be loaded</b> — {loadError?.detail}
@@ -148,36 +207,43 @@ export default function ProfileClient({ handle }: { handle: string }) {
   }
 
   const held = heldRungs(profile.badges);
+  const badges = badgeList(profile.badges);
   const publicRigs = (profile.rigs ?? []).filter((rig) => rig.is_public);
   const joined = ago(profile.created_at);
+  const captureCount = captures?.length ?? 0;
 
   return (
     <main>
-      <section className="page-head">
-        <p className="kicker">bestmodel.run / track record</p>
-        <h1>@{profile.handle}</h1>
-        <p>
-          {profile.display_name ? `${profile.display_name}. ` : ""}
-          Trust here is a ladder, climbed by verified acts. Every level is granted by a verified
-          act, is never self-declared, does not decay, and every act is attributable to an Ed25519
-          key.
-        </p>
-
-        <div className="actions">
-          {signedIn ? (
-            <button
-              type="button"
-              className={following ? "btn on" : "btn primary"}
-              disabled={followBusy}
-              onClick={() => void toggleFollow()}
-            >
-              {followBusy ? "Working…" : following ? "Following" : "Follow"}
-            </button>
-          ) : (
-            <Link className="btn" href={CONSOLE_HREF}>
-              Sign in to follow
-            </Link>
-          )}
+      {/* the record sheet header: who, since when, and the one action */}
+      <section className="sheet-head">
+        <div className="record-head">
+          <div className="record-id">
+            <p className="overline">account</p>
+            <h1 className="record-name">@{profile.handle}</h1>
+            <p className="record-sub">
+              {profile.display_name ? `${profile.display_name}. ` : ""}
+              Trust here is a ladder, climbed by verified acts. Every level is granted by a
+              verified act, is never self-declared, does not decay, and every act is attributable
+              to an Ed25519 key.
+              {joined ? ` Joined ${joined}.` : ""}
+            </p>
+          </div>
+          <div className="record-actions">
+            {signedIn ? (
+              <button
+                type="button"
+                className={following ? "btn on" : "btn primary"}
+                disabled={followBusy}
+                onClick={() => void toggleFollow()}
+              >
+                {followBusy ? "Working…" : following ? "Following" : "Follow"}
+              </button>
+            ) : (
+              <Link className="btn" href={CONSOLE_HREF}>
+                Sign in to follow
+              </Link>
+            )}
+          </div>
         </div>
         {followError && (
           <p className="help err" role="alert">
@@ -186,69 +252,122 @@ export default function ProfileClient({ handle }: { handle: string }) {
         )}
       </section>
 
-      {/* Facts the API stated, and nothing else. */}
-      <section className="panel">
-        <p className="panel-t">standing</p>
-        <div className="figs">
-          <div className="fig">
-            <span className="v">{fmt(profile.reputation?.points ?? 0, 0)}</span>
-            <span className="k">points</span>
-          </div>
-          <div className="fig">
-            <span className="v">{profile.reputation?.tier ?? "—"}</span>
-            <span className="k">tier</span>
-          </div>
-          <div className="fig">
-            <span className="v">{fmt(profile.follow?.followers ?? 0, 0)}</span>
-            <span className="k">followers</span>
-          </div>
-          <div className="fig">
-            <span className="v">{fmt(profile.follow?.following ?? 0, 0)}</span>
-            <span className="k">following</span>
-          </div>
+      {/* standing: a strip of figures, not a card grid */}
+      <section className="record-strip" aria-label="Standing">
+        <div className="record-fig">
+          <span className="v">{fmt(profile.reputation?.points ?? 0, 0)}</span>
+          <span className="k">points</span>
         </div>
-        {joined && <p className="note">joined {joined}</p>}
+        <div className="record-fig">
+          <span className="v">{profile.reputation?.tier ?? "—"}</span>
+          <span className="k">tier</span>
+        </div>
+        <div className="record-fig">
+          <span className="v">{fmt(profile.follow?.followers ?? 0, 0)}</span>
+          <span className="k">followers</span>
+        </div>
+        <div className="record-fig">
+          <span className="v">{fmt(profile.follow?.following ?? 0, 0)}</span>
+          <span className="k">following</span>
+        </div>
+        <div className="record-fig">
+          <span className="v">{captures === null ? "—" : fmt(captureCount, 0)}</span>
+          <span className="k">captures on the wall</span>
+        </div>
       </section>
 
-      <section className="section">
-        <h2>The ladder</h2>
-        <p className="section-copy">
-          Granted by a verified act; levels are not self-declared and do not decay; every act is
-          attributable to an Ed25519 key.
+      {/* the ladder: a rail, rungs on the rail */}
+      <section className="record-block">
+        <h2 className="record-h">The ladder</h2>
+        <p className="record-note">
+          Granted by a verified act; levels are not self-declared and do not decay.
         </p>
-        <div className="ladder" style={{ marginTop: 28 }}>
+        {badges.length > 0 ? (
+          <ul className="record-badges">
+            {badges.map((badge) => (
+              <li key={badge.code}>
+                <span className="record-badge-code">{badge.code.replace(/_/g, " ")}</span>
+                <span className="record-badge-label">{badge.label}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="record-note">No badge yet. A badge is granted by an act the pool records.</p>
+        )}
+        <ol className="rail">
           {RUNGS.map((rung) => {
             const isHeld = held.has(rung.key);
             return (
-              <article className="rung" key={rung.key} data-state={isHeld ? "held" : "not-yet"}>
-                <small className="kicker">{rung.level}</small>
-                <h3>{rung.name}</h3>
-                <p>{rung.blurb}</p>
-                <span className="granted">{isHeld ? rung.granted : "not yet"}</span>
-              </article>
+              <li className="rail-step" key={rung.key} data-state={isHeld ? "held" : "not-yet"}>
+                <span className="rail-node" aria-hidden="true" />
+                <div className="rail-body">
+                  <p className="rail-level">{rung.level}</p>
+                  <h3 className="rail-name">{rung.name}</h3>
+                  <p className="rail-blurb">{rung.blurb}</p>
+                  <p className="rail-granted">{isHeld ? rung.granted : "not yet"}</p>
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </section>
 
-      <section className="section">
-        <h2>Public rigs</h2>
-        {publicRigs.length === 0 ? (
-          <p className="section-copy">
-            No public rig on this profile. A rig only appears here when its owner marks it public.
+      {/* the record: what this account put on the wall */}
+      <section className="record-block">
+        <h2 className="record-h">Captures</h2>
+        {captures === null ? (
+          <Skeleton rows={1} />
+        ) : captureCount === 0 ? (
+          <p className="record-note">
+            Nothing on the wall under this handle yet. A capture is one number plus the machine it
+            came from —{" "}
+            <Link href="/submit">file the first one</Link>.
           </p>
         ) : (
-          <div className="claim-list" style={{ marginTop: 24 }}>
-            {publicRigs.map((rig) => (
-              <article className="claim-card" key={rig.slug}>
-                <div className="claim-model">{rig.nickname ?? rig.slug}</div>
-                <div className="claim-meta">
-                  {rig.slug}
-                  {rig.created_at ? ` · registered ${ago(rig.created_at)}` : ""}
+          <div className="claim-list">
+            {captures.map((claim) => (
+              <article className="claim-card" key={claim.id}>
+                <div className="claim-top">
+                  <Link className="claim-who" href={`/claim/${claim.id}`}>
+                    @{claim.claimant_handle}
+                  </Link>
+                  <span className="status" data-s={claim.status}>
+                    {claim.status.replace("_", " ")}
+                  </span>
+                  <span className="claim-age">{ago(claim.created_at) ?? ""}</span>
+                </div>
+                <Link className="claim-model" href={`/claim/${claim.id}`}>
+                  {claim.model_release_id}
+                </Link>
+                <div className="claim-num">
+                  {claim.claimed_metrics?.decode_tok_s ?? "—"}
+                  <small>tok/s decode · claimed</small>
                 </div>
               </article>
             ))}
           </div>
+        )}
+      </section>
+
+      {/* public rigs */}
+      <section className="record-block">
+        <h2 className="record-h">Public rigs</h2>
+        {publicRigs.length === 0 ? (
+          <p className="record-note">
+            No public rig on this profile. A rig only appears here when its owner marks it public.
+          </p>
+        ) : (
+          <ul className="record-rigs">
+            {publicRigs.map((rig) => (
+              <li key={rig.slug}>
+                <span className="rig-name">{rig.nickname ?? rig.slug}</span>
+                <span className="rig-slug">{rig.slug}</span>
+                {rig.created_at ? (
+                  <span className="rig-age">registered {ago(rig.created_at)}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
         )}
       </section>
     </main>

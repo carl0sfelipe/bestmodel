@@ -100,6 +100,12 @@ goal vs hardware switcher (`.journey-btn[data-journey]`).
   catalog expansion 57→76 models / 23→29 GPUs from HF configs.
   CLI v2 Local Lab (`specs/en/L01-cli-v2-local-lab.md`) planned; social spec:
   `specs/en/L02-social-platform.md`; backlog tracks B/C.
+- **L08 DONE (branch feat/golive-social)**: the classic social layer — posts,
+  comments, likes (migration 0018) — plus the go-live pass on the Next front:
+  the console is a real route (passkey/OAuth sign-in, feed, notifications,
+  profile), /mural is the live moderation queue, the profile is a record
+  sheet, and CI builds the front. Spec: `specs/en/L08-classic-social-layer.md`.
+  A post carries TEXT only — numbers belong in claims.
 - Open decisions: backlog A1–A6 + roofline threshold calibration (finding F2).
   **S37:** intent catalog (`packages/intent-catalog/catalog.json`) is the
   only category list. v3 D4 item 3 (hand-edit PR #11) is superseded by

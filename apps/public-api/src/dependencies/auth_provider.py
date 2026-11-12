@@ -28,7 +28,7 @@ from src.dependencies.database_session_provider import DatabaseSession, get_data
 class WebAuthnConfig:
     rp_id: str
     rp_name: str
-    expected_origin: str
+    expected_origin: str | list[str]
     challenge_ttl_seconds: int = 120
     session_ttl_seconds: int = 12 * 3600
 
@@ -37,12 +37,30 @@ class WebAuthnConfig:
         return cls(
             rp_id=os.environ.get("AUTH_RP_ID", "localhost"),
             rp_name=os.environ.get("AUTH_RP_NAME", "bestmodel"),
-            expected_origin=os.environ.get("AUTH_EXPECTED_ORIGIN", "http://localhost:8000"),
+            expected_origin=_expected_origins(
+                os.environ.get("AUTH_EXPECTED_ORIGIN", "http://localhost:8000")
+            ),
         )
 
 
 def get_webauthn_config(request: Request) -> WebAuthnConfig:
     return request.app.state.auth_config
+
+
+def _expected_origins(raw: str) -> str | list[str]:
+    """The origins a ceremony may come from.
+
+    The site answers on both the apex and the ``www`` host, and the browser
+    sends the origin of the page the ceremony ran on — so a single expected
+    origin silently broke sign-in on whichever host it did not name. The
+    value is a comma-separated list; one entry stays a plain string.
+    """
+    parts = [part.strip() for part in raw.split(",") if part.strip()]
+    if not parts:
+        return raw
+    if len(parts) == 1:
+        return parts[0]
+    return parts
 
 
 class AuthenticationRequired(HTTPException):

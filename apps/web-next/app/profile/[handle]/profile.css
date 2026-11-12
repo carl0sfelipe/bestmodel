@@ -1,0 +1,53 @@
+/* BM-GOLIVE-1 — /profile as a RECORD SHEET.
+   Macrostructure: the account is a file, not a page of cards. Header block
+   (who, since when, one action), a standing strip of figures, the ladder as
+   a rail, then the record (what this account captured) and the rigs it
+   publishes. Distinct from the feed (/claims), the table (/wall) and the
+   workbench (/). */
+
+.record-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--space-5);padding-bottom:var(--space-5)}
+.record-id{min-width:0;flex:1 1 30ch}
+.record-name{font:600 clamp(30px,6vw,56px)/1 var(--display);letter-spacing:-.035em;overflow-wrap:anywhere}
+.record-sub{color:var(--muted);font-size:14px;line-height:1.7;max-width:62ch;margin-top:var(--space-4)}
+.record-actions{flex-shrink:0}
+
+.record-strip{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-6);padding:var(--space-4) 0 var(--space-6);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.record-fig{display:flex;flex-direction:column;gap:var(--space-1);min-width:0}
+.record-fig .v{font:500 clamp(20px,4vw,26px)/1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.record-fig .k{font:var(--text-xs) var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+
+.record-block{padding:var(--space-6) 0}
+.record-h{font:600 clamp(20px,3.5vw,28px)/1.2 var(--display);letter-spacing:-.02em}
+.record-note{color:var(--muted);font-size:14px;line-height:1.7;max-width:62ch;margin-top:var(--space-3)}
+.record-note a{color:var(--amber)}
+
+/* the ladder as a rail: rungs hang from a line, held ones are marked */
+.rail{list-style:none;margin-top:var(--space-5);display:grid;gap:0}
+.rail-step{position:relative;display:grid;grid-template-columns:2rem minmax(0,1fr);gap:var(--space-4);padding-bottom:var(--space-6)}
+.rail-step:last-child{padding-bottom:0}
+.rail-node{position:relative;width:14px;height:14px;margin-top:6px;border-radius:999px;border:1px solid var(--hair-strong);background:var(--bg);justify-self:center}
+.rail-step::before{content:"";position:absolute;left:calc(1rem - 1px);top:20px;bottom:0;width:1px;background:var(--hair)}
+.rail-step:last-child::before{display:none}
+.rail-step[data-state="held"] .rail-node{border-color:var(--green);background:var(--green)}
+.rail-step[data-state="held"]::before{background:var(--green-line)}
+.rail-body{min-width:0}
+.rail-level{font:var(--text-xs) var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.rail-name{font:600 19px/1.25 var(--display);letter-spacing:-.02em;margin-top:var(--space-1)}
+.rail-step[data-state="not-yet"] .rail-name{color:var(--muted)}
+.rail-blurb{color:var(--muted);font-size:13px;line-height:1.65;margin-top:var(--space-2);max-width:60ch}
+.rail-granted{margin-top:var(--space-3);font:var(--text-xs)/1.6 var(--mono);color:var(--dim)}
+.rail-step[data-state="held"] .rail-granted{color:var(--green)}
+
+/* the rigs this account publishes: a list, not a grid */
+.record-rigs{list-style:none;margin-top:var(--space-4);display:grid;gap:var(--space-2)}
+.record-rigs li{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--space-2) var(--space-4);padding:var(--space-3) 0;border-bottom:1px solid var(--hair)}
+.record-rigs li:last-child{border-bottom:0}
+.rig-name{font:600 15px var(--display)}
+.rig-slug{font:var(--text-s) var(--mono);color:var(--muted)}
+.rig-age{font:var(--text-xs) var(--mono);color:var(--dim);margin-left:auto}
+
+@media (max-width:760px){
+  .record-head{align-items:flex-start;flex-direction:column}
+  .record-strip{gap:var(--space-3) var(--space-5)}
+  .rig-age{margin-left:0}
+}

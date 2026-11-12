@@ -422,6 +422,78 @@ class DatabaseSession(ABC):
         """Link an open claim to an incoming run; return affected rows (0/1)."""
 
     @abstractmethod
+    def insert_post(self, record: dict[str, Any]) -> None:
+        """Insert a post row."""
+
+    @abstractmethod
+    def find_post_by_id(self, post_id: str) -> dict[str, Any] | None:
+        """Return one post (deleted included) with its author handle, or None."""
+
+    @abstractmethod
+    def list_posts_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        """Recent posts with author handles; ``None`` selects every account."""
+
+    @abstractmethod
+    def soft_delete_post(self, post_id: str, author_id: str) -> int:
+        """Soft-delete a post authored by ``author_id``; return rows (0/1)."""
+
+    @abstractmethod
+    def insert_comment(self, record: dict[str, Any]) -> None:
+        """Insert a comment row."""
+
+    @abstractmethod
+    def list_comments_for_post(self, post_id: str) -> list[dict[str, Any]]:
+        """Comments of one post, oldest first, with author handles."""
+
+    @abstractmethod
+    def increment_post_comment_count(self, post_id: str) -> int:
+        """Bump the post's comment counter; return rows (0/1)."""
+
+    @abstractmethod
+    def insert_post_like(self, post_id: str, user_id: str) -> int:
+        """Add a like; return 1 when inserted, 0 when it already existed."""
+
+    @abstractmethod
+    def delete_post_like(self, post_id: str, user_id: str) -> int:
+        """Remove a like; return rows (0/1)."""
+
+    @abstractmethod
+    def count_post_likes(self, post_id: str) -> int:
+        """Number of likes on a post."""
+
+    @abstractmethod
+    def has_post_like(self, post_id: str, user_id: str) -> bool:
+        """Whether this user already liked the post."""
+
+    @abstractmethod
+    def insert_comment_like(self, comment_id: str, user_id: str) -> int:
+        """Add a comment like; return 1 when inserted, 0 when it already existed."""
+
+    @abstractmethod
+    def delete_comment_like(self, comment_id: str, user_id: str) -> int:
+        """Remove a comment like; return rows (0/1)."""
+
+    @abstractmethod
+    def count_comment_likes(self, comment_id: str) -> int:
+        """Number of likes on a comment."""
+
+    @abstractmethod
+    def has_comment_like(self, comment_id: str, user_id: str) -> bool:
+        """Whether this user already liked the comment."""
+
+    @abstractmethod
+    def count_posts_since(self, user_id: str, since: str) -> int:
+        """Posts created by ``user_id`` after ``since``."""
+
+    @abstractmethod
+    def count_comments_since(self, user_id: str, since: str) -> int:
+        """Comments created by ``user_id`` after ``since``."""
+
+    @abstractmethod
+    def find_comment_by_id(self, comment_id: str) -> dict[str, Any] | None:
+        """Return one comment (deleted included) or None."""
+
+    @abstractmethod
     def commit(self) -> None:
         """Persist pending writes."""
 
@@ -1225,6 +1297,145 @@ class PostgresSession(DatabaseSession):
             "ORDER BY r.submitted_at DESC LIMIT %s",
             (owner_ids, owner_ids, limit),
         )
+
+    def insert_post(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO post (id, author_id, body, kind, claim_id, rig_slug, "
+            "model_release_id, comment_count, like_count, created_at, updated_at) "
+            "VALUES (%(id)s, %(author_id)s, %(body)s, %(kind)s, %(claim_id)s, %(rig_slug)s, "
+            "%(model_release_id)s, %(comment_count)s, %(like_count)s, %(created_at)s, %(updated_at)s)",
+            record,
+        )
+
+    def find_post_by_id(self, post_id: str) -> dict[str, Any] | None:
+        rows = self._fetchall(
+            "SELECT p.*, u.handle AS author_handle FROM post p "
+            "JOIN app_user u ON u.id = p.author_id WHERE p.id = %s",
+            (post_id,),
+        )
+        return rows[0] if rows else None
+
+    def list_posts_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT p.*, u.handle AS author_handle FROM post p "
+            "JOIN app_user u ON u.id = p.author_id "
+            "WHERE p.deleted_at IS NULL "
+            "AND (%s::uuid[] IS NULL OR p.author_id = ANY(%s::uuid[])) "
+            "ORDER BY p.created_at DESC LIMIT %s",
+            (user_ids, user_ids, limit),
+        )
+
+    def soft_delete_post(self, post_id: str, author_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE post SET deleted_at = now() "
+                "WHERE id = %s AND author_id = %s AND deleted_at IS NULL",
+                (post_id, author_id),
+            )
+            return cursor.rowcount
+
+    def insert_comment(self, record: dict[str, Any]) -> None:
+        self._connection.execute(
+            "INSERT INTO comment (id, post_id, author_id, parent_id, body, like_count, created_at) "
+            "VALUES (%(id)s, %(post_id)s, %(author_id)s, %(parent_id)s, %(body)s, "
+            "%(like_count)s, %(created_at)s)",
+            record,
+        )
+
+    def list_comments_for_post(self, post_id: str) -> list[dict[str, Any]]:
+        return self._fetchall(
+            "SELECT c.*, u.handle AS author_handle FROM comment c "
+            "JOIN app_user u ON u.id = c.author_id "
+            "WHERE c.post_id = %s AND c.deleted_at IS NULL "
+            "ORDER BY c.created_at ASC",
+            (post_id,),
+        )
+
+    def increment_post_comment_count(self, post_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "UPDATE post SET comment_count = comment_count + 1 WHERE id = %s",
+                (post_id,),
+            )
+            return cursor.rowcount
+
+    def insert_post_like(self, post_id: str, user_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO post_like (post_id, user_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+                (post_id, user_id),
+            )
+            return cursor.rowcount
+
+    def delete_post_like(self, post_id: str, user_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM post_like WHERE post_id = %s AND user_id = %s",
+                (post_id, user_id),
+            )
+            return cursor.rowcount
+
+    def count_post_likes(self, post_id: str) -> int:
+        rows = self._fetchall("SELECT count(*) AS n FROM post_like WHERE post_id = %s", (post_id,))
+        return int(rows[0]["n"]) if rows else 0
+
+    def has_post_like(self, post_id: str, user_id: str) -> bool:
+        rows = self._fetchall(
+            "SELECT 1 AS present FROM post_like WHERE post_id = %s AND user_id = %s",
+            (post_id, user_id),
+        )
+        return bool(rows)
+
+    def insert_comment_like(self, comment_id: str, user_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO comment_like (comment_id, user_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+                (comment_id, user_id),
+            )
+            return cursor.rowcount
+
+    def delete_comment_like(self, comment_id: str, user_id: str) -> int:
+        with self._connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM comment_like WHERE comment_id = %s AND user_id = %s",
+                (comment_id, user_id),
+            )
+            return cursor.rowcount
+
+    def count_comment_likes(self, comment_id: str) -> int:
+        rows = self._fetchall(
+            "SELECT count(*) AS n FROM comment_like WHERE comment_id = %s", (comment_id,)
+        )
+        return int(rows[0]["n"]) if rows else 0
+
+    def has_comment_like(self, comment_id: str, user_id: str) -> bool:
+        rows = self._fetchall(
+            "SELECT 1 AS present FROM comment_like WHERE comment_id = %s AND user_id = %s",
+            (comment_id, user_id),
+        )
+        return bool(rows)
+
+    def count_posts_since(self, user_id: str, since: str) -> int:
+        rows = self._fetchall(
+            "SELECT count(*) AS n FROM post WHERE author_id = %s AND created_at >= %s",
+            (user_id, since),
+        )
+        return int(rows[0]["n"]) if rows else 0
+
+    def count_comments_since(self, user_id: str, since: str) -> int:
+        rows = self._fetchall(
+            "SELECT count(*) AS n FROM comment WHERE author_id = %s AND created_at >= %s",
+            (user_id, since),
+        )
+        return int(rows[0]["n"]) if rows else 0
+
+    def find_comment_by_id(self, comment_id: str) -> dict[str, Any] | None:
+        rows = self._fetchall(
+            "SELECT c.*, u.handle AS author_handle FROM comment c "
+            "JOIN app_user u ON u.id = c.author_id WHERE c.id = %s",
+            (comment_id,),
+        )
+        return rows[0] if rows else None
 
     def bind_claim_to_run(self, claim_id: str, run_id: str) -> int:
         with self._connection.cursor() as cursor:

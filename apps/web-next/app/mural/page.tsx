@@ -26,6 +26,9 @@ export default async function MuralPage() {
           "  other             other",
           "",
           "Machine surface (this page is a live client; no numbers render here):",
+          "  GET  /v1/reports?status=open|confirmed|dismissed   (moderators only)",
+          "  POST /v1/reports/{id}/confirm                     (moderators only)",
+          "  POST /v1/reports/{id}/dismiss                     (moderators only)",
           "  POST /v1/run-claims/{claim_id}/reports   { reason_category, reason_detail? }",
           "  full contract: /llms.txt",
         ].join("\n")}

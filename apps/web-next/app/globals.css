@@ -578,3 +578,21 @@ table.sheet{min-width:760px}
 .desk-notif-body a{color:var(--amber)}
 .desk-notif-age{font:var(--text-s) var(--mono);color:var(--dim)}
 .desk-notifications li.read{opacity:.55}
+
+/* ============================================================================
+   BM-GOLIVE-1 — /mural as the moderation desk: a queue of reports, not a
+   preview of rows. Macrostructure distinct from the wall's feed (/claims) —
+   this one is a work list with two verdicts per row, not a stream of claims.
+   ========================================================================= */
+.mural-head{padding:clamp(32px,6vw,60px) 0 0}
+.mural-title{font:600 clamp(26px,5vw,44px)/1.08 var(--display);letter-spacing:-.03em}
+.mural-frame{font:var(--text-s)/1.8 var(--mono);color:var(--muted);margin-top:var(--space-3);max-width:80ch}
+.ctl-value{font:var(--text-m) var(--mono);color:var(--ink)}
+.mural-queue{list-style:none;display:grid;gap:var(--space-3);margin:var(--space-5) 0 var(--space-8)}
+.mural-item{padding:var(--space-4) var(--space-5);border-radius:var(--radius-m);background:var(--surface);border:1px solid var(--hair)}
+@media (min-width:48rem){.mural-item{padding:var(--space-5)}}
+.mural-item-top{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)}
+.mural-item-reason{font:600 15px/1.3 var(--display);color:var(--ink)}
+.mural-item-detail{margin-top:var(--space-3);font-size:14px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
+.mural-item-meta{margin-top:var(--space-3);font:var(--text-s)/1.7 var(--mono);color:var(--dim);overflow-wrap:anywhere}
+.mural-item-actions{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-4)}

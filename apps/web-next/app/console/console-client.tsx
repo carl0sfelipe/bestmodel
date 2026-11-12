@@ -13,6 +13,7 @@ import {
   registerPasskey,
   type SessionInfo,
 } from "../../lib/auth";
+import { fmt } from "../../components/claim-parts";
 import {
   ago,
   fetchFeed,
@@ -21,6 +22,7 @@ import {
   getUser,
   markNotificationRead,
   setToken,
+  togglePostLike,
   type FeedItem,
   type FeedScope,
   type FeedSort,
@@ -34,6 +36,7 @@ export default function ConsoleClient() {
   const [checked, setChecked] = useState(false);
   const [tab, setTab] = useState<Tab>("feed");
   const [feedKey, setFeedKey] = useState(0);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -84,7 +87,48 @@ export default function ConsoleClient() {
   }
 
   if (!session) {
-    return <SignIn onSignedIn={(next) => setSession(next)} />;
+    // Reads are public. A visitor sees the feed first and is invited to
+    // sign in from there — a wall behind a login is a wall nobody reaches.
+    return (
+      <main>
+        <section className="desk-head">
+          <div className="desk-id">
+            <h1 className="desk-title">The console</h1>
+            <p className="desk-sub">
+              The feed of the capture network: what people measured, what they signed, what they
+              wrote. Reading needs no account. Writing does — sign in with a passkey and you can
+              post, answer and vote.
+            </p>
+          </div>
+          <button
+            className="btn primary"
+            type="button"
+            onClick={() => setShowSignIn(true)}
+          >
+            Sign in
+          </button>
+        </section>
+
+        {showSignIn && (
+          <div className="desk">
+            <div className="desk-panel desk-signin">
+              <SignIn
+                onSignedIn={(next) => {
+                  setSession(next);
+                  setShowSignIn(false);
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="desk">
+          <div className="desk-panel">
+            <Feed key={feedKey} signedIn={false} />
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
@@ -131,7 +175,7 @@ export default function ConsoleClient() {
           {tab === "feed" && (
             <>
               <Composer onPosted={() => setFeedKey((value) => value + 1)} />
-              <Feed key={feedKey} />
+              <Feed key={feedKey} signedIn />
             </>
           )}
           {tab === "notifications" && <Notifications />}
@@ -174,17 +218,17 @@ function SignIn({ onSignedIn }: { onSignedIn: (session: SessionInfo) => void }) 
   }
 
   return (
-    <main>
-      <section className="desk-head">
-        <h1 className="desk-title">Sign in to the network</h1>
+    <>
+      <div className="desk-signin-head">
+        <h2 className="desk-signin-title">Sign in to the network</h2>
         <p className="desk-sub">
           An account is a handle and a passkey. No email, no password — the key stays on your
           device. With one you can vote on claims, follow rigs and people, and post your own
           measurements for the community to judge.
         </p>
-      </section>
+      </div>
 
-      <section className="desk-panel desk-signin">
+      <div className="desk-signin">
         {!supported && (
           <p className="banner" data-k="bad">
             This browser has no passkey support. Open the site in a current browser on a device with
@@ -241,47 +285,24 @@ function SignIn({ onSignedIn }: { onSignedIn: (session: SessionInfo) => void }) 
             {message}
           </p>
         )}
-      </section>
-
-      <section className="desk-aside">
-        <h2 className="craft-head">What an account is for</h2>
-        <ul className="desk-list">
-          <li>
-            <strong>Vote.</strong> A claim is a number somebody asserts. Plausible or impossible —
-            your weight comes from your reputation tier.
-          </li>
-          <li>
-            <strong>Be followed.</strong> People follow rigs and hands, not benchmarks.
-          </li>
-          <li>
-            <strong>Capture.</strong> Post a run you measured; a signed CLI run can settle it for
-            good.
-          </li>
-        </ul>
-        <p className="desk-note">
-          Reads need no account. Only writes do — the wall, the pool and the catalogue are open to
-          everyone.
-        </p>
-      </section>
-    </main>
+      </div>
+    </>
   );
 }
 
 // ---------------------------------------------------------------------- feed
 
-function Feed() {
+function Feed({ signedIn }: { signedIn: boolean }) {
   const [scope, setScope] = useState<FeedScope>("global");
   const [sort, setSort] = useState<FeedSort>("recent");
   const [items, setItems] = useState<FeedItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let alive = true;
+  const load = useCallback(() => {
     setItems(null);
     setError(null);
     fetchFeed({ scope, sort })
       .then((result) => {
-        if (!alive) return;
         if (!result.ok) {
           setError(result.detail ?? "The feed could not be loaded.");
           setItems([]);
@@ -290,14 +311,24 @@ function Feed() {
         setItems(result.data ?? []);
       })
       .catch(() => {
-        if (!alive) return;
         setError("The feed could not be loaded.");
         setItems([]);
       });
-    return () => {
-      alive = false;
-    };
   }, [scope, sort]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function likePost(postId: string) {
+    const result = await togglePostLike(postId);
+    if (!result.ok) {
+      setError(result.detail ?? "The like could not be recorded.");
+      return;
+    }
+    setError(null);
+    load();
+  }
 
   return (
     <section>
@@ -308,7 +339,7 @@ function Feed() {
             {(
               [
                 ["global", "everyone"],
-                ["following", "following"],
+                ...(signedIn ? ([["following", "following"]] as Array<[FeedScope, string]>) : []),
               ] as Array<[FeedScope, string]>
             ).map(([value, label]) => (
               <button
@@ -391,7 +422,8 @@ function Feed() {
                   {item.body}
                 </Link>
                 <p className="claim-meta">
-                  {item.comment_count} comments · {item.like_count} likes
+                  {item.comment_count} {item.comment_count === 1 ? "comment" : "comments"} ·{" "}
+                  {item.like_count} {item.like_count === 1 ? "like" : "likes"}
                   {item.claim_id ? (
                     <>
                       {" · "}
@@ -405,6 +437,17 @@ function Feed() {
                     </>
                   ) : null}
                 </p>
+                {signedIn ? (
+                  <div className="post-feed-actions">
+                    <button
+                      className="btn"
+                      type="button"
+                      onClick={() => void likePost(item.id)}
+                    >
+                      like
+                    </button>
+                  </div>
+                ) : null}
               </article>
             ) : item.type === "claim" ? (
               <article className="claim-card" key={`claim-${item.id}`}>
@@ -421,7 +464,7 @@ function Feed() {
                   {item.model_release_id}
                 </Link>
                 <div className="claim-num">
-                  {item.claimed_metrics?.decode_tok_s ?? "—"}
+                  {fmt(item.claimed_metrics?.decode_tok_s, 2)}
                   <small>tok/s decode · claimed</small>
                 </div>
                 {item.tally && (
@@ -452,9 +495,9 @@ function Feed() {
                 <Link className="claim-model" href={`/m/${item.model_release_id}`}>
                   {item.model_release_id}
                 </Link>
-                <div className="claim-num">
-                  {item.decode_tok_s ?? "—"}
-                  <small>tok/s decode · measured</small>
+                <div className={item.decode_tok_s ? "claim-num" : "claim-num absent"}>
+                  {item.decode_tok_s ? fmt(item.decode_tok_s, 2) : "no decode metric"}
+                  <small>{item.decode_tok_s ? "tok/s decode · measured" : "this run has no decode metric"}</small>
                 </div>
               </article>
             ),

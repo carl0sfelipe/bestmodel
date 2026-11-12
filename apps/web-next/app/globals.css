@@ -600,3 +600,13 @@ table.sheet{min-width:760px}
 /* a post is not a claim: its kind is a chip, never a claim status */
 .post-kind{font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-line);border-radius:999px;padding:3px 9px;white-space:nowrap}
 .claim-post-body{font:15px/1.6 var(--body);letter-spacing:0;font-weight:400;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* the sign-in panel inside the desk */
+.desk-signin-head{margin-bottom:var(--space-4)}
+.desk-signin-title{font:600 20px/1.25 var(--display);letter-spacing:-.02em}
+.post-feed-actions{margin-top:var(--space-3);position:relative;z-index:1}
+
+/* A single child in the desk grid must span the panel column, not the
+   12rem rail column — otherwise the signed-out console collapses into a
+   narrow strip beside an empty rail. */
+.desk > .desk-panel:only-child{grid-column:1 / -1}

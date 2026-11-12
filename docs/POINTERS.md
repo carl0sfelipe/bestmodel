@@ -51,7 +51,6 @@ STALE (do not treat as prod):
 |---|---|
 | `docs/direction-2026-09-19.md` § D4 item 3 | Superseded by `docs/direction-2026-09-21.md` D4/D8 (catalog, not the PR #11 hand-edit). The rest of v3 still binds |
 | `docs/architecture.md` | 2026-08 graph: no web-next, no OAuth, no Omarchy, no S23 dual-path |
-| `docs/en/deploy.md` | Still beelink + Vercel `/v1` rewrite + Pages as DNS cutover |
 | `README.md` “What's here” / `apps/web` | Prod front is `apps/web-next` |
 | `docs/backlog.md` heading **S30** | That S30 is mural (31/08). OAuth on 19/09 reused the id |
 | `deploy/systemd/bestmodel-backup.service` in git | Path `/home/beelink/...`. Live units: `~/.config/systemd/user/` |
@@ -92,7 +91,8 @@ escalation.
 |---|---|---|
 | SKIP | `docs/HANDOFF-OMARCHY-2026-09-18.md` | withdrawn from the public tree |
 | OPEN | `deploy/docker-compose.omarchy.yml` | PGDATA + tunnel override (untracked until owner reviews) |
-| SKIP | `docs/en/deploy.md` | STALE host and front topology |
+| OPEN | `docs/en/deploy.md` | the runbook as it runs NOW: Next front on Vercel, Docker backend here, dev → stag → prod |
+| OPEN | `deploy/promote-prod.sh` | backup → migrate → swap → smoke; rollback in one command |
 | SKIP | `deploy/systemd/*` in git | live units are under `~/.config/systemd/user/` |
 
 ---

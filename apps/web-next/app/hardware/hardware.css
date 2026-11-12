@@ -1,8 +1,9 @@
 /* hardware.css — /hardware, the machine catalogue.
    Macrostructure: a catalogue INDEX of machines. Each entry is a ledger row
-   with an ordinal, a proportional comparison against the busiest machine and
-   the largest memory in the snapshot, and the spec figures that ride along.
-   Rows are read top to bottom in the order the reader chose. */
+   with an ordinal, two proportional comparisons (the load a machine carried
+   and the breadth of models tried on it), the spec figures, and the measured
+   / reported split of its cells. Rows read top to bottom in the order the
+   reader chose. */
 
 .hw-head {
   padding-bottom: 30px;
@@ -21,8 +22,8 @@
 
 .hw-entry {
   display: grid;
-  grid-template-columns: 3.2rem minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr);
-  grid-template-areas: "ord id load mem figs";
+  grid-template-columns: 3rem minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-areas: "ord id load spec reach figs";
   gap: var(--space-4) var(--space-5);
   align-items: start;
   padding: var(--space-4) 0;
@@ -38,7 +39,7 @@
   font: var(--text-s) var(--mono);
   color: var(--dim);
   font-variant-numeric: tabular-nums;
-  padding-top: 2px;
+  padding-top: 3px;
 }
 
 .hw-id {
@@ -78,18 +79,20 @@
   grid-area: load;
 }
 
-.hw-mem {
-  grid-area: mem;
+.hw-spec {
+  grid-area: spec;
 }
 
-.hw-runs,
-.hw-mem-n {
+.hw-reach {
+  grid-area: reach;
+}
+
+.hw-figure {
   font: var(--text-s) var(--mono);
   color: var(--muted);
 }
 
-.hw-runs strong,
-.hw-mem-n strong {
+.hw-figure strong {
   font: 500 22px/1.2 var(--mono);
   color: var(--ink);
   font-variant-numeric: tabular-nums;
@@ -111,7 +114,7 @@
   background: var(--amber);
 }
 
-.hw-bar.mem i {
+.hw-bar.reach i {
   background: var(--green);
 }
 
@@ -124,15 +127,22 @@
 .hw-figs {
   grid-area: figs;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2) var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
   margin: 0;
 }
 
-@media (min-width: 75rem) {
-  .hw-figs {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.hw-figs > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--hair);
+  padding-bottom: 3px;
+}
+
+.hw-figs > div:last-child {
+  border-bottom: 0;
 }
 
 .hw-figs dt {
@@ -140,6 +150,7 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--dim);
+  white-space: nowrap;
 }
 
 .hw-figs dd {
@@ -150,28 +161,28 @@
   overflow-wrap: anywhere;
 }
 
-
 .hw-note {
   border-top: 1px solid var(--hair);
 }
 
-@media (max-width: 62rem) {
+@media (max-width: 75rem) {
   .hw-entry {
-    grid-template-columns: 2.6rem minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: 2.8rem minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-      "ord id id"
-      "ord load mem"
-      "ord figs figs";
+      "ord id id id"
+      "ord load spec reach"
+      "ord figs figs figs";
   }
 }
 
-@media (max-width: 44rem) {
+@media (max-width: 46rem) {
   .hw-entry {
     grid-template-columns: 2.4rem minmax(0, 1fr);
     grid-template-areas:
       "ord id"
       "load load"
-      "mem mem"
+      "spec spec"
+      "reach reach"
       "figs figs";
     gap: var(--space-3) var(--space-4);
   }

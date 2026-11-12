@@ -11,8 +11,6 @@ type Entry = {
   models: number;
   measured: number;
   reported: number;
-  maxMem: number;
-  maxRuns: number;
 };
 
 const SORTS = [
@@ -33,7 +31,7 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
   const [classFilter, setClassFilter] = useState<string>("all");
   const [query, setQuery] = useState("");
 
-  const { entries, poolCells } = useMemo(() => {
+  const { entries, poolCells, maxRuns, maxModels } = useMemo(() => {
     const { hardware, pool } = loadDerived();
     const byRig = new Map<string, { cells: number; models: Set<string>; measured: number; reported: number }>();
     for (const cell of pool) {
@@ -47,8 +45,6 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
       if (basisOf(cell) === "measured") bucket.measured += 1;
       else bucket.reported += 1;
     }
-    const maxMem = Math.max(...hardware.map((rig) => rig.memGb ?? 0));
-    const maxRuns = Math.max(...hardware.map((rig) => rig.runCount ?? 0));
     const rows: Entry[] = hardware.map((rig) => {
       const bucket = byRig.get(rig.key);
       return {
@@ -57,11 +53,14 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
         models: bucket?.models.size ?? 0,
         measured: bucket?.measured ?? 0,
         reported: bucket?.reported ?? 0,
-        maxMem,
-        maxRuns,
       };
     });
-    return { entries: rows, poolCells: pool.length };
+    return {
+      entries: rows,
+      poolCells: pool.length,
+      maxRuns: Math.max(...rows.map((row) => row.rig.runCount ?? 0)),
+      maxModels: Math.max(...rows.map((row) => row.models)),
+    };
   }, []);
 
   const visible = useMemo(() => {
@@ -76,13 +75,13 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
     });
     const sorted = [...filtered];
     if (sort === "runs") sorted.sort((a, b) => (b.rig.runCount ?? 0) - (a.rig.runCount ?? 0));
-    else if (sort === "models") sorted.sort((a, b) => b.models - a.models || (b.rig.runCount ?? 0) - (a.rig.runCount ?? 0));
+    else if (sort === "models")
+      sorted.sort((a, b) => b.models - a.models || (b.rig.runCount ?? 0) - (a.rig.runCount ?? 0));
     else sorted.sort((a, b) => (b.rig.memGb ?? 0) - (a.rig.memGb ?? 0));
     return sorted;
   }, [entries, sort, classFilter, query]);
 
   const shownRuns = visible.reduce((sum, entry) => sum + (entry.rig.runCount ?? 0), 0);
-  const totalRuns = entries.reduce((sum, entry) => sum + (entry.rig.runCount ?? 0), 0);
 
   return (
     <section aria-live="polite">
@@ -140,80 +139,10 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
       </div>
 
       <p className="summary">
-        {visible.length} of {entries.length} machines · {formatNumber(shownRuns, 0)} of{" "}
-        {formatNumber(totalRuns, 0)} runs on the listed machines · {formatNumber(poolCells, 0)} pool
-        cells behind the model counts · largest memory {formatNumber(maxMem, 0)} GB · snapshot {snapshotAt}
+        {visible.length} of {entries.length} machines listed · {formatNumber(poolCells, 0)} pool cells
+        behind the model counts · {formatNumber(shownRuns, 0)} runs across the machines in view ·
+        snapshot {snapshotAt}
       </p>
-
-      <ol className="hw-index">
-        {visible.map((entry, position) => {
-          const { rig } = entry;
-          const runWidth = rig.runCount && entry.maxRuns ? (rig.runCount / entry.maxRuns) * 100 : 0;
-          const memWidth = rig.memGb && entry.maxMem ? (rig.memGb / entry.maxMem) * 100 : 0;
-          const memPct = rig.memGb && entry.maxMem ? Math.round((rig.memGb / entry.maxMem) * 100) : 0;
-          const runPct = rig.runCount && entry.maxRuns ? Math.round((rig.runCount / entry.maxRuns) * 100) : 0;
-          return (
-            <li className="hw-entry" key={rig.key}>
-              <span className="hw-ord">{String(position + 1).padStart(3, "0")}</span>
-
-              <div className="hw-id">
-                <h2 className="hw-name">
-                  <a href={`/wall?rig=${encodeURIComponent(rig.key)}`}>{rig.label}</a>
-                </h2>
-                <p className="hw-key">{rig.key}</p>
-                <p className="hw-class">{rig.hwClass}</p>
-              </div>
-
-              <div className="hw-load">
-                <p className="hw-runs">
-                  <strong>{formatNumber(rig.runCount, 0)}</strong> runs
-                </p>
-                <div className="hw-bar" aria-hidden="true">
-                  <i style={{ width: `${runWidth}%` }} />
-                </div>
-                <p className="hw-pct">{runPct}% of the busiest machine</p>
-              </div>
-
-              <div className="hw-mem">
-                <p className="hw-mem-n">
-                  <strong>{formatNumber(rig.memGb, 2)}</strong> GB
-                </p>
-                <div className="hw-bar mem" aria-hidden="true">
-                  <i style={{ width: `${memWidth}%` }} />
-                </div>
-                <p className="hw-pct">
-                  {memPct}% of the largest memory · {rig.gpuCount} GPU{rig.gpuCount === 1 ? "" : "s"}
-                </p>
-              </div>
-
-              <dl className="hw-figs">
-                <div>
-                  <dt>models tried</dt>
-                  <dd>{entry.cells ? entry.models : "—"}</dd>
-                </div>
-                <div>
-                  <dt>pool cells</dt>
-                  <dd>{entry.cells ? entry.cells : "—"}</dd>
-                </div>
-                <div>
-                  <dt>measured</dt>
-                  <dd>{entry.cells ? entry.measured : "—"}</dd>
-                </div>
-                <div>
-                  <dt>reported</dt>
-                  <dd>{entry.cells ? entry.reported : "—"}</dd>
-                </div>
-                <div>
-                  <dt>bandwidth</dt>
-                  <dd>
-                    {rig.bandwidthGBs == null ? "no data yet" : `${formatNumber(rig.bandwidthGBs)} GB/s`}
-                  </dd>
-                </div>
-              </dl>
-            </li>
-          );
-        })}
-      </ol>
 
       {visible.length === 0 ? (
         <div className="empty">
@@ -224,7 +153,76 @@ export default function HardwareIndex({ snapshotAt }: { snapshotAt: string }) {
             or clear the search to see them.
           </p>
         </div>
-      ) : null}
+      ) : (
+        <ol className="hw-index">
+          {visible.map((entry, position) => {
+            const { rig } = entry;
+            const runs = rig.runCount ?? 0;
+            const runPct = maxRuns ? Math.round((runs / maxRuns) * 100) : 0;
+            const modelPct = maxModels ? Math.round((entry.models / maxModels) * 100) : 0;
+            return (
+              <li className="hw-entry" key={rig.key}>
+                <span className="hw-ord">{String(position + 1).padStart(3, "0")}</span>
+
+                <div className="hw-id">
+                  <h2 className="hw-name">
+                    <a href={`/wall?rig=${encodeURIComponent(rig.key)}`}>{rig.label}</a>
+                  </h2>
+                  <p className="hw-key">{rig.key}</p>
+                  <p className="hw-class">{rig.hwClass}</p>
+                </div>
+
+                <div className="hw-load">
+                  <p className="hw-figure">
+                    <strong>{formatNumber(runs, 0)}</strong> runs
+                  </p>
+                  <div className="hw-bar" aria-hidden="true">
+                    <i style={{ width: `${runPct}%` }} />
+                  </div>
+                  <p className="hw-pct">{runPct}% of the busiest machine</p>
+                </div>
+
+                <div className="hw-spec">
+                  <p className="hw-figure">
+                    <strong>{formatNumber(rig.memGb, 2)}</strong> GB
+                  </p>
+                  <p className="hw-pct">
+                    {rig.gpuCount} GPU{rig.gpuCount === 1 ? "" : "s"} ·{" "}
+                    {rig.bandwidthGBs == null
+                      ? "bandwidth no data yet"
+                      : `${formatNumber(rig.bandwidthGBs)} GB/s`}
+                  </p>
+                </div>
+
+                <div className="hw-reach">
+                  <p className="hw-figure">
+                    <strong>{entry.cells ? entry.models : "—"}</strong> models tried
+                  </p>
+                  <div className="hw-bar reach" aria-hidden="true">
+                    <i style={{ width: `${modelPct}%` }} />
+                  </div>
+                  <p className="hw-pct">{modelPct}% of the most-tried machine</p>
+                </div>
+
+                <dl className="hw-figs">
+                  <div>
+                    <dt>measured</dt>
+                    <dd>{entry.cells ? entry.measured : "—"}</dd>
+                  </div>
+                  <div>
+                    <dt>reported</dt>
+                    <dd>{entry.cells ? entry.reported : "—"}</dd>
+                  </div>
+                  <div>
+                    <dt>pool cells</dt>
+                    <dd>{entry.cells ? entry.cells : "—"}</dd>
+                  </div>
+                </dl>
+              </li>
+            );
+          })}
+        </ol>
+      )}
     </section>
   );
 }

@@ -2,6 +2,7 @@ import { loadDerived } from "../../lib/engine";
 import { currentView } from "../../lib/view-server";
 import AgentView from "../_components/agent-view";
 import SubmitClient, { type ModelLabel } from "./submit-client";
+import "./submit.css";
 
 export const metadata = {
   title: "Capture",
@@ -35,7 +36,11 @@ export default async function SubmitPage() {
           "",
           "Machine surface:",
           "  POST /v1/claims        { model_release_id, claimed_metrics, source_url? } (auth)",
+          "  GET  /v1/auth/session  handle + reputation{points,tier} for the token",
           "  console:               /console (passkey, same loop without a terminal)",
+          "",
+          "Claim ceiling by tier, per 24 h (the API counts the window and refuses past it):",
+          "  L0 2 · L1 5 · L2 10 · L3 25 · L4 50",
           "",
           `Model ids the catalog resolves today (${labels.length}):`,
           ...labels.map((label) => `  ${label.slug} (${label.category})`),
@@ -44,5 +49,20 @@ export default async function SubmitPage() {
     );
   }
 
-  return <SubmitClient labels={labels} />;
+  return (
+    <main>
+      <section className="cap-head">
+        <p className="kicker">bestmodel.run / capture</p>
+        <h1>The capture bench</h1>
+        <p className="cap-frame">
+          A claim is a number somebody asserted, not a number the pool measured. It stays a claim
+          until a signed run settles the same cell. Every claim on this page declares which of the
+          two it is: the number keeps the link it came from, or it is marked as yours and
+          unverified.
+        </p>
+      </section>
+
+      <SubmitClient labels={labels} />
+    </main>
+  );
 }

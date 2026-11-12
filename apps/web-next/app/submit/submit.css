@@ -236,7 +236,7 @@
   padding: var(--space-6) 0 var(--space-8);
   max-width: 68ch;
 }
-.cap-receipt h1 {
+.cap-receipt h2 {
   font: 600 clamp(26px, 5vw, 44px) / 1.08 var(--display);
   letter-spacing: -0.03em;
 }
@@ -249,4 +249,59 @@
   border-top: 1px solid var(--hair);
   font: var(--text-s) / 1.9 var(--mono);
   color: var(--muted);
+}
+
+/* ---- the open claims waiting on a judgement ---- */
+.cap-queue {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--hair);
+}
+.cap-queue-list {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+.cap-queue-list li {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+}
+@media (min-width: 48rem) {
+  .cap-queue-list li {
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    align-items: center;
+  }
+}
+.cap-queue-n {
+  font: 500 22px / 1 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.cap-queue-n small {
+  font-size: var(--text-s);
+  color: var(--muted);
+  margin-left: var(--space-2);
+}
+.cap-queue-meta {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  font: var(--text-s) / 1.7 var(--mono);
+  color: var(--muted);
+}
+.cap-queue-model {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.cap-queue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }

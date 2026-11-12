@@ -105,3 +105,19 @@
   - BUG achado e corrigido no meio do caminho: id de post que não é uuid
     derrubava o banco (500 em vez de 404).
   - Snapshots e backends de prod NÃO foram tocados: só leitura até aqui.
+- 2026-11-12 14:05 -03 — GO-LIVE CONCLUÍDO:
+  - API promovida para produção: backup → tag rollback (api E worker) → migração
+    0018 com a imagem nova (o API no ar continua servindo) → swap → smoke. O
+    /v1/health de prod agora responde git_sha=c6fbd60.
+  - Front publicado: PR #36 (e #37) mergeados em main; a Vercel serviu as páginas
+    novas. Verificado no site vivo, em Chromium a 390px, 16 rotas: 200, sem
+    overflow, sem erro de JS (a /nope-404 responde 404 com a página do site).
+  - Correções que o site vivo provou: /v1/pick existia mas a API de prod estava
+    12 commits atrás (404); o login OAuth respondia 400 "redirect_uri not
+    allowed" no host www (agora 307 para o GitHub nos dois hosts); o console
+    imprimia "0 tok/s decode · measured" para um modelo de vídeo (agora "no
+    decode metric").
+  - O ladder voltou a ser escalável: first_verified_run concedido ao dono da
+    máquina cujo run foi validado (visível em /profile/carl0sfelipe).
+  - Rollback, se precisar: docker tag bestmodel-prod-api:rollback-<stamp>
+    bestmodel-prod-api:latest (e o mesmo para o worker) + up -d --no-build.

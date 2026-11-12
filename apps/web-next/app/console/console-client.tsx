@@ -292,6 +292,18 @@ function SignIn({ onSignedIn }: { onSignedIn: (session: SessionInfo) => void }) 
 
 // ---------------------------------------------------------------------- feed
 
+/**
+ * Does this run carry a decode rate at all?
+ *
+ * A model that does not decode text (an image or video model) records a
+ * decode of essentially zero. Printing "0 tok/s decode · measured" would
+ * claim a measurement the run never made, so a rate that rounds away is
+ * read as no decode metric.
+ */
+function hasDecode(value: number | null | undefined): boolean {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0.05;
+}
+
 function Feed({ signedIn }: { signedIn: boolean }) {
   const [scope, setScope] = useState<FeedScope>("global");
   const [sort, setSort] = useState<FeedSort>("recent");
@@ -495,9 +507,13 @@ function Feed({ signedIn }: { signedIn: boolean }) {
                 <Link className="claim-model" href={`/m/${item.model_release_id}`}>
                   {item.model_release_id}
                 </Link>
-                <div className={item.decode_tok_s ? "claim-num" : "claim-num absent"}>
-                  {item.decode_tok_s ? fmt(item.decode_tok_s, 2) : "no decode metric"}
-                  <small>{item.decode_tok_s ? "tok/s decode · measured" : "this run has no decode metric"}</small>
+                <div className={hasDecode(item.decode_tok_s) ? "claim-num" : "claim-num absent"}>
+                  {hasDecode(item.decode_tok_s) ? fmt(item.decode_tok_s, 2) : "no decode metric"}
+                  <small>
+                    {hasDecode(item.decode_tok_s)
+                      ? "tok/s decode · measured"
+                      : "this run has no decode metric"}
+                  </small>
                 </div>
               </article>
             ),

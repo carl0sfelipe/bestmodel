@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
+import Composer from "./composer";
 import {
   beginOAuth,
   consumeOAuthFragment,
@@ -32,6 +33,7 @@ export default function ConsoleClient() {
   const [session, setSession] = useState<SessionInfo | null>(null);
   const [checked, setChecked] = useState(false);
   const [tab, setTab] = useState<Tab>("feed");
+  const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
     let alive = true;
@@ -126,7 +128,12 @@ export default function ConsoleClient() {
         </nav>
 
         <div className="desk-panel">
-          {tab === "feed" && <Feed />}
+          {tab === "feed" && (
+            <>
+              <Composer onPosted={() => setFeedKey((value) => value + 1)} />
+              <Feed key={feedKey} />
+            </>
+          )}
           {tab === "notifications" && <Notifications />}
           {tab === "profile" && <Profile handle={session.handle} />}
         </div>
@@ -371,7 +378,35 @@ function Feed() {
       ) : (
         <div className="claim-list">
           {items.map((item) =>
-            item.type === "claim" ? (
+            item.type === "post" ? (
+              <article className="claim-card" key={`post-${item.id}`}>
+                <div className="claim-top">
+                  <Link className="claim-who" href={`/p/${item.id}`}>
+                    {item.handle ? `@${item.handle}` : "member"}
+                  </Link>
+                  <span className="post-kind">{item.post_kind}</span>
+                  <span className="claim-age">{ago(item.created_at) ?? ""}</span>
+                </div>
+                <Link className="claim-model claim-post-body" href={`/p/${item.id}`}>
+                  {item.body}
+                </Link>
+                <p className="claim-meta">
+                  {item.comment_count} comments · {item.like_count} likes
+                  {item.claim_id ? (
+                    <>
+                      {" · "}
+                      <Link href={`/claim/${item.claim_id}`}>about a claim</Link>
+                    </>
+                  ) : null}
+                  {item.model_release_id ? (
+                    <>
+                      {" · "}
+                      <Link href={`/m/${item.model_release_id}`}>{item.model_release_id}</Link>
+                    </>
+                  ) : null}
+                </p>
+              </article>
+            ) : item.type === "claim" ? (
               <article className="claim-card" key={`claim-${item.id}`}>
                 <div className="claim-top">
                   <Link className="claim-who" href={`/claim/${item.id}`}>

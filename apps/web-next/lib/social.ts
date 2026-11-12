@@ -362,7 +362,21 @@ export type FeedRunItem = {
   submitted_at: string | null;
 };
 
-export type FeedItem = FeedClaimItem | FeedRunItem;
+export type FeedPostItem = {
+  type: "post";
+  id: string;
+  handle: string | null;
+  body: string;
+  post_kind: "note" | "question" | "showcase";
+  claim_id: string | null;
+  rig_slug: string | null;
+  model_release_id: string | null;
+  comment_count: number;
+  like_count: number;
+  created_at: string | null;
+};
+
+export type FeedItem = FeedClaimItem | FeedRunItem | FeedPostItem;
 
 /**
  * The mixed feed (S17): claims and signed runs in one stream. `scope`
@@ -404,6 +418,94 @@ export function fetchNotifications(): Promise<ApiResult<NotificationRow[]>> {
 
 export function markNotificationRead(id: string): Promise<ApiResult<unknown>> {
   return request(`/v1/notifications/${encodeURIComponent(id)}/read`, {
+    method: "POST",
+    auth: true,
+  });
+}
+
+// ------------------------------------------------------------------- posts
+
+export type PostKind = "note" | "question" | "showcase";
+
+export const POST_KINDS: ReadonlyArray<{ value: PostKind; label: string }> = [
+  { value: "note", label: "note" },
+  { value: "question", label: "question" },
+  { value: "showcase", label: "showcase" },
+];
+
+export type Post = {
+  id: string;
+  author_handle: string | null;
+  body: string;
+  kind: PostKind;
+  claim_id: string | null;
+  rig_slug: string | null;
+  model_release_id: string | null;
+  comment_count: number;
+  like_count: number;
+  liked_by_viewer: boolean;
+  created_at: string;
+};
+
+export type Comment = {
+  id: string;
+  post_id: string;
+  parent_id: string | null;
+  author_handle: string | null;
+  body: string;
+  like_count: number;
+  liked_by_viewer: boolean;
+  created_at: string;
+};
+
+export type PostDetail = Post & { comments: Comment[] };
+
+export const MAX_POST_BODY = 2000;
+export const MAX_COMMENT_BODY = 1000;
+
+export function createPost(body: {
+  body: string;
+  kind?: PostKind;
+  claim_id?: string | null;
+  rig_slug?: string | null;
+  model_release_id?: string | null;
+}): Promise<ApiResult<Post>> {
+  return request<Post>("/v1/posts", { method: "POST", body, auth: true });
+}
+
+export function getPost(id: string): Promise<ApiResult<PostDetail>> {
+  return request<PostDetail>(`/v1/posts/${encodeURIComponent(id)}`);
+}
+
+export function deletePost(id: string): Promise<ApiResult<unknown>> {
+  return request(`/v1/posts/${encodeURIComponent(id)}`, { method: "DELETE", auth: true });
+}
+
+export function addComment(
+  postId: string,
+  body: string,
+  parentId?: string | null,
+): Promise<ApiResult<Comment>> {
+  return request<Comment>(`/v1/posts/${encodeURIComponent(postId)}/comments`, {
+    method: "POST",
+    body: { body, parent_id: parentId ?? null },
+    auth: true,
+  });
+}
+
+export function togglePostLike(
+  postId: string,
+): Promise<ApiResult<{ liked: boolean; like_count: number }>> {
+  return request(`/v1/posts/${encodeURIComponent(postId)}/likes`, {
+    method: "POST",
+    auth: true,
+  });
+}
+
+export function toggleCommentLike(
+  commentId: string,
+): Promise<ApiResult<{ liked: boolean; like_count: number }>> {
+  return request(`/v1/comments/${encodeURIComponent(commentId)}/likes`, {
     method: "POST",
     auth: true,
   });

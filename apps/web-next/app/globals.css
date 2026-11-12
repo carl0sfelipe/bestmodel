@@ -596,3 +596,7 @@ table.sheet{min-width:760px}
 .mural-item-detail{margin-top:var(--space-3);font-size:14px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}
 .mural-item-meta{margin-top:var(--space-3);font:var(--text-s)/1.7 var(--mono);color:var(--dim);overflow-wrap:anywhere}
 .mural-item-actions{display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-4)}
+
+/* a post is not a claim: its kind is a chip, never a claim status */
+.post-kind{font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.claim-post-body{font:15px/1.6 var(--body);letter-spacing:0;font-weight:400;white-space:pre-wrap;overflow-wrap:anywhere}

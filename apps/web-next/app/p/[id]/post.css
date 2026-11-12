@@ -1,0 +1,29 @@
+/* BM-GOLIVE-1 — /p/{id} as a THREAD.
+   Macrostructure: the post is the document; the conversation hangs under it.
+   Distinct from the wall's feed (/claims, a stream of claims) and from the
+   console's desk (/console, a working panel). */
+
+.post-head{padding:clamp(32px,6vw,60px) 0 0}
+.post-body{font:16px/1.7 var(--body);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:var(--space-4);max-width:70ch}
+.post-attachments{margin-top:var(--space-4);font:var(--text-s)/1.8 var(--mono);color:var(--muted)}
+.post-attachments a{color:var(--amber)}
+
+.post-actions{display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center;padding:var(--space-5) 0;border-bottom:1px solid var(--hair)}
+
+.post-thread{padding:var(--space-6) 0 var(--space-8)}
+.post-thread-h{font:600 clamp(19px,3.5vw,26px)/1.2 var(--display);letter-spacing:-.02em;margin-bottom:var(--space-4)}
+.post-note{color:var(--muted);font-size:14px;line-height:1.7;margin-top:var(--space-4);max-width:60ch}
+
+.post-form{padding:var(--space-4);border-radius:var(--radius-m);background:var(--surface);border:1px solid var(--hair);margin-bottom:var(--space-5)}
+.post-form textarea{width:100%;min-height:5rem;padding:12px;border-radius:var(--radius-s);background:var(--surface-2);border:1px solid var(--hair);font:13px/1.6 var(--mono);color:var(--ink);resize:vertical}
+
+.post-comments{list-style:none;display:grid;gap:var(--space-3);margin-top:var(--space-5)}
+.post-comments li{padding:var(--space-4);border-radius:var(--radius-m);background:var(--surface);border:1px solid var(--hair)}
+.post-comments li.reply{margin-left:var(--space-5);border-left:2px solid var(--amber-line);border-top-color:var(--hair);border-right-color:var(--hair);border-bottom-color:var(--hair)}
+.post-comment-body{font-size:14px;line-height:1.65;color:var(--muted);margin-top:var(--space-2)}
+.post-comments .btn{margin-top:var(--space-3)}
+
+/* the composer on the console desk */
+.composer{padding:var(--space-4);border-radius:var(--radius-m);background:var(--surface-2);border:1px solid var(--hair);margin-bottom:var(--space-5);display:grid;gap:var(--space-3)}
+.composer textarea{width:100%;min-height:6rem;padding:12px;border-radius:var(--radius-s);background:var(--surface);border:1px solid var(--hair);font:13px/1.6 var(--mono);color:var(--ink);resize:vertical}
+.composer .field{margin-top:0}

@@ -136,7 +136,8 @@ export default function MuralClient() {
         <p className="mural-frame">
           Every claim on the wall can be reported. A report never changes a claim by itself — a
           moderator reads it, confirms it or dismisses it, and only then does the claim move. A
-          confirmed report is worth five points to whoever filed it.
+          confirmed report is worth five points to whoever filed it, and a badge
+          that says they caught it.
         </p>
       </section>
 

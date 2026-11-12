@@ -80,6 +80,10 @@ class FakeDatabase(DatabaseSession):
         self._reputation_events: list[dict[str, Any]] = []
         self._follows: list[dict[str, Any]] = []
         self._notifications: list[dict[str, Any]] = []
+        self._posts: list[dict[str, Any]] = []
+        self._comments: list[dict[str, Any]] = []
+        self._post_likes: list[dict[str, Any]] = []
+        self._comment_likes: list[dict[str, Any]] = []
         self._seed_validated_runs()
 
     def _seed_validated_runs(self) -> None:
@@ -948,6 +952,150 @@ class FakeDatabase(DatabaseSession):
                 key=lambda v: str(v["created_at"]),
             )
         ]
+
+    # -- L08: the classic social layer (posts, comments, likes) -------------
+
+    def insert_post(self, record: dict[str, Any]) -> None:
+        stored = dict(record)
+        stored.setdefault("kind", "note")
+        stored.setdefault("claim_id", None)
+        stored.setdefault("rig_slug", None)
+        stored.setdefault("model_release_id", None)
+        stored.setdefault("comment_count", 0)
+        stored.setdefault("like_count", 0)
+        stored.setdefault("deleted_at", None)
+        stored.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        self._posts.append(stored)
+
+    def find_post_by_id(self, post_id: str) -> dict[str, Any] | None:
+        row = next((p for p in self._posts if p["id"] == post_id), None)
+        if row is None:
+            return None
+        handles = {u["id"]: u["handle"] for u in self._users}
+        return {**row, "author_handle": handles.get(row.get("author_id"))}
+
+    def list_posts_by_users(self, user_ids: list[str] | None, limit: int) -> list[dict[str, Any]]:
+        handles = {u["id"]: u["handle"] for u in self._users}
+        rows = [
+            p
+            for p in self._posts
+            if p.get("deleted_at") is None
+            and (user_ids is None or p.get("author_id") in user_ids)
+        ]
+        rows.sort(key=lambda p: str(p["created_at"]), reverse=True)
+        return [{**p, "author_handle": handles.get(p.get("author_id"))} for p in rows[:limit]]
+
+    def soft_delete_post(self, post_id: str, author_id: str) -> int:
+        affected = 0
+        for row in self._posts:
+            if row["id"] == post_id and row.get("author_id") == author_id and row.get("deleted_at") is None:
+                row["deleted_at"] = datetime.now(timezone.utc).isoformat()
+                affected += 1
+        return affected
+
+    def insert_comment(self, record: dict[str, Any]) -> None:
+        stored = dict(record)
+        stored.setdefault("parent_id", None)
+        stored.setdefault("like_count", 0)
+        stored.setdefault("deleted_at", None)
+        stored.setdefault("created_at", datetime.now(timezone.utc).isoformat())
+        self._comments.append(stored)
+
+    def list_comments_for_post(self, post_id: str) -> list[dict[str, Any]]:
+        handles = {u["id"]: u["handle"] for u in self._users}
+        rows = [
+            c for c in self._comments if c["post_id"] == post_id and c.get("deleted_at") is None
+        ]
+        rows.sort(key=lambda c: str(c["created_at"]))
+        return [{**c, "author_handle": handles.get(c.get("author_id"))} for c in rows]
+
+    def increment_post_comment_count(self, post_id: str) -> int:
+        affected = 0
+        for row in self._posts:
+            if row["id"] == post_id:
+                row["comment_count"] = int(row.get("comment_count", 0)) + 1
+                affected += 1
+        return affected
+
+    def insert_post_like(self, post_id: str, user_id: str) -> int:
+        for row in self._post_likes:
+            if row["post_id"] == post_id and row["user_id"] == user_id:
+                return 0
+        self._post_likes.append(
+            {
+                "post_id": post_id,
+                "user_id": user_id,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        return 1
+
+    def delete_post_like(self, post_id: str, user_id: str) -> int:
+        before = len(self._post_likes)
+        self._post_likes = [
+            row for row in self._post_likes if not (row["post_id"] == post_id and row["user_id"] == user_id)
+        ]
+        return before - len(self._post_likes)
+
+    def count_post_likes(self, post_id: str) -> int:
+        return sum(1 for row in self._post_likes if row["post_id"] == post_id)
+
+    def has_post_like(self, post_id: str, user_id: str) -> bool:
+        return any(
+            row["post_id"] == post_id and row["user_id"] == user_id for row in self._post_likes
+        )
+
+    def insert_comment_like(self, comment_id: str, user_id: str) -> int:
+        for row in self._comment_likes:
+            if row["comment_id"] == comment_id and row["user_id"] == user_id:
+                return 0
+        self._comment_likes.append(
+            {
+                "comment_id": comment_id,
+                "user_id": user_id,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        return 1
+
+    def delete_comment_like(self, comment_id: str, user_id: str) -> int:
+        before = len(self._comment_likes)
+        self._comment_likes = [
+            row
+            for row in self._comment_likes
+            if not (row["comment_id"] == comment_id and row["user_id"] == user_id)
+        ]
+        return before - len(self._comment_likes)
+
+    def count_comment_likes(self, comment_id: str) -> int:
+        return sum(1 for row in self._comment_likes if row["comment_id"] == comment_id)
+
+    def has_comment_like(self, comment_id: str, user_id: str) -> bool:
+        return any(
+            row["comment_id"] == comment_id and row["user_id"] == user_id
+            for row in self._comment_likes
+        )
+
+    def count_posts_since(self, user_id: str, since: str) -> int:
+        return sum(
+            1
+            for p in self._posts
+            if p.get("author_id") == user_id and str(p.get("created_at")) >= str(since)
+        )
+
+    def count_comments_since(self, user_id: str, since: str) -> int:
+        return sum(
+            1
+            for c in self._comments
+            if c.get("author_id") == user_id and str(c.get("created_at")) >= str(since)
+        )
+
+    def find_comment_by_id(self, comment_id: str) -> dict[str, Any] | None:
+        row = next((c for c in self._comments if c["id"] == comment_id), None)
+        if row is None:
+            return None
+        handles = {u["id"]: u["handle"] for u in self._users}
+        return {**row, "author_handle": handles.get(row.get("author_id"))}
 
     # -- test helpers ----------------------------------------------------
 

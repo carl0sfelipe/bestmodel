@@ -1,0 +1,252 @@
+/* submit.css — /submit, the capture bench.
+   Macrostructure: a bench with a sheet on the left and a filing slip on the
+   right. The number is placed on the sheet, checked, and the slip shows what
+   the claim will become — including whether it keeps a link or is filed as
+   self-reported. Distinct from the console desk (rail + panel), the claims
+   feed (stream), the wall (table) and the runbook (document). */
+
+.cap-head {
+  padding: clamp(32px, 6vw, 60px) 0 0;
+}
+.cap-head h1 {
+  font: 600 clamp(26px, 5vw, 44px) / 1.08 var(--display);
+  letter-spacing: -0.03em;
+}
+.cap-frame {
+  font: var(--text-s) / 1.8 var(--mono);
+  color: var(--muted);
+  margin-top: var(--space-3);
+  max-width: 78ch;
+}
+
+/* ---- the standing: who is filing, and what the API allows them to file ---- */
+.cap-standing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-5);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  font: var(--text-m) var(--mono);
+  color: var(--muted);
+}
+.cap-standing .t {
+  color: var(--amber);
+}
+.cap-standing .s {
+  color: var(--dim);
+}
+
+/* ---- the bench: sheet + slip ---- */
+.cap-bench {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  padding: var(--space-6) 0 var(--space-8);
+}
+@media (min-width: 62rem) {
+  .cap-bench {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+  }
+}
+
+.cap-sheet {
+  min-width: 0;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  padding: var(--space-5);
+}
+@media (min-width: 48rem) {
+  .cap-sheet {
+    padding: var(--space-6);
+  }
+}
+
+/* the basis strip: what kind of object this claim will be, always on screen */
+.cap-basis {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--hair-strong);
+  border-radius: var(--radius-s);
+  font: var(--text-s) / 1.7 var(--mono);
+  color: var(--muted);
+}
+.cap-basis .b {
+  color: var(--amber);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cap-basis[data-b="sourced"] {
+  border-color: var(--amber-line);
+  background: var(--amber-soft);
+}
+.cap-basis[data-b="sourced"] .b {
+  color: var(--amber);
+}
+.cap-basis[data-b="self"] .b {
+  color: var(--muted);
+}
+.cap-basis[data-b="blocked"] {
+  border-color: var(--red-line);
+}
+.cap-basis[data-b="blocked"] .b {
+  color: var(--red);
+}
+
+/* ---- stations: the numbered rows of the sheet ---- */
+.cap-station {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--hair);
+}
+.cap-station:first-of-type {
+  border-top: 0;
+  padding-top: var(--space-4);
+}
+.cap-station-h {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+}
+.cap-station-n {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.16em;
+  color: var(--dim);
+}
+.cap-station-h h2 {
+  font: 600 17px / 1.3 var(--display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.cap-station .req {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.cap-station .opt {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.cap-station-b {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+.cap-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 40rem) {
+  .cap-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cap-sheet-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--hair);
+}
+.cap-sheet-foot .actions {
+  margin-top: 0;
+}
+
+/* ---- the filing slip: what the claim becomes ---- */
+.cap-slip {
+  min-width: 0;
+  position: sticky;
+  top: var(--space-5);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  padding: var(--space-5);
+}
+.cap-slip-t {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.cap-slip-num {
+  font: 500 clamp(28px, 6vw, 40px) / 1 var(--mono);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--space-4);
+}
+.cap-slip-num small {
+  font-size: var(--text-l);
+  color: var(--muted);
+  margin-left: var(--space-2);
+  letter-spacing: 0;
+}
+.cap-slip-num.empty {
+  font-size: var(--text-l);
+  color: var(--dim);
+}
+.cap-slip-rows {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--hair);
+}
+.cap-slip-rows div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--hair);
+  font: var(--text-s) / 1.6 var(--mono);
+}
+.cap-slip-rows dt {
+  color: var(--dim);
+  min-width: 6.5rem;
+}
+.cap-slip-rows dd {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  flex: 1 1 9rem;
+}
+.cap-slip-foot {
+  margin-top: var(--space-4);
+  font: var(--text-s) / 1.7 var(--mono);
+  color: var(--dim);
+}
+.cap-slip-foot a {
+  color: var(--muted);
+}
+
+/* ---- the receipt after filing ---- */
+.cap-receipt {
+  padding: var(--space-6) 0 var(--space-8);
+  max-width: 68ch;
+}
+.cap-receipt h1 {
+  font: 600 clamp(26px, 5vw, 44px) / 1.08 var(--display);
+  letter-spacing: -0.03em;
+}
+.cap-receipt .cap-frame {
+  margin-bottom: var(--space-5);
+}
+.cap-ladder {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hair);
+  font: var(--text-s) / 1.9 var(--mono);
+  color: var(--muted);
+}

@@ -1,0 +1,178 @@
+/* hardware.css — /hardware, the machine catalogue.
+   Macrostructure: a catalogue INDEX of machines. Each entry is a ledger row
+   with an ordinal, a proportional comparison against the busiest machine and
+   the largest memory in the snapshot, and the spec figures that ride along.
+   Rows are read top to bottom in the order the reader chose. */
+
+.hw-head {
+  padding-bottom: 30px;
+}
+
+.hw-figs-top {
+  margin-top: 26px;
+}
+
+.hw-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair);
+}
+
+.hw-entry {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr);
+  grid-template-areas: "ord id load mem figs";
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.hw-entry > * {
+  min-width: 0;
+}
+
+.hw-ord {
+  grid-area: ord;
+  font: var(--text-s) var(--mono);
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.hw-id {
+  grid-area: id;
+}
+
+.hw-name {
+  font: 600 19px/1.2 var(--display);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.hw-name a {
+  text-decoration: none;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.hw-name a:hover {
+  color: var(--amber);
+}
+
+.hw-key {
+  font: var(--text-xs) var(--mono);
+  color: var(--dim);
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+}
+
+.hw-class {
+  font: var(--text-xs) var(--mono);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.hw-load {
+  grid-area: load;
+}
+
+.hw-mem {
+  grid-area: mem;
+}
+
+.hw-runs,
+.hw-mem-n {
+  font: var(--text-s) var(--mono);
+  color: var(--muted);
+}
+
+.hw-runs strong,
+.hw-mem-n strong {
+  font: 500 22px/1.2 var(--mono);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.hw-bar {
+  height: 6px;
+  border-radius: var(--radius-p);
+  background: var(--surface-3);
+  overflow: hidden;
+  margin-top: var(--space-2);
+}
+
+.hw-bar i {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-p);
+  background: var(--amber);
+}
+
+.hw-bar.mem i {
+  background: var(--green);
+}
+
+.hw-pct {
+  font: var(--text-xs) var(--mono);
+  color: var(--dim);
+  margin-top: 6px;
+}
+
+.hw-figs {
+  grid-area: figs;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+@media (min-width: 75rem) {
+  .hw-figs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.hw-figs dt {
+  font: var(--text-xs) var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.hw-figs dd {
+  margin: 0;
+  font: var(--text-s) var(--mono);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+
+.hw-note {
+  border-top: 1px solid var(--hair);
+}
+
+@media (max-width: 62rem) {
+  .hw-entry {
+    grid-template-columns: 2.6rem minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "ord id id"
+      "ord load mem"
+      "ord figs figs";
+  }
+}
+
+@media (max-width: 44rem) {
+  .hw-entry {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    grid-template-areas:
+      "ord id"
+      "load load"
+      "mem mem"
+      "figs figs";
+    gap: var(--space-3) var(--space-4);
+  }
+}

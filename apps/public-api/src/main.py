@@ -35,6 +35,7 @@ from src.routes import (
     report_route,
     rig_route,
     social_route,
+    post_route,
     transparency_route,
     user_route,
 )
@@ -88,6 +89,7 @@ def create_app() -> FastAPI:
     app.include_router(report_route.router)
     app.include_router(card_route.router)
     app.include_router(social_route.router)  # before user_route: fixed segments first
+    app.include_router(post_route.router)  # L08: posts, comments, likes
     app.include_router(user_route.router)
     return app
 

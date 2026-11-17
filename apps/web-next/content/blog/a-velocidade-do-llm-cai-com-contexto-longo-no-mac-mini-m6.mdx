@@ -1,0 +1,52 @@
+---
+title: "A velocidade do LLM cai com contexto longo no Mac mini M6?"
+slug: "a-velocidade-do-llm-cai-com-contexto-longo-no-mac-mini-m6"
+description: "A velocidade de geração cai pouco quando o contexto chega a 18,0 tok/s para o modelo Bonsai 2 27B, comparado ao ponto inicial de 19,8 tok/s. O lab mediu apenas até esse limite de oito mil tokens, sem dados para contextos maiores. A queda é pequena o suficiente para não travar a experiência com…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+A velocidade de geração cai pouco quando o contexto chega a 18,0 tok/s para o modelo Bonsai 2 27B, comparado ao ponto inicial de 19,8 tok/s. O lab mediu apenas até esse limite de oito mil tokens, sem dados para contextos maiores. A queda é pequena o suficiente para não travar a experiência com documentos grandes.
+
+## O que acontece com oito mil tokens no contexto
+
+A queda de velocidade ao adicionar contexto é proporcional ao tamanho do modelo, mas não é linear. O modelo menor, Qwen3.5 9B, sofre menos perda de desempenho do que os modelos de 27 bilhões de parâmetros, mas também tem menor capacidade de contexto útil.
+
+| Modelo | Contexto vazio | Oito mil tokens |
+|---|---|---|
+| Bonsai 2 27B | 19,8 tok/s | 18,0 tok/s |
+| Qwen3.5 9B | 26,3 tok/s | 24,8 tok/s |
+| Arete 27B | 8,0 tok/s | 7,6 tok/s |
+
+A leitura do prompt, que é o momento de processar o texto inteiro antes de começar a gerar, é diferente da velocidade de geração. O Qwen3.5 9B processa o prompt a 775 tok/s, o que indica que a ingestão de texto grande é rápida. A geração, porém, é o que o usuário sente como "travamento" durante a resposta.
+
+## Quanto contexto cabe
+
+O Mac mini M6 com 24 GB de memória deixa 13,6 GB livres para contexto e outros programas quando o Bonsai 2 27B está carregado. Isso significa que o modelo menor, Qwen3.5 9B, pode carregar contextos maiores sem pressionar a memória.
+
+Acima de oito mil tokens, os fatos não foram medidos. Não é possível afirmar se a velocidade continua caindo ou se o sistema começa a trocar memória para o disco, o que causaria lentidão real. A margem de memória livre sugere que contextos maiores são viáveis, mas o comportamento exato acima do limite medido não foi registrado.
+
+## Quando NÃO vale
+
+Não vale usar o Mac mini M6 para contextos muito longos se a prioridade é velocidade máxima de geração. A queda de 19,8 tok/s para 18,0 tok/s é pequena, mas ainda existe. Para documentos que exigem resposta instantânea com contexto enorme, um servidor dedicado com mais memória seria mais adequado.
+
+Também não vale esperar que o modelo de 27 bilhões de parâmetros tenha o mesmo desempenho que o de 9 bilhões. O Arete 27B, por exemplo, gera a 8,0 tok/s em contexto vazio, o que é quase metade da velocidade do Qwen3.5 9B. A escolha do modelo importa tanto quanto o tamanho do contexto.
+
+## Perguntas frequentes
+
+### Quanto tempo leva para ler um PDF grande?
+A leitura do prompt é o que define o tempo inicial. O Qwen3.5 9B processa o prompt a 775 tok/s, o que é rápido para documentos de algumas dezenas de páginas. A geração subsequente, porém, depende da velocidade de tok/s do modelo, que cai levemente com contexto longo.
+
+### Contexto longo usa muita memória?
+Sim, cada token de contexto ocupa memória. O Bonsai 2 27B deixa 13,6 GB livres para contexto, o que permite carregar documentos grandes sem esgotar a RAM. O Qwen3.5 9B, por ser menor, tem mais folga para contextos extensos.
+
+### Qual modelo é melhor para documentos longos?
+Depende do compromisso entre velocidade e capacidade. O Qwen3.5 9B é mais rápido e deixa mais memória livre, sendo ideal para contextos longos. O Bonsai 2 27B é mais capaz em compreensão, mas mais lento. A escolha depende se a prioridade é resposta rápida ou profundidade de análise.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

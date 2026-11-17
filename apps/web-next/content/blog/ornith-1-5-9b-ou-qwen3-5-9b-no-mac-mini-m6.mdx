@@ -1,0 +1,44 @@
+---
+title: "Ornith 1.5 9B ou Qwen3.5 9B no Mac mini M6?"
+slug: "ornith-1-5-9b-ou-qwen3-5-9b-no-mac-mini-m6"
+description: "A escolha entre os dois modelos não muda a experiência prática no Mac mini M6. A velocidade de geração do Ornith 1.5 9B em Q4KM é de 26,3 tok/s, enquanto a qualidade média do Qwen3.5 9B em Q4KM é de 51,7%. A diferença entre eles é mínima e depende mais do formato de quantização escolhido do que da…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+A escolha entre os dois modelos não muda a experiência prática no Mac mini M6. A velocidade de geração do Ornith 1.5 9B em Q4_K_M é de 26,3 tok/s, enquanto a qualidade média do Qwen3.5 9B em Q4_K_M é de 51,7%. A diferença entre eles é mínima e depende mais do formato de quantização escolhido do que da marca do modelo.
+
+## Qualidade: empate
+
+A comparação direta entre as médias de qualidade mostra um resultado praticamente igual. O Ornith 1.5 9B em Q8_0 obteve 51,3%, enquanto o Qwen3.5 9B em Q8_0 alcançou 52,3%. Essa diferença de meio ponto percentual não é estatisticamente relevante para a maioria dos usos diários.
+
+Ao detalhar as provas individuais, o cenário se equilibra. O Ornith 1.5 9B em Q8_0 teve 52,5% no ARC-Challenge e 28,5% no TruthfulQA. Já o Qwen3.5 9B em Q8_0 registrou 50,5% no ARC-Challenge e 33,2% no TruthfulQA. O Qwen3.5 9B se destaca no TruthfulQA, mas o Ornith 1.5 9B é ligeiramente superior no ARC-Challenge.
+
+## Onde eles diferem: a quantização
+
+O ponto de maior variação entre os dois modelos está na fidelidade da quantização. O Ornith 1.5 9B em Q4_K_M apresenta uma divergência de 0,040 contra a referência. O Qwen3.5 9B em Q4_K_M tem uma divergência de 0,016. Isso indica que o Qwen3.5 9B preserva melhor a resposta original quando reduzido para Q4_K_M.
+
+Para quem prefere o Ornith 1.5 9B, a quantização Q6_K oferece uma fidelidade muito maior. A divergência do Ornith 1.5 9B em Q6_K é de 0,011, um valor significativamente menor que o do Q4_K_M. Essa opção é recomendada para quem valoriza a precisão do modelo original.
+
+## Quando NÃO vale
+
+A escolha entre Ornith 1.5 9B e Qwen3.5 9B não vale a pena se a prioridade for apenas a velocidade bruta, pois os resultados são equivalentes. Também não vale a pena insistir no Q4_K_M do Ornith 1.5 9B se a precisão for crítica, pois a divergência é maior que a do Qwen3.5 9B no mesmo formato.
+
+## Perguntas frequentes
+
+### Qual dos dois é melhor em português?
+Os fatos fornecidos não incluem testes específicos de desempenho em português. A comparação apresentada baseia-se em benchmarks em inglês. Portanto, é impossível afirmar qual modelo é superior no idioma português com base apenas nestes dados.
+
+### Os dois rodam no Ollama?
+Os fatos não confirmam a compatibilidade direta com o Ollama. A velocidade e a qualidade foram medidas utilizando o llama.cpp. A disponibilidade no Ollama depende da distribuição oficial e das atualizações do software.
+
+### Qual usar para resumir documentos?
+Para resumo de documentos, a fidelidade é mais importante que a velocidade. O Qwen3.5 9B em Q4_K_M tem menor divergência que o Ornith 1.5 9B no mesmo formato. Se a precisão do resumo for a prioridade, o Qwen3.5 9B é a opção mais segura com os dados disponíveis.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

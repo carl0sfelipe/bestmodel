@@ -1,0 +1,59 @@
+---
+title: "Ternary Bonsai 2: PTQ1_0, PQ2_0 ou Q2_0, qual baixar no Mac?"
+slug: "ternary-bonsai-2-ptq1-0-pq2-0-ou-q2-0-qual-baixar-no-mac"
+description: "A escolha entre os três formatos não altera a qualidade da resposta, pois a divergência KL é de 0,000 e a taxa de tokens idênticos à referência é de 100,0%. A decisão depende apenas da velocidade de geração e da memória de pico. O PTQ10 é o mais rápido e o menor, enquanto o Q20 é o único que roda…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+A escolha entre os três formatos não altera a qualidade da resposta, pois a divergência KL é de 0,000 e a taxa de tokens idênticos à referência é de 100,0%. A decisão depende apenas da velocidade de geração e da memória de pico. O PTQ1_0 é o mais rápido e o menor, enquanto o Q2_0 é o único que roda no llama.cpp oficial.
+
+## As respostas são idênticas
+
+A objeção de que um formato menor deve ser inferior não se aplica a este caso específico. Os três arquivos foram avaliados contra a mesma referência e apresentaram divergência KL de 0,000. Isso significa que a saída é estatisticamente indistinguível da referência original.
+
+Além da métrica de divergência, a taxa de acerto de tokens idênticos à referência é de 100,0%. Portanto, o modelo gera exatamente as mesmas palavras que a referência em todos os pontos de comparação. A escolha do formato deve ser guiada exclusivamente por recursos de hardware e preferências de software.
+
+## Velocidade e memória de cada formato
+
+A diferença prática entre os formatos reside na eficiência de uso dos recursos do Mac mini M6. A tabela abaixo resume os resultados de geração e memória de pico para os três variantes.
+
+| Formato | Velocidade de geração | Memória de pico |
+| :--- | :--- | :--- |
+| PTQ1_0 | 19,8 tok/s | 6,4 GB |
+| PQ2_0 | 16,4 tok/s | 7,6 GB |
+| Q2_0 | 15,5 tok/s | 7,9 GB |
+
+O PTQ1_0 apresenta a maior velocidade de geração e a menor memória de pico. O Q2_0 é o mais lento e consome mais memória. A diferença de velocidade entre o mais rápido e o mais lento é relevante para fluxos de trabalho que exigem respostas em tempo real.
+
+## Qual programa roda cada um
+
+O suporte de software é o principal fator de decisão para usuários que já possuem um ambiente configurado. O PTQ1_0 e o PQ2_0 exigem o uso do programa descrito em fork da PrismML do llama.cpp. Isso significa que é necessário um fork específico do llama.cpp para executar esses formatos.
+
+O Q2_0, por outro lado, é compatível com o llama.cpp oficial. Se você prefere manter seu ambiente de desenvolvimento sem dependências externas ou forks, o Q2_0 é a única opção viável entre os três. A escolha do programa pode influenciar a manutenção e a atualização do seu setup local.
+
+## Quando NÃO vale
+
+Não vale a pena escolher o Q2_0 se a velocidade de geração for a prioridade máxima e você não se importa em instalar o fork específico. A diferença de velocidade entre o Q2_0 e o PTQ1_0 é significativa, e a memória de pico do Q2_0 é a maior das três opções.
+
+Também não vale a pena insistir no PTQ1_0 se você precisa de compatibilidade com o llama.cpp oficial para integrar o modelo em pipelines existentes. A falta de suporte nativo no binário oficial pode complicar a automação e a manutenção a longo prazo.
+
+## Perguntas frequentes
+
+### Por que um arquivo menor não perde qualidade aqui?
+A compressão aplicada nos formatos PTQ e PQ preserva a estrutura matemática do modelo de forma que a divergência KL seja de 0,000. A taxa de tokens idênticos à referência é de 100,0%, indicando que a saída é idêntica. A redução de tamanho vem da eficiência do algoritmo de quantização, não do descarte de informação útil.
+
+### O PTQ1_0 funciona no LM Studio?
+Os fatos disponíveis indicam que o PTQ1_0 requer o programa descrito em fork da PrismML do llama.cpp. Não há menção a compatibilidade direta com o LM Studio ou com o llama.cpp oficial. Portanto, a execução depende da disponibilidade e do suporte do fork específico mencionado.
+
+### Vale trocar o Q2_0 pelo PTQ1_0?
+A troca é vantajosa se a velocidade e a memória forem as prioridades, pois o PTQ1_0 oferece 19,8 tok/s contra 15,5 tok/s do Q2_0. A qualidade permanece a mesma, com divergência KL de 0,000. A desvantagem é a necessidade de usar o fork específico para execução.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

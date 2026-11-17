@@ -1,0 +1,53 @@
+---
+title: "O Bonsai 2 27B roda no Mac mini M6 24GB?"
+slug: "o-bonsai-2-27b-roda-no-mac-mini-m6-24gb"
+description: "Sim, roda com folga no formato PTQ10. O modelo ocupa 5,5 GiB e consome apenas 6,4 GB de memória de pico, deixando 13,6 GB livres para contexto e outros programas. A velocidade de geração é de 19,8 tok/s e a leitura do prompt atinge 230 tok/s."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Sim, roda com folga no formato PTQ1_0. O modelo ocupa 5,5 GiB e consome apenas 6,4 GB de memória de pico, deixando 13,6 GB livres para contexto e outros programas. A velocidade de geração é de 19,8 tok/s e a leitura do prompt atinge 230 tok/s.
+
+## Quanto ele ocupa e quão rápido é
+
+O modelo Ternary Bonsai 2 27B em formato PTQ1_0 tem um arquivo GGUF de 5,5 GiB. Durante a execução, a memória de pico registrada foi de 6,4 GB, o que significa que a maior parte da memória do Mac mini M6 24GB permanece disponível para o sistema operacional e outros processos.
+
+A velocidade de geração com contexto vazio é de 19,8 tok/s. A leitura do prompt, que é a fase inicial de processamento, alcançou 230 tok/s. Esses números mostram que o modelo é eficiente em termos de uso de recursos e velocidade de resposta.
+
+## E com contexto longo
+
+Com oito mil tokens já no contexto, a velocidade de geração cai para 18,0 tok/s. Essa redução é esperada em modelos de linguagem e não compromete a usabilidade para a maioria das tarefas.
+
+Mesmo com esse contexto, sobram 13,6 GB de memória de GPU para contexto adicional e outros programas. Acima de oito mil tokens, a performance não foi medida, então não é possível afirmar como o modelo se comportaria em contextos ainda maiores.
+
+## O que você precisa instalar
+
+Para rodar o Ternary Bonsai 2 27B no formato PTQ1_0, é necessário instalar o fork da PrismML do llama.cpp. Esse programa é específico para os formatos ternários e não é o mesmo que o llama.cpp oficial.
+
+O fork da PrismML do llama.cpp é o único programa que suporta os formatos PTQ1_0 e PQ2_0 do Bonsai 2. No llama.cpp oficial, o usuário deve usar o formato Q2_0, que é mais lento. A instalação é direta e segue as instruções do projeto no GitHub.
+
+## Quando NÃO vale
+
+Não vale se você precisa de um modelo que rode no llama.cpp oficial sem instalar forks. O formato PTQ1_0 exige o fork da PrismML do llama.cpp, o que pode ser uma barreira para quem prefere ferramentas padrão.
+
+Também não vale se você espera contextos muito longos acima de oito mil tokens, pois a performance nesse regime não foi medida. Se sua tarefa exige contextos extensos, teste antes de confiar na estabilidade do modelo.
+
+## Perguntas frequentes
+
+### O Bonsai 2 27B é bom em português?
+A média de ARC-Challenge, HellaSwag e TruthfulQA foi de 54,6%. Esses testes não são específicos para português, mas indicam uma qualidade razoável em raciocínio lógico e compreensão de linguagem. A qualidade em português específico não foi medida separadamente.
+
+### Dá para usar o Bonsai 2 27B junto com outro programa pesado?
+Sim, sobram 13,6 GB de memória de GPU para contexto e outros programas. Isso significa que é possível rodar o modelo junto com outros aplicativos, desde que eles não exijam muita memória de GPU. A memória de pico do modelo é de 6,4 GB, o que deixa bastante folga.
+
+### O Bonsai 2 27B roda no Ollama?
+O Ollama não foi testado com este modelo. O programa necessário para rodar o Bonsai 2 27B em formato PTQ1_0 é o fork da PrismML do llama.cpp. Se o Ollama suportar esse fork, pode funcionar, mas não há confirmação.
+
+## Fontes
+
+
+- https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

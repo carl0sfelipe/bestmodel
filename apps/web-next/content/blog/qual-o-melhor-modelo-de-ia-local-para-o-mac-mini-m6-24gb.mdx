@@ -1,0 +1,58 @@
+---
+title: "Qual o melhor modelo de IA local para o Mac mini M6 24GB?"
+slug: "qual-o-melhor-modelo-de-ia-local-para-o-mac-mini-m6-24gb"
+description: "Para uso diário, o modelo recomendado é o Bonsai 2 27B PTQ10. Ele gera 19,8 tok/s com pico de 6,4 GB e alcançou média de 54,6% nos testes. Essa combinação de velocidade, peso e desempenho o torna a escolha mais equilibrada para quem não quer travar a máquina."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Para uso diário, o modelo recomendado é o Bonsai 2 27B PTQ1_0. Ele gera 19,8 tok/s com pico de 6,4 GB e alcançou média de 54,6% nos testes. Essa combinação de velocidade, peso e desempenho o torna a escolha mais equilibrada para quem não quer travar a máquina.
+
+## A resposta curta: Bonsai 2 27B PTQ1_0
+
+O Bonsai 2 27B PTQ1_0 entrega 19,8 tok/s de velocidade de geração com contexto vazio. Essa métrica indica que o texto flui rápido o suficiente para digitar e ler sem esperar. A média de 54,6% em ARC-Challenge, HellaSwag e TruthfulQA mostra que o modelo responde com coerência em tarefas de raciocínio e factualidade.
+
+A memória de pico é de 6,4 GB. Esse valor baixo é crucial no Mac mini M6 24GB, pois deixa espaço para o sistema operacional, o navegador e outros apps abertos. Você não precisa fechar tudo para rodar o modelo, o que elimina a objeção de "não sei se cabe".
+
+## Os três perfis que fazem sentido
+
+| Modelo | Geração (tok/s) | Memória de pico | Média (ARC/Hella/Truthful) | Para quem é |
+| :--- | :--- | :--- | :--- | :--- |
+| Bonsai 2 27B PTQ1_0 | 19,8 tok/s | 6,4 GB | 54,6% | Uso diário equilibrado |
+| Arete 27B Q4_K_M | 8,0 tok/s | 16,5 GB | 57,6% | Máxima qualidade, espera |
+| Qwen3.5 9B Q4_K_M | 26,3 tok/s | 5,6 GB | 51,7% | Resposta instantânea |
+
+O Arete 27B Q4_K_M tem a média mais alta, com 57,6%, mas custa 16,5 GB de memória e gera a 8,0 tok/s. A diferença de qualidade em relação ao Bonsai é pequena, dentro da margem de erro, mas a diferença de velocidade é grande. Se você precisa de respostas rápidas, o Arete pode frustrar.
+
+O Qwen3.5 9B Q4_K_M é o mais rápido, com 26,3 tok/s, e usa só 5,6 GB. A média é de 51,7%. Esse perfil serve para quem quer interagir com a IA sem interrupções, mesmo com o Mac aberto em várias janelas.
+
+## Por que a memória decide
+
+No Mac mini M6, a GPU pode usar até 20.480 MiB depois de liberada. Esse espaço é o que permite rodar modelos maiores sem travar o sistema. Se um modelo consumir quase tudo, o sistema pode trocar memória para o disco, causando travamentos e lentidão extrema.
+
+O Bonsai 2 27B PTQ1_0, ao usar 6,4 GB, deixa sobra para o contexto e outros programas. Isso significa que você pode rodar o modelo com o navegador aberto, o editor de texto e a música tocando. O Arete 27B Q4_K_M, ao usar 16,5 GB, consome quase metade da memória disponível, limitando o que você pode fazer ao mesmo tempo.
+
+## Quando NÃO vale
+
+Não vale a pena usar o Arete 27B Q4_K_M se você precisa de respostas em tempo real. A velocidade de 8,0 tok/s é muito menor que a do Bonsai, e a diferença de qualidade não compensa a espera. Para quem quer o melhor desempenho possível, o Arete é a escolha, mas só se a paciência for alta.
+
+Também não vale usar o Qwen3.5 9B Q4_K_M se você precisa de respostas complexas ou longas. A média de 51,7% é inferior às dos modelos de 27B. Se a tarefa exige raciocínio profundo, o modelo menor pode falhar. A escolha certa depende do seu uso real, não do tamanho do modelo.
+
+## Perguntas frequentes
+
+### O Mac mini M6 24GB roda modelo de 27B?
+Sim, roda. O Bonsai 2 27B PTQ1_0 usa 6,4 GB de memória de pico. O Mac mini M6 24GB tem 20.480 MiB disponíveis para a GPU, então o modelo cabe com sobra. Você não precisa de mais memória para rodar esse modelo.
+
+### Preciso de internet para usar?
+Não, não precisa de internet para usar os modelos. Eles rodam localmente no seu Mac mini M6. A geração de texto acontece no hardware da sua máquina, sem envio de dados para servidores externos. Isso garante privacidade e velocidade, pois não há latência de rede.
+
+### Qual programa uso para rodar os modelos?
+Use o llama.cpp. É a ferramenta que roda os modelos locais no Mac mini M6. Ele é leve e otimizado para o hardware Apple. Você baixa o modelo e o llama.cpp, e o sistema fica pronto para gerar texto. Não precisa de instalação complexa.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

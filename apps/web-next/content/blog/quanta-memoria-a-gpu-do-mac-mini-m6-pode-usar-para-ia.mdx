@@ -1,0 +1,51 @@
+---
+title: "Quanta memória a GPU do Mac mini M6 pode usar para IA?"
+slug: "quanta-memoria-a-gpu-do-mac-mini-m6-pode-usar-para-ia"
+description: "Por padrão, a GPU do Mac mini M6 acessa apenas 18.186 MiB dos 24 GB disponíveis. Um comando simples eleva esse teto para 20.480 MiB, ampliando o espaço efetivo para modelos de IA. A diferença entre esses dois limites é o que determina se um modelo cabe ou não."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Por padrão, a GPU do Mac mini M6 acessa apenas 18.186 MiB dos 24 GB disponíveis. Um comando simples eleva esse teto para 20.480 MiB, ampliando o espaço efetivo para modelos de IA. A diferença entre esses dois limites é o que determina se um modelo cabe ou não.
+
+## O limite de fábrica e como liberar
+
+A máquina entrega 24 GB de memória unificada, mas o sistema reserva parte dela para o sistema operacional e outros processos. Por padrão, a GPU recebe 18.186 MiB como teto de uso. Esse valor é configurado pelo kernel e não é algo que o usuário altere manualmente sem um comando.
+
+Para aumentar a alocação, o registro do sistema permite definir um novo limite usando o comando `sysctl iogpu.wired_limit_mb`. Ao executar esse comando com o valor desejado, a GPU passa a ter acesso a 20.480 MiB. Essa operação é reversível e não altera a memória física instalada, apenas o teto que o driver pode usar.
+
+| Configuração | Memória disponível para a GPU |
+| :--- | :--- |
+| Padrão de fábrica | 18.186 MiB |
+| Limite liberado | 20.480 MiB |
+
+## O que cabe nesse limite
+
+Com o limite liberado, modelos de 27 bilhões de parâmetros em quantização Q4_K_M passam a caber. O modelo Arete 27B Q4_K_M, por exemplo, exige 16,5 GB de memória de pico. Esse valor fica dentro do teto de 20.480 MiB, permitindo o uso do modelo inteiro na GPU.
+
+Já o modelo Bonsai 2 27B em formato PTQ1_0 tem um perfil de memória muito mais enxuto, exigindo apenas 6,4 GB. Essa quantização agressiva reduz drasticamente o footprint, o que permite rodar modelos grandes mesmo com o limite padrão de fábrica, sem necessidade de liberar memória extra.
+
+## Quando NÃO vale
+
+Essa configuração não é útil se a sua prioridade for estabilidade em multitarefa pesada. Liberar memória para a GPU reduz o espaço disponível para o sistema e outros aplicativos, o que pode causar trocas de memória (swap) se você abrir muitas janelas ou usar navegador com muitas abas.
+
+Além disso, se você trabalha com modelos que exigem mais memória do que os 20.480 MiB disponíveis, liberar o teto não resolve o problema. Nesse caso, a única solução é um hardware com mais memória unificada. A liberação de memória é uma otimização para modelos específicos, não uma solução universal para todos os cenários de IA.
+
+## Perguntas frequentes
+
+### Liberar memória para a GPU é seguro?
+Sim, é seguro. O comando apenas altera um limite de configuração do driver. Não há risco de dano físico ao hardware. O sistema operacional continua gerenciando a memória restante para os outros processos.
+
+### A configuração volta ao reiniciar?
+Sim, o valor padrão é restaurado após um reinicialização. O comando `sysctl` altera a configuração apenas para a sessão atual. Se você quiser que a mudança persista, precisa adicionar o comando ao arquivo de configuração do sistema, mas isso é opcional.
+
+### Preciso fechar outros programas?
+Não é obrigatório, mas é recomendado. Quanto menos memória os outros programas estiverem usando, mais espaço sobra para a GPU. Se você tiver muitos aplicativos abertos, o sistema pode priorizar a memória do sistema sobre a da GPU, reduzindo o desempenho dos modelos de IA.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

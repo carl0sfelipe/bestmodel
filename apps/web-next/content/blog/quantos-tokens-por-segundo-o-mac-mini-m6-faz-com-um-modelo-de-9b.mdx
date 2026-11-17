@@ -1,0 +1,58 @@
+---
+title: "Quantos tokens por segundo o Mac mini M6 faz com um modelo de 9B?"
+slug: "quantos-tokens-por-segundo-o-mac-mini-m6-faz-com-um-modelo-de-9b"
+description: "O Mac mini M6 gera com o Qwen3.5 9B em Q4KM a 26,3 tok/s em contexto vazio. Com contexto de oito mil tokens, a velocidade cai para 24,8 tok/s. A leitura de prompt atinge 775 tok/s. Esses números mostram que o hardware suporta conversas fluidas sem gargalo perceptível no dia a dia."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+O Mac mini M6 gera com o Qwen3.5 9B em Q4_K_M a 26,3 tok/s em contexto vazio. Com contexto de oito mil tokens, a velocidade cai para 24,8 tok/s. A leitura de prompt atinge 775 tok/s. Esses números mostram que o hardware suporta conversas fluidas sem gargalo perceptível no dia a dia.
+
+## Os números do Qwen3.5 9B
+
+O teste com o Qwen3.5 9B em formato Q4_K_M registrou 26,3 tok/s de geração de tokens quando o contexto estava vazio. Essa é a métrica mais relevante para a experiência de chat, pois reflete o ritmo real da resposta enquanto você lê.
+
+Quando o contexto já contém oito mil tokens, a velocidade de geração desce para 24,8 tok/s. A diferença é pequena e dentro da margem de variação esperada em conversas longas. A leitura do prompt, que acontece antes da resposta, foi medida em 775 tok/s.
+
+O mesmo modelo em formato Q8_0, que usa mais memória para manter mais precisão, gera a 17,2 tok/s. Esse formato é mais pesado e, por isso, mais lento. A escolha do formato impacta diretamente a velocidade que você sente na tela.
+
+## Por que a banda de memória manda
+
+Em modelos de linguagem, cada token gerado exige ler o modelo inteiro da memória. Isso significa que a velocidade máxima é limitada pela taxa de transferência de dados, não pelo processamento em si.
+
+O Mac mini M6 possui uma banda de memória de 153 GB/s. Esse valor é o teto físico para a velocidade de geração. Quanto maior a banda, mais rápido o modelo consegue ser lido a cada passo.
+
+Por isso, modelos maiores ou em formatos de maior precisão, que ocupam mais memória, sofrem mais com esse limite. A eficiência do hardware depende diretamente de como bem ele aproveita essa banda de dados.
+
+## O 9B mais rápido do lab
+
+O modelo mais rápido medido nesse tamanho foi o Bonsai 2 9B em formato PTQ1_0. Ele alcançou 58,1 tok/s de geração de tokens.
+
+Esse resultado foi obtido com apenas 2,5 GB de memória de pico. A combinação de um formato mais eficiente e a arquitetura do modelo permitiu extrair o máximo da banda de memória do Mac mini M6.
+
+Isso mostra que, para o mesmo tamanho de modelo, a escolha do formato de quantização pode mudar drasticamente a velocidade percebida pelo usuário.
+
+## Quando NÃO vale
+
+Se você precisa de precisão máxima para tarefas críticas, o formato Q8_0 é mais lento e pode não atender a prazos de tempo. A velocidade de 17,2 tok/s é significativamente menor que a do Q4_K_M.
+
+Também não vale se você espera rodar modelos maiores que 9B com a mesma fluidez. A banda de memória de 153 GB/s é um limite físico que se torna mais evidente com modelos maiores e contextos mais longos.
+
+## Perguntas frequentes
+
+### Isso é rápido o bastante para conversar?
+Sim, a velocidade de 26,3 tok/s é suficiente para uma conversa fluida. A leitura do prompt em 775 tok/s também é rápida o bastante para respostas imediatas.
+
+### Quanto tempo leva para ler um documento longo?
+A leitura de um prompt de oito mil tokens leva menos de um segundo. A velocidade de 775 tok/s indica que o processamento inicial é rápido mesmo com contextos extensos.
+
+### O Mac mini M6 aquece muito rodando IA?
+Isso não foi medido. A temperatura e o consumo de energia não estão nos fatos fornecidos, então não é possível afirmar como o hardware se comporta termicamente sob carga.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

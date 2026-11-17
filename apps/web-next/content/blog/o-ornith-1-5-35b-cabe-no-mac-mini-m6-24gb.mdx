@@ -1,0 +1,54 @@
+---
+title: "O Ornith 1.5 35B cabe no Mac mini M6 24GB?"
+slug: "o-ornith-1-5-35b-cabe-no-mac-mini-m6-24gb"
+description: "Não cabe bem. O menor arquivo publicado do Ornith 1.5 35B tem tamanho de 20,2 GiB, enquanto a memória liberada para a GPU no Mac mini M6 é de 20.480 MiB. A diferença impede a execução completa no hardware. Quem busca um modelo grande e eficiente nesse equipamento deve considerar a alternativa do…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Não cabe bem. O menor arquivo publicado do Ornith 1.5 35B tem tamanho de 20,2 GiB, enquanto a memória liberada para a GPU no Mac mini M6 é de 20.480 MiB. A diferença impede a execução completa no hardware. Quem busca um modelo grande e eficiente nesse equipamento deve considerar a alternativa do Bonsai 2 27B, que exige menos memória de pico e oferece desempenho medido em benchmarks públicos.
+
+## A conta que não fecha
+
+A pergunta central é se os 24 GB de memória unificada do Mac mini M6 são suficientes para carregar e executar o Ornith 1.5 35B. A resposta depende de dois números concretos: o peso do modelo em disco e a quantidade de memória disponível para o processamento de inferência.
+
+O menor arquivo publicado para o Ornith 1.5 35B, na quantização Q4_K_M, mede 20,2 GiB. Esse valor representa o tamanho mínimo do modelo em estado pronto para uso. Já o limite de memória liberada para a GPU no Mac mini M6, conforme registrado no método de teste, é de 20.480 MiB.
+
+Comparando os dois valores, o arquivo do modelo é maior que a memória disponível para a GPU. Mesmo considerando que parte do sistema operacional e dos processos de fundo ocupem espaço, a sobra de memória para o modelo não atinge o volume necessário. A diferença entre o tamanho do arquivo e a memória liberada é significativa o suficiente para impedir que o modelo caiba inteiramente na memória acelerada.
+
+## A alternativa que cabe
+
+Se o objetivo é rodar um modelo de linguagem grande no Mac mini M6 24GB, o Bonsai 2 27B é a opção que se encaixa melhor no perfil de hardware. Esse modelo foi testado e apresenta métricas de desempenho e consumo de memória compatíveis com o dispositivo.
+
+O modelo Bonsai 2 27B, na configuração PTQ1_0, registra um pico de memória de 6,4 GB. Esse valor está bem abaixo do limite de memória liberada para a GPU, permitindo que o modelo caiba inteiramente na memória acelerada sem depender de offload para a CPU.
+
+Além do consumo de memória, o desempenho do modelo foi avaliado em benchmarks públicos. A média de acurácia obtida em ARC-Challenge, HellaSwag e TruthfulQA foi de 54,6%. Esse resultado demonstra que o modelo mantém capacidade de raciocínio e compreensão de linguagem, mesmo em uma configuração otimizada para hardware limitado.
+
+## Quando NÃO vale
+
+A escolha do Ornith 1.5 35B não vale a pena no Mac mini M6 24GB porque o modelo não cabe na memória de GPU. Tentar forçar a execução resultará em falhas de carregamento ou em um desempenho extremamente lento, se o sistema tentar usar a CPU para completar o processo.
+
+Essa página não recomenda o uso do Ornith 1.5 35B em Mac mini M6 24GB para quem busca uma experiência de inferência fluida e confiável. A alternativa do Bonsai 2 27B oferece um equilíbrio melhor entre tamanho do modelo, consumo de memória e desempenho medido.
+
+## Perguntas frequentes
+
+### E se eu usar uma quantização menor?
+
+A quantização menor reduz o tamanho do arquivo, mas o Ornith 1.5 35B em Q4_K_M já é uma das versões mais compactas publicadas. Mesmo assim, o menor arquivo mede 20,2 GiB, o que continua acima da memória liberada para a GPU. Quantizações menores podem não ser suficientes para resolver o problema de espaço.
+
+### Dá para rodar parte na CPU?
+
+Tecnicamente, é possível dividir a execução entre a GPU e a CPU, mas o desempenho cai drasticamente. A memória liberada para a GPU é de 20.480 MiB, e qualquer parte do modelo que exceda esse limite será processada pela CPU, que é muito mais lenta para inferência de modelos de linguagem.
+
+### Quais modelos de 35B cabem?
+
+Nenhum modelo de 35B cabe inteiramente na memória de GPU do Mac mini M6 24GB, conforme os dados disponíveis. O menor arquivo do Ornith 1.5 35B já é maior que a memória liberada. Para modelos de 35B, é necessário um hardware com mais memória unificada ou uma configuração que permita offload eficiente.
+
+## Fontes
+
+
+- https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B-GGUF
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

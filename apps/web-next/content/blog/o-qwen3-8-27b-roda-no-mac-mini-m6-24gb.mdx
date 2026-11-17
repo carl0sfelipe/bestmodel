@@ -1,0 +1,47 @@
+---
+title: "O Qwen3.8 27B roda no Mac mini M6 24GB?"
+slug: "o-qwen3-8-27b-roda-no-mac-mini-m6-24gb"
+description: "Sim, o Qwen3.8 27B roda no Mac mini M6 24GB no formato UD-Q3KXL, ocupando 12,6 GB de memória de pico. A geração de texto ocorre a 10,6 tok/s em contexto vazio, uma velocidade baixa típica de modelos densos de 27B. A fidelidade é alta, com divergência mínima e desempenho sólido em benchmarks."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Sim, o Qwen3.8 27B roda no Mac mini M6 24GB no formato UD-Q3_K_XL, ocupando 12,6 GB de memória de pico. A geração de texto ocorre a 10,6 tok/s em contexto vazio, uma velocidade baixa típica de modelos densos de 27B. A fidelidade é alta, com divergência mínima e desempenho sólido em benchmarks.
+
+## Velocidade e memória no UD-Q3_K_XL
+
+O modelo em formato UD-Q3_K_XL exige 12,6 GB de memória de pico para operar. Esse valor fica bem abaixo dos 24GB disponíveis no Mac mini M6, garantindo espaço para o sistema operacional e outras tarefas simultâneas. O arquivo em si tem 12,2 GiB de tamanho no Hugging Face, o que facilita o download e a instalação.
+
+A velocidade de geração é de 10,6 tok/s em contexto vazio. Quando o contexto já contém oito mil tokens, a velocidade cai para 9,7 tok/s. Essa redução é esperada em modelos densos, pois o processamento de contexto longo aumenta a carga computacional. Para uso em conversas longas ou análise de documentos extensos, a velocidade pode parecer lenta.
+
+## Quanto ele perde nessa quantização
+
+A quantização UD-Q3_K_XL apresenta uma divergência KL de 0,030 contra a referência. Esse valor próximo de zero indica que as respostas geradas são praticamente idênticas às do modelo original, mantendo a fidelidade do conteúdo. A média em ARC-Challenge, HellaSwag e TruthfulQA é de 54,8%, um desempenho competitivo para um modelo de 27B em formato quantizado.
+
+Essa combinação de baixa divergência e boa pontuação em benchmarks mostra que o formato UD-Q3_K_XL preserva bem a qualidade do modelo. O usuário pode esperar respostas coerentes e precisas, mesmo com a redução de bits. A velocidade, porém, permanece o principal trade-off, pois a quantização não compensa a densidade do modelo.
+
+## Quando NÃO vale
+
+Não vale se a prioridade for velocidade de geração. Com 10,6 tok/s em contexto vazio, o modelo é lento para tarefas que exigem respostas imediatas ou processamento de grandes volumes de texto em tempo real. A memória de pico de 12,6 GB também limita o uso simultâneo de outros aplicativos pesados no Mac mini M6 24GB.
+
+Não vale se a fidelidade for o único critério. Embora a divergência seja baixa, o formato UD-Q3_K_XL ainda é uma quantização. Para aplicações críticas onde a precisão absoluta é essencial, o modelo original em ponto flutuante pode ser necessário, mas não cabe no hardware.
+
+## Perguntas frequentes
+
+### E o Q4_K_M do Qwen3.8 27B?
+O Q4_K_M do Qwen3.8 27B ainda está sendo medido. Não há dados disponíveis sobre velocidade, memória ou qualidade desse formato específico. A decisão deve considerar apenas o UD-Q3_K_XL, que é o único formato com métricas confirmadas para o Mac mini M6 24GB.
+
+### O Qwen3.8 27B é bom para programar?
+O Qwen3.8 27B é bom para programar em tarefas de média complexidade. A divergência baixa de 0,030 indica que o modelo mantém a lógica e a estrutura do código. A velocidade de 10,6 tok/s pode ser lenta para geração de código extenso, mas a qualidade das respostas compensa para a maioria dos casos de uso.
+
+### Qwen3.8 27B ou Bonsai 2 27B?
+O Qwen3.8 27B em UD-Q3_K_XL tem velocidade de 10,6 tok/s e divergência de 0,030. O Bonsai 2 27B não tem métricas comparáveis disponíveis para o Mac mini M6 24GB. A escolha deve considerar a disponibilidade de dados e a necessidade de velocidade, pois o Qwen3.8 27B é o único com métricas confirmadas.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.8-27B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

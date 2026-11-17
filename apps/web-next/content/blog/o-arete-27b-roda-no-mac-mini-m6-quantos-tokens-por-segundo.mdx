@@ -1,0 +1,53 @@
+---
+title: "O Arete 27B roda no Mac mini M6? Quantos tokens por segundo?"
+slug: "o-arete-27b-roda-no-mac-mini-m6-quantos-tokens-por-segundo"
+description: "Sim, o Arete 27B roda no Mac mini M6. No formato Q4KM, a geração atinge 8,0 tok/s com contexto vazio e 7,6 tok/s com contexto de oito mil tokens. A memória de pico é de 16,5 GB, o que cabe com folga na memória unificada de 24 GB. A velocidade é compatível com a leitura humana, mas não com…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Sim, o Arete 27B roda no Mac mini M6. No formato Q4_K_M, a geração atinge 8,0 tok/s com contexto vazio e 7,6 tok/s com contexto de oito mil tokens. A memória de pico é de 16,5 GB, o que cabe com folga na memória unificada de 24 GB. A velocidade é compatível com a leitura humana, mas não com conversas em tempo real.
+
+## Velocidade e memória do Arete 27B
+
+O teste de geração no contexto vazio registrou 8,0 tok/s. Quando o contexto já contém oito mil tokens, a velocidade cai levemente para 7,6 tok/s. Essa queda é pequena e esperada em modelos de 27 bilhões de parâmetros. A memória de pico medida foi de 16,5 GB, e o arquivo GGUF tem 16,0 GiB.
+
+Com 24 GB de memória unificada no Mac mini M6, o modelo Q4_K_M sobe sem estourar a RAM. O sistema pode manter o modelo inteiro na memória unificada, evitando o uso do disco como cache de troca. Isso mantém a latência estável durante a geração.
+
+## A qualidade que justifica a espera
+
+A média de acertos em ARC-Challenge, HellaSwag e TruthfulQA foi de 57,6%. No ARC-Challenge, o modelo acertou 59,2%. No HellaSwag, a taxa foi de 78,0%. Esses números mostram que o modelo responde bem em tarefas de raciocínio e senso comum.
+
+A qualidade é a principal vantagem do Q4_K_M. A perda de qualidade em quantização é baixa, e o modelo mantém consistência nas respostas. Para quem prioriza precisão acima da velocidade, esse formato é o indicado. A espera de alguns segundos por frase é o custo de ter respostas mais confiáveis.
+
+## IQ3_XXS: mais rápido, um pouco pior
+
+O formato IQ3_XXS gera a 11,3 tok/s com contexto vazio. A memória de pico cai para 11,7 GB, liberando mais espaço para o contexto ou para outros processos. A média de acertos desce para 55,1%. A divergência KL contra a referência é de 0,082, o que indica uma fidelidade menor às respostas originais.
+
+Esse formato é útil quando a velocidade importa mais que a precisão. A diferença de velocidade é real, mas a perda de qualidade também é. Para tarefas simples, o IQ3_XXS atende. Para raciocínio complexo ou código, o Q4_K_M é mais seguro. A escolha depende do uso.
+
+## Quando NÃO vale
+
+O Arete 27B não é indicado para quem precisa de respostas instantâneas. A velocidade de 8,0 tok/s é lenta para conversas rápidas ou para uso em tempo real. Se a tarefa exige latência mínima, o modelo não atende.
+
+Também não vale para quem quer rodar outros modelos grandes ao mesmo tempo. A memória de pico de 16,5 GB consome boa parte dos 24 GB. Rodar o Arete 27B junto com outro modelo grande pode estourar a memória e causar trocas de disco.
+
+## Perguntas frequentes
+
+### O que é o Arete 27B?
+O Arete 27B é um modelo de linguagem com 27 bilhões de parâmetros. Ele foi testado no formato Q4_K_M e IQ3_XXS no Mac mini M6. O modelo responde em português e inglês, e foi avaliado em tarefas de raciocínio e senso comum.
+
+### O Arete 27B é melhor que o Qwen3.8 27B?
+Os fatos não permitem comparar diretamente com o Qwen3.8 27B. O Arete 27B foi medido no lab com os fatos listados. O Qwen3.8 27B não aparece nos dados de velocidade ou qualidade aqui. A decisão deve considerar outros fatores além dos números medidos.
+
+### Dá para usar o Arete 27B para programar?
+O modelo responde bem em tarefas de raciocínio, o que ajuda em código. A velocidade de 8,0 tok/s é lenta para geração de código longa. Para tarefas simples, o IQ3_XXS é mais rápido. Para código complexo, o Q4_K_M é mais confiável.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/bartowski/NousResearch_Arete-27B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

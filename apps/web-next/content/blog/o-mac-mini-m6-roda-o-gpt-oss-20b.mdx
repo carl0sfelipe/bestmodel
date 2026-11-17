@@ -1,0 +1,53 @@
+---
+title: "O Mac mini M6 roda o gpt-oss-20b?"
+slug: "o-mac-mini-m6-roda-o-gpt-oss-20b"
+description: "Sim, o Mac mini M6 roda o gpt-oss-20b com folga. O modelo em formato F16 consome 12,4 GB de memória de pico, o que cabe com sobra na configuração de 24GB. A velocidade de geração atinge 38,3 tok/s em contexto vazio, mantendo fluidez para conversas e tarefas locais sem necessidade de hardware…"
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Sim, o Mac mini M6 roda o gpt-oss-20b com folga. O modelo em formato F16 consome 12,4 GB de memória de pico, o que cabe com sobra na configuração de 24GB. A velocidade de geração atinge 38,3 tok/s em contexto vazio, mantendo fluidez para conversas e tarefas locais sem necessidade de hardware externo.
+
+## Velocidade e memória
+
+O desempenho medido para o gpt-oss-20b em formato F16 mostra uma velocidade de geração de 38,3 tok/s quando o contexto está vazio. Quando o contexto já contém oito mil tokens, a velocidade cai levemente para 35,1 tok/s, o que indica estabilidade mesmo com conversas mais longas. A leitura do prompt alcança 1.161 tok/s, o que agiliza a processação inicial das instruções.
+
+A memória de pico registrada é de 12,4 GB, enquanto o tamanho do arquivo GGUF no Hugging Face é de 12,8 GiB. Esses valores confirmam que o Mac mini M6 com 24GB de memória unificada tem capacidade suficiente para hospedar o modelo e o sistema operacional simultaneamente, sem exigir troca de arquivos ou fragmentação de memória.
+
+## Por que um 20B é tão rápido
+
+O gpt-oss-20b é um modelo de mistura de especialistas, o que significa que ele não ativa todos os parâmetros a cada token gerado. Em vez disso, o modelo seleciona apenas uma parte dos componentes para processar cada entrada, reduzindo o custo computacional por token. Essa arquitetura permite que o modelo mantenha a capacidade de 20B bilhões de parâmetros totais, mas execute com a eficiência de um modelo menor em cada passo específico.
+
+Essa estrutura explica por que a velocidade de 38,3 tok/s é compatível com o hardware do Mac mini M6. A aceleração ocorre porque o sistema só precisa mover e calcular os pesos ativos para aquele token, ignorando o restante da rede. O resultado é uma experiência de uso mais próxima de modelos menores, mesmo que a base do modelo seja maior em termos de parâmetros totais.
+
+## E a qualidade
+
+A média de desempenho em ARC-Challenge, HellaSwag e TruthfulQA foi de 46,3%. Esse resultado indica que o modelo apresenta capacidade razoável para tarefas de raciocínio e compreensão de linguagem, mas não deve ser comparado diretamente a modelos de 27B ou maiores sem considerar a diferença de arquitetura e tamanho.
+
+A qualidade medida é um ponto de partida, mas a percepção de utilidade depende do caso de uso. Para tarefas simples de escrita ou resumo, o desempenho pode ser suficiente. Para raciocínio complexo ou análise de dados extensos, a média de 46,3% sugere que o usuário deve testar o modelo com seus próprios cenários antes de definir se ele atende à necessidade.
+
+## Quando NÃO vale
+
+O gpt-oss-20b em formato F16 não é a melhor opção se o usuário precisar de máxima qualidade possível em tarefas de raciocínio avançado. A média de 46,3% é inferior a modelos maiores, e a arquitetura de mistura de especialistas pode limitar a profundidade de raciocínio em problemas complexos.
+
+Também não vale se o usuário quiser rodar o modelo em formato F16 em um Mac mini M6 com menos de 24GB de memória. A memória de pico de 12,4 GB mais o sistema operacional pode exceder a capacidade disponível em configurações menores, causando falhas de carregamento ou trocas de memória que degradam a performance.
+
+## Perguntas frequentes
+
+### Qual arquivo do gpt-oss-20b baixar?
+O arquivo recomendado para o Mac mini M6 é o gpt-oss-20b--f16.tg, disponível no Hugging Face. Esse arquivo tem o tamanho de 12,8 GiB e foi o usado nas medições de velocidade e memória. A versão F16 oferece o melhor equilíbrio entre qualidade e desempenho nesse hardware.
+
+### O gpt-oss-20b funciona sem internet?
+Sim, o gpt-oss-20b funciona offline após o download do arquivo GGUF. Uma vez que o modelo está no disco local, a geração de texto não requer conexão com a internet. O Mac mini M6 processa tudo localmente, o que garante privacidade e independência de servidores externos.
+
+### Dá para usar o gpt-oss-20b com ferramentas?
+Sim, o gpt-oss-20b pode ser usado com ferramentas como llama.cpp para inferência local. O modelo foi testado com o llama.cpp e apresenta compatibilidade com o hardware Apple Silicon. A velocidade de 38,3 tok/s confirma que a integração é viável e eficiente para uso diário.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/gpt-oss-20b-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

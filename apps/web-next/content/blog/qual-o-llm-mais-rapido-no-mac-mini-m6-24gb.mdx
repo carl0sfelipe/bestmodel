@@ -1,0 +1,51 @@
+---
+title: "Qual o LLM mais rápido no Mac mini M6 24GB?"
+slug: "qual-o-llm-mais-rapido-no-mac-mini-m6-24gb"
+description: "Os modelos mais rápidos medidos no Mac mini M6 24GB empatam na velocidade de geração. O Bonsai 2 9B PTQ10 atinge 58,1 tok/s, enquanto o Qwen3.5 4B UD-IQ3XXS alcança 58,2 tok/s. A diferença é mínima, mas a qualidade do Bonsai é superior."
+date: "2026-11-17"
+author: "Orbe Lab"
+---
+
+
+Os modelos mais rápidos medidos no Mac mini M6 24GB empatam na velocidade de geração. O Bonsai 2 9B PTQ1_0 atinge 58,1 tok/s, enquanto o Qwen3.5 4B UD-IQ3_XXS alcança 58,2 tok/s. A diferença é mínima, mas a qualidade do Bonsai é superior.
+
+## O pódio da velocidade
+
+A velocidade de geração é o principal critério para quem busca resposta imediata em tarefas diárias. Os dois modelos que lideram a medição apresentam desempenho praticamente idêntico, o que indica que o gargalo não está no hardware, mas na arquitetura e no quantização do modelo.
+
+| Modelo | Velocidade de geração |
+| :--- | :--- |
+| Bonsai 2 9B PTQ1_0 | 58,1 tok/s |
+| Qwen3.5 4B UD-IQ3_XXS | 58,2 tok/s |
+
+O consumo de memória também é um fator relevante para o Mac mini M6 24GB. O Bonsai 2 9B PTQ1_0 utiliza 2,5 GB de memória de pico, o que permite que outros processos rodem simultaneamente sem pressionar o sistema operacional.
+
+## Rápido, mas bom?
+
+A objeção central é que modelos rápidos costumam ser menos precisos. Os dados mostram que o Bonsai 2 9B PTQ1_0 obtém média de 46,4% em benchmarks de raciocínio e factualidade. Já o Qwen3.5 4B UD-IQ3_XXS registra 44,2%.
+
+Se a fidelidade for mais importante que a velocidade máxima, o Qwen3.5 4B Q4_K_M é uma alternativa. Ele atinge 45,1 tok/s de velocidade, mas com uma média de qualidade de 46,6%. A diferença de velocidade é maior, mas a qualidade se mantém competitiva.
+
+## Quando NÃO vale
+
+Esse conjunto de modelos não é ideal para quem precisa de contexto extenso ou tarefas que exigem raciocínio profundo em múltiplas etapas. A velocidade medida foi com contexto vazio, e a qualidade em benchmarks específicos pode não refletir a performance em tarefas reais complexas.
+
+Também não vale a pena esperar que um modelo de 9B ou 4B substitua um modelo de 27B em tarefas que exigem conhecimento amplo. A velocidade é alta, mas o volume de conhecimento é limitado.
+
+## Perguntas frequentes
+
+### Modelo rápido serve para quê?
+Modelos rápidos como o Bonsai 2 9B PTQ1_0 são ideais para resumos, respostas curtas e automação simples. Eles respondem em tempo real, o que melhora a experiência do usuário em tarefas repetitivas.
+
+### Velocidade cai com contexto longo?
+A velocidade de geração tende a cair conforme o contexto aumenta. Os valores medidos foram com contexto vazio, então a performance real com textos longos será inferior.
+
+### Qual o mais rápido de 27B?
+Os fatos fornecidos não incluem medições de modelos de 27B no Mac mini M6 24GB. Portanto, não é possível afirmar qual é o mais rápido nessa categoria com base nos dados disponíveis.
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

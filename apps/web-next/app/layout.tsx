@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { currentView } from "../lib/view-server";
 import ViewToggle from "./_components/view-toggle";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" data-view={view}>
       <body>
+        <Analytics />
         <header className="site-nav masthead">
           <div className="mast-top">
             <Link className="brand" href="/">$ bestmodel.run</Link>

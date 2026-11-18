@@ -50,7 +50,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # The test runner strips TypeScript types itself (node --experimental-strip-types),
+          # which needs Node 22.6+. On Node 20 the job failed before running a
+          # single test: "node: bad option: --experimental-strip-types".
+          node-version: "22"
       - run: npm ci
         working-directory: apps/web-next
       - run: npm test

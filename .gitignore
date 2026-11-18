@@ -31,3 +31,4 @@ deploy/.env.bak*
 
 # scratch dirs for `make test` (artifact vault + pytest cache)
 .tmp/
+.vercel

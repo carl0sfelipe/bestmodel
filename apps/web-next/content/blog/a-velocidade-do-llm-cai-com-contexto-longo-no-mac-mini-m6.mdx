@@ -4,8 +4,9 @@ slug: "a-velocidade-do-llm-cai-com-contexto-longo-no-mac-mini-m6"
 description: "A velocidade de geração cai pouco quando o contexto chega a 18,0 tok/s para o modelo Bonsai 2 27B, comparado ao ponto inicial de 19,8 tok/s. O lab mediu apenas até esse limite de oito mil tokens, sem dados para contextos maiores. A queda é pequena o suficiente para não travar a experiência com…"
 date: "2026-11-17"
 author: "Orbe Lab"
+coverImage: "/images/blog/capa-a-velocidade-do-llm-cai-com-contexto-longo-no-mac-mini-m6.png"
+coverStats: "18,0 tok/s · 13,6 GB"
 ---
-
 
 A velocidade de geração cai pouco quando o contexto chega a 18,0 tok/s para o modelo Bonsai 2 27B, comparado ao ponto inicial de 19,8 tok/s. O lab mediu apenas até esse limite de oito mil tokens, sem dados para contextos maiores. A queda é pequena o suficiente para não travar a experiência com documentos grandes.
 
@@ -43,6 +44,13 @@ Sim, cada token de contexto ocupa memória. O Bonsai 2 27B deixa 13,6 GB livres 
 
 ### Qual modelo é melhor para documentos longos?
 Depende do compromisso entre velocidade e capacidade. O Qwen3.5 9B é mais rápido e deixa mais memória livre, sendo ideal para contextos longos. O Bonsai 2 27B é mais capaz em compreensão, mas mais lento. A escolha depende se a prioridade é resposta rápida ou profundidade de análise.
+
+## Veja também
+
+- [Qual o LLM mais rápido no Mac mini M6 24GB?](/blog/qual-o-llm-mais-rapido-no-mac-mini-m6-24gb)
+- [Quantos tokens por segundo o Mac mini M6 faz com um modelo de 9B?](/blog/quantos-tokens-por-segundo-o-mac-mini-m6-faz-com-um-modelo-de-9b)
+- [Gemma 4 12B em produção na RTX 3090: 66,5 tok/s medidos no bestmodel.run](/blog/gemma-4-12b-producao-rtx-3090)
+- [Como achar em 5 minutos o melhor LLM local para a sua GPU no bestmodel.run](/blog/como-achar-em-5-minutos-o-melhor-llm-local-para-a-sua-gpu-no-bestmodel-run)
 
 ## Fontes
 

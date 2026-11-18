@@ -1,0 +1,61 @@
+---
+title: "O Granite 4 2B roda no Mac mini M6 24GB?"
+slug: "o-granite-4-2b-roda-no-mac-mini-m6-24gb"
+description: "Sim, o Granite 4 2B roda com folga no Mac mini M6 24GB. O formato Q4_K_M consome apenas 6,2 GB de memória de pico, o que deixa espaço amplo para o sistema operacional e outras aplicações. A velocidade de geração atinge 27,2 tok/s em contexto vazio, permitindo interações fluidas para tarefas de…"
+date: "2026-11-18"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-granite-4-2b-roda-no-mac-mini-m6-24gb.png"
+coverStats: "6,2 GB · 27,2 tok/s · 5,0 GiB"
+---
+
+Sim, o Granite 4 2B roda com folga no Mac mini M6 24GB. O formato Q4_K_M consome apenas 6,2 GB de memória de pico, o que deixa espaço amplo para o sistema operacional e outras aplicações. A velocidade de geração atinge 27,2 tok/s em contexto vazio, permitindo interações fluidas para tarefas de escrita e análise básica.
+
+## Velocidade
+
+A velocidade de geração do modelo em Q4_K_M é de 27,2 tok/s quando o contexto está vazio. Ao introduzir oito mil tokens já processados no contexto, a velocidade cai para 22,1 tok/s, uma redução esperada em modelos locais. A leitura do prompt, que processa a entrada inicial, é significativamente mais rápida, alcançando 749 tok/s.
+
+Para comparação, o formato Q8_0 do mesmo modelo gera tokens a 16,5 tok/s. A diferença de velocidade entre os dois formatos é clara: o Q4_K_M é consideravelmente mais rápido, o que é crucial para aplicações que exigem resposta imediata ou processamento de múltiplas requisições simultâneas.
+
+## Memoria e arquivo
+
+A memória de pico do Granite 4 2B em Q4_K_M é de 6,2 GB. O tamanho do arquivo GGUF correspondente é de 5,0 GiB, um valor compacto para download e armazenamento.
+
+No formato Q8_0, a memória de pico sobe para 9,8 GB e o arquivo ocupa 8,7 GiB. Embora o Mac mini M6 24GB tenha memória suficiente para ambos, o Q4_K_M é a escolha mais eficiente, reservando mais recursos para o sistema e outras tarefas.
+
+## Qualidade
+
+A média de qualidade do Granite 4 2B em Q4_K_M, medida em ARC-Challenge, HellaSwag e TruthfulQA, é de 49,8%. A divergência KL contra a referência é de 0,184, e a proporção de tokens que coincidem com a referência é de 84,9%.
+
+O formato Q8_0 apresenta uma média de qualidade de 50,5%. A diferença entre os dois formatos é mínima, dentro da margem de variação natural das provas. Portanto, o Q4_K_M oferece qualidade suficiente sem o custo adicional de memória do Q8_0.
+
+## Quando NÃO vale
+
+O Granite 4 2B não é indicado quando a tarefa exige contexto muito longo além de oito mil tokens, pois a velocidade de geração cai para 22,1 tok/s nesse cenário. Também não é adequado quando a precisão absoluta é crítica e a divergência KL de 0,184 é inaceitável para a aplicação.
+
+Além disso, o modelo não deve ser usado quando a memória disponível é inferior a 6,2 GB ou quando a velocidade mínima exigida é superior a 22,1 tok/s. Se a qualidade mínima exigida nas provas for superior a 49,8%, o Granite 4 2B não atende à necessidade.
+
+## Perguntas frequentes
+
+### O Granite 4 2B da conta de um modelo pequeno?
+Sim, a média de qualidade é de 49,8% no Q4_K_M. O modelo é compacto e eficiente para tarefas básicas.
+
+### Vale a pena baixar o Q8_0 do Granite 4 2B?
+Não, a qualidade é de 50,5% contra 49,8% do Q4_K_M, dentro da margem. O Q8_0 consome 9,8 GB contra 6,2 GB do Q4_K_M.
+
+### Quanto de memoria sobra com o Granite 4 2B rodando?
+Sobram 6,2 GB de memória de pico com o Q4_K_M. O Mac mini M6 24GB tem espaço amplo para outras aplicações.
+
+## Veja também
+
+- [O LFM2.5 8B A1B roda no Mac mini M6 24GB?](/blog/o-lfm2-5-8b-a1b-roda-no-mac-mini-m6-24gb)
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+- [O Mac mini M6 roda o gpt-oss-20b?](/blog/o-mac-mini-m6-roda-o-gpt-oss-20b)
+- [O Bonsai 2 27B roda no Mac mini M6 24GB?](/blog/o-bonsai-2-27b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/ibm-granite/granite-4.2-8b-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

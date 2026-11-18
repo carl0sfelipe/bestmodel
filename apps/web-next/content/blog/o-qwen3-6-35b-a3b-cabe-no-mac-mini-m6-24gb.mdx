@@ -1,0 +1,71 @@
+---
+title: "O Qwen3.6 35B A3B cabe no Mac mini M6 24GB?"
+slug: "o-qwen3-6-35b-a3b-cabe-no-mac-mini-m6-24gb"
+description: "Cabe. A arquitetura A3B ativa apenas parte dos parâmetros por token, permitindo que o modelo rode com folga no hardware. No formato UD-IQ3_XXS, a memória de pico é de 12,6 GB, bem abaixo do limite disponível para a GPU. A velocidade de geração atinge 56,0 tok/s, confirmando a viabilidade prática…"
+date: "2026-11-18"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-qwen3-6-35b-a3b-cabe-no-mac-mini-m6-24gb.png"
+coverStats: "12,6 GB · 56,0 tok/s · 12,3 GiB"
+---
+
+Cabe. A arquitetura A3B ativa apenas parte dos parâmetros por token, permitindo que o modelo rode com folga no hardware. No formato UD-IQ3_XXS, a memória de pico é de 12,6 GB, bem abaixo do limite disponível para a GPU. A velocidade de geração atinge 56,0 tok/s, confirmando a viabilidade prática no dispositivo.
+
+## Velocidade
+
+O desempenho de geração é consistente entre os formatos testados. No contexto vazio, o formato UD-IQ3_XXS alcança 56,0 tok/s, enquanto o formato UD-Q3_K_M registra 50,3 tok/s. A diferença entre esses dois valores é pequena, indicando que a escolha do formato não impacta drasticamente a fluidez da resposta.
+
+Com contexto longo, a velocidade diminui levemente. O formato UD-IQ3_XXS cai para 50,6 tok/s e o formato UD-Q3_K_M para 46,2 tok/s. A leitura do prompt, medida no formato mais leve, atinge 1.191 tok/s, o que é relevante para tarefas que exigem processamento rápido de entradas longas.
+
+| Formato | Velocidade (contexto vazio) | Velocidade (contexto longo) |
+| :--- | :--- | :--- |
+| UD-IQ3_XXS | 56,0 tok/s | 50,6 tok/s |
+| UD-Q3_K_M | 50,3 tok/s | 46,2 tok/s |
+
+## Memoria e arquivo
+
+A principal objeção à pergunta é o tamanho do modelo. Como o Qwen3.6 35B A3B é uma arquitetura de mistura de especialistas, não todos os parâmetros ficam carregados simultaneamente em memória densa. A memória de pico medida no formato UD-IQ3_XXS é de 12,6 GB, e no formato UD-Q3_K_M é de 15,8 GB.
+
+O limite liberado para a GPU no Mac mini M6 é de 20.480 MiB. Ambos os picos de memória estão abaixo desse valor, o que significa que o modelo cabe com sobra. O tamanho do arquivo em disco é de 12,3 GiB para o formato mais leve e de 15,5 GiB para o formato mais pesado.
+
+| Formato | Memória de pico | Tamanho do arquivo |
+| :--- | :--- | :--- |
+| UD-IQ3_XXS | 12,6 GB | 12,3 GiB |
+| UD-Q3_K_M | 15,8 GB | 15,5 GiB |
+
+## Fidelidade e qualidade
+
+A qualidade das respostas foi avaliada em três provas: ARC-Challenge, HellaSwag e TruthfulQA. A média obtida no formato UD-IQ3_XXS é de 54,8%, enquanto no formato UD-Q3_K_M é de 56,3%. A diferença entre as médias é pequena, mas o formato mais pesado oferece uma margem de qualidade ligeiramente superior.
+
+A divergência KL do formato UD-IQ3_XXS contra a referência é de 0,106, e a proporção de tokens em que a escolha é a mesma da referência é de 87,1%. Esses números mostram que, mesmo no formato mais leve, o modelo mantém uma alta fidelidade às respostas de referência.
+
+## Quando NÃO vale
+
+Essa análise não se aplica a modelos densos de 35B, pois a arquitetura A3B é fundamental para o baixo uso de memória. Se você precisar de um modelo denso, a memória de pico será muito maior e pode exceder o limite de 20.480 MiB.
+
+Não vale para contextos muito longos que excedam a capacidade de memória disponível, pois a memória de pico pode aumentar com o contexto. Também não vale para hardware com menos de 20.480 MiB de memória liberada para a GPU.
+
+## Perguntas frequentes
+
+### Um 35B roda nos 24 GB de memoria unificada?
+Sim, pois a memória de pico do modelo em quantização UD-IQ3_XXS é de 12,6 GB, bem abaixo do limite liberado para a GPU de 20.480 MiB. Mesmo na quantização mais pesada testada, UD-Q3_K_M, o pico é de 15,8 GB, que também cabe com sobra.
+
+### Qual quantizacao do Qwen3.6 35B A3B baixar?
+O UD-IQ3_XXS é a melhor opção para o Mac mini M6 24GB, pois usa apenas 12,6 GB de memória de pico e mantém uma velocidade de 56,0 tok/s, com uma qualidade média de 54,8%. O formato UD-Q3_K_M é uma alternativa se a qualidade for prioridade, mas usa mais memória e é ligeiramente mais lento.
+
+### O Qwen3.6 35B A3B e mais rapido que um 27B denso?
+NÃO MEDIDO. Os fatos não contêm medições de velocidade de um modelo denso de 27B no Mac mini M6. Apenas medições do Qwen3.6 35B A3B em diferentes quantizações foram registradas, como 56,0 tok/s e 50,3 tok/s.
+
+## Veja também
+
+- [O Ornith 1.5 35B cabe no Mac mini M6 24GB?](/blog/o-ornith-1-5-35b-cabe-no-mac-mini-m6-24gb)
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+- [Ornith 1.5 9B ou Qwen3.5 9B no Mac mini M6?](/blog/ornith-1-5-9b-ou-qwen3-5-9b-no-mac-mini-m6)
+- [Gemma 4 no Mac mini M6 24GB: qual quantização não estraga o modelo?](/blog/gemma-4-no-mac-mini-m6-24gb-qual-quantizacao-nao-estraga-o-modelo)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

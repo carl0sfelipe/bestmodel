@@ -8,7 +8,10 @@ import path from "node:path";
 import matter from "gray-matter";
 import { marked } from "marked";
 
-export const BLOG_ORIGIN = "https://bestmodel.run";
+// The production origin: bestmodel.run 308-redirects to www.bestmodel.run,
+// so every absolute URL (canonical, og:image, JSON-LD) names the URL that is
+// actually served. A canonical pointing at the redirect loses the signal.
+export const BLOG_ORIGIN = "https://www.bestmodel.run";
 
 export type BlogPost = {
   title: string;
@@ -16,9 +19,15 @@ export type BlogPost = {
   date: string;
   description: string;
   author?: string;
+  /** Site-relative path of the cover image, kept only when the file exists. */
+  coverImage?: string;
+  /** Measured numbers shown on the cover, kept for the cover renderer. */
+  coverStats?: string;
   body: string;
   sourceFile: string;
 };
+
+export type FaqPair = { question: string; answer: string };
 
 function resolveBlogDir(): string {
   const candidates = [
@@ -29,6 +38,31 @@ function resolveBlogDir(): string {
     if (existsSync(dir)) return dir;
   }
   throw new Error("content/blog not found next to the web app");
+}
+
+function resolvePublicDir(): string {
+  const candidates = [
+    path.join(process.cwd(), "public"),
+    path.join(process.cwd(), "apps", "web-next", "public"),
+  ];
+  for (const dir of candidates) {
+    if (existsSync(dir)) return dir;
+  }
+  return "";
+}
+
+/** True when the cover file is really there: a post must never render a broken image. */
+export function coverExists(coverPath: string): boolean {
+  const publicDir = resolvePublicDir();
+  if (!publicDir) return false;
+  const rel = coverPath.replace(/^\/+/, "");
+  if (!rel || rel.includes("..")) return false;
+  return existsSync(path.join(publicDir, rel));
+}
+
+function optionalString(data: Record<string, unknown>, key: string): string | undefined {
+  const value = data[key];
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
 function requireString(data: Record<string, unknown>, key: string, file: string): string {
@@ -60,6 +94,23 @@ export function canonicalFor(slug: string): string {
   return `${BLOG_ORIGIN}/blog/${slug}`;
 }
 
+/**
+ * Q&A pairs of the "## Perguntas frequentes" section, for the FAQPage
+ * JSON-LD. The answers come from the same text the reader sees, so the
+ * structured data can never promise something the page does not say.
+ */
+export function faqPairs(markdown: string): FaqPair[] {
+  const section = /^##[ \t]+Perguntas frequentes[ \t]*\r?\n([\s\S]*?)(?=^##[ \t]|(?![\s\S]))/m.exec(markdown);
+  if (!section) return [];
+  const pairs: FaqPair[] = [];
+  for (const block of section[1].split(/^###[ \t]+/m).slice(1)) {
+    const [question, ...rest] = block.split(/\r?\n/);
+    const answer = rest.join(" ").replace(/\s+/g, " ").trim();
+    if (question.trim() && answer) pairs.push({ question: question.trim(), answer });
+  }
+  return pairs;
+}
+
 export function listPosts(): BlogPost[] {
   const dir = resolveBlogDir();
   const files = readdirSync(dir).filter((name) => name.endsWith(".mdx"));
@@ -78,13 +129,16 @@ export function listPosts(): BlogPost[] {
       throw new Error(`content/blog: duplicate frontmatter.slug "${slug}"`);
     }
     seen.add(slug);
-    const author = typeof data.author === "string" && data.author.trim() ? data.author.trim() : undefined;
+    const author = optionalString(data, "author");
+    const cover = optionalString(data, "coverImage");
     posts.push({
       title,
       slug,
       date,
       description,
       author,
+      coverImage: cover && coverExists(cover) ? cover : undefined,
+      coverStats: optionalString(data, "coverStats"),
       body: parsed.content.replace(/^\uFEFF?/, ""),
       sourceFile: file,
     });

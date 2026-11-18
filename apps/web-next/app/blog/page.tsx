@@ -6,7 +6,7 @@ import AgentView from "../_components/agent-view";
 export const metadata = {
   title: "Blog",
   description: "Measured local-AI notes: which model fits a GPU, how fast, and how to add a signed run.",
-  alternates: { canonical: "https://bestmodel.run/blog" },
+  alternates: { canonical: "https://www.bestmodel.run/blog" },
 };
 
 export default async function BlogIndexPage() {

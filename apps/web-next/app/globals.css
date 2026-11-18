@@ -517,6 +517,8 @@ table.sheet{min-width:760px}
 .blog-post{max-width:72ch;margin:0 auto;padding:clamp(36px,7vw,72px) 0 var(--space-8)}
 .blog-post-head h1{font:600 clamp(28px,5.5vw,48px)/1.12 var(--display);letter-spacing:-.03em}
 .blog-post-meta{font:var(--text-s)/1.8 var(--mono);color:var(--muted);margin-top:var(--space-3)}
+.blog-cover{margin-top:var(--space-6);border:1px solid var(--hair);border-radius:var(--radius-m);overflow:hidden;background:var(--surface)}
+.blog-cover img{display:block;width:100%;height:auto}
 .blog-prose{margin-top:var(--space-6);font-family:var(--body);line-height:1.7;color:var(--ink)}
 .blog-prose > * + *{margin-top:var(--space-4)}
 .blog-prose h2{font:600 clamp(22px,3.5vw,32px)/1.15 var(--display);letter-spacing:-.02em;margin-top:var(--space-7)}

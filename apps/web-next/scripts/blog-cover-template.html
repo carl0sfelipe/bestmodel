@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Cover of a bestmodel.run blog post, 1424×752. Slots are filled by
+     scripts/render-blog-covers.mjs. No JS, no tracking: the cover is a static
+     file served from /public. Fonts come from Google Fonts; the renderer waits
+     for them (virtual time budget) before the screenshot. -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0C0E;
+    --surface: #121417;
+    --hair: rgba(255,255,255,.08);
+    --hair-strong: rgba(255,255,255,.16);
+    --ink: #EDEEF0;
+    --muted: #8B9096;
+    --amber: #E0A458;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --display: 'Inter Tight', Inter, system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1424px; height: 752px; overflow: hidden; }
+  body {
+    font-family: var(--display);
+    background: var(--bg);
+    color: var(--ink);
+    position: relative;
+    display: grid;
+    grid-template-columns: 58% 42%;
+  }
+  body::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .6;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse at 72% 26%, #000 22%, transparent 76%);
+  }
+  .content {
+    position: relative; z-index: 2;
+    padding: 68px 56px 60px 72px;
+    display: flex; flex-direction: column;
+  }
+  .kicker {
+    font-family: var(--mono); font-size: 17px; font-weight: 600;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--amber);
+  }
+  .title {
+    font-family: var(--display); font-weight: 600;
+    font-size: {{TITLE_SIZE}}; line-height: 1.02; letter-spacing: -.03em;
+    margin: 30px 0 0; color: var(--ink);
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .title em { font-style: normal; color: var(--amber); }
+  .bar { width: 116px; height: 5px; border-radius: 5px; background: var(--amber); margin: 30px 0 26px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 16px; }
+  .chip {
+    font-family: var(--mono); font-size: 21px; font-weight: 600;
+    color: var(--ink); padding: 12px 20px; border-radius: var(--radius, 10px);
+    background: var(--surface); border: 1.5px solid var(--hair-strong);
+  }
+  .foot {
+    margin-top: auto; display: flex; align-items: baseline; gap: 16px;
+    font-family: var(--mono); font-size: 22px; font-weight: 600;
+  }
+  .foot .brand b { color: var(--amber); }
+  .foot .tag {
+    font-size: 15px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+  }
+  .visual { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .mono-fallback {
+    font-family: var(--display); font-weight: 700; font-size: 250px; line-height: 1;
+    color: rgba(224,164,88,.16); letter-spacing: -.05em;
+  }
+</style>
+</head>
+<body>
+  <div class="content">
+    <div class="kicker">{{KICKER}}</div>
+    <h1 class="title">{{TITLE}}</h1>
+    <div class="bar"></div>
+    <div class="stats">{{STATS}}</div>
+    <div class="foot">
+      <span class="brand">bestmodel<b>.run</b></span>
+      <span class="tag">{{TAG}}</span>
+    </div>
+  </div>
+  <div class="visual">
+    <div class="mono-fallback">{{MONOGRAM}}</div>
+  </div>
+</body>
+</html>

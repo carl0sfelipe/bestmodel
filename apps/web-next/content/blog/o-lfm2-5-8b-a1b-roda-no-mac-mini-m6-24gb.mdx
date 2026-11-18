@@ -1,0 +1,64 @@
+---
+title: "O LFM2.5 8B A1B roda no Mac mini M6 24GB?"
+slug: "o-lfm2-5-8b-a1b-roda-no-mac-mini-m6-24gb"
+description: "Sim, o LFM2.5 8B A1B roda com folga no Mac mini M6 24GB. Na configuração UD-Q4_K_M, a memória de pico é de 5,3 GB, bem abaixo da capacidade disponível. A velocidade de geração atinge 111,7 tok/s em contexto vazio, mantendo-se acima de cem tokens por segundo mesmo com contexto longo. A qualidade…"
+date: "2026-11-18"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-lfm2-5-8b-a1b-roda-no-mac-mini-m6-24gb.png"
+coverStats: "5,3 GB · 111,7 tok/s · 5,0 GiB"
+---
+
+Sim, o LFM2.5 8B A1B roda com folga no Mac mini M6 24GB. Na configuração UD-Q4_K_M, a memória de pico é de 5,3 GB, bem abaixo da capacidade disponível. A velocidade de geração atinge 111,7 tok/s em contexto vazio, mantendo-se acima de cem tokens por segundo mesmo com contexto longo. A qualidade média nas provas é de 42,2%, indicando desempenho funcional para uso local.
+
+## Velocidade
+
+A velocidade de geração varia conforme a quantização e o tamanho do contexto. No formato UD-Q4_K_M, o modelo atinge 111,7 tok/s em contexto vazio. Com contexto de oito mil tokens, a velocidade cai para 104,7 tok/s, mas continua acima de cem tokens por segundo. A leitura de prompt nesse formato é de 2.588 tok/s.
+
+O formato UD-IQ3_XXS é o mais rápido medido, alcançando 146,0 tok/s. O UD-Q5_K_M oferece uma velocidade intermediária de 100,5 tok/s, enquanto o Q8_0 é o mais lento, com 78,7 tok/s. A diferença entre o IQ3_XXS e o Q4_K_M é de 146,0 tok/s contra 111,7 tok/s, uma vantagem clara para o formato mais leve.
+
+## Memoria e arquivo
+
+A memória de pico é o principal fator de compatibilidade com o hardware. No formato UD-Q4_K_M, o consumo é de 5,3 GB, o que representa uma fração pequena dos 24 GB disponíveis no Mac mini M6. O tamanho do arquivo GGUF é de 5,0 GiB.
+
+No formato UD-IQ3_XXS, a memória de pico cai para 3,4 GB e o arquivo tem 3,0 GiB. Essa redução de memória e tamanho de arquivo torna o modelo ainda mais acessível para dispositivos com recursos limitados, mas o Mac mini M6 24GB tem sobra de capacidade em ambos os casos.
+
+## Fidelidade e qualidade
+
+A qualidade do modelo é medida pela divergência KL contra a referência e pela média das provas. No formato UD-Q4_K_M, a divergência KL é de 0,083 e a média das provas é de 42,2%. No formato UD-IQ3_XXS, a média é de 41,8%.
+
+O formato UD-Q5_K_M apresenta uma divergência KL menor de 0,044 e uma média de 42,9%. A porcentagem de tokens em que a escolha é a mesma da referência no Q5_K_M é de 89,3%. A diferença de qualidade entre o Q4_K_M e o IQ3_XXS é pequena, mas o Q4_K_M mantém uma média ligeiramente superior.
+
+## Quando NÃO vale
+
+O LFM2.5 8B A1B não é indicado quando se espera desempenho comparável a modelos de 27B ou 35B em tarefas complexas de raciocínio. A qualidade média de 42,2% não é suficiente para tarefas críticas de produção que exigem precisão absoluta.
+
+Também não vale quando se precisa de contexto muito longo além dos oito mil tokens testados, pois a velocidade pode cair. A divergência KL de 0,083 indica pequenas diferenças em relação à referência, o que pode ser relevante para aplicações que exigem fidelidade absoluta.
+
+## Perguntas frequentes
+
+### O LFM2.5 8B roda mais rapido que um 9B no Mac mini M6?
+
+Não foi medido. Não há fatos comparativos diretos com modelos de 9B no mesmo hardware. A velocidade do LFM2.5 8B A1B é de 111,7 tok/s no formato UD-Q4_K_M, mas não é possível afirmar se é mais rápido que um 9B sem dados comparativos.
+
+### Qual quantizacao do LFM2.5 8B escolher no Mac mini M6?
+
+O UD-Q4_K_M é o equilíbrio ideal para a maioria dos casos. Ele oferece uma velocidade de 111,7 tok/s, consumo de memória de 5,3 GB e qualidade média de 42,2%. O UD-IQ3_XXS é mais rápido e leve, mas com qualidade ligeiramente inferior.
+
+### O LFM2.5 8B cabe tranquilo nos 24 GB de memoria?
+
+Sim, a memória de pico é de 5,3 GB no formato UD-Q4_K_M, o que é compatível com os 24 GB disponíveis no Mac mini M6. O modelo tem sobra de capacidade de memória, permitindo o uso de outros aplicativos simultaneamente.
+
+## Veja também
+
+- [O Granite 4 2B roda no Mac mini M6 24GB?](/blog/o-granite-4-2b-roda-no-mac-mini-m6-24gb)
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+- [O Mac mini M6 roda o gpt-oss-20b?](/blog/o-mac-mini-m6-roda-o-gpt-oss-20b)
+- [O Bonsai 2 27B roda no Mac mini M6 24GB?](/blog/o-bonsai-2-27b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/LFM2.5-8B-A1B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

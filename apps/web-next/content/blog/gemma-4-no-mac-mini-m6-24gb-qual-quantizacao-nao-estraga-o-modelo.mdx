@@ -10,7 +10,7 @@ coverStats: "7,8 GB · 18,8 tok/s"
 
 A resposta curta é Q4_K_M. No Gemma 4 12B, essa configuração mantém uma divergência de 0,762 contra a referência, um valor baixo que preserva a coerência do texto. Formatos mais agressivos, como o UD-IQ3_XXS, elevam essa divergência para 2,451, o que indica uma perda real de qualidade. Para caber nos 24GB do Mac mini M6 com segurança, a Q4_K_M é o ponto de equilíbrio medido.
 
-## A divergencia contra a referencia
+## A divergencia contra a referência
 
 A divergência KL mede o quão diferente a saída do modelo quantizado está da saída original. Quanto menor o número, mais fiel o resultado. No Gemma 4 12B, a diferença entre os formatos é clara: o UD-IQ3_XXS apresenta uma divergência de 2,451, seguido pelo Q3_K_M em 1,597. A Q4_K_M fica em 0,762, e a Q6_K em 0,267.
 
@@ -32,7 +32,7 @@ Escolher a quantização correta exige equilibrar memória e velocidade. No Gemm
 
 Se a fidelidade for a prioridade máxima, a Q6_K no Gemma 4 12B mostra 84,0% de tokens idênticos à referência. No entanto, a velocidade cai para 14,3 tok/s. Para a maioria dos casos de uso no Mac mini M6, a Q4_K_M oferece o melhor compromisso entre custo de memória, velocidade e qualidade.
 
-## Os menores, que quase nao cabem
+## Os menores, que quase não cabem
 
 O Gemma 4 E4B é uma opção diferente, focada em modelos menores. Na configuração UD-IQ3_XXS, ele ocupa 2,7 GB e atinge 57,9 tok/s, mas a divergência é de 0,470. Já na Q4_K_M, a velocidade é de 43,7 tok/s e a divergência cai para 0,093.
 
@@ -49,10 +49,10 @@ Evite o Gemma 4 26B A4B em configurações que exijam muito contexto adicional. 
 ### Pode quantizar o Gemma 4 sem perder o modelo?
 Sim, é possível, mas a qualidade varia muito. A Q4_K_M no Gemma 4 12B mantém uma divergência de 0,762, o que preserva bem a saída. Já a UD-IQ3_XXS eleva essa divergência para 2,451, indicando uma perda significativa de fidelidade.
 
-### Qual quantizacao do Gemma 4 12B escolher no Mac mini M6?
+### Qual quantização do Gemma 4 12B escolher no Mac mini M6?
 A Q4_K_M é a melhor escolha geral. Ela ocupa 7,8 GB e gera a 18,8 tok/s, equilibrando memória, velocidade e qualidade. A UD-IQ3_XXS é mais rápida, mas a divergência de 2,451 não compensa a perda de qualidade para a maioria dos usos.
 
-### O Gemma 4 26B A4B roda nos 24 GB de memoria?
+### O Gemma 4 26B A4B roda nos 24 GB de memória?
 Sim, a configuração UD-Q4_K_M usa 16,7 GB, o que cabe nos 24GB do Mac mini M6. A velocidade é de 38,5 tok/s, mas a margem de memória é menor. Se você precisa de mais espaço para outros apps, o Gemma 4 12B em Q4_K_M é uma alternativa mais confortável.
 
 ## Veja também

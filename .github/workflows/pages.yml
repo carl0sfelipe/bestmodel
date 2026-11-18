@@ -33,7 +33,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Build redirect surface (canonical host: www.bestmodel.run)
+      - name: "Build redirect surface (canonical host: www.bestmodel.run)"
         run: |
           set -euo pipefail
           mkdir -p publish

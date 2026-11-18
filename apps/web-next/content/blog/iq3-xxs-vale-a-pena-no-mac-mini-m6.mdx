@@ -1,53 +1,50 @@
 ---
 title: "IQ3_XXS vale a pena no Mac mini M6?"
 slug: "iq3-xxs-vale-a-pena-no-mac-mini-m6"
-description: "A resposta depende do tamanho do modelo. Em modelos pequenos, como o Qwen3.5 9B, a velocidade sobe para 35,2 tok/s, mas a divergência KL de 0,112 indica perda de fidelidade. Já no Arete 27B, a memória de pico cai para 11,7 GB, liberando espaço para contexto maior no Mac mini M6."
+description: "Para modelos pequenos, como o Qwen3.5 9B, o IQ3_XXS não compensa. A divergência KL de 0,112 indica perda de fidelidade, e a média dos testes é de 50,4%. No Mac mini M6, a economia de memória não justifica a queda de qualidade se a tarefa exige precisão."
 date: "2026-11-17"
 author: "Orbe Lab"
 coverImage: "/images/blog/capa-iq3-xxs-vale-a-pena-no-mac-mini-m6.png"
-coverStats: "35,2 tok/s · 11,7 GB"
+coverStats: "11,7 GB · 23,0 tok/s · 1,8 GiB"
 ---
 
-A resposta depende do tamanho do modelo. Em modelos pequenos, como o Qwen3.5 9B, a velocidade sobe para 35,2 tok/s, mas a divergência KL de 0,112 indica perda de fidelidade. Já no Arete 27B, a memória de pico cai para 11,7 GB, liberando espaço para contexto maior no Mac mini M6.
+Para modelos pequenos, como o Qwen3.5 9B, o IQ3_XXS não compensa. A divergência KL de 0,112 indica perda de fidelidade, e a média dos testes é de 50,4%. No Mac mini M6, a economia de memória não justifica a queda de qualidade se a tarefa exige precisão.
 
 ## Em modelo pequeno, a perda pesa
 
-O formato IQ3_XXS reduz drasticamente o tamanho do arquivo, o que aumenta a velocidade de inferência. No caso do Qwen3.5 9B, a geração atinge 35,2 tok/s em contexto vazio. Porém, a divergência KL de 0,112 mostra que as respostas divergem da referência original.
+O formato IQ3_XXS reduz drasticamente o tamanho do arquivo, mas a qualidade sofre. No Qwen3.5 9B, a divergência KL é de 0,112 contra a referência. A média em ARC-Challenge, HellaSwag e TruthfulQA é de 50,4%.
 
-Para o Qwen3.5 4B, a velocidade é ainda maior, com 58,2 tok/s, mas a divergência KL sobe para 0,142. Essa diferença não é apenas numérica; ela reflete a capacidade do modelo de manter coerência e precisão nas respostas. Em modelos pequenos, a compressão agressiva do IQ3_XXS tende a degradar a qualidade percebida pelo usuário final.
+No Qwen3.5 4B, a divergência KL é de 0,142 e a média nos mesmos testes é de 44,2%. A diferença de divergência entre o 9B e o 4B em IQ3_XXS é de 0,03, mostrando que o modelo maior mantém melhor a estrutura mesmo com quantização agressiva.
 
-| Modelo | Velocidade (tok/s) | Divergência KL |
+| Modelo | Divergência KL | Média de Eval |
 | :--- | :--- | :--- |
-| Qwen3.5 9B UD-IQ3_XXS | 35,2 tok/s | 0,112 |
-| Qwen3.5 4B UD-IQ3_XXS | 58,2 tok/s | 0,142 |
+| Qwen3.5 9B UD-IQ3_XXS | 0,112 | 50,4%|
+| Qwen3.5 4B UD-IQ3_XXS | 0,142 | 44,2%|
 
 ## Em modelo grande, pode compensar
 
-Em modelos maiores, como o Arete 27B, a estratégia muda. A divergência KL do Arete 27B IQ3_XXS é de 0,082, um valor menor que o observado nos modelos de 9B e 4B. Isso significa que a perda de fidelidade é menor, mantendo a utilidade prática do modelo.
+Em modelos maiores, como o Arete 27B, o IQ3_XXS pode valer a pena. A divergência KL é de 0,082, e a média nos testes é de 55,1%. A memória de pico é de 11,7 GB, enquanto o Q4_K_M do mesmo modelo usa 16,5 GB.
 
-Além da qualidade, há o ganho em memória. O Arete 27B IQ3_XXS consome 11,7 GB de memória de pico, enquanto a versão Q4_K_M do mesmo modelo consome 16,5 GB. Essa diferença libera recursos no Mac mini M6, permitindo o uso de contextos maiores ou a execução de outros processos sem trocar de hardware.
-
-| Modelo Arete 27B | Memória de pico |
-| :--- | :--- |
-| IQ3_XXS | 11,7 GB |
-| Q4_K_M | 16,5 GB |
+A diferença de divergência entre o Qwen3.5 9B UD-IQ3_XXS e o Arete 27B IQ3_XXS é de 0,03. Isso indica que o modelo de 27B sofre menos com a quantização. A diferença de velocidade entre o Qwen3.5 9B UD-IQ3_XXS e o Qwen3.5 4B UD-IQ3_XXS é de 23,0 tok/s, mostrando a ganho de velocidade no modelo menor.
 
 ## Quando NÃO vale
 
-O IQ3_XXS não é a escolha ideal se a prioridade máxima for a fidelidade absoluta em modelos pequenos. Para o Qwen3.5 9B, a divergência KL de 0,112 pode resultar em respostas menos precisas ou coerentes para tarefas que exigem alta consistência.
-
-Também não vale a pena se o usuário precisa de velocidade extrema em modelos de 4B. Embora o Qwen3.5 4B UD-IQ3_XXS atinja 58,2 tok/s, a divergência KL de 0,142 é a maior entre os dados fornecidos, indicando uma perda significativa de qualidade. Nesses casos, formatos menos agressivos podem ser preferíveis.
+- Quando a precisão do output é crítica e a divergência KL de 0,112 é inaceitável para a aplicação.
+- Quando o contexto é muito longo e a velocidade de geração não atende à necessidade de latência.
+- Quando o armazenamento é limitado e o tamanho do arquivo não cabe no espaço disponível.
+- Quando a qualidade em benchmarks como 50,4% é insuficiente para a tarefa.
+- Quando se precisa de maior fidelidade à referência, como indicado pela divergência KL.
 
 ## Perguntas frequentes
 
 ### O que significa IQ3_XXS?
-IQ3_XXS é um formato de quantização que reduz drasticamente o tamanho do arquivo do modelo. Essa redução aumenta a velocidade de inferência e diminui o consumo de memória, mas pode levar a uma maior divergência das respostas originais.
+O IQ3_XXS é um formato de quantização ultra-compacto. Ele reduz o tamanho do arquivo para caber em menos memória, mas perde qualidade em comparação com formatos mais precisos.
 
 ### IQ3_XXS ou Q3_K_M?
-A escolha depende do modelo. Para modelos pequenos, o Q3_K_M geralmente oferece melhor fidelidade, enquanto o IQ3_XXS é mais rápido. Para modelos grandes, como o Arete 27B, o IQ3_XXS pode ser uma opção viável devido à menor divergência KL de 0,082.
+O Q3_K_M é mais preciso que o IQ3_XXS. No Qwen3.5 4B, o Q4_K_M tem uma divergência KL de 0,021, enquanto o UD-IQ3_XXS tem 0,142. O Q3_K_M é uma alternativa intermediária.
 
 ### Por que o modelo grande sofre menos?
-Modelos maiores, como o Arete 27B, tendem a ter mais parâmetros para compensar a perda de informação durante a quantização. A divergência KL de 0,082 é menor que a dos modelos de 9B, indicando que a compressão afeta menos a qualidade final.
+Modelos maiores têm mais parâmetros para compensar a perda de informação. O Arete 27B IQ3_XXS tem divergência KL de 0,082, enquanto modelos menores perdem mais. A memória de pico do Arete 27B IQ3_XXS é de 11,7 GB.
 
 ## Veja também
 
@@ -58,7 +55,7 @@ Modelos maiores, como o Arete 27B, tendem a ter mais parâmetros para compensar 
 
 ## Fontes
 
-
 - https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.5-4B-GGUF
 
 Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

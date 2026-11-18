@@ -13,6 +13,7 @@ import {
 } from "../../../lib/blog";
 import { currentView } from "../../../lib/view-server";
 import AgentView from "../../_components/agent-view";
+import CtaUtm from "../../_components/cta-utm";
 
 export function generateStaticParams() {
   return listPosts().map((post) => ({ slug: post.slug }));
@@ -131,6 +132,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </figure>
         ) : null}
         <div className="blog-prose" dangerouslySetInnerHTML={{ __html: html }} />
+        <CtaUtm />
       </article>
     </main>
   );

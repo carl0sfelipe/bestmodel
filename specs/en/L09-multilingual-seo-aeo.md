@@ -51,8 +51,10 @@ Portuguese page, asked in English cites the English one.
   Portuguese URLs move once, one day after publication, before they are indexed.
 - **D2 — The English offer.** The Portuguese posts close on `orbe.live`, which
   ships in Brazil only. An English post cannot carry that call to action
-  honestly. Default for this spec: the English posts close on the CLI ("measure
-  your own machine") and drop the store link. Owner may substitute another offer.
+  silently. Owner decision (2026-11-18): the English posts close on the same
+  store link **with an explicit notice that it ships to Brazil only** — the
+  stranger in Brazil is still the buyer, the stranger abroad is told the truth
+  instead of being sent to a checkout that cannot ship to them.
 - **D3 — No automatic redirect.** No IP-based, `Accept-Language`-based or
   cookie-based redirect between the two language trees. Redirects make one
   version invisible to the crawler that never matches, and the AI crawlers
@@ -103,8 +105,8 @@ Portuguese page, asked in English cites the English one.
 - `llms.txt` is not a lever here: the strongest available measurement (83 sites,
   Jul 2026) found near-zero fetches by the major AI crawlers (OpenAI 7 fetches,
   Perplexity 0). The file stays as it is; the effort goes into the pages.
-- The English pages must not carry the Brazilian store call to action without
-  the owner's decision (D2).
+- The English pages carry the store link only with the Brazil-only notice (D2);
+  never present `orbe.live` as a purchase path that ships anywhere.
 
 ## Acceptance
 

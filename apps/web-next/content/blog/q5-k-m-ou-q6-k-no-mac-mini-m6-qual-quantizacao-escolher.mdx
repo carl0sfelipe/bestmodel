@@ -1,0 +1,61 @@
+---
+title: "Q5_K_M ou Q6_K no Mac mini M6: qual quantização escolher?"
+slug: "q5-k-m-ou-q6-k-no-mac-mini-m6-qual-quantizacao-escolher"
+description: "Para o Qwen3.5 9B, a Q5_K_M é a escolha mais equilibrada para o Mac mini M6. Ela entrega 2,8 tok/s de vantagem em velocidade em contexto vazio e 2,4 tok/s em contexto de oito mil tokens, além de economizar 0,7 GB de memória de pico."
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-q5-k-m-ou-q6-k-no-mac-mini-m6-qual-quantizacao-escolher.png"
+coverStats: "2,8 tok/s · 0,7 GB · 6,1 GiB"
+---
+
+Para o Qwen3.5 9B, a Q5_K_M é a escolha mais equilibrada para o Mac mini M6. Ela entrega 2,8 tok/s de vantagem em velocidade em contexto vazio e 2,4 tok/s em contexto de oito mil tokens, além de economizar 0,7 GB de memória de pico.
+
+## Fidelidade
+
+A fidelidade é o principal critério de comparação entre as duas quantizações. No Qwen3.5 9B, a Q5_K_M apresenta uma divergência KL de 0,006 contra a referência, enquanto a Q6_K registra 0,002. A diferença entre os dois valores é de 0,004, indicando que a Q6_K se aproxima mais do comportamento original do modelo.
+
+Além da divergência, o número de tokens em que a escolha é a mesma da referência é de 96,7% para a Q5_K_M e 97,5% para a Q6_K. A diferença de 0,8% mostra que a Q6_K mantém mais consistência nas escolhas de tokens. No entanto, essa vantagem de fidelidade é acompanhada de um custo direto em velocidade e memória, o que é crucial para o uso em hardware com recursos limitados.
+
+## Velocidade e memória
+
+No Mac mini M6, a eficiência de recursos determina a experiência de uso diária. A Q5_K_M do Qwen3.5 9B gera 23,3 tok/s em contexto vazio e 22,1 tok/s com contexto de oito mil tokens. A memória de pico é de 6,3 GB e o arquivo ocupa 6,1 GiB no disco.
+
+A Q6_K, por sua vez, gera 20,5 tok/s em contexto vazio e 19,7 tok/s com contexto longo. A memória de pico sobe para 7,0 GB e o tamanho do arquivo aumenta para 7,0 GiB. A diferença de velocidade entre as duas quantizações é de 2,8 tok/s em contexto vazio, e a economia de memória é de 0,7 GB. Esses ganhos são significativos para manter outros processos em execução no sistema.
+
+## Qualidade
+
+A qualidade final é medida pela média de ARC-Challenge, HellaSwag e TruthfulQA. No Qwen3.5 9B, a Q5_K_M obtém uma nota de 52,3%, enquanto a Q6_K alcança 51,8%. A diferença entre essas notas é de 0,5%, um valor pequeno que pode estar dentro da margem de erro das provas.
+
+Para modelos menores, como o Qwen3.5 4B, a Q5_K_M registra 48,0% e a Q6_K registra 47,6%. A diferença entre eles é de 0,4%. Comparando o 9B com o 4B, a Q5_K_M do 9B é superior à Q5_K_M do 4B em 4,3%, e a Q6_K do 9B é superior à Q6_K do 4B em 4,2%. A escolha do tamanho do modelo impacta mais a qualidade do que a escolha da quantização, mas a Q5_K_M mantém um bom equilíbrio em ambos os cenários.
+
+## Quando NÃO vale
+
+A Q5_K_M pode não ser ideal quando a máxima fidelidade ao modelo original é crítica para a aplicação. Se a diferença de 0,5% em benchmarks for decisiva para o seu caso de uso, a Q6_K é a única opção viável entre as duas, apesar do custo adicional.
+
+Também não vale a pena se a memória disponível for extremamente restrita e a diferença de 0,7 GB impedisse o carregamento do modelo. Embora a Q5_K_M economize recursos, ela pode não ser suficiente se o sistema estiver sobrecarregado. Por fim, os fatos medidos são específicos para o Qwen3.5 9B e contextos até oito mil tokens; cenários com contexto muito maior ou outros modelos podem apresentar resultados diferentes.
+
+## Perguntas frequentes
+
+### Qual a diferença entre Q5_K_M e Q6_K na prática?
+A Q5_K_M é mais rápida e consome menos memória que a Q6_K. A diferença de velocidade em contexto vazio é de 2,8 tok/s e a economia de memória de pico é de 0,7 GB. A Q6_K oferece uma fidelidade ligeiramente maior, mas o ganho é pequeno.
+
+### Vale a pena pagar mais espaço pelo Q6_K?
+O espaço adicional é de 0,9 GiB e a memória extra é de 0,7 GB. A diferença de qualidade em benchmarks é de apenas 0,5%, o que geralmente não justifica o custo para uso geral.
+
+### Q5_K_M funciona bem em modelo pequeno também?
+Sim, a Q5_K_M do Qwen3.5 4B obtém uma nota de 48,0%, que é superior à nota da Q6_K do 4B em 0,4%. A diferença de qualidade entre as quantizações no 4B é de 0,4%, mantendo um bom desempenho.
+
+## Veja também
+
+- [Gemma 4 no Mac mini M6 24GB: qual quantização não estraga o modelo?](/blog/gemma-4-no-mac-mini-m6-24gb-qual-quantizacao-nao-estraga-o-modelo)
+- [Q4_K_M ou Q8_0 no Mac mini M6: qual quantização usar?](/blog/q4-k-m-ou-q8-0-no-mac-mini-m6-qual-quantizacao-usar)
+- [IQ3_XXS vale a pena no Mac mini M6?](/blog/iq3-xxs-vale-a-pena-no-mac-mini-m6)
+- [Qwen3.5 4B ou Qwen3.5 9B no Mac mini M6 24GB: qual escolher?](/blog/qwen3-5-4b-ou-qwen3-5-9b-no-mac-mini-m6-24gb-qual-escolher)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.5-9B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

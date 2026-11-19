@@ -1,0 +1,67 @@
+---
+title: "Mac mini M6 24GB ou RTX 3090: qual é melhor para rodar um modelo de 27B?"
+slug: "mac-mini-m6-24gb-ou-rtx-3090-qual-e-melhor-para-rodar-um-modelo-de-27b"
+description: "Para rodar um modelo de 27B, a qualidade da resposta é a mesma nas duas máquinas. A diferença está no throughput: a RTX 3090 gera tokens mais rápido, com 27,4 tok/s contra 8,0 tok/s no Mac mini M6. A leitura do prompt também é muito maior na placa, com 1.105 tok/s contra 230 tok/s."
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-mac-mini-m6-24gb-ou-rtx-3090-qual-e-melhor-para-rodar-um-modelo-de-27b.png"
+coverStats: "27,4 tok/s · 16,0 GiB · 16,5 GB"
+---
+
+Para rodar um modelo de 27B, a qualidade da resposta é a mesma nas duas máquinas. A diferença está no throughput: a RTX 3090 gera tokens mais rápido, com 27,4 tok/s contra 8,0 tok/s no Mac mini M6. A leitura do prompt também é muito maior na placa, com 1.105 tok/s contra 230 tok/s.
+
+## A mesma resposta, mais rápido na placa
+
+A qualidade não é o diferencial aqui. A média das três provas de ARC-Challenge, HellaSwag e TruthfulQA no Mac mini M6 é 57,6%, enquanto na RTX 3090 é 57,5%. A diferença entre eles é de 0,1%, o que está dentro da margem de variação e não muda o que o modelo responde na prática.
+
+A velocidade é onde a separação aparece. A geração de tokens no contexto vazio é de 8,0 tok/s no Mac mini M6 e de 27,4 tok/s na RTX 3090, uma diferença de 19,4 tok/s. A leitura do prompt segue a mesma tendência: 230 tok/s contra 1.105 tok/s, com uma diferença de 875,0 tok/s.
+
+## A quantização não muda entre as máquinas
+
+A divergência KL contra a referência é zero em ambas as plataformas para o formato IQ3_XXS, com 0,082 no Mac mini M6 e 0,083 na RTX 3090. Isso significa que as escolhas de token são idênticas à referência: a RTX 3090 apresentou 88,4% tokens iguais à referência. A velocidade desse formato mais leve é de 11,3 tok/s no Mac mini M6 e de 31,9 tok/s na placa.
+
+A nota de qualidade do IQ3_XXS é 55,1% no Mac mini M6 e 55,4% na RTX 3090. A diferença entre os dois é de 0,3%, dentro da margem. Comparando o IQ3_XXS com o Q4_K_M na mesma plataforma, a diferença de média é de 2,5% no Mac mini M6 e de 2,1% na RTX 3090.
+
+## O que cada máquina precisa
+
+A memória é o ponto de contato. O modelo Arete 27B Q4_K_M tem um arquivo de 16,0 GiB e exige 16,5 GB de memória de pico no Mac mini M6. A RTX 3090 tem 24 GB disponíveis. O limite liberado para a GPU no lab no Mac mini M6 é 20.480 MiB.
+
+A diferença de velocidade entre os dois hardware para o Q4_K_M é de 19,4 tok/s. Comparando o Q4_K_M com o IQ3_XXS no Mac mini M6, a diferença de geração é de 3,3 tok/s. Na RTX 3090, essa diferença entre os dois formatos é de 23,9 tok/s.
+
+## Quando NÃO vale
+
+- Quando a pergunta for sobre modelos maiores que exijam mais memória do que o medido aqui.
+- Quando a pergunta for sobre modelos que não foram medidos nestes hardware específicos.
+- Quando a pergunta for sobre contexto muito longo que não foi testado nos fatos.
+- Quando a pergunta for sobre outros modelos além do Arete 27B e Qwen3.5 9B.
+- Quando a pergunta for sobre uso caseiro com múltiplos processos simultâneos.
+
+## Perguntas frequentes
+
+### A RTX 3090 roda um modelo de 27B mais rápido que o Mac mini M6?
+
+Sim. A geração de tokens na RTX 3090 é de 27,4 tok/s contra 8,0 tok/s no Mac mini M6. A diferença medida é de 19,4 tok/s.
+
+### O modelo dá a mesma resposta nas duas máquinas?
+
+Sim. A diferença na média dos evals é de 0,1%, dentro da margem. A divergência KL também é zero para o formato IQ3_XXS em ambas as plataformas.
+
+### Um 27B quantizado em Q4_K_M cabe em qual das duas?
+
+Cabe em ambas. A memória de pico no Mac mini M6 é 16,5 GB, dentro do limite de 20.480 MiB. A RTX 3090 tem 24 GB disponíveis.
+
+## Veja também
+
+- [Qwen3.6 27B ou Qwen3.8 27B: qual escolher no Mac mini M6 24GB?](/blog/qwen3-6-27b-ou-qwen3-8-27b-qual-escolher-no-mac-mini-m6-24gb)
+- [Qwen3.5 4B ou Qwen3.5 9B no Mac mini M6 24GB: qual escolher?](/blog/qwen3-5-4b-ou-qwen3-5-9b-no-mac-mini-m6-24gb-qual-escolher)
+- [Ornith 1.5 9B ou Qwen3.5 9B no Mac mini M6?](/blog/ornith-1-5-9b-ou-qwen3-5-9b-no-mac-mini-m6)
+- [GLM-5.3 cheio vs Flash em 4×B300: quantos tok/s antes de alugar](/blog/glm-5-3-vs-flash-4x-b300)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#rtx3090
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/bartowski/NousResearch_Arete-27B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

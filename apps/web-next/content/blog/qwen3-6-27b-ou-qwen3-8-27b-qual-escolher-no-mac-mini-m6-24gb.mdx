@@ -1,0 +1,76 @@
+---
+title: "Qwen3.6 27B ou Qwen3.8 27B: qual escolher no Mac mini M6 24GB?"
+slug: "qwen3-6-27b-ou-qwen3-8-27b-qual-escolher-no-mac-mini-m6-24gb"
+description: "No Mac mini M6 24GB, a escolha entre Qwen3.6 27B e Qwen3.8 27B depende do equilíbrio entre velocidade e precisão. O Qwen3.6 27B em Q4_K_M alcança 8,4 tok/s em contexto vazio, enquanto o Qwen3.8 27B em UD-Q4_K_M chega a 8,8 tok/s, uma diferença mínima de 0,4 tok/s."
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-qwen3-6-27b-ou-qwen3-8-27b-qual-escolher-no-mac-mini-m6-24gb.png"
+coverStats: "8,4 tok/s · 16,2 GB · 12,2 GiB"
+---
+
+No Mac mini M6 24GB, a escolha entre Qwen3.6 27B e Qwen3.8 27B depende do equilíbrio entre velocidade e precisão. O Qwen3.6 27B em Q4_K_M alcança 8,4 tok/s em contexto vazio, enquanto o Qwen3.8 27B em UD-Q4_K_M chega a 8,8 tok/s, uma diferença mínima de 0,4 tok/s.
+
+## Velocidade lado a lado
+
+A velocidade de geração é o principal critério prático para uso diário em um Mac mini M6 24GB. O Qwen3.6 27B em Q4_K_M registra 8,4 tok/s em contexto vazio e 7,7 tok/s quando há oito mil tokens já processados no contexto. A leitura de prompt para este formato é de 228 tok/s.
+
+O Qwen3.8 27B em UD-Q4_K_M atinge 8,8 tok/s em contexto vazio. A diferença de velocidade entre os dois formatos é de 0,4 tok/s, o que indica desempenho praticamente idêntico na prática. Se a prioridade for velocidade máxima, o Qwen3.8 27B em UD-Q3_K_XL sobe para 10,6 tok/s em contexto vazio e 9,7 tok/s em contexto longo, com diferença de 2,2 tok/s em relação ao Qwen3.6 27B Q4_K_M.
+
+| Modelo | Formato | Velocidade (contexto vazio) | Velocidade (contexto longo) |
+| :--- | :--- | :--- | :--- |
+| Qwen3.6 27B | Q4_K_M | 8,4 tok/s | 7,7 tok/s |
+| Qwen3.8 27B | UD-Q4_K_M | 8,8 tok/s | - |
+| Qwen3.8 27B | UD-Q3_K_XL | 10,6 tok/s | 9,7 tok/s |
+| Qwen3.8 27B | UD-IQ3_XXS | 12,3 tok/s | - |
+
+## Memória e arquivo
+
+O consumo de memória é crítico no Mac mini M6 24GB, pois o sistema operacional e outros processos também disputam recursos. O Qwen3.6 27B em Q4_K_M utiliza 16,2 GB de memória de pico, enquanto o Qwen3.8 27B em UD-Q4_K_M consome 15,6 GB. A diferença de memória entre esses dois formatos é de 0,6 GB, que é mínima e dentro da margem.
+
+O Qwen3.8 27B em UD-Q3_K_XL tem memória de pico de 12,6 GB e tamanho de arquivo de 12,2 GiB. O Qwen3.6 27B em Q4_K_M tem tamanho de arquivo de 15,7 GiB. Ambos os modelos cabem na memória de 24GB do Mac mini M6, mas o uso de quantizações menores como Q3_K_XL ou IQ3_XXS pode liberar mais espaço para outros processos.
+
+## Qualidade e fidelidade
+
+A qualidade foi medida pela média de desempenho em ARC-Challenge, HellaSwag e TruthfulQA. O Qwen3.6 27B em Q4_K_M obtém 56,4%, enquanto o Qwen3.8 27B em UD-Q4_K_M obtém 54,0%. A diferença de média é de 2,4%, indicando que o Qwen3.6 27B tem desempenho ligeiramente superior em benchmarks, apesar de ser a versão anterior.
+
+O Qwen3.8 27B em UD-Q3_K_XL alcança média de 54,8%, com diferença de 1,6% em relação ao Qwen3.6 27B Q4_K_M. A divergência KL contra a referência para o Q3_K_XL é de 0,030, e a taxa de tokens idênticos à referência é de 91,9%. O formato IQ3_XXS do Qwen3.8 27B obtém média de 52,8%, com diferença de 3,6% em relação ao Qwen3.6 27B.
+
+| Modelo | Formato | Média de qualidade | Diferença vs Qwen3.6 27B Q4_K_M |
+| :--- | :--- | :--- | :--- |
+| Qwen3.6 27B | Q4_K_M | 56,4% | - |
+| Qwen3.8 27B | UD-Q4_K_M | 54,0% | 2,4% |
+| Qwen3.8 27B | UD-Q3_K_XL | 54,8% | 1,6% |
+| Qwen3.8 27B | UD-IQ3_XXS | 52,8% | 3,6% |
+
+## Quando NÃO vale
+
+Não vale escolher o Qwen3.8 27B apenas porque é a versão mais nova, pois os fatos mostram que a diferença de qualidade em benchmarks é mínima e o Qwen3.6 27B em Q4_K_M até apresenta desempenho ligeiramente superior. A diferença de velocidade entre os formatos comparados é de 0,4 tok/s, que é insignificante para uso diário.
+
+Não vale esperar que a versão mais nova resolve problemas específicos de qualidade em tarefas não medidas. Os fatos não cobrem desempenho em código, redação criativa ou outros cenários específicos. Se a sua necessidade for uma tarefa muito específica que não foi testada, a escolha deve ser feita com cautela, pois a diferença entre os modelos pode não se refletir no resultado final.
+
+## Perguntas frequentes
+
+### Qual dos dois Qwen de 27B e mais rápido no Mac mini M6?
+A diferença de velocidade de geração entre o Qwen3.6 27B Q4_K_M e o Qwen3.8 27B UD-Q4_K_M é de 0,4 tok/s, uma diferença mínima. O Qwen3.8 27B em UD-Q3_K_XL é mais rápido, com 10,6 tok/s, mas usa menos memória e tem qualidade diferente.
+
+### O Qwen3.8 27B e melhor que o Qwen3.6 27B?
+Não necessariamente. O Qwen3.6 27B Q4_K_M tem média de 56,4% em benchmarks, enquanto o Qwen3.8 27B UD-Q4_K_M tem 54,0%. A diferença de 2,4% mostra que o Qwen3.6 27B tem desempenho ligeiramente superior em qualidade, apesar de ser a versão anterior.
+
+### Qual quantização do Qwen3.8 27B escolher?
+Depende da prioridade entre velocidade e qualidade. O UD-Q4_K_M tem velocidade de 8,8 tok/s e qualidade de 54,0%. O UD-Q3_K_XL é mais rápido, com 10,6 tok/s, e tem qualidade de 54,8%. A diferença de qualidade entre Q4_K_M e Q3_K_XL é de 0,8%.
+
+## Veja também
+
+- [Qwen3.5 4B ou Qwen3.5 9B no Mac mini M6 24GB: qual escolher?](/blog/qwen3-5-4b-ou-qwen3-5-9b-no-mac-mini-m6-24gb-qual-escolher)
+- [Ornith 1.5 9B ou Qwen3.5 9B no Mac mini M6?](/blog/ornith-1-5-9b-ou-qwen3-5-9b-no-mac-mini-m6)
+- [GLM-5.3 cheio vs Flash em 4×B300: quantos tok/s antes de alugar](/blog/glm-5-3-vs-flash-4x-b300)
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.8-27B-GGUF
+- https://huggingface.co/unsloth/Qwen3.6-27B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

@@ -1,0 +1,61 @@
+---
+title: "Qwen3.5 4B ou Qwen3.5 9B no Mac mini M6 24GB: qual escolher?"
+slug: "qwen3-5-4b-ou-qwen3-5-9b-no-mac-mini-m6-24gb-qual-escolher"
+description: "A escolha entre o Qwen3.5 4B e o Qwen3.5 9B no Mac mini M6 24GB depende do equilíbrio entre velocidade e qualidade. O 4B é mais rápido, mas a qualidade cai alguns pontos. O 9B é a escolha segura quando a resposta importa mais que a velocidade instantânea. Ambos cabem com folga na memória de 24 GB,…"
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-qwen3-5-4b-ou-qwen3-5-9b-no-mac-mini-m6-24gb-qual-escolher.png"
+coverStats: "2,6 GB · 43,2 tok/s · 2,9 GiB"
+---
+
+A escolha entre o Qwen3.5 4B e o Qwen3.5 9B no Mac mini M6 24GB depende do equilíbrio entre velocidade e qualidade. O 4B é mais rápido, mas a qualidade cai alguns pontos. O 9B é a escolha segura quando a resposta importa mais que a velocidade instantânea. Ambos cabem com folga na memória de 24 GB, com o 9B usando 2,6 GB a mais que o 4B.
+
+## Velocidade
+
+O Qwen3.5 4B Q5_K_M atinge 43,2 tok/s e, com contexto longo, 39,8 tok/s. O 9B Q5_K_M roda a 23,3 tok/s. A diferença de velocidade de geração (contexto vazio) entre o 9B e o 4B é de 19,9 tok/s.
+
+Para o 4B, as outras quantizações também variam: Q6_K em 36,8 tok/s, Q3_K_M em 53,7 tok/s e UD-IQ3_XXS em 58,2 tok/s. A diferença entre o 4B Q5_K_M e o Q6_K é de 6,4 tok/s; entre o Q5_K_M e o UD-IQ3_XXS, de 15,0 tok/s; e entre o Q5_K_M e o Q3_K_M, de 10,5 tok/s.
+
+## Memória e arquivo
+
+O 4B Q5_K_M consome 3,7 GB de memória de pico, com arquivo de 2,9 GiB. O Q6_K usa 4,1 GB e arquivo de 3,3 GiB. O UD-IQ3_XXS consome 2,6 GB e arquivo de 1,8 GiB. O 9B Q5_K_M consome 6,3 GB.
+
+A diferença de memória de pico entre o 4B Q5_K_M e o 9B Q5_K_M é de 2,6 GB. Ambos os modelos cabem com folga na memória de 24 GB do Mac mini M6, mas o 9B ocupa mais espaço e reduz a margem disponível para outros processos.
+
+## Qualidade e fidelidade
+
+A média de qualidade (ARC-Challenge, HellaSwag e TruthfulQA) do 4B Q5_K_M é 48,0%, do Q6_K 47,6%, do UD-IQ3_XXS 44,2% e do Q3_K_M 45,5%. O 9B Q5_K_M registra 52,3%. A diferença de média de qualidade entre o 4B Q5_K_M e o 9B Q5_K_M é de 4,3%.
+
+Dentro do 4B, a diferença entre Q5_K_M e Q6_K é de 0,4%, entre Q5_K_M e UD-IQ3_XXS de 3,8%, e entre Q5_K_M e Q3_K_M de 2,5%. A divergência KL do 4B Q5_K_M contra a referência é 0,008 e a taxa de tokens iguais à referência é 95,7%.
+
+## Quando NÃO vale
+
+O 9B não vale quando a prioridade principal é a velocidade máxima de geração e a latência é crítica para a tarefa, pois é significativamente mais lento que o 4B. A escolha do 4B não é ideal quando a qualidade em tarefas de raciocínio é mais importante que a velocidade, pois a diferença de média de qualidade de 4,3% indica uma melhora perceptível no 9B.
+
+Também não vale quando a memória disponível é limitada e o 9B não cabe com folga, embora os fatos indiquem que cabe em 24 GB, não há dados sobre outros processos em execução. A decisão depende de critérios não medidos, como custo de energia, consumo térmico ou compatibilidade com outros softwares.
+
+## Perguntas frequentes
+
+### Qual a diferença de qualidade entre o 4B e o 9B?
+A diferença de média de qualidade (ARC-Challenge, HellaSwag e TruthfulQA) entre o 4B Q5_K_M e o 9B Q5_K_M é de 4,3%. O 9B apresenta uma melhora perceptível em tarefas de raciocínio.
+
+### O Qwen3.5 4B roda mais rápido que o 9B no Mac mini M6?
+Sim. A diferença de velocidade de geração (contexto vazio) entre o 9B Q5_K_M e o 4B Q5_K_M é de 19,9 tok/s. O 4B é mais rápido, mas a qualidade cai alguns pontos.
+
+### Qual quantização do Qwen3.5 4B baixar?
+Depende da prioridade. O Q5_K_M é o equilíbrio entre velocidade e qualidade, com média de 48,0%. O Q6_K é mais lento, com 36,8 tok/s, mas melhor qualidade, de 47,6%. O UD-IQ3_XXS é o mais rápido e compacto, com 58,2 tok/s e média de 44,2%.
+
+## Veja também
+
+- [Qwen3.6 27B ou Qwen3.8 27B: qual escolher no Mac mini M6 24GB?](/blog/qwen3-6-27b-ou-qwen3-8-27b-qual-escolher-no-mac-mini-m6-24gb)
+- [Ornith 1.5 9B ou Qwen3.5 9B no Mac mini M6?](/blog/ornith-1-5-9b-ou-qwen3-5-9b-no-mac-mini-m6)
+- [GLM-5.3 cheio vs Flash em 4×B300: quantos tok/s antes de alugar](/blog/glm-5-3-vs-flash-4x-b300)
+- [O Qwen3-Coder 30B A3B roda no Mac mini M6 24GB?](/blog/o-qwen3-coder-30b-a3b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3.5-4B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

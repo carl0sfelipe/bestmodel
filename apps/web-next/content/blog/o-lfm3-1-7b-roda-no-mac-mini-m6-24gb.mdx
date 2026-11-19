@@ -1,0 +1,55 @@
+---
+title: "O LFM3 1.7B roda no Mac mini M6 24GB?"
+slug: "o-lfm3-1-7b-roda-no-mac-mini-m6-24gb"
+description: "Sim, o LFM3 1.7B em Q4_K_M roda no Mac mini M6 24GB com folga. O modelo consome apenas 1,4 GB de memória de pico e o arquivo GGUF tem 1,0 GiB de tamanho. A velocidade de geração medida foi de 118,5 tok/s com contexto vazio. A divergência KL de 0,114 indica que a quantização preserva boa fidelidade…"
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-lfm3-1-7b-roda-no-mac-mini-m6-24gb.png"
+coverStats: "1,4 GB · 1,0 GiB · 118,5 tok/s"
+---
+
+Sim, o LFM3 1.7B em Q4_K_M roda no Mac mini M6 24GB com folga. O modelo consome apenas 1,4 GB de memória de pico e o arquivo GGUF tem 1,0 GiB de tamanho. A velocidade de geração medida foi de 118,5 tok/s com contexto vazio. A divergência KL de 0,114 indica que a quantização preserva boa fidelidade ao modelo original.
+
+## Velocidade e tamanho
+
+O LFM3 1.7B em Q4_K_M atinge 118,5 tok/s de velocidade de geração com contexto vazio. Com oito mil tokens já no contexto, a velocidade cai para 110,4 tok/s, mostrando estabilidade no desempenho mesmo com carga de contexto maior. A leitura de prompt foi medida em 3.905 tok/s.
+
+A versão Q8_0 do mesmo modelo atinge 75,9 tok/s de velocidade de geração. A diferença de velocidade entre Q4_K_M e Q8_0 é de 42,6 tok/s, fora da margem, o que mostra que a versão Q4_K_M é substancialmente mais rápida. O arquivo GGUF do Q4_K_M tem 1,0 GiB, enquanto o Q8_0 tem 1,7 GiB. A diferença de tamanho entre os dois arquivos é de 0,7 GiB.
+
+## Memória ocupada
+
+A memória de pico do LFM3 1.7B em Q4_K_M é de 1,4 GB, valor bem abaixo dos 24 GB disponíveis no Mac mini M6. A versão Q8_0 consome 2,1 GB de memória de pico. A diferença de memória de pico entre Q4_K_M e Q8_0 é de 0,7 GB, fora da margem, o que confirma que a quantização Q4_K_M economiza significativamente memória.
+
+## O que se perde em qualidade
+
+A média de acertos em ARC-Challenge, HellaSwag e TruthfulQA para o Q4_K_M é de 32,8%, enquanto para o Q8_0 é de 34,1%. A diferença de média entre os dois é de 1,3%, dentro da margem, o que indica que a perda de qualidade é mínima. A divergência KL do Q4_K_M contra a referência é de 0,114, e 83,7% dos tokens são idênticos à referência.
+
+## Quando NÃO vale
+
+O LFM3 1.7B não é indicado quando o usuário precisa de contexto muito longo acima de oito mil tokens, pois os fatos só medem até esse limite. Também não é adequado quando a aplicação exige precisão crítica acima do que 32,8% de acerto médio nos benchmarks medidos. O modelo não foi testado em hardware inferior ao Mac mini M6 24GB, e não cobre capacidades específicas além de ARC-Challenge, HellaSwag e TruthfulQA.
+
+## Perguntas frequentes
+
+### Qual e o menor modelo que roda bem no Mac mini M6?
+O LFM3 1.7B em Q4_K_M é o menor modelo medido que roda bem no Mac mini M6 24GB. Ele consome apenas 1,4 GB de memória de pico e atinge 118,5 tok/s de velocidade de geração.
+
+### O LFM3 1.7B serve para resumir e classificar texto?
+Sim, o LFM3 1.7B serve para tarefas curtas e repetitivas como resumir e classificar texto. A média de acertos de 32,8% nos benchmarks medidos indica que o modelo mantém boa fidelidade para esse tipo de tarefa.
+
+### Quanto de memória sobra rodando o LFM3 1.7B?
+Rodando o LFM3 1.7B em Q4_K_M, sobra memória de sobra no Mac mini M6 24GB. O modelo consome apenas 1,4 GB de memória de pico, bem abaixo dos 24 GB disponíveis.
+
+## Veja também
+
+- [O Qwen3.6 35B A3B cabe no Mac mini M6 24GB?](/blog/o-qwen3-6-35b-a3b-cabe-no-mac-mini-m6-24gb)
+- [O Bonsai 2 27B roda no Mac mini M6 24GB?](/blog/o-bonsai-2-27b-roda-no-mac-mini-m6-24gb)
+- [O Flint roda no Mac mini M6 24GB?](/blog/o-flint-roda-no-mac-mini-m6-24gb)
+- [O Granite 4 2B roda no Mac mini M6 24GB?](/blog/o-granite-4-2b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/LiquidAI/LFM3-1.7B-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

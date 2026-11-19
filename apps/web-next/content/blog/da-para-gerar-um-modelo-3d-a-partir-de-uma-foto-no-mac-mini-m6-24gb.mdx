@@ -1,0 +1,54 @@
+---
+title: "Dá para gerar um modelo 3D a partir de uma foto no Mac mini M6 24GB?"
+slug: "da-para-gerar-um-modelo-3d-a-partir-de-uma-foto-no-mac-mini-m6-24gb"
+description: "Sim, é possível gerar um modelo 3D a partir de uma foto no Mac mini M6 24GB. O processo utiliza o TRELLIS.2, que roda no Apple Silicon via port MPS do trellis-mac. A memória unificada recomendada para essa tarefa é de 24 GB, correspondente à configuração do hardware em questão. A malha gerada sai…"
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-da-para-gerar-um-modelo-3d-a-partir-de-uma-foto-no-mac-mini-m6-24gb.png"
+---
+
+Sim, é possível gerar um modelo 3D a partir de uma foto no Mac mini M6 24GB. O processo utiliza o TRELLIS.2, que roda no Apple Silicon via port MPS do trellis-mac. A memória unificada recomendada para essa tarefa é de 24 GB, correspondente à configuração do hardware em questão. A malha gerada sai pronta em 3D com textura, sem a necessidade de uma placa de vídeo dedicada.
+
+## O que sai
+
+A geração de um modelo 3D a partir de uma foto no Mac mini M6 24GB é viável porque o TRELLIS.2 opera dentro da memória unificada do M6. O tempo medido pelo autor do port para a geração da malha e a aplicação de textura é de 313 s. A malha gerada possui 400 mil vertices de vértices, o que garante uma representação tridimensional com textura aplicada.
+
+O Mac mini M6 24GB atende ao requisito de memória unificada de 24 GB. Isso significa que o modelo roda localmente, utilizando a arquitetura de memória compartilhada do Apple Silicon. A ausência de uma placa de vídeo dedicada não impede a execução, pois o port MPS do trellis-mac foi desenvolvido para aproveitar a aceleração de hardware integrada ao chip M6.
+
+## O que trava hoje
+
+Os pesos que o modelo TRELLIS.2 utiliza hoje são de acesso restrito no repositório de pesos, especificamente os modelos DINOv3 e RMBG-2.0, que compõem o TRELLIS. Esses modelos são gated no Hugging Face, o que significa que o acesso requer autorização. Trocar por peças abertas é um trabalho de adaptação, não um simples download.
+
+Além do acesso aos pesos, o processo requer 15 GB de espaço em disco para os pesos do modelo. Esses pesos são baixados no primeiro uso, o que significa que o usuário precisa ter esse espaço livre disponível no armazenamento do Mac mini M6. Sem esse espaço, o download não conclui e a geração não inicia.
+
+## Quando NÃO vale
+
+- Quando o usuário espera um resultado imediato, pois o tempo medido é de 313 s.
+- Quando o hardware tem menos de 24 GB de memória unificada, pois esse é o requisito recomendado no registro.
+- Quando o usuário não tem 15 GB de espaço livre em disco para o download dos pesos.
+- Quando o acesso aos modelos gated (DINOv3 e RMBG-2.0) no Hugging Face não está disponível ou autorizado.
+
+## Perguntas frequentes
+
+### O Mac mini M6 gera 3D a partir de uma foto?
+Sim, o Mac mini M6 24GB gera modelos 3D a partir de fotos. O TRELLIS.2 roda no Apple Silicon via port MPS do trellis-mac. A memória unificada de 24 GB atende ao requisito recomendado de 24 GB.
+
+### Quanto tempo leva para gerar um modelo 3D no M6?
+O tempo medido pelo autor do port para a geração da malha e a aplicação de textura é de 313 s. Esse tempo corresponde à geração de uma malha 3D com textura a partir de uma foto. A malha gerada possui 400 mil vertices de vértices.
+
+### Preciso de placa de vídeo para gerar 3D em casa?
+Não, não é necessário uma placa de vídeo dedicada. O TRELLIS.2 opera no Apple Silicon via port MPS do trellis-mac. A memória unificada do M6 de 24 GB é suficiente para a execução do modelo. O processo utiliza a aceleração de hardware integrada ao chip M6.
+
+## Veja também
+
+- [Gemma 4 no Mac mini M6 24GB: qual quantização não estraga o modelo?](/blog/gemma-4-no-mac-mini-m6-24gb-qual-quantizacao-nao-estraga-o-modelo)
+- [Qual o melhor modelo de IA local para o Mac mini M6 24GB?](/blog/qual-o-melhor-modelo-de-ia-local-para-o-mac-mini-m6-24gb)
+- [Quantos tokens por segundo o Mac mini M6 faz com um modelo de 9B?](/blog/quantos-tokens-por-segundo-o-mac-mini-m6-faz-com-um-modelo-de-9b)
+- [O Bonsai 2 27B roda no Mac mini M6 24GB?](/blog/o-bonsai-2-27b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://github.com/shivampkumar/trellis-mac
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

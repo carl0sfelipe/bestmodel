@@ -1,0 +1,61 @@
+---
+title: "O Flint roda no Mac mini M6 24GB?"
+slug: "o-flint-roda-no-mac-mini-m6-24gb"
+description: "Sim, o Flint roda no Mac mini M6 24GB. A memória de pico medida foi de 13,9 GB, o que cabe no limite de 24 GB. A velocidade de geração foi de 67,4 tok/s no contexto vazio e de 57,7 tok/s com contexto extenso. O tamanho do arquivo é de 13,5 GiB, compatível com o armazenamento disponível."
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-flint-roda-no-mac-mini-m6-24gb.png"
+coverStats: "13,9 GB · 67,4 tok/s · 13,5 GiB"
+---
+
+Sim, o Flint roda no Mac mini M6 24GB. A memória de pico medida foi de 13,9 GB, o que cabe no limite de 24 GB. A velocidade de geração foi de 67,4 tok/s no contexto vazio e de 57,7 tok/s com contexto extenso. O tamanho do arquivo é de 13,5 GiB, compatível com o armazenamento disponível.
+
+## Velocidade
+
+A velocidade de geração medida foi de 67,4 tok/s no contexto vazio. Com contexto extenso, a velocidade foi de 57,7 tok/s. A leitura do prompt foi de 1.298 tok/s.
+
+A diferença entre a velocidade no contexto vazio e a velocidade com contexto extenso é esperada e não indica falha de execução. A medição veio em uma única quantização, então ainda não dá para dizer o que uma quantização menos agressiva faria com ele.
+
+## Memória e arquivo
+
+A memória de pico medida foi de 13,9 GB. O tamanho do arquivo é de 13,5 GiB. A memória de pico é ligeiramente maior que o tamanho do arquivo, dentro da margem de erro do método. A diferença é atribuída à alocação de memória em runtime, não a um erro de instalação.
+
+O arquivo ocupa espaço compatível com o hardware de 24 GB. A memória de pico é inferior à RAM de 24 GB do Mac mini M6, permitindo a execução.
+
+## Qualidade
+
+A média das três provas foi de 46,5%. A nota de qualidade é a média de ARC-Challenge, HellaSwag e TruthfulQA. A medição veio em uma única quantização, então ainda não dá para dizer o que uma quantização menos agressiva faria com ele.
+
+A qualidade medida é a média das três provas. A nota de qualidade é a média de ARC-Challenge, HellaSwag e TruthfulQA. A medição veio em uma única quantização, então ainda não dá para dizer o que uma quantização menos agressiva faria com ele.
+
+## Quando NÃO vale
+
+Quando a pergunta envolver modelos diferentes do UD-IQ3_XXS sem fatos específicos. Quando a pergunta exigir desempenho em contextos muito maiores que o medido sem medição correspondente. Quando a pergunta envolver outros hardware sem fatos de comparação.
+
+Quando a pergunta exigir métricas de qualidade como critério de "rodar", pois "rodar" refere-se a execução, não a desempenho. Quando a pergunta envolver versões diferentes do Flint sem fatos específicos.
+
+## Perguntas frequentes
+
+### O que é o Flint e roda no Mac mini M6?
+O Flint é um modelo de linguagem. A memória de pico medida foi de 13,9 GB, o que cabe no limite de 24 GB. A velocidade de geração foi de 67,4 tok/s no contexto vazio.
+
+### O Flint é mais rápido que um 9B?
+A velocidade de geração medida foi de 67,4 tok/s no contexto vazio. A velocidade com contexto extenso foi de 57,7 tok/s. A medição veio em uma única quantização, então ainda não dá para dizer o que uma quantização menos agressiva faria com ele.
+
+### Quanto de memória o Flint ocupa?
+A memória de pico medida foi de 13,9 GB. O tamanho do arquivo é de 13,5 GiB. A memória de pico é ligeiramente maior que o tamanho do arquivo, dentro da margem de erro do método.
+
+## Veja também
+
+- [O Granite 4 2B roda no Mac mini M6 24GB?](/blog/o-granite-4-2b-roda-no-mac-mini-m6-24gb)
+- [O LFM2.5 8B A1B roda no Mac mini M6 24GB?](/blog/o-lfm2-5-8b-a1b-roda-no-mac-mini-m6-24gb)
+- [O Qwen3-Coder 30B A3B roda no Mac mini M6 24GB?](/blog/o-qwen3-coder-30b-a3b-roda-no-mac-mini-m6-24gb)
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/flint-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

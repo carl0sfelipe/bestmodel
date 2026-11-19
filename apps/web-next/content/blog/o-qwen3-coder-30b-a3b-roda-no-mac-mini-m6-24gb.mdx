@@ -1,0 +1,63 @@
+---
+title: "O Qwen3-Coder 30B A3B roda no Mac mini M6 24GB?"
+slug: "o-qwen3-coder-30b-a3b-roda-no-mac-mini-m6-24gb"
+description: "Sim, o Qwen3-Coder 30B A3B roda no Mac mini M6 24GB. A memória de pico medida para a quantização Q3_K_M é de 14,6 GB, e a para a UD-Q4_K_XL é de 17,3 GB, ambas inferiores à capacidade disponível."
+date: "2026-11-19"
+author: "Orbe Lab"
+coverImage: "/images/blog/capa-o-qwen3-coder-30b-a3b-roda-no-mac-mini-m6-24gb.png"
+coverStats: "14,6 GB · 66,9 tok/s · 13,7 GiB"
+---
+
+Sim, o Qwen3-Coder 30B A3B roda no Mac mini M6 24GB. A memória de pico medida para a quantização Q3_K_M é de 14,6 GB, e a para a UD-Q4_K_XL é de 17,3 GB, ambas inferiores à capacidade disponível.
+
+## Velocidade
+
+A velocidade de geração do Qwen3-Coder 30B A3B depende diretamente da quantização aplicada. A versão UD-Q4_K_XL atinge 66,9 tok/s em contexto vazio, enquanto a versão mais leve, UD-IQ3_XXS, alcança 76,7 tok/s. A diferença medida entre essas duas quantizações é de 9,8 tok/s, o que indica que a opção mais leve é perceptivelmente mais rápida. A leitura de prompt para a versão UD-Q4_K_XL é de 1.225 tok/s.
+
+Com contexto longo, a velocidade cai de forma significativa. A diferença de velocidade entre a UD-Q4_K_XL e a Q3_K_M em contexto vazio é de 9,9 tok/s, e com oito mil tokens já no contexto, essa diferença é de 3,7 tok/s. A Q3_K_M é o melhor equilíbrio entre arquivo, memória e velocidade, oferecendo desempenho consistente sem exigir recursos excessivos.
+
+## Memória e arquivo
+
+A memória de pico é o fator crítico para a execução no Mac mini M6 24GB. A quantização Q3_K_M consome 14,6 GB, a UD-IQ3_XXS consome 12,9 GB, e a UD-Q4_K_XL consome 17,3 GB. A diferença de memória de pico entre a mais pesada e a mais leve é de 4,4 GB, mas todas as opções ficam dentro dos 24 GB disponíveis.
+
+O tamanho do arquivo também varia. A versão Q3_K_M tem arquivo de 13,7 GiB, enquanto a UD-Q4_K_XL tem 16,4 GiB. A diferença de tamanho entre a UD-Q4_K_XL e a UD-IQ3_XXS é de 4,4 GiB. Para uso contínuo, a Q3_K_M é recomendada por equilibrar consumo de memória e velocidade sem comprometer a qualidade.
+
+## Fidelidade e qualidade
+
+A qualidade do modelo é medida pela média de ARC-Challenge, HellaSwag e TruthfulQA. A UD-Q4_K_XL obtém 48,5%, a Q3_K_M obtém 48,0%, e a UD-IQ3_XXS obtém 49,3%. A diferença de média entre a UD-Q4_K_XL e a Q3_K_M é de 0,5%, e entre a UD-Q4_K_XL e a UD-IQ3_XXS é de 0,8%.
+
+A divergência KL da Q3_K_M contra a referência é de 0,055, e a proporção de tokens com escolha idêntica à referência é de 90,4%. A diferença de média entre a Q3_K_M e a UD-IQ3_XXS é de 1,3%. A nota de qualidade da Q3_K_M é de 48,0%, o que a torna a opção mais equilibrada para uso prático.
+
+## Quando NÃO vale
+
+- Quando a pergunta exigir confirmação de compatibilidade oficial do Mac mini M6 com o modelo, pois os fatos não contêm informações sobre suporte oficial ou testes específicos nessa máquina.
+- Quando a pergunta exigir garantia de desempenho em condições de uso contínuo ou multi-tarefa, pois os fatos medem apenas pico de memória e velocidade em contexto controlado.
+- Quando a pergunta exigir comparação com outros modelos não listados nos fatos, pois os fatos não cobrem essa comparação.
+- Quando a pergunta exigir análise de consumo energético ou aquecimento, pois os fatos não incluem medições de potência ou temperatura.
+- Quando a pergunta exigir validação de qualidade de código gerado, pois os fatos medem apenas métricas de velocidade, memória e benchmarks genéricos.
+
+## Perguntas frequentes
+
+### Um modelo de código de 30B roda no Mac mini M6 24GB?
+Sim, a memória de pico máxima medida é de 17,3 GB, inferior aos 24 GB disponíveis. A arquitetura de mistura de especialistas permite que apenas uma parte dos parâmetros fique ativa a cada token, reduzindo o consumo de memória.
+
+### O Qwen3-Coder e mais rápido que um 27B denso?
+Os fatos não incluem medições de velocidade de modelos de 27B densos para comparação direta. A velocidade do Qwen3-Coder 30B A3B varia de 66,9 tok/s a 76,7 tok/s, dependendo da quantização.
+
+### Quanto o contexto longo derruba a velocidade do Qwen3-Coder?
+A velocidade cai com contexto longo. A diferença de velocidade entre a UD-Q4_K_XL e a Q3_K_M com oito mil tokens no contexto é de 3,7 tok/s. A Q3_K_M mantém desempenho mais consistente em contextos longos.
+
+## Veja também
+
+- [O Qwen3.8 27B roda no Mac mini M6 24GB?](/blog/o-qwen3-8-27b-roda-no-mac-mini-m6-24gb)
+- [O Flint roda no Mac mini M6 24GB?](/blog/o-flint-roda-no-mac-mini-m6-24gb)
+- [O Granite 4 2B roda no Mac mini M6 24GB?](/blog/o-granite-4-2b-roda-no-mac-mini-m6-24gb)
+- [O LFM2.5 8B A1B roda no Mac mini M6 24GB?](/blog/o-lfm2-5-8b-a1b-roda-no-mac-mini-m6-24gb)
+
+## Fontes
+
+
+- https://bestmodel.run/hardware.html#m6-24gb
+- https://huggingface.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF
+
+Quer rodar esses modelos em casa, sem mensalidade e sem mandar seus dados para a nuvem? O Mac mini M6 24GB do lab está à venda na Orbe: https://orbe.live/produtos/mac-mini-m6-24gb-512gb

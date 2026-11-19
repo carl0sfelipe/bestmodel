@@ -1,55 +1,51 @@
 ---
 title: "Q4_K_M ou Q8_0 no Mac mini M6: qual quantização usar?"
 slug: "q4-k-m-ou-q8-0-no-mac-mini-m6-qual-quantizacao-usar"
-description: "Para o Qwen3.5 9B no Mac mini M6, escolha Q4_K_M. A média de qualidade é 51,7%, praticamente igual à do Q8_0, e a geração é mais rápida com 26,3 tok/s. A memória de pico do Q8_0 é de 8,7 GB, o que consome mais espaço do que o necessário para o mesmo desempenho."
+description: "Para o Qwen3.5 9B em um Mac mini M6 com 24GB, a escolha entre Q4_K_M e Q8_0 depende do que prioriza: velocidade e economia de memória ou máxima fidelidade. Os testes mostram que a diferença de qualidade entre os dois é de 0,6% na média de benchmarks, uma diferença pequena."
 date: "2026-11-17"
 author: "Orbe Lab"
 coverImage: "/images/blog/capa-q4-k-m-ou-q8-0-no-mac-mini-m6-qual-quantizacao-usar.png"
-coverStats: "26,3 tok/s · 8,7 GB"
+coverStats: "26,3 tok/s · 3,1 GB"
 ---
 
-Para o Qwen3.5 9B no Mac mini M6, escolha Q4_K_M. A média de qualidade é 51,7%, praticamente igual à do Q8_0, e a geração é mais rápida com 26,3 tok/s. A memória de pico do Q8_0 é de 8,7 GB, o que consome mais espaço do que o necessário para o mesmo desempenho.
+Para o Qwen3.5 9B em um Mac mini M6 com 24GB, a escolha entre Q4_K_M e Q8_0 depende do que prioriza: velocidade e economia de memória ou máxima fidelidade. Os testes mostram que a diferença de qualidade entre os dois é de 0,6% na média de benchmarks, uma diferença pequena.
 
 ## Qualidade: Q4_K_M empata com Q8_0
 
-A objeção de que a quantização estraga o modelo não se aplica aqui. A divergência KL do Q4_K_M é de 0,016, um valor muito baixo que indica que a saída é quase idêntica à referência. Além disso, 94,3% dos tokens são exatamente os mesmos da referência, o que comprova a fidelidade do processo.
+A quantização Q4_K_M apresenta uma nota de qualidade de 51,7% na média de ARC-Challenge, HellaSwag e TruthfulQA, enquanto a Q8_0 registra 52,3%. A diferença entre as duas é de 0,6%, o que indica que a perda de qualidade ao usar Q4_K_M em relação à Q8_0 é mínima.
 
-| Métrica | Q4_K_M | Q8_0 |
-| :--- | :--- | :--- |
-| Média de testes | 51,7% | 52,3% |
-| Divergência KL | 0,016 | — |
-| Tokens iguais | 94,3% | — |
-
-A diferença nas médias de qualidade é mínima. Dentro da margem de erro, o Q4_K_M entrega o mesmo resultado prático do Q8_0, sem o custo adicional de memória.
+Além da nota média, a divergência KL do Q4_K_M contra a referência é de 0,016, e a proporção de tokens em que a escolha é a mesma da referência é de 94,3%. Isso significa que, na prática, a resposta gerada pelo modelo quantizado em Q4_K_M é muito próxima da original, mantendo a coerência e a precisão esperadas para a maioria das tarefas de linguagem.
 
 ## Velocidade: o Q4_K_M ganha
 
-O ganho de velocidade é o principal argumento técnico para a escolha. A geração no Q4_K_M atinge 26,3 tok/s, enquanto o Q8_0 fica em 17,2 tok/s.
+A velocidade de geração do Q4_K_M é de 26,3 tok/s, enquanto a da Q8_0 é de 17,2 tok/s. A diferença de velocidade entre os dois é de 9,1 tok/s, com o Q4_K_M sendo significativamente mais rápido. Essa vantagem é crucial para quem trabalha com contextos longos ou precisa de respostas em tempo real.
 
-Essa diferença de desempenho é significativa para a experiência de uso. O Q4_K_M permite respostas mais fluidas e reduz o tempo de espera em conversas longas. No Mac mini M6, isso significa que o hardware aproveita melhor a capacidade disponível sem exigir o uso de todos os 24GB de memória.
+A economia de memória também favorece o Q4_K_M. A diferença de memória de pico entre a Q8_0 e o Q4_K_M é de 3,1 GB, com o Q4_K_M usando menos memória. Em um Mac mini M6 com 24GB, essa economia permite que outros processos ou contextos adicionais rodem simultaneamente, melhorando a experiência geral de uso.
 
 ## Até onde dá para descer
 
-A fidelidade cai rapidamente abaixo de quatro bits. A divergência KL do Q6_K é de 0,002, o que mostra que a qualidade se mantém alta. Já a divergência do Q3_K_M é de 0,068, um valor muito maior que indica uma perda de precisão perceptível.
+A divergência KL do Q6_K contra a referência é de 0,002, enquanto a do Q3_K_M é de 0,068. A diferença de divergência KL entre o Q4_K_M e o Q6_K é de 0,014, e entre o Q4_K_M e o Q3_K_M é de 0,052.
 
-O Q4_K_M é o ponto de equilíbrio ideal. Ele preserva a qualidade do Q8_0 e evita a degradação visível que ocorre em quantizações mais agressivas. Para o Qwen3.5 9B, essa é a opção recomendada para uso diário no Mac mini M6.
+A nota de qualidade do Q3_K_M é de 50,7%, e a do Q6_K é de 51,8%. A diferença de média entre o Q4_K_M e o Q3_K_M é de 1,0%, e entre o Q4_K_M e o Q6_K é de 0,1%. Isso mostra que, abaixo de quatro bits, a fidelidade cai rápido, tornando o Q4_K_M o ponto ideal entre qualidade e desempenho.
 
 ## Quando NÃO vale
 
-O Q4_K_M não é a melhor escolha se a prioridade máxima for a precisão absoluta em tarefas críticas. Embora a diferença seja mínima, o Q8_0 ainda mantém uma divergência KL menor. Além disso, se o modelo for muito grande e a memória disponível for limitada, a escolha da quantização pode exigir um ajuste fino que não é viável aqui.
-
-Também não vale a pena usar Q4_K_M se o objetivo for apenas testar o limite de memória do sistema. Nesse caso, o Q8_0, com 8,7 GB de pico, oferece uma referência mais alta para comparação.
+- Quando o usuário precisa de máxima qualidade e não se importa com velocidade ou memória.
+- Quando o usuário precisa de máxima velocidade e não se importa com qualidade.
+- Quando o usuário tem restrições de memória muito apertadas.
+- Quando o usuário precisa de contexto muito longo (os fatos não medem contexto longo).
+- Quando o usuário usa um modelo diferente do Qwen3.5 9B.
 
 ## Perguntas frequentes
 
 ### Q6_K vale a pena?
-O Q6_K tem uma divergência KL de 0,002, o que indica uma fidelidade muito alta. No entanto, ele consome mais memória do que o Q4_K_M sem oferecer uma melhoria significativa na prática. Para a maioria dos casos, o Q4_K_M é a escolha mais eficiente.
+A nota de qualidade do Q6_K é de 51,8%, enquanto a do Q4_K_M é de 51,7%. A diferença de média entre os dois é de 0,1%. A Q6_K usa mais memória e é mais lenta, sem ganho significativo de qualidade.
 
 ### O que é divergência KL?
-A divergência KL mede a diferença entre a distribuição de probabilidades do modelo quantizado e a do modelo original. Um valor próximo de zero indica que a saída é quase idêntica. No caso do Q4_K_M, o valor é de 0,016, o que confirma a alta fidelidade.
+Divergência KL é uma métrica que mede a diferença entre a distribuição de probabilidades do modelo original e a do modelo quantizado. Quanto menor o valor, mais próxima a resposta do modelo quantizado está da original. A divergência KL do Q4_K_M é de 0,016, indicando uma fidelidade alta.
 
 ### Essa regra vale para todos os modelos?
-Não. A regra de que Q4_K_M é o ponto de equilíbrio ideal foi testada especificamente para o Qwen3.5 9B. Outros modelos podem ter comportamentos diferentes com quantizações. É importante verificar os dados específicos de cada modelo antes de decidir.
+Essa regra foi medida especificamente para o Qwen3.5 9B. Para outros modelos, como o Qwen3.5 4B ou o Qwen3.6 27B, os valores de qualidade, velocidade e memória podem variar. É importante testar cada modelo individualmente antes de decidir.
 
 ## Veja também
 
@@ -59,7 +55,6 @@ Não. A regra de que Q4_K_M é o ponto de equilíbrio ideal foi testada especifi
 - [A velocidade do LLM cai com contexto longo no Mac mini M6?](/blog/a-velocidade-do-llm-cai-com-contexto-longo-no-mac-mini-m6)
 
 ## Fontes
-
 
 - https://bestmodel.run/hardware.html#m6-24gb
 

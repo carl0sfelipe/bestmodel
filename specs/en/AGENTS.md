@@ -45,6 +45,7 @@ commit time); L01+ is the active frontier.
 | S37-intent-catalog | done | one JSON catalog; CHECK, API filter, classifier, web-next intents and metricOf derive from it |
 | S48-match-honesty | done | `source_class` on every match row; text-generation runtimes only (public-api `match_honesty.py`) |
 | S49-model-pick | done | `GET /v1/pick` over the pool snapshot (contract model-pick-v1); API host in `llms.txt` |
+| L09-multilingual-seo-aeo | PLANNED (2026-11-18) | one host, two languages, explicit: `hreflang` pairs + `x-default`, per-page `lang`/`inLanguage`, blog indexes split by language; D1 path-based locales, D2 the English offer (owner), D3 no automatic redirect |
 
 Rules for new specs: name `<id>-<kebab-title>.md`; include objective, deps,
 deliverable paths (exact), requirements, acceptance commands; cite the implementing module or migration files for formulas; where an
